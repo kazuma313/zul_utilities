@@ -1,45 +1,43 @@
 """
-Milvus Helper Utility
-Module ini bisa di-extend sesuai kebutuhan
+Milvus Helper Utility (lokal ke project)
 """
+
+import json
+from pathlib import Path
+from typing import Optional
 
 class Milvus:
     """
-    Helper class untuk bekerja dengan Milvus vector database
-    
-    Contoh:
-        >>> from zul.utilities.milvus_helper import Milvus
-        >>> client = Milvus(host="localhost", port=19530)
-        >>> client.connect()
+    Helper class untuk Milvus.
+    1. Secara default, config dicari di folder project (cwd).
+    2. config_path bisa di-set manual ke file json config lokal.
+    3. host/port bisa di-override manual.
     """
-    
-    def __init__(self, host: str = "localhost", port: int = 19530):
-        """
-        Initialize Milvus client
-        
-        Args:
-            host: Milvus server host
-            port: Milvus server port
-        """
-        self.host = host
-        self.port = port
-        self._connected = False
-        
+    def __init__(self, config_path: str = "milvus_config.json", host: Optional[str] = None, port: Optional[int] = None):
+        # Cek config di cwd
+        cfg_path = Path.cwd() / config_path
+        config = {}
+
+        if cfg_path.exists():
+            with open(cfg_path, "r", encoding="utf-8") as f:
+                config = json.load(f)
+
+        self.host = (
+            host if host is not None else config.get("host", "localhost")
+        )
+        self.port = (
+            port if port is not None else config.get("port", 19530)
+        )
+        self.connected = False
+
     def connect(self):
-        """Connect ke Milvus server"""
-        print(f"Connecting to Milvus at {self.host}:{self.port}")
-        self._connected = True
-        print("✅ Connected successfully!")
-        
+        print(f"Connecting to Milvus at {self.host}:{self.port} ...")
+        self.connected = True
+
     def disconnect(self):
-        """Disconnect dari Milvus server"""
-        if self._connected:
-            print("Disconnecting from Milvus...")
-            self._connected = False
-            print("✅ Disconnected successfully!")
-        else:
-            print("⚠️  Already disconnected")
-    
-    def is_connected(self) -> bool:
-        """Check connection status"""
-        return self._connected
+        if self.connected:
+            print("Disconnected from Milvus")
+            self.connected = False
+
+    def is_connected(self):
+        return self.connected

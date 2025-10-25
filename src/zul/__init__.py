@@ -1,7 +1,8 @@
 """
 Zul - CLI tool untuk membuat template proyek dan utilities
 """
-__version__ = "0.1.0"
+
+# __version__ = "0.1.1"
 
 # Export utilities agar bisa diimport langsung
 from zul.utilities import milvus_helper

@@ -29,20 +29,20 @@ Zul adalah CLI tool yang powerful dan mudah digunakan untuk membuat template pro
 
 ```bash
 # Install versi terbaru
-pip install git+https://github.com/YOUR_USERNAME/zul.git
+pip install git+https://github.com/kazuma313/zul_utilities.git
 
 # Install versi spesifik (tag/branch)
-pip install git+https://github.com/YOUR_USERNAME/zul.git@v0.1.0
+pip install git+https://github.com/kazuma313/zul_utilities.git@v0.1.0
 ```
 
 #### Menggunakan UV (Recommended):
 
 ```bash
 # Install sebagai tool global
-uv tool install git+https://github.com/YOUR_USERNAME/zul.git
+uv tool install git+https://github.com/kazuma313/zul_utilities.git
 
 # Atau untuk development
-git clone https://github.com/YOUR_USERNAME/zul.git
+git clone https://github.com/kazuma313/zul_utilities.git
 cd zul
 uv sync
 uv pip install -e .
@@ -52,7 +52,7 @@ uv pip install -e .
 
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/zul.git
+git clone https://github.com/kazuma313/zul_utilities.git
 cd zul
 
 # Install dengan UV
@@ -69,13 +69,13 @@ Tambahkan baris ini ke file `requirements.txt` proyek Anda:
 
 ```txt
 # Install dari GitHub main branch
-zul @ git+https://github.com/YOUR_USERNAME/zul.git
+zul @ git+https://github.com/kazuma313/zul_utilities.git
 
 # Atau install versi spesifik
-zul @ git+https://github.com/YOUR_USERNAME/zul.git@v0.1.0
+zul @ git+https://github.com/kazuma313/zul_utilities.git@v0.1.0
 
 # Atau install dari branch tertentu
-zul @ git+https://github.com/YOUR_USERNAME/zul.git@development
+zul @ git+https://github.com/kazuma313/zul_utilities.git@development
 ```
 
 Kemudian install:
@@ -193,7 +193,7 @@ from zul.utilities.pdf_converter import convert_md_to_pdf  # Future utility
 
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/zul.git
+git clone https://github.com/kazuma313/zul_utilities.git
 cd zul
 
 # Install dengan development dependencies
