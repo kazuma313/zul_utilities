@@ -44,7 +44,7 @@ def milvus_helper(config_name: str = "milvus_config.json"):
     # metadata_dir = Path(default_config["metadata_dir"])
     # metadata_dir.mkdir(parents=True, exist_ok=True)
 
-    typer.echo(f"\n📁 File config:")
+    typer.echo("\n📁 File config:")
     typer.echo(f"  - {config_file}")
     typer.echo("💡 Cara pakai di Python:")
     typer.echo("  from zul.utilities.milvus_helper import Milvus")
