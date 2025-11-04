@@ -293,7 +293,7 @@ class MarkdownToPDFConverter:
             with open(output_file, "wb") as pdf_file:
                 pisa_status = pisa.CreatePDF(html_document, dest=pdf_file)
 
-            if pisa_status.err: # type: ignore
+            if pisa_status.err:  # type: ignore
                 print("✗ Error saat membuat PDF")
                 return False
 
@@ -304,7 +304,7 @@ class MarkdownToPDFConverter:
         except Exception as e:
             print(f"✗ Error: {e}")
             return False
-        
+
     def convert_to_bytes(self, markdown_content: str) -> bytes:
         """
         Konversi Markdown menjadi PDF dalam bentuk bytes (in-memory).
@@ -318,24 +318,24 @@ class MarkdownToPDFConverter:
         try:
             # Convert Markdown ke HTML
             html_content = self.markdown_to_html(markdown_content)
-            
+
             # Buat dokumen HTML lengkap
             html_document = self.create_html_document(html_content)
-            
+
             # Simpan PDF ke memori (bukan file fisik)
             pdf_io = BytesIO()
             pisa_status = pisa.CreatePDF(html_document, dest=pdf_io)
             pdf_io.seek(0)
-            
-            if pisa_status.err: # type: ignore
+
+            if pisa_status.err:  # type: ignore
                 raise Exception("Gagal membuat PDF dari Markdown.")
-            
+
             return pdf_io.getvalue()
-        
+
         except Exception as e:
             print(f"✗ Error saat konversi ke bytes: {e}")
             return b""
-    
+
     def convert_from_response(
         self, response, output_path: str, filename: str = "output.pdf"
     ) -> bool:

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
+
 class Milvus:
     """
     Helper class untuk Milvus.
@@ -13,7 +14,13 @@ class Milvus:
     2. config_path bisa di-set manual ke file json config lokal.
     3. host/port bisa di-override manual.
     """
-    def __init__(self, config_path: str = "milvus_config.json", host: Optional[str] = None, port: Optional[int] = None):
+
+    def __init__(
+        self,
+        config_path: str = "milvus_config.json",
+        host: Optional[str] = None,
+        port: Optional[int] = None,
+    ):
         # Cek config di cwd
         cfg_path = Path.cwd() / config_path
         config = {}
@@ -22,12 +29,8 @@ class Milvus:
             with open(cfg_path, "r", encoding="utf-8") as f:
                 config = json.load(f)
 
-        self.host = (
-            host if host is not None else config.get("host", "localhost")
-        )
-        self.port = (
-            port if port is not None else config.get("port", 19530)
-        )
+        self.host = host if host is not None else config.get("host", "localhost")
+        self.port = port if port is not None else config.get("port", 19530)
         self.connected = False
 
     def connect(self):

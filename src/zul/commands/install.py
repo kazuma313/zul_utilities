@@ -8,6 +8,7 @@ from pathlib import Path
 
 app = typer.Typer()
 
+
 @app.command()
 def milvus_helper(config_name: str = "milvus_config.json"):
     """
@@ -29,7 +30,9 @@ def milvus_helper(config_name: str = "milvus_config.json"):
 
     # Cek dan konfirmasi jika file sudah ada
     if config_file.exists():
-        typer.secho("⚠️  milvus_config.json sudah ada di folder project!", fg=typer.colors.YELLOW)
+        typer.secho(
+            "⚠️  milvus_config.json sudah ada di folder project!", fg=typer.colors.YELLOW
+        )
         overwrite = typer.confirm("Ganti konfigurasi lama?", default=False)
         if not overwrite:
             typer.echo("⏹️  Dibatalkan.")
@@ -39,7 +42,7 @@ def milvus_helper(config_name: str = "milvus_config.json"):
     with open(config_file, "w", encoding="utf-8") as f:
         json.dump(default_config, f, indent=4)
     typer.secho(f"✅ {config_file} berhasil dibuat!", fg=typer.colors.GREEN)
-    
+
     # # Buat folder koleksi
     # metadata_dir = Path(default_config["metadata_dir"])
     # metadata_dir.mkdir(parents=True, exist_ok=True)

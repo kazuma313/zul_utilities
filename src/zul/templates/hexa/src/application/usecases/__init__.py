@@ -1,4 +1,4 @@
-""" 
+"""
 Satu aksi spesifik yang dilakukan sistem
 Orchestrate domain entities
 Koordinasi dengan repositories

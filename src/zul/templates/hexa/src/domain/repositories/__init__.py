@@ -1,4 +1,4 @@
-""" 
+"""
 Apa itu Repository Interface?
 
 Kontrak (abstract) untuk simpan/ambil data

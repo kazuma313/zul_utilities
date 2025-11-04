@@ -47,4 +47,3 @@ class TimerDecorator:
         self.times = []
         self.total_time = 0
         self.call_count = 0
-

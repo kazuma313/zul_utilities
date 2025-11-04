@@ -1,4 +1,4 @@
-""" 
+"""
 Apa itu Domain Event?
 
 Kejadian penting dalam bisnis

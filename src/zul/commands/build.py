@@ -9,8 +9,8 @@ from InquirerPy import inquirer
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
 
-
 app = typer.Typer()
+
 
 @app.command()
 def web(
@@ -30,10 +30,10 @@ def web(
     """
     # Jika nama proyek tidak diberikan, tanyakan secara interaktif
     if not name:
-        name = inquirer.text(message="Masukkan nama proyek:", default="my-web-project").execute() # type: ignore
+        name = inquirer.text(message="Masukkan nama proyek:", default="my-web-project").execute()  # type: ignore
 
     # Konfirmasi sebelum membuat proyek
-    confirm = inquirer.confirm(message=f"Buat proyek '{name}'?", default=True).execute() # type: ignore
+    confirm = inquirer.confirm(message=f"Buat proyek '{name}'?", default=True).execute()  # type: ignore
     if not confirm:
         typer.echo("❌ Dibatalkan")
         raise typer.Exit()
@@ -89,9 +89,9 @@ def hexa(
     (file & folder apa pun di dalamnya)
     """
     if not name:
-        name = inquirer.text(message="Masukkan nama proyek:", default="my-hexa-project").execute() # type: ignore
+        name = inquirer.text(message="Masukkan nama proyek:", default="my-hexa-project").execute()  # type: ignore
 
-    confirm = inquirer.confirm(message=f"Buat proyek '{name}' (hexa)?", default=True).execute() # type: ignore
+    confirm = inquirer.confirm(message=f"Buat proyek '{name}' (hexa)?", default=True).execute()  # type: ignore
     if not confirm:
         typer.echo("❌ Dibatalkan")
         raise typer.Exit()
