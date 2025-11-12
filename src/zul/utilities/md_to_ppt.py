@@ -1,5 +1,4 @@
 import re
-import io
 from pathlib import Path
 from pptx import Presentation
 from pptx.util import Inches, Pt
@@ -11,7 +10,7 @@ class DynamicMarkdownToPPTXService:
     Service dinamis untuk convert Markdown ke PPTX
     - Auto detect template (pakai template jika ada, generate baru jika tidak)
     - Customizable font styling per header level
-    - Support matplotlib code execution
+    - Support image dari file path (no matplotlib execution)
     """
     
     def __init__(self, template_path=None, style_config=None):
@@ -42,108 +41,74 @@ class DynamicMarkdownToPPTXService:
         self.style_config = self.get_default_style()
         if style_config:
             self._merge_style(style_config)
-        
-        self.code_blocks = {}
     
     def get_default_style(self):
-        """
-        Default styling configuration
-        Bisa di-override saat init atau via set_style()
-        """
+        """Default styling configuration"""
         return {
-            'h1': {  # Main title (# Header)
+            'h1': {
                 'font_size': 44,
                 'font_name': 'Calibri',
-                'font_color': RGBColor(0, 51, 102),  # Navy blue
+                'font_color': RGBColor(0, 51, 102),
                 'bold': True,
                 'italic': False,
             },
-            'h2': {  # Subtitle/Section heading (## Header)
+            'h2': {
                 'font_size': 32,
                 'font_name': 'Calibri',
-                'font_color': RGBColor(230, 126, 34),  # Orange
+                'font_color': RGBColor(230, 126, 34),
                 'bold': True,
                 'italic': False,
             },
-            'h3': {  # Sub-section heading (### Header)
+            'h3': {
                 'font_size': 24,
                 'font_name': 'Calibri',
-                'font_color': RGBColor(52, 73, 94),  # Dark gray-blue
+                'font_color': RGBColor(52, 73, 94),
                 'bold': True,
                 'italic': False,
             },
-            'body': {  # Regular text
+            'body': {
                 'font_size': 14,
                 'font_name': 'Calibri',
                 'font_color': RGBColor(60, 60, 60),
                 'bold': False,
                 'italic': False,
             },
-            'bullet': {  # Bullet points
+            'bullet': {
                 'font_size': 16,
                 'font_name': 'Calibri',
                 'font_color': RGBColor(60, 60, 60),
                 'bold': False,
                 'italic': False,
             },
-            'code': {  # Code blocks
-                'font_size': 12,
-                'font_name': 'Consolas',
-                'font_color': RGBColor(100, 100, 100),
-                'bold': False,
-                'italic': False,
-            }
         }
     
     def _merge_style(self, new_style):
-        """
-        Deep merge new style dengan existing style
-        
-        Args:
-            new_style: Dict dengan style baru
-        """
+        """Deep merge new style dengan existing style"""
         for key, value in new_style.items():
             if key in self.style_config:
-                # Update existing key
                 self.style_config[key].update(value)
             else:
-                # Add new key
                 self.style_config[key] = value
     
     def set_style(self, style_dict):
         """
         Update style configuration
         
-        Args:
-            style_dict: Dict dengan format seperti get_default_style()
-        
         Example:
             service.set_style({
-                'h1': {
-                    'font_size': 48,
-                    'font_color': RGBColor(255, 0, 0),
-                    'bold': True
-                }
+                'h1': {'font_size': 48, 'font_color': RGBColor(255, 0, 0)}
             })
         """
         self._merge_style(style_dict)
         print(f"✅ Style updated for: {', '.join(style_dict.keys())}")
     
     def apply_text_style(self, paragraph, style_type='body'):
-        """
-        Apply styling ke paragraph berdasarkan style type
-        
-        Args:
-            paragraph: Paragraph object dari text frame
-            style_type: Key dari style_config ('h1', 'h2', 'h3', 'body', 'bullet', 'code')
-        """
-        # Get style dengan fallback ke body
+        """Apply styling ke paragraph berdasarkan style type"""
         if style_type in self.style_config:
             style = self.style_config[style_type]
         else:
             style = self.style_config.get('body', {})
         
-        # Apply style properties yang ada
         if 'font_size' in style and style['font_size']:
             paragraph.font.size = Pt(style['font_size'])
         if 'font_name' in style and style['font_name']:
@@ -155,61 +120,15 @@ class DynamicMarkdownToPPTXService:
         if 'italic' in style:
             paragraph.font.italic = style['italic']
     
-    def extract_code_blocks(self, text):
-        """Extract Python code blocks dari markdown"""
-        code_pattern = r'``````'
-        matches = re.findall(code_pattern, text, re.DOTALL)
-        
-        modified_text = text
-        for i, code in enumerate(matches):
-            placeholder = f'[[[CODE_BLOCK_{i}]]]'
-            self.code_blocks[placeholder] = code
-            modified_text = modified_text.replace(
-                f'``````', 
-                placeholder, 
-                1
-            )
-        
-        return modified_text
-    
-    def execute_code_block(self, code):
-        """Execute Python code dan return matplotlib image"""
-        try:
-            import matplotlib.pyplot as plt
-            import numpy as np
-            
-            namespace = {'plt': plt, 'np': np}
-            
-            plt.clf()
-            plt.close('all')
-            exec(code, namespace)
-            
-            if plt.get_fignums():
-                buffer = io.BytesIO()
-                plt.savefig(buffer, format='png', dpi=150, bbox_inches='tight')
-                buffer.seek(0)
-                plt.close('all')
-                return ('image', buffer)
-            else:
-                return ('error', 'No plot generated')
-                
-        except ImportError:
-            return ('skip', 'matplotlib not installed')
-        except Exception as e:
-            return ('error', str(e))
-    
     def create_blank_slide(self):
         """Create blank slide"""
         if self.use_template:
-            # Gunakan blank layout dari template
             try:
                 blank_layout = self.prs.slide_layouts[6]
             except IndexError:
                 blank_layout = self.prs.slide_layouts[-1]
-            
             slide = self.prs.slides.add_slide(blank_layout)
         else:
-            # Create blank dari scratch
             blank_layout = self.prs.slide_layouts[6]
             slide = self.prs.slides.add_slide(blank_layout)
             
@@ -227,15 +146,7 @@ class DynamicMarkdownToPPTXService:
         return slide
     
     def add_styled_textbox(self, slide, text, left, top, width, height, style_type='body'):
-        """
-        Add textbox dengan custom styling
-        
-        Args:
-            slide: Slide object
-            text: Text content
-            left, top, width, height: Position dan size dalam inches
-            style_type: Style type ('h1', 'h2', 'h3', 'body', 'bullet')
-        """
+        """Add textbox dengan custom styling"""
         textbox = slide.shapes.add_textbox(
             Inches(left), 
             Inches(top), 
@@ -256,18 +167,7 @@ class DynamicMarkdownToPPTXService:
         return textbox
     
     def add_bullet_textbox(self, slide, bullets, left, top, width, style_type='bullet'):
-        """
-        Add textbox dengan bullet points
-        
-        Args:
-            slide: Slide object
-            bullets: List of bullet texts
-            left, top, width: Position dan size
-            style_type: Style type (default 'bullet')
-        
-        Returns:
-            Total height yang dipakai
-        """
+        """Add textbox dengan bullet points"""
         total_height = len(bullets) * 0.35 + 0.2
         
         textbox = slide.shapes.add_textbox(
@@ -289,25 +189,56 @@ class DynamicMarkdownToPPTXService:
         
         return total_height
     
-    def fill_template_placeholder(self, slide, title=None, content=None):
+    def add_image(self, slide, image_path, left=1.5, top=3, width=7, height=None):
         """
-        Fill placeholder di template slide
+        Add image ke slide dari file path
         
         Args:
             slide: Slide object
-            title: Title text
-            content: Content text atau list
+            image_path: Path ke image file
+            left, top: Position dalam inches
+            width: Width dalam inches
+            height: Height dalam inches (optional, auto jika None)
+        
+        Returns:
+            Picture shape atau None jika gagal
         """
+        if not Path(image_path).exists():
+            print(f"⚠️  Image not found: {image_path}")
+            return None
+        
+        try:
+            if height:
+                pic = slide.shapes.add_picture(
+                    image_path,
+                    Inches(left),
+                    Inches(top),
+                    width=Inches(width),
+                    height=Inches(height)
+                )
+            else:
+                pic = slide.shapes.add_picture(
+                    image_path,
+                    Inches(left),
+                    Inches(top),
+                    width=Inches(width)
+                )
+            return pic
+        except Exception as e:
+            print(f"⚠️  Error adding image: {e}")
+            return None
+    
+    def fill_template_placeholder(self, slide, title=None, content=None):
+        """Fill placeholder di template slide"""
         for shape in slide.placeholders:
             ph_type = shape.placeholder_format.type
             
             # Title placeholder
             if ph_type == 1 and title:
                 shape.text = title
-                # Apply h2 style ke title
                 if shape.has_text_frame:
                     for paragraph in shape.text_frame.paragraphs:
-                        if paragraph.text:  # Only apply if has text
+                        if paragraph.text:
                             self.apply_text_style(paragraph, 'h2')
             
             # Body/Content placeholder
@@ -329,17 +260,14 @@ class DynamicMarkdownToPPTXService:
                     p.text = str(content)
                     self.apply_text_style(p, 'body')
     
-    def add_slide_from_content(self, title=None, content=None, image_buffer=None, 
-                               image_path=None, layout_index=1):
+    def add_slide_from_content(self, title=None, content=None, image_paths=None, layout_index=1):
         """
         Add slide dengan content
-        Mode auto: template-based atau generated
         
         Args:
             title: Slide title
             content: String atau list untuk content
-            image_buffer: Matplotlib image buffer
-            image_path: Path ke image file
+            image_paths: List of image paths atau single path
             layout_index: Layout index jika pakai template
         """
         if self.use_template:
@@ -372,19 +300,21 @@ class DynamicMarkdownToPPTXService:
                     self.add_styled_textbox(slide, content, 0.5, current_y, 9, 0.6, 'body')
                     current_y += 0.8
         
-        # Add image (both modes)
-        if image_buffer or image_path:
-            try:
-                left = Inches(1.5)
-                top = Inches(3 if self.use_template else current_y) # type: ignore
-                width = Inches(7)
-                
-                if image_buffer:
-                    slide.shapes.add_picture(image_buffer, left, top, width=width)
-                elif image_path and Path(image_path).exists():
-                    slide.shapes.add_picture(image_path, left, top, width=width)
-            except Exception as e:
-                print(f"⚠️  Error adding image: {e}")
+        # Add images
+        if image_paths:
+            paths = image_paths if isinstance(image_paths, list) else [image_paths]
+            
+            for img_path in paths:
+                if img_path:
+                    pic = self.add_image(
+                        slide, 
+                        img_path,
+                        left=1.5,
+                        top=3 if self.use_template else current_y, # type: ignore
+                        width=7
+                    )
+                    if pic and not self.use_template:
+                        current_y += pic.height.inches + 0.2 # type: ignore
         
         return slide
     
@@ -392,13 +322,18 @@ class DynamicMarkdownToPPTXService:
         """
         Convert markdown ke PPTX
         
+        Supported syntax:
+        - # Heading 1 (title)
+        - ## Heading 2 (subtitle/section)
+        - ### Heading 3 (sub-section)
+        - * Bullet point
+        - ![alt text](path/to/image.png) - untuk add image
+        - --- untuk slide separator
+        
         Args:
             md_content: String markdown content
             output_path: Output file path
         """
-        # Extract code blocks
-        md_content = self.extract_code_blocks(md_content)
-        
         # Split by slide separator
         slides_content = md_content.split('\n---\n')
         
@@ -410,8 +345,7 @@ class DynamicMarkdownToPPTXService:
             
             title = None
             content_items = []
-            image_buffer = None
-            image_path_found = None
+            image_paths = []
             
             for line in lines:
                 line = line.strip()
@@ -437,25 +371,11 @@ class DynamicMarkdownToPPTXService:
                     bullet_text = line.lstrip('*- ').strip()
                     content_items.append(bullet_text)
                 
-                # Image reference
+                # Image reference ![alt](path)
                 elif line.startswith('!['):
                     match = re.match(r'!\[.*?\]\((.*?)\)', line)
                     if match:
-                        image_path_found = match.group(1)
-                
-                # Code block
-                elif '[[[CODE_BLOCK_' in line:
-                    match = re.search(r'\[\[\[CODE_BLOCK_(\d+)\]\]\]', line)
-                    if match:
-                        code_key = f'[[[CODE_BLOCK_{match.group(1)}]]]'
-                        code = self.code_blocks.get(code_key, '')
-                        
-                        result_type, result_data = self.execute_code_block(code)
-                        
-                        if result_type == 'image':
-                            image_buffer = result_data
-                        elif result_type == 'error':
-                            content_items.append(f"⚠️ {result_data}")
+                        image_paths.append(match.group(1))
                 
                 # Regular text
                 elif line:
@@ -466,8 +386,7 @@ class DynamicMarkdownToPPTXService:
             self.add_slide_from_content(
                 title=title,
                 content=content,
-                image_buffer=image_buffer,
-                image_path=image_path_found,
+                image_paths=image_paths if image_paths else None,
                 layout_index=1
             )
         
@@ -483,22 +402,18 @@ class DynamicMarkdownToPPTXService:
         print(f"✅ Saved: {output_path}")
 
 
+
+
 # # ============ CONTOH PENGGUNAAN ============
 
 # def example_with_template():
 #     """Contoh pakai template"""
     
-#     # Custom font styling (hanya override yang perlu)
+#     # Custom font styling
 #     custom_style = {
-#         'h1': {
-#             'font_size': 48,
-#             'font_name': 'Arial',
-#             'font_color': RGBColor(255, 0, 0),  # Red
-#             'bold': True,
-#         },
 #         'h2': {
 #             'font_size': 36,
-#             'font_color': RGBColor(0, 102, 204),  # Blue
+#             'font_color': RGBColor(0, 102, 204),
 #             'bold': True,
 #         },
 #         'bullet': {
@@ -512,44 +427,55 @@ class DynamicMarkdownToPPTXService:
 #     )
     
 #     markdown_content = """
-# # Judul Utama
+# # Judul Presentasi PLN
 
 # ---
 
-# ## Topik 1
+# ## Topik 1 - Overview
 
-# * Poin pertama
-# * Poin kedua
-# * Poin ketiga
+# * Point pertama tentang sistem
+# * Point kedua tentang infrastruktur
+# * Point ketiga tentang target
 
 # ---
 
-# ## Topik 2 - Data
+# ## Topik 2 - Data Visualization
 
-# import matplotlib.pyplot as plt
-# import numpy as np
+# Berikut adalah grafik performa:
 
-# x = np.linspace(0, 10, 100)
-# y = np.sin(x)
+# ![Chart Performance](data/images/chart1.png)
 
-# plt.figure(figsize=(10, 5))
-# plt.plot(x, y, linewidth=2)
-# plt.title('Sine Wave')
-# plt.grid(True, alpha=0.3)
-# plt.tight_layout()
+# ---
+
+# ## Topik 3 - Multiple Images
+
+# * Grafik A
+# * Grafik B
+
+# ![Chart A](data/images/chart_a.png)
+# ![Chart B](data/images/chart_b.png)
+
+# ---
+
+# ## Kesimpulan
+
+# * Target tercapai
+# * Efisiensi meningkat
+# * Rekomendasi untuk tahun depan
 # """
+    
 #     service.convert_markdown(markdown_content, 'output_template.pptx')
-    
-    
+
+
 # def example_without_template():
-#     """Contoh tanpa template"""
+#     """Contoh tanpa template (generate from scratch)"""
     
 #     service = DynamicMarkdownToPPTXService(
-#         template_path=None  # Tidak pakai template
+#         template_path=None
 #     )
     
 #     markdown_content = """
-# # Welcome
+# # Welcome Presentation
 
 # ---
 
@@ -558,11 +484,50 @@ class DynamicMarkdownToPPTXService:
 # * Feature 1
 # * Feature 2
 # * Feature 3
+
+# ---
+
+# ## Data Section
+
+# Hasil analisis data:
+
+# ![Data Chart](data/images/analysis.png)
 # """
     
 #     service.convert_markdown(markdown_content, 'output_generated.pptx')
 
 
-# # if __name__ == '__main__':
-#     # example_with_template()
-#     # example_without_template()
+# def example_manual_slide_creation():
+#     """Contoh create slide manual (bukan dari markdown)"""
+    
+#     service = DynamicMarkdownToPPTXService(
+#         template_path='data/ppt/template.pptx'
+#     )
+    
+#     # Add slide 1
+#     service.add_slide_from_content(
+#         title='Slide 1',
+#         content=['Point A', 'Point B', 'Point C']
+#     )
+    
+#     # Add slide 2 dengan image
+#     service.add_slide_from_content(
+#         title='Slide 2 - Chart',
+#         content=['Grafik performance', 'Trend meningkat'],
+#         image_paths='data/images/chart.png'
+#     )
+    
+#     # Add slide 3 dengan multiple images
+#     service.add_slide_from_content(
+#         title='Slide 3 - Multiple Charts',
+#         content=None,
+#         image_paths=['data/images/chart1.png', 'data/images/chart2.png']
+#     )
+    
+#     service.save('output_manual.pptx')
+
+
+# if __name__ == '__main__':
+#     example_with_template()
+#     example_without_template()
+#     example_manual_slide_creation()
