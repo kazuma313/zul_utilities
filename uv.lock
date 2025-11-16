@@ -3447,16 +3447,9 @@ dependencies = [
     { name = "jinja2" },
     { name = "langchain-openai" },
     { name = "langgraph" },
-    { name = "nltk" },
-    { name = "numpy" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
-    { name = "python-pptx" },
-    { name = "redis" },
-    { name = "redisvl" },
-    { name = "scipy" },
     { name = "typer" },
-    { name = "xhtml2pdf" },
 ]
 
 [package.dev-dependencies]
@@ -3466,11 +3459,18 @@ dev = [
     { name = "langchain" },
     { name = "langchain-ollama" },
     { name = "mypy" },
+    { name = "nltk" },
+    { name = "numpy" },
     { name = "ollama" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "python-pptx" },
+    { name = "redis" },
+    { name = "redisvl" },
     { name = "ruff" },
+    { name = "scipy" },
     { name = "streamlit" },
+    { name = "xhtml2pdf" },
 ]
 
 [package.metadata]
@@ -3479,16 +3479,9 @@ requires-dist = [
     { name = "jinja2", specifier = ">=3.1.0" },
     { name = "langchain-openai", specifier = ">=1.0.2" },
     { name = "langgraph", specifier = ">=1.0.2" },
-    { name = "nltk", specifier = ">=3.9.2" },
-    { name = "numpy", specifier = ">=2.3.4" },
     { name = "pydantic", specifier = ">=2.0.0" },
     { name = "pydantic-settings", specifier = ">=2.0.0" },
-    { name = "python-pptx", specifier = ">=1.0.2" },
-    { name = "redis", specifier = ">=6.4.0" },
-    { name = "redisvl", specifier = ">=0.10.0" },
-    { name = "scipy", specifier = ">=1.16.2" },
     { name = "typer", extras = ["all"], specifier = ">=0.12.0" },
-    { name = "xhtml2pdf", specifier = ">=0.2.17" },
 ]
 
 [package.metadata.requires-dev]
@@ -3498,9 +3491,16 @@ dev = [
     { name = "langchain", specifier = ">=1.0.5" },
     { name = "langchain-ollama", specifier = ">=1.0.0" },
     { name = "mypy", specifier = ">=1.0.0" },
+    { name = "nltk", specifier = ">=3.9.2" },
+    { name = "numpy", specifier = ">=2.3.4" },
     { name = "ollama", specifier = ">=0.6.0" },
     { name = "pytest", specifier = ">=7.0.0" },
     { name = "pytest-cov", specifier = ">=4.0.0" },
+    { name = "python-pptx", specifier = ">=1.0.2" },
+    { name = "redis", specifier = ">=6.4.0" },
+    { name = "redisvl", specifier = ">=0.10.0" },
     { name = "ruff", specifier = ">=0.1.0" },
+    { name = "scipy", specifier = ">=1.16.2" },
     { name = "streamlit", specifier = ">=1.51.0" },
+    { name = "xhtml2pdf", specifier = ">=0.2.17" },
 ]

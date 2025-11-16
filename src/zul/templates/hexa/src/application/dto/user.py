@@ -1,8 +1,8 @@
-""" 
+"""
 link references: https://hackernoon.com/dto-in-python-an-explanation
 
 The primary goal of a DTO is to simplify communication between different layers of an application,
-particularly when transmitting data through various boundary interfaces such as 
+particularly when transmitting data through various boundary interfaces such as
 web services, REST APIs, message brokers, or other mechanisms of remote interaction.
 
 example:
@@ -27,13 +27,14 @@ age
 
 from pydantic import BaseModel, Field, field_validator
 
+
 class UserDTO(BaseModel):
-   first_name: str
-   last_name: str = Field(min_length=2, alias="lastName")
-   age: int = Field(lt=100, description="Age must be a positive integer")
-   
-   @field_validator("age")
-   def validate_age(cls, value):
-       if value < 18:
-           raise ValueError("Age must be at least 18")
-       return value
+    first_name: str
+    last_name: str = Field(min_length=2, alias="lastName")
+    age: int = Field(lt=100, description="Age must be a positive integer")
+
+    @field_validator("age")
+    def validate_age(cls, value):
+        if value < 18:
+            raise ValueError("Age must be at least 18")
+        return value

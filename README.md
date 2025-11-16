@@ -177,6 +177,13 @@ Pastikan semua proyek dalam tim memiliki struktur yang konsisten:
 zul build web --name feature-xyz
 ```
 
+
+```bash
+# Setiap developer menjalankan command yang sama
+zul build hexa --name feature-xyz
+```
+
+
 ### 3. Reusable Utilities
 
 Import helper utilities yang sudah Anda buat:
@@ -227,29 +234,6 @@ ruff check src/
 
 # Type checking dengan mypy
 mypy src/
-```
-
-### Project Structure
-
-```
-zul/
-├── pyproject.toml          # Project configuration
-├── README.md               # This file
-├── src/
-│   └── zul/
-│       ├── __init__.py     # Package initialization
-│       ├── cli.py          # Main CLI entry point
-│       ├── commands/       # CLI commands
-│       │   ├── __init__.py
-│       │   ├── build.py    # Build command implementation
-│       │   └── install.py  # Install command implementation
-│       ├── templates/      # Jinja2 templates
-│       │   └── web/        # Web project templates
-│       └── utilities/      # Helper utilities
-│           ├── __init__.py
-│           └── milvus_helper.py
-└── tests/                  # Test files
-    └── __init__.py
 ```
 
 ## 📚 Documentation
@@ -328,38 +312,10 @@ Contributions are welcome! Berikut cara contribute:
 - Update documentation
 - Keep commits clean and descriptive
 
-## 📋 Roadmap
-
-- [ ] Add FastAPI project template
-- [ ] Add Django project template
-- [ ] Add Flask project template
-- [ ] Add CLI testing framework template
-- [ ] Add Docker configuration template
-- [ ] Add CI/CD pipeline templates (GitHub Actions, GitLab CI)
-- [ ] Add PDF converter utility
-- [ ] Add database migration utility
-- [ ] Add API client generator utility
-- [ ] Interactive template customization
-- [ ] Custom template support from external sources
-- [ ] Configuration file support (.zulrc)
-
 ## 🐛 Known Issues
 
 Belum ada known issues. Jika menemukan bug, silakan [buat issue baru](https://github.com/YOUR_USERNAME/zul/issues).
 
-## 📝 Changelog
-
-### v0.1.0 (2025-10-25)
-
-**Initial Release**
-
-- ✨ Basic CLI framework dengan Typer
-- ✨ `zul build web` command untuk generate web project template
-- ✨ `zul install milvus_helper` command
-- ✨ Interactive prompts dengan InquirerPy
-- ✨ Template generation dengan Jinja2
-- ✨ Milvus helper utility
-- 📚 Comprehensive documentation
 
 ## 🔗 Links
 
@@ -377,14 +333,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [InquirerPy](https://inquirerpy.readthedocs.io/) - Interactive prompts
 - [Jinja2](https://jinja.palletsprojects.com/) - Template engine
 - [Pydantic](https://docs.pydantic.dev/) - Data validation
+- [Langchain](https://docs.langchain.com/oss/python/langchain/overview) - agent builder
+- [Langgraph](https://docs.langchain.com/oss/python/langchain/overview) - agent orchestration control
 - [UV](https://github.com/astral-sh/uv) - Python package manager
 
 ## 👨‍💻 Author
 
-**Your Name**
+**Kurnia Zulda Matondang**
 
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- Email: your.email@example.com
+- Email: kurniazuldam@gmail.com
 
 ## ⭐ Show Your Support
 

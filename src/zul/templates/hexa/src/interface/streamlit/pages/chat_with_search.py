@@ -15,7 +15,10 @@ Try more LangChain 🤝 Streamlit Agent examples at [github.com/langchain-ai/str
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "assistant", "content": "Hi, I'm a chatbot who can search the web. How can I help you?"}
+        {
+            "role": "assistant",
+            "content": "Hi, I'm a chatbot who can search the web. How can I help you?",
+        }
     ]
 
 for msg in st.session_state.messages:

@@ -2,10 +2,12 @@ from openai import OpenAI
 import streamlit as st
 
 with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="feedback_api_key", type="password")
+    openai_api_key = st.text_input(
+        "OpenAI API Key", key="feedback_api_key", type="password"
+    )
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
- 
- 
+
+
 st.title("📝 Chat with feedback (Trubrics)")
 
 """
@@ -15,7 +17,10 @@ from the user about the LLM responses.
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "How can I help you? Leave feedback to help me improve!"}
+        {
+            "role": "assistant",
+            "content": "How can I help you? Leave feedback to help me improve!",
+        }
     ]
 if "response" not in st.session_state:
     st.session_state["response"] = None
