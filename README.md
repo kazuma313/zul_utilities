@@ -33,6 +33,7 @@ pip install git+https://github.com/kazuma313/zul_utilities.git
 
 # Install versi spesifik (tag/branch)
 pip install git+https://github.com/kazuma313/zul_utilities.git@v0.1.0
+pip install git+https://github.com/kazuma313/zul_utilities.git@development
 ```
 
 #### Menggunakan UV (Recommended):
