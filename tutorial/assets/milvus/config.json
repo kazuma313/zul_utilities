@@ -1,0 +1,44 @@
+{
+  "connection": {
+    "uri": "http://",
+    "port": 19530,
+    "db_name": "my_database"
+  },
+  "collections": [
+    {
+      "collection_name": "my_collection",
+      "shards_num": 2,
+      "description": "My first collection",
+      "milvus_schema": {
+        "auto_id": true,
+        "enable_dynamic_field": true,
+        "fields": [
+          {
+            "field_name": "id",
+            "datatype": "VARCHAR",
+            "max_length": 128,
+            "is_primary": true
+          },
+          {
+            "field_name": "embedding",
+            "datatype": "FLOAT_VECTOR",
+            "dim": 768
+          }
+        ],
+        "functions": []
+      },
+      "indexes": [
+        {
+          "field_name": "embedding",
+          "index_name": "emb_idx",
+          "index_type": "HNSW",
+          "metric_type": "COSINE",
+          "params": {
+            "M": 16,
+            "efConstruction": 200
+          }
+        }
+      ]
+    }
+  ]
+}

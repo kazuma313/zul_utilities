@@ -1,0 +1,31 @@
+{
+  "connection": {
+    "uri": "http://",
+    "port": 30030,
+    "db_name": "redis_db"
+  },
+  
+  "schema": {
+    "index": {
+      "name": "redis_performance_test",
+      "prefix": "redis",
+      "storage_type": "hash"
+    },
+    "fields": [
+      {
+        "name": "content",
+        "type": "text"
+      },
+      {
+        "name": "content_embedding_vector",
+        "type": "vector",
+        "attrs": {
+          "dims": 768,
+          "distance_metric": "cosine",
+          "algorithm": "flat",
+          "datatype": "float32"
+        }
+      }
+    ]
+  }
+}

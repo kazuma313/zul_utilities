@@ -1,0 +1,91 @@
+connection:
+  uri: "http://localhost"
+  port: 19530
+  db_name: "document_database"
+
+collections:
+  - collection_name: "documents"
+    shards_num: 2
+    description: "Document collection with hybrid search support"
+    milvus_schema:
+      auto_id: true
+      enable_dynamic_field: true
+      description: "Documents with dense and sparse embeddings"
+      fields:
+        - field_name: "id"
+          datatype: "VARCHAR"
+          max_length: 256
+          is_primary: true
+          description: "Document ID"
+        
+        - field_name: "content"
+          datatype: "VARCHAR"
+          max_length: 65535
+          enable_analyzer: true
+          description: "Document text content"
+        
+        - field_name: "dense_vector"
+          datatype: "FLOAT_VECTOR"
+          dim: 1024
+          description: "Dense embedding from transformer model"
+        
+        - field_name: "sparse_vector"
+          datatype: "SPARSE_FLOAT_VECTOR"
+          description: "Sparse BM25 embedding"
+      
+      functions:
+        - name: "bm25_function"
+          function_type: "BM25"
+          input_field_names: ["content"]
+          output_field_names: ["sparse_vector"]
+    
+    indexes:
+      - field_name: "dense_vector"
+        index_name: "dense_idx"
+        index_type: "HNSW"
+        metric_type: "COSINE"
+        params:
+          M: 32
+          efConstruction: 256
+      
+      - field_name: "sparse_vector"
+        index_name: "sparse_idx"
+        index_type: "SPARSE_INVERTED_INDEX"
+        metric_type: "BM25"
+        params: {}
+  
+  - collection_name: "products"
+    shards_num: 4
+    description: "Product catalog"
+    schema:
+      auto_id: false
+      enable_dynamic_field: true
+      fields:
+        - field_name: "product_id"
+          datatype: "VARCHAR"
+          max_length: 64
+          is_primary: true
+        
+        - field_name: "title"
+          datatype: "VARCHAR"
+          max_length: 512
+        
+        - field_name: "price"
+          datatype: "FLOAT"
+        
+        - field_name: "in_stock"
+          datatype: "BOOL"
+        
+        - field_name: "title_embedding"
+          datatype: "FLOAT_VECTOR"
+          dim: 768
+      
+      functions: []
+    
+    indexes:
+      - field_name: "title_embedding"
+        index_name: "title_vec_idx"
+        index_type: "IVF_FLAT"
+        metric_type: "L2"
+        params:
+          nlist: 128
