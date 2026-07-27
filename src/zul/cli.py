@@ -2,8 +2,8 @@
 CLI Entry Point untuk Zul
 """
 
-import typer
 from zul.commands import build, install
+import typer
 
 # Buat aplikasi Typer utama
 app = typer.Typer(

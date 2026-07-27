@@ -87,13 +87,13 @@ class MilvusHelper:
         """Create a single collection"""
         # Build schema
         schema = self.client.create_schema(
-            auto_id=col_config.schema.auto_id,
-            enable_dynamic_field=col_config.schema.enable_dynamic_field,
-            description=col_config.schema.description or ""
+            auto_id=col_config.milvus_schema.auto_id,
+            enable_dynamic_field=col_config.milvus_schema.enable_dynamic_field,
+            description=col_config.milvus_schema.description or ""
         )
         
         # Add fields
-        for field in col_config.schema.fields:
+        for field in col_config.milvus_schema.fields:
             field_params = {
                 "field_name": field.field_name,
                 "datatype": self._map_datatype(field.datatype),
@@ -114,7 +114,7 @@ class MilvusHelper:
             schema.add_field(**field_params)
         
         # Add functions (e.g., BM25)
-        for func in col_config.schema.functions:
+        for func in col_config.milvus_schema.functions:
             function = Function(
                 name=func.name,
                 input_field_names=func.input_field_names,
@@ -286,3 +286,41 @@ class MilvusHelper:
     def get_collection_stats(self, collection_name: str) -> Dict:
         """Get collection statistics"""
         return self.client.get_collection_stats(collection_name=collection_name)
+
+    def get_all_data(
+        self,
+        collection_name: str,
+        filter_expr: str = "",
+        output_fields: Optional[List[str]] = None,
+        batch_size: int = 1024,
+    ) -> List[Dict]:
+        """
+        Retrieve all records from a collection using the iterator pattern.
+
+        Args:
+            collection_name: Target collection
+            filter_expr: Optional Milvus filter expression (e.g. "judul != ''")
+            output_fields: Fields to return; defaults to all fields
+            batch_size: Rows per batch, 1–16384
+
+        Returns:
+            List of all matching records as dicts
+        """
+        results: List[Dict] = []
+        iterator = self.client.query_iterator(
+            collection_name=collection_name,
+            batch_size=batch_size,
+            filter=filter_expr,
+            output_fields=output_fields or ["*"],
+        )
+        try:
+            while True:
+                batch = iterator.next()
+                if not batch:
+                    break
+                results.extend(batch)
+        finally:
+            iterator.close()
+
+        logger.info(f"Retrieved {len(results)} records from {collection_name}")
+        return results
