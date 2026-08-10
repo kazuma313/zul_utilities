@@ -1,0 +1,41 @@
+# ---------------------------------------------------------------------------
+# folder_migrator — example configuration
+# Copy this file, adjust the paths, then run:  python main.py --config config.yaml
+# ---------------------------------------------------------------------------
+
+# Required: directory whose contents will be MOVED (must already exist).
+source: "/mnt/source"
+
+# Required: directory that will receive the contents (created if missing).
+destination: "/mnt/destination"
+
+# A file is eligible only if it matches at least one include pattern.
+include:
+  - ".*"
+
+# Any file OR directory whose name matches an exclude pattern is skipped.
+# (Excluded directories are pruned — never descended into.)
+exclude:
+  - "^\\.git$"
+  - "__pycache__"
+  - "\\.DS_Store"
+  - "node_modules"
+  - "\\.venv"
+  - "\\.idea"
+
+# Descend into / move symbolic links (false = symlinks are skipped).
+follow_symlink: false
+
+# Replace files that already exist at the destination (false = skip them).
+overwrite: false
+
+# Number of concurrent worker threads (>= 1).
+workers: 4
+
+# --- Optional tuning (sensible defaults shown) ------------------------------
+# Where resume progress is stored:
+checkpoint_path: "checkpoint.json"
+# Where logs are written (also echoed to the console):
+log_path: "logs/move_folder.log"
+# Flush the checkpoint at least this often (in files processed):
+checkpoint_every: 500

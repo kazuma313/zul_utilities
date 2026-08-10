@@ -1,0 +1,6 @@
+# Runtime: only PyYAML is needed, and only if you use YAML configs.
+# JSON configs work with the standard library alone.
+PyYAML>=6.0
+
+# Development / testing
+pytest>=7.0

@@ -1,0 +1,14 @@
+{
+  "completed_directories": [
+    ".",
+    "images",
+    "images/2024",
+    "documents/reports"
+  ],
+  "moved_count": 12345,
+  "skipped_count": 27,
+  "failed_count": 3,
+  "last_processed": "images/2024/img123.png",
+  "started_at": 1753670400.0,
+  "updated_at": 1753670712.5
+}
