@@ -1,8 +1,11 @@
 """Tests for FileMover (single move) and FolderMover (full migration/resume)."""
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 from typing import Callable
+
+import pytest
 
 from folder_migrator.checkpoint import CheckpointManager
 from folder_migrator.matcher import RegexMatcher
@@ -113,3 +116,49 @@ def test_resume_skips_completed_directory(
     assert (src / "keep" / "a.txt").exists()
     assert not (dst / "keep" / "a.txt").exists()
     assert (dst / "move" / "b.txt").exists()
+
+
+def test_directory_with_failure_is_not_marked_completed(
+    tmp_path: Path,
+    make_config: Callable[..., MigrationConfig],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A failed file must not silently prevent that directory from ever being retried.
+
+    Regression test: previously, ``mark_directory_completed`` ran unconditionally
+    after processing a directory, so a resumed run would skip it forever even
+    though one of its files never actually moved.
+    """
+    src, dst = tmp_path / "src", tmp_path / "dst"
+    (src / "docs").mkdir(parents=True)
+    (src / "docs" / "ok.txt").write_text("ok", encoding="utf-8")
+    (src / "docs" / "bad.txt").write_text("bad", encoding="utf-8")
+    config = make_config(src, dst)
+
+    real_move = shutil.move
+
+    def _flaky_move(source: str, destination: str) -> object:
+        if "bad.txt" in str(source):
+            raise OSError("simulated failure (e.g. path too long)")
+        return real_move(source, destination)
+
+    monkeypatch.setattr("folder_migrator.mover.shutil.move", _flaky_move)
+
+    FolderMover.from_config(config).run()
+
+    checkpoint = CheckpointManager(config.checkpoint_path).load()
+    assert "docs" not in checkpoint.completed_directories
+    assert checkpoint.failed_count == 1
+    assert (dst / "docs" / "ok.txt").exists()
+    assert (src / "docs" / "bad.txt").exists()  # left in place, safe to retry
+
+    # Resume after the transient failure is fixed: the directory is revisited
+    # (not skipped), the already-moved file is left alone, and the previously
+    # failed file is retried and succeeds.
+    monkeypatch.undo()
+    FolderMover.from_config(config).run()
+
+    assert (dst / "docs" / "bad.txt").exists()
+    assert not (src / "docs" / "bad.txt").exists()
+    final_checkpoint = CheckpointManager(config.checkpoint_path).load()
+    assert "docs" in final_checkpoint.completed_directories

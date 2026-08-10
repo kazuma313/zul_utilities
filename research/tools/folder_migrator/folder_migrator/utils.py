@@ -27,6 +27,31 @@ def to_relative(child: Path, root: Path) -> str:
     return Path(os.path.relpath(child, root)).as_posix()
 
 
+def to_long_path(path: Path) -> Path:
+    """Return a Windows extended-length path to bypass the 260-char MAX_PATH limit.
+
+    Deeply nested trees with long names (common in exported documents) easily
+    exceed Windows' classic 260-character path limit, which surfaces as a
+    misleading ``FileNotFoundError`` even though every component exists. The
+    ``\\\\?\\`` prefix tells the Win32 API to skip that legacy check. This is a
+    no-op on non-Windows platforms and on paths already prefixed.
+
+    Args:
+        path: The path to widen.
+
+    Returns:
+        ``path`` unchanged on non-Windows, otherwise an extended-length form.
+    """
+    if os.name != "nt":
+        return path
+    text = str(path if path.is_absolute() else Path.cwd() / path)
+    if text.startswith("\\\\?\\"):
+        return path
+    if text.startswith("\\\\"):  # UNC path: \\server\share\... -> \\?\UNC\server\share\...
+        return Path("\\\\?\\UNC\\" + text.lstrip("\\"))
+    return Path("\\\\?\\" + text)
+
+
 def scan_directory(
     directory: Path, follow_symlink: bool
 ) -> tuple[list[os.DirEntry[str]], list[os.DirEntry[str]]]:
@@ -74,6 +99,10 @@ class ProgressReporter:
     def update(self, processed: int, moved: int, current: str, *, force: bool = False) -> None:
         """Print progress, throttled unless ``force`` is True.
 
+        Never raises: a console codepage that cannot encode a given filename
+        (e.g. cp1252 vs. a name containing rare Unicode characters) must not
+        abort a multi-hour migration over a cosmetic progress line.
+
         Args:
             processed: Total entries processed so far.
             moved: Total entries successfully moved.
@@ -84,8 +113,16 @@ class ProgressReporter:
         if not force and (now - self._last_emit) < self._interval:
             return
         self._last_emit = now
-        sys.stdout.write(f"\rProcessed: {processed} | moved: {moved} | current: {current}")
-        sys.stdout.flush()
+        line = f"\rProcessed: {processed} | moved: {moved} | current: {current}"
+        try:
+            sys.stdout.write(line)
+            sys.stdout.flush()
+        except UnicodeEncodeError:
+            safe = line.encode(sys.stdout.encoding or "ascii", errors="replace").decode(
+                sys.stdout.encoding or "ascii", errors="replace"
+            )
+            sys.stdout.write(safe)
+            sys.stdout.flush()
 
     def finish(self) -> None:
         """Terminate the progress line with a newline."""

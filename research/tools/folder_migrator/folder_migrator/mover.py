@@ -26,7 +26,7 @@ from .config import ConfigLoader
 from .logger import LoggerFactory
 from .matcher import RegexMatcher
 from .models import MigrationConfig, MoveOutcome, MoveResult
-from .utils import ProgressReporter, scan_directory, to_relative
+from .utils import ProgressReporter, scan_directory, to_long_path, to_relative
 
 
 class FileMover:
@@ -53,15 +53,19 @@ class FileMover:
             A :class:`MoveResult` describing the outcome (moved/skipped/failed).
         """
         name = source.name
-        if source.is_symlink() and not self._config.follow_symlink:
+        # Deeply nested trees with long names routinely exceed Windows' classic
+        # 260-char MAX_PATH; widen both sides so existence checks and the move
+        # itself see the real file instead of a misleading FileNotFoundError.
+        long_source = to_long_path(source)
+        if long_source.is_symlink() and not self._config.follow_symlink:
             return MoveResult(relative_path, MoveOutcome.SKIPPED, "symlink")
         if not self._matcher.should_move_file(name):
             return MoveResult(relative_path, MoveOutcome.SKIPPED, "excluded by regex")
 
-        destination = self._config.destination / relative_path
+        destination = to_long_path(self._config.destination / relative_path)
         if destination.exists() and not self._config.overwrite:
             return MoveResult(relative_path, MoveOutcome.SKIPPED, "destination exists")
-        return self._safe_move(source, destination, relative_path)
+        return self._safe_move(long_source, destination, relative_path)
 
     def _safe_move(self, source: Path, destination: Path, relative_path: str) -> MoveResult:
         """Perform the move, converting expected errors into a FAILED result."""
@@ -177,8 +181,14 @@ class FolderMover:
             return
 
         self._logger.info("Processing directory: %s (%d files)", relative_dir, len(files))
-        self._move_directory_files(files, relative_dir, executor)
-        self._checkpoint.mark_directory_completed(relative_dir)
+        had_failure = self._move_directory_files(files, relative_dir, executor)
+        # Only mark a directory complete if every file in it truly succeeded (moved or
+        # legitimately skipped) and the run wasn't interrupted mid-way. Otherwise a
+        # resume would silently never retry the files that failed (e.g. transient
+        # disk-full, permission, or path-length errors) or were left unprocessed by a
+        # graceful shutdown.
+        if not had_failure and not self._stop.is_set():
+            self._checkpoint.mark_directory_completed(relative_dir)
         self._checkpoint.flush()
 
     def _enqueue_subdirectories(
@@ -193,30 +203,48 @@ class FolderMover:
 
     def _move_directory_files(
         self, files: list[os.DirEntry[str]], relative_dir: str, executor: cf.ThreadPoolExecutor
-    ) -> None:
-        """Move every file in a directory with a bounded number of in-flight tasks."""
+    ) -> bool:
+        """Move every file in a directory with a bounded number of in-flight tasks.
+
+        Returns:
+            True if any file in this directory failed to move (or an entry was
+            left unsubmitted because a stop was requested mid-directory).
+        """
         max_inflight = self._config.workers * 4
         pending: set[cf.Future[MoveResult]] = set()
+        had_failure = False
         for entry in files:
             if self._stop.is_set():
+                had_failure = True
                 break
             relative_path = entry.name if relative_dir == "." else f"{relative_dir}/{entry.name}"
             pending.add(executor.submit(self._file_mover.move, Path(entry.path), relative_path))
             if len(pending) >= max_inflight:
                 done, pending = cf.wait(pending, return_when=cf.FIRST_COMPLETED)
-                self._drain(done)
-        self._drain(cf.as_completed(pending))
+                had_failure |= self._drain(done)
+        had_failure |= self._drain(cf.as_completed(pending))
+        return had_failure
 
-    def _drain(self, futures: Iterable[cf.Future[MoveResult]]) -> None:
-        """Record and log the results of completed move futures."""
+    def _drain(self, futures: Iterable[cf.Future[MoveResult]]) -> bool:
+        """Record and log the results of completed move futures.
+
+        Returns:
+            True if any drained result was a failure (or a worker raised
+            unexpectedly).
+        """
+        had_failure = False
         for future in futures:
             try:
                 result = future.result()
             except Exception as error:  # pragma: no cover - FileMover already guards
                 self._logger.error("Unexpected worker error: %s", error)
+                had_failure = True
                 continue
             self._checkpoint.record(result)
             self._report(result)
+            if result.outcome is MoveOutcome.FAILED:
+                had_failure = True
+        return had_failure
 
     def _report(self, result: MoveResult) -> None:
         """Log a single result at the appropriate level and update progress."""
