@@ -49,6 +49,15 @@ dev = [
     "torchvision",
 ]
 
+[tool.pytest.ini_options]
+testpaths = [
+    "research/sorting_algorithm",
+    "research/image_processing",
+    "research/probability_simulation",
+    "research/string_algorithms",
+]
+addopts = "-ra"
+
 [[tool.uv.index]]
 name = "pytorch"
 url = "https://download.pytorch.org/whl/cu130"
