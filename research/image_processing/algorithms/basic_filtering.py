@@ -22,7 +22,6 @@ Output: (np.ndarray) - image hasil blur, shape sama dengan input, dtype uint8.
 
 import numpy as np
 import cv2
-from ollama import show
 
 def read_image(path:str, widht:int, height:int):
     image = cv2.imread(path)

@@ -30,7 +30,24 @@ Output (canny_edge_detection): (np.ndarray) - binary edge map, shape (H, W),
     dtype uint8, nilai {0, 255}.
 """
 
+
 import numpy as np
+import cv2
+
+def read_image(path:str, widht:int, height:int):
+    image = cv2.imread(path)
+    if image is None:
+        raise FileNotFoundError(f"Image not found")
+    
+    image = cv2.resize(image, (widht, height), interpolation=0)
+    return image
+
+
+def show_image(image, name="gambar"):
+    cv2.imshow (name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
 
 
 def sobel_edge_detection(image: np.ndarray, ksize: int = 3) -> np.ndarray:
@@ -48,9 +65,18 @@ def sobel_edge_detection(image: np.ndarray, ksize: int = 3) -> np.ndarray:
     Raises:
         ValueError: If image is not a 2D (grayscale) array.
     """
-    raise NotImplementedError("TODO: implement sobel_edge_detection")
+    image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    image_gray = cv2.GaussianBlur(image_gray, (ksize, ksize), 0)
 
-
+    image_x = cv2.Sobel(image_gray, cv2.CV_64F, 1, 0, ksize=ksize)
+    image_y = cv2.Sobel(image_gray,  cv2.CV_64F, 0, 1, ksize=ksize)
+    
+    gradient_magnitude = cv2.magnitude(image_x, image_y)
+    sobel_final = cv2.convertScaleAbs(gradient_magnitude)
+    
+    return sobel_final
+    
+    
 def canny_edge_detection(
     image: np.ndarray,
     threshold1: int = 100,
@@ -72,13 +98,18 @@ def canny_edge_detection(
         ValueError: If image is not a 2D (grayscale) array, or if
             threshold1 >= threshold2.
     """
-    raise NotImplementedError("TODO: implement canny_edge_detection")
+    edges = cv2.Canny(image, threshold1, threshold2)
+    return edges
 
 
 if __name__ == "__main__":
     import sys
 
     image_path = sys.argv[1] if len(sys.argv) > 1 else "rog.jpg"
-    # TODO: baca gambar dari image_path (grayscale), panggil
-    # sobel_edge_detection & canny_edge_detection di atas, lalu simpan atau
-    # tampilkan hasilnya.
+    img = read_image(image_path, widht=640, height=640)
+    img_sobel = sobel_edge_detection(image=img)
+    img_canny = canny_edge_detection(image=img)
+    
+    # print(img[0])
+    show_image(name= "sobel", image=img_sobel)
+    show_image(name= "canny", image=img_canny)
