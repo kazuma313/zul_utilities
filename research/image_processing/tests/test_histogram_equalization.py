@@ -1,16 +1,16 @@
 """
-this module for testing histogram & histogram equalization algorithm
+this module for testing histogram & histogram equalization (problem #4)
 """
 
 import unittest
 import numpy as np
-from research.image_processing.algorithms.histogram import (
+from research.image_processing.algorithms.histogram_equalization import (
     compute_histogram,
     histogram_equalization,
 )
 
 
-class TestHistogramCorrectness(unittest.TestCase):
+class TestHistogramEqualizationCorrectness(unittest.TestCase):
     """Verifies the histogram and equalization produce the right values."""
 
     def test_counts_are_correct(self):
@@ -24,6 +24,7 @@ class TestHistogramCorrectness(unittest.TestCase):
         self.assertEqual(result.sum(), image.size)
 
     def test_constant_image_stays_uniform(self):
+        # already-uniform intensity: equalization has nothing to spread out
         image = np.full((3, 3), 100, dtype=np.uint8)
 
         result = histogram_equalization(image)
@@ -31,7 +32,7 @@ class TestHistogramCorrectness(unittest.TestCase):
         self.assertEqual(len(np.unique(result)), 1)
 
 
-class TestHistogramSoftwareEngineering(unittest.TestCase):
+class TestHistogramEqualizationSoftwareEngineering(unittest.TestCase):
     """Checks the implementations' contracts, robustness and side effects."""
 
     def test_histogram_shape_is_256(self):

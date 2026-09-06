@@ -1,5 +1,5 @@
 """
-this module for testing color-based object detection & counting algorithm
+this module for testing color-based object detection & counting (problem #5)
 """
 
 import unittest
@@ -23,9 +23,11 @@ class TestColorObjectDetectionCorrectness(unittest.TestCase):
         self.assertTrue(np.all(mask[1:3, 1:3] == 255))
 
     def test_two_separate_red_objects(self):
-        image = np.zeros((6, 6, 3), dtype=np.uint8)
-        image[0:1, 0:1] = [255, 0, 0]
-        image[4:5, 4:5] = [255, 0, 0]
+        # each object is a 2x2 block, large enough to survive morphological
+        # noise cleanup.
+        image = np.zeros((8, 8, 3), dtype=np.uint8)
+        image[0:2, 0:2] = [255, 0, 0]
+        image[5:7, 5:7] = [255, 0, 0]
 
         _, count = detect_and_count_colored_objects(image, (0, 100, 100), (10, 255, 255))
 
@@ -38,6 +40,18 @@ class TestColorObjectDetectionCorrectness(unittest.TestCase):
 
         self.assertEqual(count, 0)
         self.assertTrue(np.all(mask == 0))
+
+    def test_single_pixel_noise_speckle_is_filtered_out(self):
+        # a real 3x3 object plus a lone 1-pixel speck of the same color far
+        # away; morphological cleanup should drop the speck so it does not
+        # get counted as a second object.
+        image = np.zeros((10, 10, 3), dtype=np.uint8)
+        image[2:5, 2:5] = [255, 0, 0]
+        image[8, 8] = [255, 0, 0]
+
+        _, count = detect_and_count_colored_objects(image, (0, 100, 100), (10, 255, 255))
+
+        self.assertEqual(count, 1)
 
 
 class TestColorObjectDetectionSoftwareEngineering(unittest.TestCase):

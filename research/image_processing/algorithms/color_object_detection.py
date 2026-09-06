@@ -1,9 +1,19 @@
 """
--> Deteksi & Hitung Objek Sederhana (Color-based Masking)
-Diberi gambar dengan beberapa objek berwarna solid di atas background berbeda,
-buat mask untuk mendeteksi objek dengan warna tertentu (misal semua objek merah)
-menggunakan HSV color space, lalu hitung berapa banyak objek dengan connected
-component labeling.
+#5 (Medium, 25 menit) - Deteksi & Hitung Objek Berdasarkan Warna
+Diberi gambar dengan beberapa objek berwarna solid di atas background
+berbeda, buat mask di HSV color space untuk mendeteksi objek dengan warna
+tertentu (misal semua objek merah), bersihkan noise dengan morphological
+operations, lalu hitung jumlah objek dengan cv2.findContours atau
+cv2.connectedComponentsWithStats. Ini pola soal yang sangat umum: color
+masking + counting.
+
+Langkah yang diharapkan:
+    1. Konversi image ke HSV, buat mask dengan cv2.inRange(hsv_lower, hsv_upper).
+    2. Bersihkan noise pada mask dengan morphological opening/closing
+       (mis. cv2.morphologyEx) supaya speck 1-2 piksel tidak ikut terhitung
+       sebagai objek.
+    3. Hitung jumlah komponen (objek) pada mask yang sudah bersih, mis.
+       dengan cv2.findContours atau cv2.connectedComponentsWithStats.
 
 Input:
     image (np.ndarray) - RGB image, shape (H, W, 3), dtype uint8.
@@ -41,7 +51,10 @@ def detect_and_count_colored_objects(
 
 
 if __name__ == "__main__":
-    sample = np.zeros((4, 4, 3), dtype=np.uint8)
-    sample[0:2, 0:2] = [255, 0, 0]
-    mask, count = detect_and_count_colored_objects(sample, (0, 100, 100), (10, 255, 255))
-    print(mask, count)
+    import sys
+
+    image_path = sys.argv[1] if len(sys.argv) > 1 else "rog.jpg"
+    # TODO: baca gambar dari image_path, panggil
+    # detect_and_count_colored_objects di atas dengan hsv_lower/hsv_upper
+    # pilihanmu (mis. untuk menangkap neon merah), lalu simpan atau
+    # tampilkan mask & count-nya.
