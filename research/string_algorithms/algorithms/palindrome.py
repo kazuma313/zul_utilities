@@ -8,7 +8,7 @@ Input: s (str) - string yang bisa mengandung karakter non-alfanumerik dan
 Output: (bool) - True jika s adalah palindrome setelah mengabaikan karakter
     non-alfanumerik dan kapitalisasi, False jika tidak.
 """
-
+import re
 
 def is_valid_palindrome(s: str) -> bool:
     """
@@ -21,8 +21,13 @@ def is_valid_palindrome(s: str) -> bool:
     Returns:
         bool: True if s is a valid palindrome, False otherwise.
     """
-    raise NotImplementedError("TODO: implement is_valid_palindrome")
+    
+    cleaned_str = re.sub(r'[^a-zA-Z0-9]', '', s).lower()
+    reverse_string= cleaned_str[::-1]
+    string = cleaned_str
+    
+    return reverse_string == string
 
 
 if __name__ == "__main__":
-    print(is_valid_palindrome("A man, a plan, a canal: Panama"))
+    print(is_valid_palindrome("ibu ratna antar ubi"))

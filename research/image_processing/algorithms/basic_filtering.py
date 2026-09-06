@@ -21,6 +21,22 @@ Output: (np.ndarray) - image hasil blur, shape sama dengan input, dtype uint8.
 """
 
 import numpy as np
+import cv2
+from ollama import show
+
+def read_image(path:str, widht:int, height:int):
+    image = cv2.imread(path)
+    if image is None:
+        raise FileNotFoundError(f"Image not found")
+    
+    image = cv2.resize(image, (widht, height), interpolation=0)
+    return image
+
+
+def show_image(image, name="gambar"):
+    cv2.imshow (name, image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
 def apply_gaussian_blur(image: np.ndarray, ksize: int = 5) -> np.ndarray:
@@ -37,7 +53,9 @@ def apply_gaussian_blur(image: np.ndarray, ksize: int = 5) -> np.ndarray:
     Raises:
         ValueError: If ksize is not odd or is less than 3.
     """
-    raise NotImplementedError("TODO: implement apply_gaussian_blur")
+    image = cv2.GaussianBlur(image, (ksize, ksize), 0)
+    return image
+    
 
 
 def apply_median_blur(image: np.ndarray, ksize: int = 5) -> np.ndarray:
@@ -55,12 +73,17 @@ def apply_median_blur(image: np.ndarray, ksize: int = 5) -> np.ndarray:
     Raises:
         ValueError: If ksize is not odd or is less than 3.
     """
-    raise NotImplementedError("TODO: implement apply_median_blur")
+    image = cv2.medianBlur(image, ksize, 0)
+    return image
 
 
 if __name__ == "__main__":
     import sys
 
     image_path = sys.argv[1] if len(sys.argv) > 1 else "rog.jpg"
-    # TODO: baca gambar dari image_path, panggil apply_gaussian_blur /
-    # apply_median_blur di atas, lalu simpan atau tampilkan hasilnya.
+    img = read_image(image_path, widht=640, height=640)
+    img_gausian = apply_gaussian_blur(image=img)
+    img_median = apply_median_blur(image=img)
+    # print(img[0])
+    show_image(name= "gausian", image=img_gausian)
+    show_image(name= "median", image=img_median)

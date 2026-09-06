@@ -26,8 +26,6 @@ Output (binary_threshold): (np.ndarray) - binary image, shape (H, W), dtype
 
 import numpy as np
 import cv2
-from streamlit import image
-from sympy import im
 
 def read_image(path:str, widht:int, height:int):
     image = cv2.imread(path)
