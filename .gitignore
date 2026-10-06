@@ -217,3 +217,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated demo output images (research/image_processing __main__ demos)
+demo_output/
+
+# Packages installed by npm (skills and research folders)
+node_modules/
+
+# Downloaded model weights (too large for GitHub)
+weights/
