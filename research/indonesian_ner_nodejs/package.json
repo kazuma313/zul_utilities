@@ -1,0 +1,13 @@
+{
+  "name": "indonesian-ner-nodejs",
+  "private": true,
+  "description": "cahya/bert-base-indonesian-NER in Node.js with transformers.js",
+  "type": "module",
+  "scripts": {
+    "ner": "node ner.mjs",
+    "check": "node check.mjs"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.3.1"
+  }
+}

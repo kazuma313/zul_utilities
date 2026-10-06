@@ -1,0 +1,172 @@
+{
+ "Pc3GWaOWHLk#0": {
+  "A": "gemma3-4b",
+  "B": "qwen3-8b",
+  "C": "qwen3-4b"
+ },
+ "Pc3GWaOWHLk#3": {
+  "A": "qwen3-8b",
+  "B": "gemma3-4b",
+  "C": "qwen3-4b"
+ },
+ "Pc3GWaOWHLk#6": {
+  "A": "qwen3-8b",
+  "B": "qwen3-4b",
+  "C": "gemma3-4b"
+ },
+ "6c14acc799cc#2": {
+  "A": "qwen3-4b",
+  "B": "gemma3-4b",
+  "C": "qwen3-8b"
+ },
+ "6c14acc799cc#5": {
+  "A": "qwen3-8b",
+  "B": "qwen3-4b",
+  "C": "gemma3-4b"
+ },
+ "6c14acc799cc#8": {
+  "A": "qwen3-8b",
+  "B": "gemma3-4b",
+  "C": "qwen3-4b"
+ },
+ "6c14acc799cc#11": {
+  "A": "qwen3-4b",
+  "B": "qwen3-8b",
+  "C": "gemma3-4b"
+ },
+ "99d6393011a5#1": {
+  "A": "gemma3-4b",
+  "B": "qwen3-4b",
+  "C": "qwen3-8b"
+ },
+ "99d6393011a5#4": {
+  "A": "qwen3-8b",
+  "B": "gemma3-4b",
+  "C": "qwen3-4b"
+ },
+ "99d6393011a5#7": {
+  "A": "qwen3-4b",
+  "B": "gemma3-4b",
+  "C": "qwen3-8b"
+ },
+ "gqCEJ1McXCQ#1": {
+  "A": "qwen3-4b",
+  "B": "gemma3-4b",
+  "C": "qwen3-8b"
+ },
+ "gqCEJ1McXCQ#4": {
+  "A": "qwen3-4b",
+  "B": "qwen3-8b",
+  "C": "gemma3-4b"
+ },
+ "gqCEJ1McXCQ#7": {
+  "A": "qwen3-4b",
+  "B": "qwen3-8b",
+  "C": "gemma3-4b"
+ },
+ "gqCEJ1McXCQ#10": {
+  "A": "qwen3-4b",
+  "B": "gemma3-4b",
+  "C": "qwen3-8b"
+ },
+ "gqCEJ1McXCQ#13": {
+  "A": "gemma3-4b",
+  "B": "qwen3-8b",
+  "C": "qwen3-4b"
+ },
+ "gqCEJ1McXCQ#16": {
+  "A": "qwen3-8b",
+  "B": "gemma3-4b",
+  "C": "qwen3-4b"
+ },
+ "gqCEJ1McXCQ#19": {
+  "A": "qwen3-4b",
+  "B": "gemma3-4b",
+  "C": "qwen3-8b"
+ },
+ "gqCEJ1McXCQ#22": {
+  "A": "gemma3-4b",
+  "B": "qwen3-4b",
+  "C": "qwen3-8b"
+ },
+ "gqCEJ1McXCQ#25": {
+  "A": "qwen3-8b",
+  "B": "gemma3-4b",
+  "C": "qwen3-4b"
+ },
+ "Qft-J2LG0NM#1": {
+  "A": "qwen3-4b",
+  "B": "gemma3-4b",
+  "C": "qwen3-8b"
+ },
+ "Qft-J2LG0NM#4": {
+  "A": "gemma3-4b",
+  "B": "qwen3-8b",
+  "C": "qwen3-4b"
+ },
+ "Qft-J2LG0NM#7": {
+  "A": "qwen3-8b",
+  "B": "gemma3-4b",
+  "C": "qwen3-4b"
+ },
+ "Qft-J2LG0NM#10": {
+  "A": "gemma3-4b",
+  "B": "qwen3-4b",
+  "C": "qwen3-8b"
+ },
+ "Qft-J2LG0NM#13": {
+  "A": "qwen3-8b",
+  "B": "gemma3-4b",
+  "C": "qwen3-4b"
+ },
+ "Qft-J2LG0NM#16": {
+  "A": "gemma3-4b",
+  "B": "qwen3-4b",
+  "C": "qwen3-8b"
+ },
+ "Qft-J2LG0NM#19": {
+  "A": "qwen3-4b",
+  "B": "qwen3-8b",
+  "C": "gemma3-4b"
+ },
+ "Qft-J2LG0NM#22": {
+  "A": "qwen3-4b",
+  "B": "gemma3-4b",
+  "C": "qwen3-8b"
+ },
+ "Qft-J2LG0NM#25": {
+  "A": "qwen3-8b",
+  "B": "gemma3-4b",
+  "C": "qwen3-4b"
+ },
+ "Qft-J2LG0NM#28": {
+  "A": "gemma3-4b",
+  "B": "qwen3-8b",
+  "C": "qwen3-4b"
+ },
+ "Qft-J2LG0NM#31": {
+  "A": "qwen3-4b",
+  "B": "qwen3-8b",
+  "C": "gemma3-4b"
+ },
+ "Qft-J2LG0NM#34": {
+  "A": "qwen3-4b",
+  "B": "gemma3-4b",
+  "C": "qwen3-8b"
+ },
+ "Qft-J2LG0NM#37": {
+  "A": "qwen3-4b",
+  "B": "qwen3-8b",
+  "C": "gemma3-4b"
+ },
+ "Qft-J2LG0NM#40": {
+  "A": "qwen3-8b",
+  "B": "qwen3-4b",
+  "C": "gemma3-4b"
+ },
+ "Qft-J2LG0NM#43": {
+  "A": "gemma3-4b",
+  "B": "qwen3-8b",
+  "C": "qwen3-4b"
+ }
+}

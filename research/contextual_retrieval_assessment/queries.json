@@ -1,0 +1,427 @@
+{
+ "about": "Questions for evals/retrieval_eval.py, written by Claude (Fable 5.1) on 2026-10-06 from the chunks alone, before any model wrote a context. 'evidence' is a piece of text that occurs in exactly one chunk of the corpus: that chunk is the answer. 'situated' questions name the source (speaker, show, page), which the chunk itself usually does not; 'content' questions ask only about what is said; 'paraphrase' questions (added after a first run showed BM25 near 97%, still before any model context) avoid the words of the chunk.",
+ "corpus": [
+  "youtube:Pc3GWaOWHLk  MALAKA Kelas Pakar, Justinus Laksana (9 min)",
+  "youtube:gqCEJ1McXCQ  dr. Tirta, mitos dan fakta kesehatan (26 min)",
+  "youtube:Qft-J2LG0NM  Theresa Learns x KJo, trading crypto (44 min, 11 chapters)",
+  "docs/panduan/memakai-milvus.md",
+  "docs/panduan/membuat-mindmap.md"
+ ],
+ "queries": [
+  {
+   "q": "Di kelas pakar MALAKA, berapa lama Justinus Laksana tinggal di Belanda waktu kecil?",
+   "evidence": "dari umur 12 sampai 32 tahun besar di Belanda",
+   "type": "situated"
+  },
+  {
+   "q": "Apa pesan ibu Coach Justin waktu dia remaja di Belanda?",
+   "evidence": "jangan terlibat dengan kriminalitas",
+   "type": "situated"
+  },
+  {
+   "q": "Berapa tahun Justinus Laksana jadi komentator bola di TV?",
+   "evidence": "komentator bola di TV 14 tahun",
+   "type": "situated"
+  },
+  {
+   "q": "Apa pekerjaan pertama Coach Justin waktu baru datang ke Indonesia?",
+   "evidence": "Waktu gua datang, gue jualan kertas",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa kita tidak boleh komplain soal orang tua yang tidak kaya atau sekolah yang tidak mahal?",
+   "evidence": "orang tua lu enggak kaya",
+   "type": "content"
+  },
+  {
+   "q": "Apa cerita Coach Justin tentang berhenti merokok?",
+   "evidence": "gua harus berhenti ngerokok",
+   "type": "situated"
+  },
+  {
+   "q": "Kalau bukan uang, modal apa yang dibutuhkan untuk maju menurut Justinus Laksana?",
+   "evidence": "modal itu bukan duit",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa dr. Tirta masih suka kerokan?",
+   "evidence": "bermanfaat untuk relaksasi otot",
+   "type": "situated"
+  },
+  {
+   "q": "Menurut dr. Tirta, kenapa kerokan tidak boleh terlalu ke samping leher?",
+   "evidence": "arteri karotis",
+   "type": "situated"
+  },
+  {
+   "q": "Apakah demam tinggi bisa merusak sel otak secara permanen?",
+   "evidence": "demam tinggi bisa merusak sel otak secara permanen",
+   "type": "content"
+  },
+  {
+   "q": "Berapa suhu tubuh normal menurut dr. Tirta?",
+   "evidence": "36,5 sampai 37,5",
+   "type": "situated"
+  },
+  {
+   "q": "Kalau ada orang kejang, boleh dikasih sendok?",
+   "evidence": "enggak boleh dikasih sendok",
+   "type": "content"
+  },
+  {
+   "q": "Kenapa sering kebelet BAB saat mau olahraga?",
+   "evidence": "tekanan abdominalnya naik",
+   "type": "content"
+  },
+  {
+   "q": "Kenapa sekarang makin banyak anak muda yang terkena hipertensi?",
+   "evidence": "karena gaya hidup dan lifestyle dan kedua karena genetik",
+   "type": "content"
+  },
+  {
+   "q": "Berapa tekanan darah yang normal?",
+   "evidence": "120 tuh sistoliknya",
+   "type": "content"
+  },
+  {
+   "q": "Kenapa mantan perokok biasanya minum kopinya lebih kencang?",
+   "evidence": "Nikotin plus kafein",
+   "type": "content"
+  },
+  {
+   "q": "Apakah diabetes bisa merambat ke penyakit lain?",
+   "evidence": "trio penyakit metabolic sindrome",
+   "type": "content"
+  },
+  {
+   "q": "Apa itu diabetes retinopati?",
+   "evidence": "Kalau terganggu di retina jadinya diabetes retinopati",
+   "type": "content"
+  },
+  {
+   "q": "Sinusitis itu ranah dokter spesialis apa menurut dr. Tirta?",
+   "evidence": "ranah SPTHT",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa anak yang terlalu dijaga kebersihannya malah gampang sakit?",
+   "evidence": "dipaparkan dengan bakteri-bakteri dan virus",
+   "type": "content"
+  },
+  {
+   "q": "Kenapa anak dr. Tirta sering flu setiap pulang sekolah?",
+   "evidence": "AC yang enggak bersih",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa satu kantor bisa bergiliran sakit per lantai?",
+   "evidence": "AC central building",
+   "type": "content"
+  },
+  {
+   "q": "Apakah makan protein terlalu banyak bisa membuat asam urat naik?",
+   "evidence": "3 gram per kg berat badan",
+   "type": "content"
+  },
+  {
+   "q": "Di podcast dr. Tirta, Pak Deni kemungkinan punya masalah organ apa di masa depan?",
+   "evidence": "Kemungkinan batu ginjal sama gagal hati",
+   "type": "situated"
+  },
+  {
+   "q": "Sejak umur berapa sebaiknya mulai check up rutin?",
+   "evidence": "sejak umur 25",
+   "type": "content"
+  },
+  {
+   "q": "Suplemen apa yang dr. Tirta minum karena jarang kena matahari?",
+   "evidence": "vitamin D3 karena saya jarang terpapar matahari",
+   "type": "situated"
+  },
+  {
+   "q": "Sejak tahun berapa KJo bekerja sebagai web developer?",
+   "evidence": "web developer 2016",
+   "type": "situated"
+  },
+  {
+   "q": "Berapa harga satu Bitcoin waktu KJo pertama kali masuk crypto?",
+   "evidence": "dari Rp50 juta satu koinnya",
+   "type": "situated"
+  },
+  {
+   "q": "Koin kecil apa yang sempat dibeli KJo tahun 2021?",
+   "evidence": "BCH",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa banyak trader berhenti entry lagi setelah kena stop loss?",
+   "evidence": "kena SL lagilah",
+   "type": "content"
+  },
+  {
+   "q": "Bagaimana KJo menentukan conviction bullish dari analisa teknikal?",
+   "evidence": "berapa banyak parameter bullish",
+   "type": "situated"
+  },
+  {
+   "q": "Di level berapa harga BTC ETF menurut analisa KJo di Theresa Learns?",
+   "evidence": "BTC ETF itu around 57.000",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa BTC turun ke 74.000 tahun lalu?",
+   "evidence": "karena masalah tarif",
+   "type": "content"
+  },
+  {
+   "q": "Level Fibonacci berapa yang dipakai KJo saat BTC turun karena tarif?",
+   "evidence": "fibo 0,618",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa BTC bisa naik ketika berita buruk ternyata cuma bercanda?",
+   "evidence": "Trump sama si Elon berantem",
+   "type": "content"
+  },
+  {
+   "q": "Kenaikan satu candle berapa persen yang tidak pernah terjadi selama dua tahun?",
+   "evidence": "24% naik",
+   "type": "content"
+  },
+  {
+   "q": "Kalau BTC jebol 76.000, potensi turunnya ke mana?",
+   "evidence": "76.000 jebol kita potensial ke 69",
+   "type": "content"
+  },
+  {
+   "q": "Di harga berapa average Ethereum milik KJo?",
+   "evidence": "jadi 1700",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa KJo tidak mau melakukan short sekarang?",
+   "evidence": "demand lebih besar daripada seller",
+   "type": "situated"
+  },
+  {
+   "q": "Bagaimana KJo memaknai cut loss?",
+   "evidence": "cut loss itu adalah kedewasaan",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa dalam trading yang penting persentase, bukan nominal?",
+   "evidence": "it's all about percentage, not the nominals",
+   "type": "content"
+  },
+  {
+   "q": "Analogi hotel di puncak dipakai untuk menjelaskan apa soal volume market?",
+   "evidence": "hotel di puncak",
+   "type": "content"
+  },
+  {
+   "q": "Apa maksud jangan mencintai koin tapi cinta cuan?",
+   "evidence": "keras kepala untuk enggak berani cuts",
+   "type": "content"
+  },
+  {
+   "q": "Apa saja kerja sampingan KJo waktu kuliah sebelum trading?",
+   "evidence": "joki di kampus",
+   "type": "situated"
+  },
+  {
+   "q": "Bagaimana KJo menyisihkan uang supaya tetap ada untuk makan bulan depan?",
+   "evidence": "enggak boleh aku ganggu uang itu",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa KJo menganggap angka di portofolio seperti skor game?",
+   "evidence": "kayak skor games",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa sebaiknya tidak trading sebelum tidur?",
+   "evidence": "jangan trading kalau lu mau tidur",
+   "type": "content"
+  },
+  {
+   "q": "Di kampus mana KJo pernah mengajar AI?",
+   "evidence": "dosen tamu",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa KJo membandingkan Kejo Terminal dengan Bloomberg?",
+   "evidence": "Bloomberg kan punya Bloomberg",
+   "type": "situated"
+  },
+  {
+   "q": "Siapa yang membantu KJo kalau dia tidak punya tim atau mentor?",
+   "evidence": "nge-backup gua tuh adalah AI",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa teman-teman KJo banyak yang bangkrut tahun ini?",
+   "evidence": "di PHK",
+   "type": "situated"
+  },
+  {
+   "q": "Kenapa KJo merasa hampa walaupun mimpinya sudah tercapai?",
+   "evidence": "makin merasakan hampa",
+   "type": "situated"
+  },
+  {
+   "q": "Bagaimana cara memasang Zul dengan dukungan Milvus?",
+   "evidence": "pip install \"zul[milvus]",
+   "type": "situated"
+  },
+  {
+   "q": "Bagaimana memeriksa file config Milvus tanpa menyambung ke server?",
+   "evidence": "Periksa file config tanpa menyambung ke server",
+   "type": "content"
+  },
+  {
+   "q": "Bagaimana mencari vektor yang paling mirip dengan MilvusHelper?",
+   "evidence": "Cari vektor yang paling mirip dengan `search`",
+   "type": "situated"
+  },
+  {
+   "q": "Bagaimana mengambil seluruh isi collection yang besar sekaligus?",
+   "evidence": "Method ini membaca per batch",
+   "type": "content"
+  },
+  {
+   "q": "Apakah drop_collection di Milvus bisa dibatalkan?",
+   "evidence": "tidak bisa dibatalkan",
+   "type": "content"
+  },
+  {
+   "q": "Bagaimana menyiapkan hybrid search dengan BM25 di Milvus?",
+   "evidence": "vektor sparse BM25 dari sebuah field teks",
+   "type": "situated"
+  },
+  {
+   "q": "Bagaimana melihat jumlah baris di sebuah collection?",
+   "evidence": "row_count",
+   "type": "content"
+  },
+  {
+   "q": "Bagaimana menulis outline Markdown untuk skill mind map?",
+   "evidence": "Judul `#` menjadi pusat peta",
+   "type": "situated"
+  },
+  {
+   "q": "Model apa yang dipakai generate_mindmap.py kalau saya tidak memilih model?",
+   "evidence": "Kamu tidak perlu memilih model",
+   "type": "situated"
+  },
+  {
+   "q": "Berapa lama gemma3:4b membuat mind map dari dokumen 13.700 karakter?",
+   "evidence": "16 sampai 98 detik",
+   "type": "content"
+  },
+  {
+   "q": "Kenapa Ollama bisa lambat di laptop dengan dua GPU?",
+   "evidence": "OLLAMA_VULKAN=0",
+   "type": "content"
+  },
+  {
+   "q": "Kenapa bind_tools gagal dengan model gemma3?",
+   "evidence": "tidak menyediakan tool calling untuk `gemma3`",
+   "type": "content"
+  },
+  {
+   "q": "Format mind map apa yang butuh browser seperti Edge atau Chrome?",
+   "evidence": "Edge, Chrome, atau Chromium",
+   "type": "content"
+  },
+  {
+   "q": "Kenapa pembuluh darah besar di leher berbahaya kalau dikerok terlalu keras?",
+   "evidence": "memacu dropnya tensi secara dadakan",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Apakah suhu badan yang sangat panas bisa membuat otak rusak?",
+   "evidence": "bisa terjadi kerusakan pada selak",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Apa pertolongan pertama untuk orang yang sedang step?",
+   "evidence": "Biarin aja dikasih ke tempat aman sampai berhenti",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Kenapa perut mules waktu lari atau latihan di gym?",
+   "evidence": "Lagi nge-gym tiba-tiba belat ngising",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Kenapa luka penderita gula darah tinggi bisa sampai diamputasi?",
+   "evidence": "harus diamputa",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Kenapa pendingin ruangan di rumah harus rutin dibersihkan?",
+   "evidence": "AC dibersihkan",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Apa akibat menggabungkan kafein dan nikotin?",
+   "evidence": "kafein dikali 4",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Pelajaran apa yang didapat trader kripto dari kerugian besar?",
+   "evidence": "pembelajaran dari dari loss tersebut",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Kenapa menambah modal tidak menolong kalau cara mainnya salah?",
+   "evidence": "Kalau gameplay dan cara lu megang 10.000 tuh udah salah",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Bagaimana trader menghadapi pasar yang sepi di hari biasa?",
+   "evidence": "tidak setiap hari marketnya itu punya volume",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Asisten kecerdasan buatan yang menjawab pertanyaan anggota komunitas trading",
+   "evidence": "dia tanya soal outlook kejo saat ini",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Pengalaman membangun sistem pengenalan wajah untuk perusahaan properti",
+   "evidence": "face recognition",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Bagaimana orang yang mulai dari nol tanpa rumah dan keluarga bisa bertahan?",
+   "evidence": "Gua start from zero",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Kenapa kita tidak bisa merencanakan karier sampai lima tahun ke depan?",
+   "evidence": "enggak bisa prediksi 5 tahun ke depan",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Bagaimana menghapus data dengan syarat tertentu dari database vektor?",
+   "evidence": "kategori == \"panduan\"",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Bagaimana melihat log koneksi helper database vektor?",
+   "evidence": "Untuk melihat log koneksi",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Format peta pikiran apa saja yang bisa dibuat tanpa browser?",
+   "evidence": "Ditempel sebagai gambar di dokumen atau slide",
+   "type": "paraphrase"
+  },
+  {
+   "q": "Bisakah membuat peta pikiran tanpa model AI sama sekali?",
+   "evidence": "Tanpa model sama sekali",
+   "type": "paraphrase"
+  }
+ ]
+}

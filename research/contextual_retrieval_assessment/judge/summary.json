@@ -1,0 +1,40 @@
+{
+ "gemma3-4b": {
+  "scored": 34,
+  "no_context": 0,
+  "low_faithful": [],
+  "faithful": 4.59,
+  "situates": 4.21,
+  "specific": 3.97,
+  "form": 4.12,
+  "mean": 4.22
+ },
+ "qwen3-8b": {
+  "scored": 34,
+  "no_context": 0,
+  "low_faithful": [
+   "Qft-J2LG0NM#4: 'crash 2021': the chunk says he became a trader at the Terra Luna crash, not in 2021",
+   "Qft-J2LG0NM#31: 'uang bukan sekadar angka tapi skor' inverts him: money does not feel like money, it is a game score"
+  ],
+  "faithful": 4.74,
+  "situates": 4.03,
+  "specific": 4.47,
+  "form": 4.71,
+  "mean": 4.49
+ },
+ "qwen3-4b": {
+  "scored": 33,
+  "no_context": 1,
+  "low_faithful": [
+   "gqCEJ1McXCQ#10: smoking and coffee are not given as blood-pressure factors; 'penggunaan tekanan darah' garbled",
+   "gqCEJ1McXCQ#22: 'mengalami masalah ginjal dan hati': the chunk says it is a future possibility",
+   "Qft-J2LG0NM#1: 'dibawakan oleh KJo': KJo is the guest, Theresa Learns hosts; starts lowercase 'ini'",
+   "Qft-J2LG0NM#22: 'dari Rp1.000 ke Rp200-300': the account is 1 000 dollars, not rupiah"
+  ],
+  "faithful": 4.45,
+  "situates": 4.09,
+  "specific": 4.61,
+  "form": 4.12,
+  "mean": 4.32
+ }
+}
