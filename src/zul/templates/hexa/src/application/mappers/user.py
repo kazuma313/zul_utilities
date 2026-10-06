@@ -1,15 +1,31 @@
 """
-# Data Transfer Object (DTO)
-DTOs are simple objects used to transfer data between different layers of an application
-or between services. dataclasses provide a convenient way to create them.
+Contoh mapper: mengubah data dari satu bentuk ke bentuk lain.
 
-# Mapper
-A mapper is responsible for converting data between different representations,
-such as between a database entity and a DTO, or between a DTO and a response object.
+Gunanya:
+    Mapper memisahkan bentuk data di dalam aplikasi (entity) dari bentuk
+    yang dikirim keluar (DTO). Dengan begitu data sensitif, seperti hash
+    password, tidak ikut terbawa ke respons.
 
+Cara pakai:
+    user = UserEntity(1, "john_doe", "john@example.com", "hashed_password")
+
+    user_dto = UserMapper.to_dto(user)         # tanpa password_hash
+    user = UserMapper.from_dto(user_dto, password_hash="hashed_password")
+
+Menjalankan contoh di bawah:
+    python -m src.application.mappers.user
 """
 
 from dataclasses import dataclass
+
+# --------------------------------------------------------------------------
+# Dua Bentuk Data User
+# --------------------------------------------------------------------------
+#
+# DTO hanya membawa data yang boleh dilihat pihak luar, tanpa method
+# untuk logika bisnis. Entity adalah bentuk lengkapnya di dalam
+# aplikasi, di sini ia menyimpan hash password yang rahasia.
+#
 
 
 @dataclass
@@ -17,7 +33,6 @@ class UserDTO:
     id: int
     username: str
     email: str
-    # No methods for business logic, just data
 
 
 class UserEntity:
@@ -25,18 +40,23 @@ class UserEntity:
         self.id = id
         self.username = username
         self.email = email
-        self.password_hash = password_hash  # Sensitive data
+        self.password_hash = password_hash
+
+
+# --------------------------------------------------------------------------
+# Mapper
+# --------------------------------------------------------------------------
 
 
 class UserMapper:
     @staticmethod
     def to_dto(entity: UserEntity) -> UserDTO:
-        """Converts a UserEntity to a UserDTO, omitting sensitive data."""
+        """Ubah entity menjadi DTO, tanpa membawa data sensitif."""
         return UserDTO(id=entity.id, username=entity.username, email=entity.email)
 
     @staticmethod
     def from_dto(dto: UserDTO, password_hash: str) -> UserEntity:
-        """Converts a UserDTO back to a UserEntity (requires additional data)."""
+        """Ubah DTO kembali menjadi entity; hash password diberikan terpisah."""
         return UserEntity(
             id=dto.id,
             username=dto.username,
@@ -45,9 +65,7 @@ class UserMapper:
         )
 
 
-# Example Usage
 if __name__ == "__main__":
-    # Simulate a UserEntity from a database
     db_user = UserEntity(
         id=1,
         username="john_doe",
@@ -55,13 +73,9 @@ if __name__ == "__main__":
         password_hash="hashed_password123",
     )
 
-    # Map entity to DTO for transfer or API response
     user_dto = UserMapper.to_dto(db_user)
     print(f"User DTO: {user_dto}")
 
-    # Simulate creating/updating a user from DTO (requires password hash for entity)
     new_user_dto = UserDTO(id=2, username="jane_smith", email="jane@example.com")
-    new_user_entity = UserMapper.from_dto(new_user_dto, "another_hashed_password")
-    print(
-        f"New User Entity: {new_user_entity.username}, {new_user_entity.email}, {new_user_entity.password_hash}"
-    )
+    new_user = UserMapper.from_dto(new_user_dto, "another_hashed_password")
+    print(f"User entity baru: {new_user.username}, {new_user.email}")

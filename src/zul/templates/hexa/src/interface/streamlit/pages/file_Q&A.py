@@ -1,3 +1,7 @@
+# Halaman contoh: tanya jawab atas file yang diunggah. Kerangka UI saja.
+#
+# Unggah file dan kolom pertanyaan sudah ada; pemanggilan LLM belum.
+
 import streamlit as st
 
 with st.sidebar:

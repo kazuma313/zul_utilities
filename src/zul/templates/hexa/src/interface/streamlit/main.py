@@ -1,5 +1,18 @@
-from openai import OpenAI
+# Halaman utama: chatbot yang memanggil OpenAI langsung.
+#
+# Menjalankan dari root proyek:
+#     streamlit run src/interface/streamlit/main.py
+#
+# Contoh bawaan Streamlit. API key diisi user di sidebar,
+# dan riwayat percakapan disimpan di `st.session_state`.
+#
+# Untuk memakai agent proyek ini (bukan OpenAI langsung), panggil REST API:
+#     import httpx
+#     reply = httpx.post("http://localhost:8000/chat", json={"message": prompt}).json()
+#     st.chat_message("assistant").write(reply["answer"])
+
 import streamlit as st
+from openai import OpenAI
 
 with st.sidebar:
     openai_api_key = st.text_input(

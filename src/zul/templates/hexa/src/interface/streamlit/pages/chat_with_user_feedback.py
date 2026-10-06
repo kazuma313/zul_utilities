@@ -1,4 +1,8 @@
-from openai import OpenAI
+# Halaman contoh: chat dengan tombol feedback. Kerangka UI saja.
+#
+# Pesan user sudah ditampilkan, tetapi belum ada
+# pemanggilan LLM maupun penyimpanan feedback.
+
 import streamlit as st
 
 with st.sidebar:
@@ -11,8 +15,9 @@ with st.sidebar:
 st.title("📝 Chat with feedback (Trubrics)")
 
 """
-In this example, we're using [streamlit-feedback](https://github.com/trubrics/streamlit-feedback) and Trubrics to collect and store feedback
-from the user about the LLM responses.
+In this example, we're using
+[streamlit-feedback](https://github.com/trubrics/streamlit-feedback)
+and Trubrics to collect and store feedback from the user about the LLM responses.
 """
 
 if "messages" not in st.session_state:

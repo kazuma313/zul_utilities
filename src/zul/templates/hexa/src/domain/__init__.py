@@ -10,7 +10,7 @@ contoh:
 # domain/value_objects/money.py
 @dataclass(frozen=True)
 class Money:
-    /"/"/"Value Object untuk uang/"/"/"
+    '''Value Object untuk uang'''
     amount: int  # dalam rupiah
     currency: str = "IDR"
 
@@ -21,17 +21,17 @@ class Money:
             raise ValueError("Currency tidak didukung")
 
     def add(self, other: 'Money') -> 'Money':
-        /"/"/"Tambah uang/"/"/"
+        '''Tambah uang'''
         if self.currency != other.currency:
             raise ValueError("Currency harus sama")
         return Money(self.amount + other.amount, self.currency)
 
     def multiply(self, factor: int) -> 'Money':
-        /"/"/"Kalikan uang/"/"/"
+        '''Kalikan uang'''
         return Money(self.amount * factor, self.currency)
 
     def format(self) -> str:
-        /"/"/"Format uang untuk display/"/"/"
+        '''Format uang untuk display'''
         if self.currency == "IDR":
             return f"Rp {self.amount:,}"
         return f"${self.amount:,}"

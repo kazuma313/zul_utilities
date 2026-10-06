@@ -1,5 +1,8 @@
-import streamlit as st
+# Halaman contoh: form satu pertanyaan. Kerangka UI saja.
+#
+# `generate_response` masih kosong; isi dengan pemanggilan agent atau LLM.
 
+import streamlit as st
 
 st.title("🦜🔗 Langchain Quickstart App")
 

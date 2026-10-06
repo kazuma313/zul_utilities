@@ -1,3 +1,8 @@
+# Halaman contoh: chat dengan pencarian web. Kerangka UI saja.
+#
+# Pesan user sudah ditampilkan, tetapi belum ada pemanggilan LLM. Sambungkan
+# ke agent dengan memanggil `POST /chat` setelah `st.chat_message("user")`.
+
 import streamlit as st
 
 with st.sidebar:
@@ -9,8 +14,10 @@ with st.sidebar:
 st.title("🔎 LangChain - Chat with search")
 
 """
-In this example, we're using `StreamlitCallbackHandler` to display the thoughts and actions of an agent in an interactive Streamlit app.
-Try more LangChain 🤝 Streamlit Agent examples at [github.com/langchain-ai/streamlit-agent](https://github.com/langchain-ai/streamlit-agent).
+In this example, we're using `StreamlitCallbackHandler` to display the thoughts
+and actions of an agent in an interactive Streamlit app.
+Try more LangChain 🤝 Streamlit Agent examples at
+[github.com/langchain-ai/streamlit-agent](https://github.com/langchain-ai/streamlit-agent).
 """
 
 if "messages" not in st.session_state:
