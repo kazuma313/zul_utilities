@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "docs",
+      "runtimeExecutable": ".venv/Scripts/mkdocs.exe",
+      "runtimeArgs": ["serve", "--dev-addr", "127.0.0.1:8001"],
+      "port": 8001
+    },
+    {
+      "name": "skill-comparison",
+      "runtimeExecutable": ".venv/Scripts/python.exe",
+      "runtimeArgs": ["-m", "http.server", "8011", "--bind", "127.0.0.1", "--directory", "research/agentic/algorithms/skills/evals/comparison"],
+      "port": 8011
+    }
+  ]
+}

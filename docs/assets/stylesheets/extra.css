@@ -1,0 +1,896 @@
+/*
+ * Tampilan dokumentasi Zul.
+ *
+ * Warna diambil dari logo: biru laut untuk teks, nila untuk aksen, sian
+ * paruh enggang untuk mode gelap dan langkah tool, kuning petir untuk
+ * saat manusia harus memutuskan.
+ *
+ * Huruf memakai satu keluarga besar, IBM Plex: Plex Sans untuk judul dan
+ * isi, Plex Mono untuk kode. Keduanya dirancang bersama, jadi kode di
+ * tengah kalimat punya tinggi dan ketebalan yang sama dengan teksnya.
+ * Judul memakai tebal 600, bukan ekstra tebal, seperti kebiasaan situs
+ * dokumentasi teknis. File hurufnya dimuat lewat extra_css di mkdocs.yml.
+ *
+ * Ukuran memakai rem milik Material (1rem = 20px), jadi 0.8rem = 16px.
+ */
+
+/* ── Token ────────────────────────────────────────────────────────────────── */
+
+:root {
+  --md-text-font: "IBM Plex Sans";
+  --md-code-font: "IBM Plex Mono";
+
+  --zul-ink: #0b1f4d;
+  --zul-text: #33415c;
+  --zul-muted: #5d6b86;
+  --zul-accent: #3f37c9;
+  --zul-accent-strong: #2c2699;
+  --zul-accent-soft: #eef0ff;
+  --zul-cyan: #0b8fb0;
+  --zul-cyan-soft: #e2f5fa;
+  --zul-amber: #a86200;
+  --zul-amber-fill: #f5a524;
+  --zul-amber-soft: #fff3da;
+  --zul-green: #0b7a53;
+  --zul-green-soft: #e5f6ee;
+  --zul-red: #b42318;
+  --zul-red-soft: #fdecea;
+  --zul-surface: #f4f6fb;
+  --zul-surface-strong: #e9edf6;
+  --zul-border: #dde4f0;
+  --zul-page: #ffffff;
+  --zul-trace-model: #3f37c9;
+  --zul-trace-tool: #0b8fb0;
+  --zul-radius: 0.45rem;
+  --zul-measure: 34rem;
+  --zul-column: 41rem;
+}
+
+[data-md-color-scheme="slate"] {
+  --zul-ink: #eef2ff;
+  --zul-text: #c2cbe3;
+  --zul-muted: #8f9bbd;
+  --zul-accent: #7cd8f2;
+  --zul-accent-strong: #b6ecfa;
+  --zul-accent-soft: rgba(124, 216, 242, 0.12);
+  --zul-cyan: #7cd8f2;
+  --zul-cyan-soft: rgba(124, 216, 242, 0.12);
+  --zul-amber: #ffc45c;
+  --zul-amber-fill: #f5a524;
+  --zul-amber-soft: rgba(245, 165, 36, 0.14);
+  --zul-green: #5ad6a4;
+  --zul-green-soft: rgba(90, 214, 164, 0.13);
+  --zul-red: #ff9c94;
+  --zul-red-soft: rgba(255, 156, 148, 0.13);
+  --zul-surface: #111d45;
+  --zul-surface-strong: #17265a;
+  --zul-border: #253468;
+  --zul-page: #0a1330;
+  --zul-trace-model: #a9b4ff;
+  --zul-trace-tool: #4fd1c5;
+
+  --md-default-bg-color: var(--zul-page);
+  --md-default-fg-color: var(--zul-text);
+  --md-default-fg-color--light: var(--zul-muted);
+  --md-code-fg-color: #dbe3f7;
+}
+
+:root,
+[data-md-color-scheme="slate"] {
+  --md-accent-fg-color: var(--zul-accent);
+  --md-accent-fg-color--transparent: var(--zul-accent-soft);
+  --md-code-bg-color: var(--zul-surface);
+  --md-typeset-color: var(--zul-text);
+  --md-footer-bg-color: var(--zul-page);
+  --md-footer-bg-color--dark: var(--zul-page);
+  --md-footer-fg-color: var(--zul-ink);
+  --md-footer-fg-color--light: var(--zul-muted);
+  --md-footer-fg-color--lighter: var(--zul-muted);
+}
+
+/* Material menetapkan warna tautan per palet di <body>; samakan dengan aksen. */
+body[data-md-color-scheme][data-md-color-primary] {
+  --md-typeset-a-color: var(--zul-accent);
+  --md-primary-fg-color: var(--zul-page);
+  --md-primary-bg-color: var(--zul-ink);
+  --md-primary-bg-color--light: var(--zul-muted);
+}
+
+/* ── Kerangka halaman ─────────────────────────────────────────────────────── */
+
+/*
+ * Halaman memakai lebar layar: navigasi menempel di kiri, daftar isi di
+ * kanan, dan isi berada di tengah dengan lebar baca yang tetap. Halaman
+ * sampul dan playground tidak punya panel samping, jadi isinya melebar.
+ */
+.md-grid {
+  max-width: 88rem;
+}
+
+.md-main__inner {
+  margin-top: 1.2rem;
+}
+
+@media screen and (min-width: 76.25em) {
+  .md-content__inner {
+    max-width: var(--zul-column);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .md-content__inner:has(> .zul-wide) {
+    max-width: 62rem;
+  }
+
+  .md-sidebar--primary {
+    width: 13.2rem;
+  }
+}
+
+.md-typeset > :is(p, ul, dl, blockquote, h1, h2, h3, h4) {
+  max-width: var(--zul-measure);
+}
+
+/* ── Header dan tab ───────────────────────────────────────────────────────── */
+
+body[data-md-color-primary] .md-header,
+body[data-md-color-primary] .md-tabs {
+  color: var(--zul-ink);
+  background-color: color-mix(in srgb, var(--zul-page) 84%, transparent);
+  -webkit-backdrop-filter: saturate(1.5) blur(14px);
+  backdrop-filter: saturate(1.5) blur(14px);
+}
+
+.md-header {
+  box-shadow: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 160ms ease;
+}
+
+.md-header--shadow {
+  box-shadow: none;
+  border-bottom-color: var(--zul-border);
+}
+
+.md-header__button.md-logo img {
+  height: 1.6rem;
+  width: 1.6rem;
+  border-radius: 50%;
+}
+
+.md-header__title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+}
+
+.md-tabs {
+  border-bottom: 1px solid var(--zul-border);
+}
+
+.md-tabs__link {
+  margin-top: 0.6rem;
+  padding-bottom: 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--zul-muted);
+  opacity: 1;
+  border-bottom: 2px solid transparent;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+.md-tabs__link:hover {
+  color: var(--zul-ink);
+}
+
+.md-tabs__item--active .md-tabs__link {
+  color: var(--zul-ink);
+  font-weight: 600;
+  border-bottom-color: var(--zul-accent);
+}
+
+.md-tabs__item {
+  height: auto;
+}
+
+.md-search__form {
+  border-radius: var(--zul-radius);
+  background-color: var(--zul-surface);
+  border: 1px solid var(--zul-border);
+  transition: border-color 120ms ease;
+}
+
+.md-search__form:hover,
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+  background-color: var(--zul-surface);
+  border-color: var(--zul-accent);
+}
+
+.md-search__input,
+.md-search__input::placeholder,
+.md-search__icon {
+  color: var(--zul-muted);
+}
+
+.md-source {
+  font-size: 0.62rem;
+}
+
+/* Bilah kemajuan saat berpindah halaman. */
+.md-progress {
+  height: 2px;
+  background-color: var(--zul-accent);
+}
+
+/* ── Jejak lokasi di atas judul ───────────────────────────────────────────── */
+
+.md-path {
+  margin: 0 0.8rem;
+  padding-top: 0.4rem;
+  font-size: 0.66rem;
+}
+
+@media screen and (min-width: 76.25em) {
+  .md-path {
+    max-width: var(--zul-column);
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.md-path__link {
+  color: var(--zul-muted);
+}
+
+.md-path__link:hover {
+  color: var(--zul-accent);
+}
+
+/* ── Navigasi samping ─────────────────────────────────────────────────────── */
+
+.md-nav {
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.md-nav__title {
+  color: var(--zul-ink);
+  font-weight: 600;
+}
+
+.md-nav--primary .md-nav__item--section > .md-nav__link {
+  margin-top: 0.9rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--zul-ink);
+}
+
+.md-nav__link {
+  color: var(--zul-muted);
+  transition: color 120ms ease;
+}
+
+.md-nav__link:is(:hover, :focus) {
+  color: var(--zul-ink);
+}
+
+.md-nav__item .md-nav__link--active,
+.md-nav__item .md-nav__link--active:is(:hover, :focus) {
+  color: var(--zul-accent);
+  font-weight: 600;
+}
+
+/* Daftar isi di kanan punya rel; bagian yang sedang dibaca ditandai di rel itu. */
+.md-nav--secondary .md-nav__title {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--zul-ink);
+  box-shadow: none;
+  background: none;
+}
+
+@media screen and (min-width: 60em) {
+  .md-nav--secondary > .md-nav__list {
+    border-left: 1px solid var(--zul-border);
+  }
+
+  .md-nav--secondary .md-nav__link {
+    margin: 0;
+    padding: 0.2rem 0 0.2rem 0.7rem;
+    border-left: 2px solid transparent;
+    margin-left: -1px;
+  }
+
+  .md-nav--secondary .md-nav__link--active {
+    border-left-color: var(--zul-accent);
+  }
+
+  .md-nav--secondary .md-nav__list .md-nav__list .md-nav__link {
+    padding-left: 1.3rem;
+  }
+}
+
+/* ── Tipografi ────────────────────────────────────────────────────────────── */
+
+.md-typeset {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--zul-text);
+}
+
+.md-typeset :is(h1, h2, h3, h4) {
+  color: var(--zul-ink);
+  text-wrap: balance;
+}
+
+.md-typeset h1 {
+  font-size: 2.1em;
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.55em;
+}
+
+.md-typeset h2 {
+  font-size: 1.45em;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
+  margin: 2.6em 0 0.6em;
+}
+
+.md-typeset h3 {
+  font-size: 1.15em;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+  margin: 2em 0 0.5em;
+}
+
+.md-typeset h4 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 1.6em 0 0.4em;
+}
+
+/* Paragraf pertama di bawah judul halaman adalah pengantar. */
+.md-typeset h1 + p {
+  font-size: 1.14em;
+  line-height: 1.6;
+}
+
+.md-typeset a {
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--zul-accent) 30%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 120ms ease, color 120ms ease;
+}
+
+.md-typeset a:hover {
+  color: var(--zul-accent-strong);
+  text-decoration-color: currentColor;
+}
+
+.md-typeset .headerlink {
+  color: var(--zul-muted);
+  opacity: 0;
+  margin-left: 0.4rem;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+/* Judul halaman tidak butuh tautan jangkar. Tautan yang tersembunyi itu
+   ikut dihitung lebarnya, sehingga judul panjang turun menjadi dua baris. */
+.md-typeset h1 .headerlink {
+  display: none;
+}
+
+.md-typeset :is(h1, h2, h3, h4):hover .headerlink {
+  opacity: 0.8;
+}
+
+.md-typeset strong {
+  color: var(--zul-ink);
+  font-weight: 600;
+}
+
+.md-typeset hr {
+  border-bottom-color: var(--zul-border);
+}
+
+/* ── Langkah bernomor ─────────────────────────────────────────────────────── */
+
+/*
+ * Daftar bernomor di dokumentasi ini selalu berupa urutan langkah. Nomornya
+ * digambar sebagai titik di sebuah rel, sama seperti jejak langkah agent di
+ * panel playground.
+ */
+.md-typeset > ol,
+.md-typeset :is(.zul-wide, .zul-steps) > ol {
+  counter-reset: zul-step;
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+  max-width: none;
+}
+
+.md-typeset > ol > li,
+.md-typeset :is(.zul-wide, .zul-steps) > ol > li {
+  counter-increment: zul-step;
+  position: relative;
+  margin: 0 0 0.2rem;
+  padding: 0 0 0.9rem 2.2rem;
+}
+
+.md-typeset > ol > li::before,
+.md-typeset :is(.zul-wide, .zul-steps) > ol > li::before {
+  content: counter(zul-step);
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--zul-accent);
+  background: var(--zul-page);
+  border: 1.5px solid var(--zul-accent);
+  border-radius: 50%;
+}
+
+.md-typeset > ol > li:not(:last-child)::after,
+.md-typeset :is(.zul-wide, .zul-steps) > ol > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(0.675rem - 0.5px);
+  top: 1.6rem;
+  bottom: 0;
+  width: 1px;
+  background: var(--zul-border);
+}
+
+.md-typeset > ol > li > :is(p, pre, .highlight):first-child {
+  margin-top: 0;
+}
+
+.md-typeset > ol > li > p {
+  max-width: calc(var(--zul-measure) - 2.2rem);
+}
+
+/* ── Kode ─────────────────────────────────────────────────────────────────── */
+
+.md-typeset code {
+  font-size: 0.84em;
+  font-variant-ligatures: none;
+  border-radius: 0.3rem;
+}
+
+.md-typeset :not(pre) > code {
+  padding: 0.1em 0.38em;
+  color: var(--zul-ink);
+  background-color: var(--zul-surface);
+  border: 1px solid var(--zul-border);
+}
+
+.md-typeset a > code {
+  color: inherit;
+}
+
+.md-typeset pre > code {
+  border: 1px solid var(--zul-border);
+  border-radius: var(--zul-radius);
+  padding: 0.9em 1.1em;
+  line-height: 1.65;
+}
+
+/* Blok kode berjudul: nama file tampil sebagai bilah di atas kode. */
+.md-typeset .highlight span.filename {
+  margin: 0;
+  padding: 0.5em 1.1em;
+  font-family: var(--md-code-font-family);
+  font-size: 0.72em;
+  font-weight: 500;
+  color: var(--zul-muted);
+  background-color: var(--zul-surface-strong);
+  border: 1px solid var(--zul-border);
+  border-bottom: 0;
+  border-radius: var(--zul-radius) var(--zul-radius) 0 0;
+}
+
+.md-typeset .highlight span.filename + pre > code {
+  border-radius: 0 0 var(--zul-radius) var(--zul-radius);
+}
+
+.md-typeset .md-clipboard {
+  color: var(--zul-muted);
+  transition: color 120ms ease;
+}
+
+.md-typeset .md-clipboard:hover {
+  color: var(--zul-accent);
+}
+
+/* ── Gambar ───────────────────────────────────────────────────────────────── */
+
+/* Gambar di isi halaman, misalnya mind map SVG, tampil sebagai lembar
+   berbingkai. Latar putih bawaannya jadi tetap rapi di mode gelap. */
+.md-typeset p > img {
+  display: block;
+  border: 1px solid var(--zul-border);
+  border-radius: var(--zul-radius);
+}
+
+/* ── Tabel ────────────────────────────────────────────────────────────────── */
+
+.md-typeset table:not([class]) {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.md-typeset table:not([class]) th {
+  padding: 0.6em 1em 0.6em 0;
+  font-size: 0.66rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--zul-muted);
+  background: none;
+  border-bottom: 1px solid var(--zul-border);
+}
+
+.md-typeset table:not([class]) td {
+  padding: 0.75em 1em 0.75em 0;
+  border-top: 0;
+  border-bottom: 1px solid var(--zul-border);
+  vertical-align: top;
+}
+
+.md-typeset table:not([class]) tbody tr {
+  transition: background-color 120ms ease;
+}
+
+.md-typeset table:not([class]) tbody tr:hover {
+  background: var(--zul-surface);
+  box-shadow: none;
+}
+
+/* Nama opsi, perintah, dan path tidak dipotong di tengah kata. */
+.md-typeset table:not([class]) td:nth-child(-n + 2) code {
+  white-space: nowrap;
+}
+
+.md-typeset table:not([class]) td code {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* ── Catatan ──────────────────────────────────────────────────────────────── */
+
+.md-typeset :is(.admonition, details) {
+  border: 0;
+  border-left: 3px solid var(--zul-border);
+  border-radius: 0 var(--zul-radius) var(--zul-radius) 0;
+  box-shadow: none;
+  background: var(--zul-surface);
+  font-size: 0.74rem;
+  padding: 0.15rem 0.9rem;
+}
+
+.md-typeset :is(.admonition-title, summary) {
+  background: none !important;
+  font-weight: 600;
+  color: var(--zul-ink);
+  margin: 0.5rem -0.9rem 0;
+  padding-left: 2.2rem;
+}
+
+.md-typeset :is(.admonition-title, summary)::before {
+  left: 0.9rem;
+  top: 0.62em;
+}
+
+.md-typeset .admonition :is(p, li) {
+  color: var(--zul-text);
+}
+
+.md-typeset .admonition:is(.note, .info) {
+  background: var(--zul-accent-soft);
+  border-left-color: var(--zul-accent);
+}
+
+.md-typeset .admonition:is(.note, .info) > .admonition-title::before {
+  background-color: var(--zul-accent);
+}
+
+.md-typeset .admonition:is(.tip, .success) {
+  background: var(--zul-green-soft);
+  border-left-color: var(--zul-green);
+}
+
+.md-typeset .admonition:is(.tip, .success) > .admonition-title::before {
+  background-color: var(--zul-green);
+}
+
+.md-typeset .admonition:is(.warning, .caution, .important) {
+  background: var(--zul-amber-soft);
+  border-left-color: var(--zul-amber-fill);
+}
+
+.md-typeset .admonition:is(.warning, .caution, .important) > .admonition-title {
+  color: var(--zul-amber);
+}
+
+.md-typeset .admonition:is(.warning, .caution, .important) > .admonition-title::before {
+  background-color: var(--zul-amber-fill);
+}
+
+/* ── Tombol ───────────────────────────────────────────────────────────────── */
+
+.md-typeset .zul-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.4rem 0;
+}
+
+.md-typeset .zul-actions p {
+  display: contents;
+}
+
+.md-typeset .zul-actions a {
+  display: inline-block;
+  padding: 0.55em 1.2em;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--zul-ink);
+  background: var(--zul-page);
+  border: 1px solid var(--zul-border);
+  border-radius: var(--zul-radius);
+  text-decoration: none;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.md-typeset .zul-actions a:hover {
+  border-color: var(--zul-accent);
+}
+
+.md-typeset .zul-actions a:first-child {
+  color: #fff;
+  background: var(--zul-accent);
+  border-color: var(--zul-accent);
+}
+
+.md-typeset .zul-actions a:first-child:hover {
+  background: var(--zul-accent-strong);
+  border-color: var(--zul-accent-strong);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .zul-actions a:first-child {
+  color: #0a1330;
+}
+
+/* ── Sampul ───────────────────────────────────────────────────────────────── */
+
+/*
+ * Sampul dibuka dengan agent yang sedang bekerja: di kanan, panel playground
+ * menampilkan satu percakapan dan berhenti menunggu keputusan pembaca.
+ */
+.md-typeset .zul-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+  margin: 1rem 0 3.4rem;
+}
+
+@media screen and (min-width: 60em) {
+  .md-typeset .zul-hero {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 2.6rem;
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .md-typeset .zul-hero__text {
+    padding-top: 2.2rem;
+  }
+}
+
+.md-typeset .zul-hero h1 {
+  font-size: clamp(2rem, 1.3rem + 1.9vw, 2.7rem);
+  line-height: 1.08;
+  margin-bottom: 0.5em;
+}
+
+.md-typeset .zul-hero h1 .headerlink {
+  display: none;
+}
+
+.md-typeset .zul-hero__text > p {
+  max-width: 25rem;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.md-typeset .zul-hero__text .highlight {
+  max-width: 25rem;
+}
+
+.md-typeset .zul-hero__demo .zul-playground {
+  margin: 0;
+}
+
+/* Di sampul, percakapan ditampilkan utuh tanpa digulung. */
+.md-typeset .zul-hero__demo .zpg__log {
+  max-height: none;
+}
+
+/* Halaman tanpa panel samping tidak menampilkan tombol sunting di sudut. */
+.md-content__inner:has(> .zul-wide) > .md-content__button {
+  display: none;
+}
+
+.md-typeset .zul-hero__demo > p {
+  margin: 0.6rem 0 0;
+  font-size: 0.68rem;
+  color: var(--zul-muted);
+}
+
+/* ── Peta dokumentasi ─────────────────────────────────────────────────────── */
+
+/*
+ * Empat bagian dokumentasi disusun pada dua sumbu, seperti peta Diátaxis:
+ * kolom membedakan saat belajar dan saat bekerja, baris membedakan
+ * langkah praktis dan pengetahuan.
+ */
+.md-typeset .zul-map {
+  margin: 1.4rem 0 0;
+}
+
+.md-typeset .zul-map .md-typeset__table {
+  display: block;
+}
+
+.md-typeset .zul-map table:not([class]) {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  font-size: 0.74rem;
+  border: 1px solid var(--zul-border);
+  border-radius: var(--zul-radius);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.md-typeset .zul-map table:not([class]) :is(th, td) {
+  padding: 1rem 1.1rem;
+  border: 0;
+  border-right: 1px solid var(--zul-border);
+  border-bottom: 1px solid var(--zul-border);
+  white-space: normal;
+}
+
+.md-typeset .zul-map table:not([class]) :is(th, td):last-child {
+  border-right: 0;
+}
+
+.md-typeset .zul-map table:not([class]) tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.md-typeset .zul-map table:not([class]) :is(th, td):first-child {
+  width: 22%;
+  font-weight: 600;
+  color: var(--zul-muted);
+  background: var(--zul-surface);
+}
+
+.md-typeset .zul-map table:not([class]) th {
+  font-size: 0.7rem;
+  background: var(--zul-surface);
+}
+
+.md-typeset .zul-map table:not([class]) td:first-child strong {
+  color: inherit;
+}
+
+.md-typeset .zul-map table:not([class]) td:not(:first-child) {
+  color: var(--zul-text);
+  transition: background-color 140ms ease;
+}
+
+.md-typeset .zul-map table:not([class]) td:not(:first-child):hover {
+  background: var(--zul-accent-soft);
+}
+
+.md-typeset .zul-map table:not([class]) tbody tr:hover {
+  background: none;
+}
+
+.md-typeset .zul-map table:not([class]) td:not(:first-child) a {
+  display: inline-block;
+  margin-bottom: 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--zul-ink);
+  text-decoration: none;
+}
+
+.md-typeset .zul-map table:not([class]) td:not(:first-child):hover a {
+  color: var(--zul-accent);
+}
+
+/* ── Dua kolom keterangan ─────────────────────────────────────────────────── */
+
+.md-typeset .zul-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 2.6rem;
+}
+
+@media screen and (min-width: 60em) {
+  .md-typeset .zul-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.md-typeset .zul-columns h2 {
+  margin-top: 2rem;
+}
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+
+.md-footer {
+  border-top: 1px solid var(--zul-border);
+}
+
+.md-footer__link {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  opacity: 1;
+  transition: color 120ms ease;
+}
+
+.md-footer__link:is(:hover, :focus) {
+  color: var(--zul-accent);
+  opacity: 1;
+}
+
+.md-footer__title {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.md-footer__direction {
+  font-size: 0.62rem;
+  font-weight: 500;
+  opacity: 1;
+  color: var(--zul-muted);
+}
+
+.md-footer-meta {
+  border-top: 1px solid var(--zul-border);
+}
+
+.md-footer-meta .md-copyright,
+html .md-footer-meta.md-typeset a {
+  color: var(--zul-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset *,
+  .md-header,
+  .md-tabs__link,
+  .md-nav__link {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,744 @@
+/*
+ * Tampilan panel playground (lihat assets/javascripts/playground.js).
+ *
+ * Jejak langkah digambar sebagai rel dengan satu titik per node. Warna titik
+ * menunjukkan siapa yang bekerja: nila untuk model, sian untuk tool, kuning
+ * petir untuk manusia. Semua warna memakai token dari extra.css.
+ */
+
+.zul-playground {
+  margin: 1.4rem 0;
+  color: var(--zul-muted);
+  font-size: 0.72rem;
+}
+
+.zpg {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--zul-border);
+  border-radius: 0.6rem;
+  background: var(--zul-page);
+  box-shadow: 0 1px 2px rgba(11, 31, 77, 0.05), 0 12px 32px -12px rgba(11, 31, 77, 0.18);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--zul-text);
+  overflow: hidden;
+}
+
+[data-md-color-scheme="slate"] .zpg {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 36px -14px rgba(0, 0, 0, 0.6);
+}
+
+.zpg button,
+.zpg input,
+.zpg select,
+.zpg textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.zpg :is(button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--zul-accent);
+  outline-offset: 1px;
+}
+
+.zpg [hidden] {
+  display: none !important;
+}
+
+/* ── Bilah atas ───────────────────────────────────────────────────────────── */
+
+.zpg__bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  background: var(--zul-surface);
+  border-bottom: 1px solid var(--zul-border);
+}
+
+.zpg__title {
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--zul-ink);
+}
+
+.zpg__feature {
+  padding: 0.12rem 0.5rem;
+  font-weight: 600;
+  color: var(--zul-accent);
+  background: var(--zul-accent-soft);
+  border: 0;
+  border-radius: 0.3rem;
+}
+
+select.zpg__feature {
+  padding-right: 0.2rem;
+  cursor: pointer;
+}
+
+.zpg__spacer {
+  flex: 1;
+}
+
+/* Tombol status: menunjukkan sumber jawaban dan membuka cara menyambungkan. */
+.zpg__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.12rem 0.55rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--zul-muted) !important;
+  background: var(--zul-page);
+  border: 1px solid var(--zul-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 120ms ease;
+}
+
+.zpg__status:hover {
+  border-color: var(--zul-accent);
+}
+
+.zpg__status::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--zul-muted);
+}
+
+.zpg__status[data-state="live"]::before {
+  background: var(--zul-green);
+  box-shadow: 0 0 0 3px var(--zul-green-soft);
+}
+
+.zpg__status[data-state="simulated"]::before {
+  background: var(--zul-amber-fill);
+  box-shadow: 0 0 0 3px var(--zul-amber-soft);
+}
+
+.zpg__link {
+  padding: 0.15rem 0.3rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--zul-muted) !important;
+  background: none;
+  border: 0;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+
+.zpg__link:hover {
+  color: var(--zul-accent) !important;
+}
+
+.zpg__link--inline {
+  align-self: flex-start;
+  padding-left: 0;
+}
+
+/* ── Cara menyambungkan ───────────────────────────────────────────────────── */
+
+.zpg__connection {
+  padding: 0.8rem;
+  background: var(--zul-amber-soft);
+  border-bottom: 1px solid var(--zul-border);
+}
+
+.zpg[data-mode="live"] .zpg__connection {
+  background: var(--zul-green-soft);
+}
+
+.zpg__connection-note {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+  color: var(--zul-ink);
+}
+
+.md-typeset .zpg__connection ol {
+  margin: 0 0 0.7rem;
+  padding-left: 1.1rem;
+  list-style: decimal;
+}
+
+.md-typeset .zpg__connection li {
+  margin: 0.15rem 0;
+}
+
+.zpg__connection code {
+  padding: 0.05em 0.35em;
+  font-family: var(--md-code-font-family);
+  font-size: 0.9em;
+  color: var(--zul-ink);
+  background: var(--zul-page);
+  border: 1px solid var(--zul-border);
+  border-radius: 0.25rem;
+}
+
+.zpg__address {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.zpg__address label {
+  font-weight: 600;
+  color: var(--zul-ink);
+}
+
+.zpg__address input {
+  flex: 1;
+  min-width: 11rem;
+}
+
+/* ── Badan panel ──────────────────────────────────────────────────────────── */
+
+.zpg__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.zpg__chat {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.zpg__inspector {
+  min-width: 0;
+  padding: 0.8rem;
+  border-top: 1px solid var(--zul-border);
+  background: var(--zul-surface);
+}
+
+@media screen and (min-width: 60em) {
+  .zpg[data-layout="wide"] .zpg__body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 24rem;
+  }
+
+  .zpg[data-layout="wide"] .zpg__inspector {
+    border-top: 0;
+    border-left: 1px solid var(--zul-border);
+    max-height: 34rem;
+    overflow-y: auto;
+  }
+
+  .zpg[data-layout="wide"] .zpg__log {
+    flex: 1;
+    max-height: 26rem;
+  }
+}
+
+.zpg__inspector-title {
+  margin: 0 0 0.6rem;
+  font-weight: 600;
+  color: var(--zul-ink);
+}
+
+.zpg__description {
+  margin: 0;
+  padding: 0.7rem 0.8rem 0;
+  color: var(--zul-muted);
+}
+
+.zpg__description:empty {
+  display: none;
+}
+
+/* ── Percakapan ───────────────────────────────────────────────────────────── */
+
+.zpg__log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  min-height: 3.2rem;
+  max-height: 30rem;
+  overflow-y: auto;
+}
+
+.zpg__empty {
+  margin: 0;
+  color: var(--zul-muted);
+}
+
+.zpg__msg {
+  max-width: 88%;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.zpg__msg--user {
+  align-self: flex-end;
+  color: #fff;
+  background: var(--zul-accent);
+  border-bottom-right-radius: 0.15rem;
+}
+
+[data-md-color-scheme="slate"] .zpg__msg--user {
+  color: #0a1330;
+}
+
+.zpg__msg--agent {
+  align-self: flex-start;
+  color: var(--zul-ink);
+  background: var(--zul-surface);
+  border: 1px solid var(--zul-border);
+  border-bottom-left-radius: 0.15rem;
+}
+
+.zpg__turn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.zpg__notice {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+  border-radius: 0.5rem;
+}
+
+.zpg__notice--error {
+  color: var(--zul-red);
+  background: var(--zul-red-soft);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.zpg__notice--busy {
+  padding-left: 0;
+  color: var(--zul-muted);
+}
+
+.zpg__notice--busy::after {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  margin-left: 0.1em;
+  text-align: left;
+  animation: zpg-dots 1.2s steps(4, end) infinite;
+}
+
+@keyframes zpg-dots {
+  0% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+}
+
+/* ── Jejak langkah ────────────────────────────────────────────────────────── */
+
+.md-typeset .zpg details {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--zul-border);
+  border-radius: 0.5rem;
+  background: none;
+  box-shadow: none;
+  font-size: inherit;
+}
+
+.zpg__inspector details.zpg__trace {
+  border: 0;
+}
+
+.md-typeset .zpg summary {
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--zul-muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.zpg__inspector .zpg__trace > summary {
+  padding-left: 0;
+}
+
+.md-typeset .zpg summary::before {
+  content: "";
+  position: static;
+  display: inline-block;
+  width: 0.35rem;
+  height: 0.35rem;
+  margin: 0 0.5rem 0.1rem 0.1rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+  transform: rotate(-45deg);
+  transition: transform 140ms ease;
+}
+
+.md-typeset .zpg summary::after {
+  display: none;
+}
+
+.md-typeset .zpg details[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.md-typeset .zpg__steps {
+  margin: 0;
+  padding: 0.3rem 0.7rem 0.7rem;
+  list-style: none;
+}
+
+.zpg__inspector .zpg__steps {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/*
+ * Setiap langkah punya titik di rel. Rel langkah subagent bergeser ke kanan
+ * sesuai kedalamannya, sehingga terlihat siapa memanggil siapa.
+ */
+.md-typeset .zpg__step {
+  position: relative;
+  margin: 0 0 0 calc(var(--depth, 0) * 1.3rem);
+  padding: 0 0 0.75rem 1.3rem;
+}
+
+.zpg__step::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.32rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--zul-page);
+  border: 2px solid var(--zul-trace-model);
+  box-sizing: border-box;
+}
+
+.zpg__step::after {
+  content: "";
+  position: absolute;
+  left: calc(0.275rem - 0.5px);
+  top: 1rem;
+  bottom: -0.2rem;
+  width: 1px;
+  background: var(--zul-border);
+}
+
+.zpg__step:last-child {
+  padding-bottom: 0;
+}
+
+.zpg__step:last-child::after {
+  display: none;
+}
+
+.zpg__step[data-kind="tool"]::before {
+  border-color: var(--zul-trace-tool);
+}
+
+.zpg__step[data-kind="human"]::before {
+  border-color: var(--zul-amber-fill);
+  background: var(--zul-amber-fill);
+}
+
+.zpg__step[data-kind="pass"]::before {
+  border-color: var(--zul-muted);
+}
+
+.zpg__step--arriving {
+  opacity: 0;
+  animation: zpg-arrive 320ms ease forwards;
+}
+
+@keyframes zpg-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.md-typeset .zpg__step-head {
+  margin: 0 0 0.2rem;
+}
+
+.zpg__node {
+  padding: 0.05rem 0.4rem;
+  font-family: var(--md-code-font-family);
+  font-size: 0.62rem;
+  color: var(--zul-ink);
+  background: var(--zul-surface);
+  border: 1px solid var(--zul-border);
+  border-radius: 0.25rem;
+}
+
+.zpg__inspector .zpg__node {
+  background: var(--zul-page);
+}
+
+.zpg__tool {
+  font-weight: 600;
+  color: var(--zul-ink);
+}
+
+.zpg__failed {
+  color: var(--zul-red);
+  font-weight: 600;
+}
+
+.md-typeset .zpg pre {
+  margin: 0.25rem 0 0;
+  padding: 0.45rem 0.6rem;
+  max-height: 13rem;
+  overflow: auto;
+  font-family: var(--md-code-font-family);
+  font-size: 0.64rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--md-code-fg-color);
+  background: var(--zul-surface);
+  border: 1px solid var(--zul-border);
+  border-radius: 0.4rem;
+}
+
+.md-typeset .zpg__inspector pre {
+  background: var(--zul-page);
+}
+
+.zpg__raw {
+  margin-top: 0.6rem;
+}
+
+.zpg__raw-body {
+  padding: 0.5rem 0.7rem 0.7rem;
+}
+
+/* ── Form review ──────────────────────────────────────────────────────────── */
+
+/* Kuning petir menandai saat keputusan ada di tangan manusia. */
+.zpg__review {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.7rem 0.8rem 0.8rem;
+  border: 1px solid var(--zul-amber-fill);
+  border-radius: 0.6rem;
+  background: var(--zul-amber-soft);
+}
+
+.md-typeset .zpg__review-title {
+  margin: 0;
+  font-weight: 600;
+  color: var(--zul-amber);
+}
+
+.zpg__review fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.zpg__review legend {
+  padding: 0;
+  font-weight: 600;
+  color: var(--zul-ink);
+}
+
+/* Tiga pilihan keputusan tampil sebagai satu tombol bersegmen. */
+.zpg__choices {
+  display: inline-flex;
+  margin: 0.4rem 0;
+  padding: 0.15rem;
+  background: var(--zul-page);
+  border: 1px solid var(--zul-border);
+  border-radius: 0.45rem;
+}
+
+.zpg__choices label {
+  position: relative;
+  cursor: pointer;
+}
+
+.zpg__choices input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.zpg__choices span {
+  display: block;
+  padding: 0.22rem 0.8rem;
+  font-weight: 600;
+  color: var(--zul-muted);
+  border-radius: 0.32rem;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.zpg__choices input:checked + span {
+  color: #fff;
+  background: var(--zul-accent);
+}
+
+[data-md-color-scheme="slate"] .zpg__choices input:checked + span {
+  color: #0a1330;
+}
+
+.zpg__choices input:focus-visible + span {
+  outline: 2px solid var(--zul-accent);
+  outline-offset: 1px;
+}
+
+.zpg__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.3rem;
+}
+
+.zpg__field > span {
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--zul-muted);
+}
+
+.zpg :is(input[type="text"], input[type="url"], textarea) {
+  padding: 0.4rem 0.55rem;
+  background: var(--zul-page);
+  border: 1px solid var(--zul-border);
+  border-radius: 0.4rem;
+  transition: border-color 120ms ease;
+}
+
+.zpg :is(input[type="text"], input[type="url"], textarea):focus {
+  border-color: var(--zul-accent);
+}
+
+.zpg textarea {
+  min-height: 5.6rem;
+  font-family: var(--md-code-font-family);
+  font-size: 0.64rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.zpg textarea:read-only {
+  color: var(--zul-muted);
+}
+
+.zpg :is(textarea, input[type="text"], input[type="url"]):disabled {
+  opacity: 0.55;
+}
+
+.zpg__review:has(:disabled) .zpg__choices {
+  opacity: 0.6;
+}
+
+.md-typeset .zpg__field-error {
+  margin: 0;
+  color: var(--zul-red);
+}
+
+/* ── Kotak pesan dan tombol ───────────────────────────────────────────────── */
+
+.zpg__examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0 0.8rem 0.6rem;
+}
+
+.zpg__examples:empty {
+  display: none;
+}
+
+.zpg__chip {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.66rem;
+  color: var(--zul-text) !important;
+  background: var(--zul-page);
+  border: 1px solid var(--zul-border);
+  border-radius: 0.4rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+.zpg__chip:hover {
+  border-color: var(--zul-accent);
+  color: var(--zul-accent) !important;
+}
+
+.zpg__form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding: 0.6rem 0.8rem;
+  border-top: 1px solid var(--zul-border);
+  background: var(--zul-surface);
+}
+
+.zpg__form input {
+  flex: 1;
+  min-width: 0;
+}
+
+.zpg__button {
+  align-self: flex-start;
+  padding: 0.4rem 0.9rem;
+  font-weight: 600;
+  color: #fff !important;
+  background: var(--zul-accent);
+  border: 1px solid var(--zul-accent);
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+[data-md-color-scheme="slate"] .zpg__button {
+  color: #0a1330 !important;
+}
+
+.zpg__button:hover {
+  background: var(--zul-accent-strong);
+  border-color: var(--zul-accent-strong);
+}
+
+.zpg__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zpg__step--arriving {
+    opacity: 1;
+    animation: none;
+  }
+
+  .zpg__notice--busy::after {
+    animation: none;
+    content: "...";
+  }
+}

@@ -1,0 +1,180 @@
+# Situs dokumentasi Zul.
+#
+#   uv run mkdocs serve      # pratinjau di http://127.0.0.1:8001
+#   uv run mkdocs build      # hasil statis di folder site/
+#
+# Susunan menu mengikuti Diátaxis (https://diataxis.fr): Tutorial untuk
+# belajar, Panduan untuk mengerjakan tugas, Referensi untuk mencari fakta,
+# dan Konsep untuk memahami alasannya. Satu halaman hanya berisi satu jenis.
+site_name: Zul
+# Alamat situs setelah diterbitkan ke GitHub Pages oleh
+# .github/workflows/docs.yml. Ganti jika situsnya diterbitkan di tempat lain.
+site_url: https://kazuma313.github.io/zul_utilities/
+site_description: CLI generator proyek AI berarsitektur hexagonal dan toolkit utilities untuk Python.
+site_author: Kurnia Zulda Matondang
+repo_url: https://github.com/kazuma313/zul_utilities
+repo_name: kazuma313/zul_utilities
+edit_uri: edit/main/docs/
+docs_dir: docs
+copyright: Dirilis di bawah lisensi MIT.
+
+# Port 8000 dipakai API proyek hasil generate (uvicorn). Situs dokumentasi
+# memakai 8001 supaya keduanya bisa jalan bersamaan dan playground di
+# halaman dokumentasi bisa memanggil API itu.
+dev_addr: 127.0.0.1:8001
+
+# Catatan lama di docs/ yang bukan bagian dari situs dokumentasi
+exclude_docs: |
+  /commands.md
+  /hexagonal_base.md
+  /Tutorial Membuat Boilerplate Proyek CLI dengan Python.md
+  *.pdf
+
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+    absolute_links: warn
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: warn
+    unrecognized_links: warn
+
+theme:
+  name: material
+  language: id
+  logo: assets/logo.jpg
+  favicon: assets/logo.jpg
+  # Font dimuat lewat extra_css di bawah (IBM Plex Sans dan IBM Plex Mono),
+  # karena tema hanya memuat tebal 300, 400, dan 700.
+  font: false
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Mode gelap
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Mode terang
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    - navigation.path
+    - navigation.footer
+    - navigation.top
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - toc.follow
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.action.edit
+
+extra_css:
+  - https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap
+  - assets/stylesheets/extra.css
+  - assets/stylesheets/playground.css
+
+extra_javascript:
+  - assets/javascripts/playground.js
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - tables
+  - github-callouts
+  - toc:
+      permalink: "#"
+      toc_depth: 3
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+nav:
+  - Beranda: index.md
+  - Tutorial:
+      - tutorial/index.md
+      - Membuat agent pertamamu: tutorial/agent-pertama.md
+      - Meminta persetujuan manusia: tutorial/persetujuan-manusia.md
+      - Membangun tim agent: tutorial/tim-agent.md
+  - Panduan:
+      - panduan/index.md
+      - Memulai:
+          - Memasang Zul: panduan/memasang-zul.md
+          - Membuat proyek baru: panduan/membuat-proyek.md
+          - Mengatur model dan API key: panduan/mengatur-llm.md
+          - Menjalankan aplikasi: panduan/menjalankan-aplikasi.md
+      - Agent:
+          - Menambah tool: panduan/menambah-tool.md
+          - Mengubah system prompt: panduan/mengubah-system-prompt.md
+          - Menambah node ke graph: panduan/menambah-node.md
+          - Mengatur batas langkah: panduan/mengatur-batas-langkah.md
+          - Menyimpan percakapan di database: panduan/menyimpan-percakapan.md
+          - Mewajibkan persetujuan untuk sebuah tool: panduan/mewajibkan-persetujuan.md
+          - Menambah subagent: panduan/menambah-subagent.md
+          - Menambah endpoint: panduan/menambah-endpoint.md
+          - Mencoba fitur di playground: panduan/mencoba-di-playground.md
+          - Menguji agent: panduan/menguji-agent.md
+      - Utilities:
+          - Milvus: panduan/memakai-milvus.md
+          - Redis: panduan/memakai-redis.md
+          - OCR: panduan/membaca-dokumen-ocr.md
+          - LLM dan embedding: panduan/memanggil-llm-dan-embedding.md
+          - Markdown ke PDF dan PPTX: panduan/mengonversi-markdown.md
+          - Grafik perbandingan: panduan/membuat-grafik.md
+          - Helper kecil: panduan/memakai-helper.md
+      - Skill:
+          - Membuat mind map: panduan/membuat-mindmap.md
+          - Mengambil transcript YouTube: panduan/mengambil-transcript-youtube.md
+          - Menyiapkan dokumen untuk RAG: panduan/menyiapkan-dokumen-untuk-rag.md
+      - Proyek Zul:
+          - Menerbitkan dokumentasi: panduan/menerbitkan-dokumentasi.md
+          - Berkontribusi: panduan/berkontribusi.md
+  - Referensi:
+      - referensi/index.md
+      - Zul CLI:
+          - Perintah zul: referensi/cli.md
+      - Template hexa:
+          - Struktur proyek: referensi/struktur-proyek.md
+          - Environment variable: referensi/konfigurasi.md
+          - HTTP API: referensi/http-api.md
+          - Playground API: referensi/playground-api.md
+          - API agent: referensi/agent.md
+          - Format review: referensi/format-review.md
+      - Utilities:
+          - MilvusHelper: referensi/milvus.md
+          - RedisHelper: referensi/redis.md
+          - OCR: referensi/ocr.md
+          - AI Service: referensi/ai-service.md
+          - Markdown converter: referensi/markdown-converter.md
+          - ChartGenerator: referensi/grafik.md
+          - Helper kecil: referensi/helper.md
+  - Konsep:
+      - konsep/index.md
+      - Arsitektur hexagonal: konsep/arsitektur-hexagonal.md
+      - Perjalanan sebuah request: konsep/alur-request.md
+      - Cara kerja agent ReAct: konsep/agent-react.md
+      - Cara kerja human-in-the-loop: konsep/human-in-the-loop.md
+      - Cara kerja subagents: konsep/subagents.md
+      - Memory dan thread: konsep/memory.md
+      - Menguji tanpa LLM asli: konsep/pengujian.md
+      - Hexagonal dari nol: hexagonal.md
+  - Playground: playground.md
