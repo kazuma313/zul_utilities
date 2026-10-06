@@ -1,13 +1,84 @@
+"""
+Konversi Markdown menjadi presentasi PowerPoint (.pptx).
+
+Gunanya:
+    Membuat slide dari Markdown, misalnya dari ringkasan yang ditulis LLM.
+    Bisa memakai template .pptx perusahaan atau membuat slide polos 16:9.
+
+Cara pakai (`pip install "zul[converter]"`):
+    from zul.utilities.markdown_converter.md_to_ppt import DynamicMarkdownToPPTXService
+
+    service = DynamicMarkdownToPPTXService()                     # slide polos
+    service = DynamicMarkdownToPPTXService(template_path="template.pptx")
+
+    service.convert_markdown(markdown, "hasil.pptx")
+    pptx_bytes = service.convert_to_bytes(markdown)               # untuk respons HTTP
+
+Sintaks Markdown yang dikenali:
+    # Judul              judul slide
+    ## Judul             judul slide (jika belum ada), selain itu sub-judul
+    ### / ####           sub-judul di dalam slide
+    * teks / - teks      bullet; indentasi 2 spasi per level
+    ** teks / *** teks   bullet level 1 / level 2
+    | a | b |            tabel
+    ![alt](gambar.png)   gambar dari file lokal
+    ---                  pemisah slide (di baris sendiri)
+
+Contoh:
+    markdown = (
+        "# Laporan Kuartal\n"
+        "\n---\n"
+        "## Ringkasan\n"
+        "* Pendapatan naik\n"
+        "  * Terutama dari produk A\n"
+    )
+"""
+
 import re
-from pathlib import Path
 from io import BytesIO
+from pathlib import Path
+
 from pptx import Presentation
-from pptx.util import Inches, Pt
-from pptx.enum.text import PP_ALIGN
 from pptx.dml.color import RGBColor
-from pptx.oxml.xmlchemy import OxmlElement
+from pptx.enum.text import PP_ALIGN
 from pptx.oxml import parse_xml
-from pptx.util import Pt as PtUnit
+from pptx.util import Inches, Pt
+
+# --------------------------------------------------------------------------
+# Aturan Slide dan Pola Markdown
+# --------------------------------------------------------------------------
+#
+# Slide dipisah oleh baris "---". Ukuran 10 x 5,625 inci adalah
+# rasio 16:9. Bullet hanya dikenali sampai level 2, sehingga
+# indentasi yang lebih dalam tetap dianggap level 2 juga.
+#
+
+SLIDE_SEPARATOR = "\n---\n"
+SLIDE_WIDTH_INCHES = 10
+SLIDE_HEIGHT_INCHES = 5.625  # 16:9
+MAX_BULLET_LEVEL = 2
+SPACES_PER_BULLET_LEVEL = 2
+
+_HEADING_PATTERN = re.compile(r"^(#{1,4})\s+(.*)$")
+# "* text" / "- text" (level dari indentasi) atau
+# "** text" / "*** text" (level dari jumlah *)
+_BULLET_PATTERN = re.compile(r"^(\*{1,3}|-)\s+(.*)$")
+_IMAGE_PATTERN = re.compile(r"!\[.*?\]\((.*?)\)")
+
+# --------------------------------------------------------------------------
+# Fungsi Pembantu
+# --------------------------------------------------------------------------
+
+
+def strip_inline_markdown(text: str) -> str:
+    """Hapus penanda **bold** / *italic* karena PPTX menampilkannya apa adanya."""
+    text = re.sub(r"\*\*(.*?)\*\*", r"\1", text)
+    return re.sub(r"\*(.*?)\*", r"\1", text)
+
+
+# --------------------------------------------------------------------------
+# Service Konversi
+# --------------------------------------------------------------------------
 
 
 class DynamicMarkdownToPPTXService:
@@ -30,18 +101,14 @@ class DynamicMarkdownToPPTXService:
             style_config: Dict untuk custom font styling (optional)
         """
         self.template_path = template_path
-        self.use_template = False
 
         # Check template
-        if template_path and Path(template_path).exists():
-            self.prs = Presentation(template_path)
-            self.use_template = True
+        self.use_template = bool(template_path and Path(template_path).exists())
+        self.prs = self._new_presentation()
+        if self.use_template:
             print(f"✅ Mode: Template-based (using {template_path})")
         else:
-            self.prs = Presentation()
-            self.prs.slide_width = Inches(10)
-            self.prs.slide_height = Inches(5.625)
-            print(f"✅ Mode: Generate from scratch")
+            print("✅ Mode: Generate from scratch")
             if template_path:
                 print(f"   ⚠️  Template not found: {template_path}")
 
@@ -49,6 +116,19 @@ class DynamicMarkdownToPPTXService:
         self.style_config = self.get_default_style()
         if style_config:
             self._merge_style(style_config)
+
+    def _new_presentation(self):
+        """Presentation baru: dari template jika ada, kalau tidak kosong 16:9."""
+        if self.use_template:
+            return Presentation(self.template_path)
+        prs = Presentation()
+        prs.slide_width = Inches(SLIDE_WIDTH_INCHES)
+        prs.slide_height = Inches(SLIDE_HEIGHT_INCHES)
+        return prs
+
+    # ----------------------------------------------------------------------
+    # Gaya Teks
+    # ----------------------------------------------------------------------
 
     def get_default_style(self):
         """Default styling configuration"""
@@ -168,9 +248,17 @@ class DynamicMarkdownToPPTXService:
         )
         if buChar is None:
             # Create bullet with default bullet character
-            buChar_xml = '<a:buChar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" char="•"/>'
+            buChar_xml = (
+                "<a:buChar"
+                ' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'
+                ' char="•"/>'
+            )
             buChar = parse_xml(buChar_xml)
             pPr.append(buChar)
+
+    # ----------------------------------------------------------------------
+    # Slide dan Textbox
+    # ----------------------------------------------------------------------
 
     def create_blank_slide(self):
         """Create blank slide"""
@@ -246,10 +334,7 @@ class DynamicMarkdownToPPTXService:
 
         for idx, item in enumerate(content_items):
             # Use first paragraph for first item, add new for rest
-            if idx == 0:
-                p = text_frame.paragraphs[0]
-            else:
-                p = text_frame.add_paragraph()
+            p = text_frame.paragraphs[0] if idx == 0 else text_frame.add_paragraph()
 
             p.text = item["text"]
 
@@ -290,10 +375,7 @@ class DynamicMarkdownToPPTXService:
             text_frame.paragraphs[0].text = ""
 
         for idx, bullet_text in enumerate(bullets):
-            if idx == 0:
-                p = text_frame.paragraphs[0]
-            else:
-                p = text_frame.add_paragraph()
+            p = text_frame.paragraphs[0] if idx == 0 else text_frame.add_paragraph()
 
             p.text = bullet_text
 
@@ -302,6 +384,10 @@ class DynamicMarkdownToPPTXService:
             self.apply_text_style(p, style_type)
 
         return total_height
+
+    # ----------------------------------------------------------------------
+    # Tabel dan Gambar
+    # ----------------------------------------------------------------------
 
     def parse_markdown_table(self, table_text):
         """
@@ -322,7 +408,7 @@ class DynamicMarkdownToPPTXService:
 
         table_data = []
 
-        for i, line in enumerate(lines):
+        for line in lines:
             # Skip separator line (yang berisi |---|---|)
             if "---" in line:
                 continue
@@ -333,10 +419,7 @@ class DynamicMarkdownToPPTXService:
             # Clean markdown formatting (bold, italic, etc)
             cleaned_cells = []
             for cell in cells:
-                # Remove markdown bold (**text**)
-                cell = re.sub(r"\*\*(.*?)\*\*", r"\1", cell)
-                # Remove markdown italic (*text*)
-                cell = re.sub(r"\*(.*?)\*", r"\1", cell)
+                cell = strip_inline_markdown(cell)
                 # Remove HTML breaks
                 cell = cell.replace("<br>", "\n").replace("<br/>", "\n")
                 cleaned_cells.append(cell.strip())
@@ -446,6 +529,10 @@ class DynamicMarkdownToPPTXService:
             print(f"⚠️  Error adding image: {e}")
             return None
 
+    # ----------------------------------------------------------------------
+    # Menyusun Slide
+    # ----------------------------------------------------------------------
+
     def fill_template_placeholder(self, slide, title=None, content=None):
         """Fill placeholder di template slide"""
         for shape in slide.placeholders:
@@ -468,7 +555,7 @@ class DynamicMarkdownToPPTXService:
                 text_frame.clear()
 
                 if isinstance(content, list):
-                    for idx, item in enumerate(content):
+                    for item in content:
                         p = text_frame.add_paragraph()
 
                         # Check if item is dict (structured content)
@@ -588,6 +675,126 @@ class DynamicMarkdownToPPTXService:
 
         return slide
 
+    # ----------------------------------------------------------------------
+    # Membaca Markdown
+    # ----------------------------------------------------------------------
+
+    def _split_table_lines(self, lines):
+        """
+        Pisahkan baris tabel markdown dari baris lainnya.
+
+        Returns:
+            (table_data, non_table_lines). Jika ada beberapa tabel dalam satu
+            slide, tabel terakhir yang dipakai.
+        """
+        table_data = None
+        table_lines = []
+        non_table_lines = []
+
+        for line in lines:
+            line_stripped = line.strip()
+            if line_stripped.startswith("|") and "|" in line_stripped[1:]:
+                table_lines.append(line)
+                continue
+            if table_lines:
+                # Table ended, parse it
+                table_data = self.parse_markdown_table("\n".join(table_lines))
+                table_lines = []
+            non_table_lines.append(line)
+
+        # Handle table at end of slide
+        if table_lines:
+            table_data = self.parse_markdown_table("\n".join(table_lines))
+
+        return table_data, non_table_lines
+
+    @staticmethod
+    def _parse_bullet(original_line):
+        """
+        Parse baris bullet menjadi content item, atau None jika bukan bullet.
+
+        Level ditentukan oleh jumlah asterisk ("**" = 1, "***" = 2) atau,
+        untuk "* " / "- ", oleh indentasi (2 spasi per level).
+        """
+        match = _BULLET_PATTERN.match(original_line.strip())
+        if not match:
+            return None
+
+        marker, text = match.groups()
+        if len(marker) > 1:
+            level = len(marker) - 1
+        else:
+            expanded = original_line.expandtabs(SPACES_PER_BULLET_LEVEL)
+            leading_spaces = len(expanded) - len(expanded.lstrip())
+            level = leading_spaces // SPACES_PER_BULLET_LEVEL
+
+        return {
+            "type": "bullet",
+            "text": strip_inline_markdown(text).strip(),
+            "level": min(level, MAX_BULLET_LEVEL),
+        }
+
+    def _parse_slide(self, slide_content):
+        """
+        Parse markdown satu slide.
+
+        Returns:
+            Dict dengan key: title, content (list of dicts atau None),
+            image_paths (list atau None), table_data (list of lists atau None)
+        """
+        title = None
+        content_items = []
+        image_paths = []
+
+        table_data, non_table_lines = self._split_table_lines(slide_content.split("\n"))
+
+        for original_line in non_table_lines:
+            line = original_line.strip()
+            if not line:
+                continue
+
+            heading = _HEADING_PATTERN.match(line)
+            if heading:
+                level, text = len(heading.group(1)), heading.group(2).strip()
+                # "#" selalu judul slide; "##" jadi judul jika belum ada
+                if level == 1 or (level == 2 and not title):
+                    title = text
+                else:
+                    content_items.append(
+                        {"type": "section", "text": text, "header_level": level}
+                    )
+                continue
+
+            bullet = self._parse_bullet(original_line)
+            if bullet:
+                content_items.append(bullet)
+            elif line.startswith("!["):
+                image = _IMAGE_PATTERN.match(line)
+                if image:
+                    image_paths.append(image.group(1))
+            elif not line.startswith("#"):
+                content_items.append({"type": "text", "text": line})
+
+        return {
+            "title": title,
+            "content": content_items or None,
+            "image_paths": image_paths or None,
+            "table_data": table_data,
+        }
+
+    def _add_slides_from_markdown(self, md_content):
+        """Tambahkan satu slide untuk tiap bagian markdown yang dipisah '---'."""
+        for slide_content in md_content.split(SLIDE_SEPARATOR):
+            if not slide_content.strip():
+                continue
+            self.add_slide_from_content(
+                **self._parse_slide(slide_content), layout_index=1
+            )
+
+    # ----------------------------------------------------------------------
+    # Konversi dan Menyimpan
+    # ----------------------------------------------------------------------
+
     def convert_markdown(self, md_content, output_path):
         """
         Convert markdown ke PPTX
@@ -597,7 +804,7 @@ class DynamicMarkdownToPPTXService:
         - ## Heading 2 (slide title)
         - ### Heading 3 (section header dalam slide)
         - #### Heading 4 (sub-section header dalam slide)
-        - * Bullet point (level 0)
+        - * Bullet point (level 0), indentasi 2 spasi per level untuk nested
         - ** Nested bullet (level 1)
         - *** Deep nested bullet (level 2)
         - ![alt text](path/to/image.png) - untuk add image
@@ -608,131 +815,7 @@ class DynamicMarkdownToPPTXService:
             md_content: String markdown content
             output_path: Output file path
         """
-        # Split by slide separator
-        slides_content = md_content.split("\n---\n")
-
-        for idx, slide_content in enumerate(slides_content):
-            if not slide_content.strip():
-                continue
-
-            lines = slide_content.split("\n")
-
-            title = None
-            content_items = []
-            image_paths = []
-            table_data = None
-
-            # Detect table
-            table_lines = []
-            in_table = False
-            non_table_lines = []
-
-            for line in lines:
-                line_stripped = line.strip()
-
-                # Check if line is part of table
-                if line_stripped.startswith("|") and "|" in line_stripped[1:]:
-                    in_table = True
-                    table_lines.append(line)
-                else:
-                    if in_table and table_lines:
-                        # Table ended, parse it
-                        table_text = "\n".join(table_lines)
-                        table_data = self.parse_markdown_table(table_text)
-                        table_lines = []
-                        in_table = False
-                    non_table_lines.append(line)
-
-            # Handle table at end of slide
-            if table_lines:
-                table_text = "\n".join(table_lines)
-                table_data = self.parse_markdown_table(table_text)
-
-            # Process non-table lines
-            for line in non_table_lines:
-                if not line.strip():
-                    continue
-
-                original_line = line
-                line = line.strip()
-
-                # Header level 1 (# Header) - biasanya untuk slide title utama
-                if line.startswith("# ") and not line.startswith("## "):
-                    title = line.replace("# ", "").strip()
-
-                # Header level 2 (## Header) - slide title
-                elif line.startswith("## ") and not line.startswith("### "):
-                    heading = line.replace("## ", "").strip()
-                    if not title:
-                        title = heading
-                    else:
-                        content_items.append(
-                            {"type": "section", "text": heading, "header_level": 2}
-                        )
-
-                # Header level 3 (### Header) - section dalam slide
-                elif line.startswith("### ") and not line.startswith("#### "):
-                    content_items.append(
-                        {
-                            "type": "section",
-                            "text": line.replace("### ", "").strip(),
-                            "header_level": 3,
-                        }
-                    )
-
-                # Header level 4 (#### Header) - sub-section dalam slide
-                elif line.startswith("#### "):
-                    content_items.append(
-                        {
-                            "type": "section",
-                            "text": line.replace("#### ", "").strip(),
-                            "header_level": 4,
-                        }
-                    )
-
-                # Bullet point dengan deteksi level (indentasi)
-                elif line.startswith("* ") or line.startswith("- "):
-                    # Count leading spaces untuk detect nested level
-                    leading_spaces = len(original_line) - len(original_line.lstrip())
-
-                    # Detect nested bullet by spaces or asterisks
-                    if "**" in line[:5]:
-                        level = 2
-                        bullet_text = line.lstrip("*- ").strip()
-                    elif (
-                        line.startswith("  *")
-                        or line.startswith("  -")
-                        or leading_spaces >= 2
-                    ):
-                        level = 1
-                        bullet_text = line.lstrip("*- ").strip()
-                    else:
-                        level = 0
-                        bullet_text = line.lstrip("*- ").strip()
-
-                    content_items.append(
-                        {"type": "bullet", "text": bullet_text, "level": level}
-                    )
-
-                # Image reference ![alt](path)
-                elif line.startswith("!["):
-                    match = re.match(r"!\[.*?\]\((.*?)\)", line)
-                    if match:
-                        image_paths.append(match.group(1))
-
-                # Regular text
-                elif line and not line.startswith("#"):
-                    content_items.append({"type": "text", "text": line})
-
-            # Add slide
-            content = content_items if content_items else None
-            self.add_slide_from_content(
-                title=title,
-                content=content,
-                image_paths=image_paths if image_paths else None,
-                table_data=table_data,
-                layout_index=1,
-            )
+        self._add_slides_from_markdown(md_content)
 
         # Save
         self.prs.save(output_path)
@@ -748,150 +831,17 @@ class DynamicMarkdownToPPTXService:
             markdown_content (str): Konten dalam format Markdown.
 
         Returns:
-            bytes: File PPTX dalam bentuk bytes.
+            bytes: File PPTX dalam bentuk bytes (kosong jika konversi gagal).
         """
         try:
             # Reset presentation untuk konversi baru
-            if self.template_path and Path(self.template_path).exists():
-                self.prs = Presentation(self.template_path)
-            else:
-                self.prs = Presentation()
-                self.prs.slide_width = Inches(10)
-                self.prs.slide_height = Inches(5.625)
+            self.prs = self._new_presentation()
+            self._add_slides_from_markdown(markdown_content)
 
-            # Process markdown content (sama seperti convert_markdown tapi tanpa save ke file)
-            # Split by slide separator
-            slides_content = markdown_content.split("\n---\n")
-
-            for idx, slide_content in enumerate(slides_content):
-                if not slide_content.strip():
-                    continue
-
-                lines = slide_content.split("\n")
-
-                title = None
-                content_items = []
-                image_paths = []
-                table_data = None
-
-                # Detect table
-                table_lines = []
-                in_table = False
-                non_table_lines = []
-
-                for line in lines:
-                    line_stripped = line.strip()
-
-                    # Check if line is part of table
-                    if line_stripped.startswith("|") and "|" in line_stripped[1:]:
-                        in_table = True
-                        table_lines.append(line)
-                    else:
-                        if in_table and table_lines:
-                            # Table ended, parse it
-                            table_text = "\n".join(table_lines)
-                            table_data = self.parse_markdown_table(table_text)
-                            table_lines = []
-                            in_table = False
-                        non_table_lines.append(line)
-
-                # Handle table at end of slide
-                if table_lines:
-                    table_text = "\n".join(table_lines)
-                    table_data = self.parse_markdown_table(table_text)
-
-                # Process non-table lines
-                for line in non_table_lines:
-                    if not line.strip():
-                        continue
-
-                    original_line = line
-                    line = line.strip()
-
-                    # Header level 1 (# Header)
-                    if line.startswith("# ") and not line.startswith("## "):
-                        title = line.replace("# ", "").strip()
-
-                    # Header level 2 (## Header)
-                    elif line.startswith("## ") and not line.startswith("### "):
-                        heading = line.replace("## ", "").strip()
-                        if not title:
-                            title = heading
-                        else:
-                            content_items.append(
-                                {"type": "section", "text": heading, "header_level": 2}
-                            )
-
-                    # Header level 3 (### Header)
-                    elif line.startswith("### ") and not line.startswith("#### "):
-                        content_items.append(
-                            {
-                                "type": "section",
-                                "text": line.replace("### ", "").strip(),
-                                "header_level": 3,
-                            }
-                        )
-
-                    # Header level 4 (#### Header)
-                    elif line.startswith("#### "):
-                        content_items.append(
-                            {
-                                "type": "section",
-                                "text": line.replace("#### ", "").strip(),
-                                "header_level": 4,
-                            }
-                        )
-
-                    # Bullet point dengan deteksi level
-                    elif line.startswith("* ") or line.startswith("- "):
-                        leading_spaces = len(original_line) - len(
-                            original_line.lstrip()
-                        )
-
-                        if "**" in line[:5]:
-                            level = 2
-                            bullet_text = line.lstrip("*- ").strip()
-                        elif (
-                            line.startswith("  *")
-                            or line.startswith("  -")
-                            or leading_spaces >= 2
-                        ):
-                            level = 1
-                            bullet_text = line.lstrip("*- ").strip()
-                        else:
-                            level = 0
-                            bullet_text = line.lstrip("*- ").strip()
-
-                        content_items.append(
-                            {"type": "bullet", "text": bullet_text, "level": level}
-                        )
-
-                    # Image reference
-                    elif line.startswith("!["):
-                        match = re.match(r"!\[.*?\]\((.*?)\)", line)
-                        if match:
-                            image_paths.append(match.group(1))
-
-                    # Regular text
-                    elif line and not line.startswith("#"):
-                        content_items.append({"type": "text", "text": line})
-
-                # Add slide
-                content = content_items if content_items else None
-                self.add_slide_from_content(
-                    title=title,
-                    content=content,
-                    image_paths=image_paths if image_paths else None,
-                    table_data=table_data,
-                    layout_index=1,
-                )
-
-            # Save to BytesIO
             bytes_io = BytesIO()
             self.prs.save(bytes_io)
-            bytes_io.seek(0)
 
-            print(f"\n✅ Presentasi berhasil dikonversi ke bytes")
+            print("\n✅ Presentasi berhasil dikonversi ke bytes")
             print(f"   Total slides: {len(self.prs.slides)}")
 
             return bytes_io.getvalue()

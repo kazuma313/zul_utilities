@@ -28,6 +28,30 @@ Buat struktur proyek AI production-ready dalam satu perintah, lalu pakai kembali
 
 ---
 
+## 📚 Dokumentasi
+
+Dokumentasi lengkap ada di folder [`docs/`](docs/index.md) dan bisa dibaca langsung di GitHub. Untuk membukanya sebagai situs dengan menu, pencarian, dan **playground** interaktif, jalankan:
+
+```bash
+uv sync
+uv run mkdocs serve      # buka http://127.0.0.1:8001
+```
+
+Dokumentasi mengikuti [Diátaxis](https://diataxis.fr): satu halaman hanya berisi satu jenis tulisan.
+
+| Bagian | Untuk apa | Mulai dari |
+|--------|-----------|------------|
+| [Tutorial](docs/tutorial/index.md) | Belajar sambil mengerjakan | [Membuat agent pertamamu](docs/tutorial/agent-pertama.md) |
+| [Panduan](docs/panduan/index.md) | Mengerjakan satu tugas tertentu | [Menambah tool](docs/panduan/menambah-tool.md), [Milvus](docs/panduan/memakai-milvus.md) |
+| [Referensi](docs/referensi/index.md) | Mencari fakta saat bekerja | [Perintah zul](docs/referensi/cli.md), [HTTP API](docs/referensi/http-api.md) |
+| [Konsep](docs/konsep/index.md) | Memahami alasannya | [Arsitektur hexagonal](docs/konsep/arsitektur-hexagonal.md) |
+
+Halaman tutorial dan panduan punya panel **Playground**: kirim pesan ke agent di proyekmu, lalu lihat setiap langkahnya dan setujui aksi yang menunggu. Lihat [Mencoba fitur di playground](docs/panduan/mencoba-di-playground.md).
+
+Setiap modul di `src/zul/` dan di template juga diawali docstring **Gunanya / Cara pakai / Contoh**, jadi petunjuknya muncul langsung di editor.
+
+---
+
 ## ✨ Fitur Utama
 
 | Fitur | Keterangan |
@@ -38,6 +62,7 @@ Buat struktur proyek AI production-ready dalam satu perintah, lalu pakai kembali
 | 🗄️ **Vector DB Helpers** | Helper konfigurasi-driven untuk **Milvus** & **Redis** (termasuk hybrid search) |
 | 👁️ **OCR Toolkit** | Ekstraksi dokumen via **Docling VLM** dan **Google Gemini** |
 | 📄 **Doc Converters** | Konversi Markdown → PDF & PPTX |
+| 🧩 **Agent Skills** | Kumpulan skill untuk agent AI di `research/agentic/algorithms/skills/` (mind map, slide, poster, dokumen, transcript YouTube), sudah diuji dengan model lokal 4B (`gemma3:4b`) |
 | 🎯 **Type-Safe** | Validasi & settings berbasis Pydantic v2 |
 
 ---
@@ -108,21 +133,27 @@ boilerplate/
 │   ├── cli.py                    # Entry point CLI (typer app)
 │   ├── commands/                 # Sub-command CLI
 │   │   ├── build.py              #   → zul build hexa
-│   │   └── install.py            #   → zul install milvus_helper
+│   │   └── install.py            #   → zul install milvus-helper / redis-helper
 │   ├── utilities/                # 🧰 Toolkit yang bisa diimpor
 │   │   ├── vector_DB/            #   Milvus & Redis helper + config schema
 │   │   ├── OCR/                  #   Docling VLM & Gemini OCR
 │   │   ├── markdown_converter/   #   MD → PDF / PPTX
-│   │   ├── script_helper/        #   JSON, save file, eval, dll
+│   │   ├── script_helper/        #   JSON, save file, timer, PDF reader, dll
 │   │   ├── embedding_service.py  #   LLM & embedding config (Pydantic)
+│   │   ├── fake_embedding.py     #   Embedding palsu yang deterministik (untuk test)
+│   │   ├── analysis.py           #   ChartGenerator + uji statistik
+│   │   ├── logger.py             #   Logger console + rotating file
 │   │   └── react_graph.py        #   Contoh LangGraph StateGraph
 │   └── templates/
 │       └── hexa/                 # 🏛️ Blueprint proyek hexagonal
+│           ├── README.md, requirements.txt, .env.example
+│           ├── data/ dockerfile/ logs/ notebooks/ test/
 │           └── src/
 │               ├── domain/       #   Entity, exceptions, prompt templates
 │               ├── application/  #   Use case, AI agents (ReAct), DTO
 │               ├── infrastructure/ # LLM, tools, database, logging
 │               └── interface/    #   http (FastAPI), streamlit, cli, discord
+├── tests/                        # 🧪 Test untuk CLI, utilities, dan template
 ├── tutorial/                     # 📚 Notebook contoh per-utilitas
 ├── pyproject.toml                # Metadata & dependencies
 └── README.md
@@ -139,12 +170,17 @@ boilerplate/
 
 ### Penjelasan Modul `utilities`
 
-| Modul | Isi | Contoh Impor |
-|-------|-----|--------------|
-| `vector_DB` | `MilvusHelper`, `redis_helper`, config loader/schema | `from zul.utilities.vector_DB.milvus_helper import MilvusHelper` |
-| `OCR` | `DoclingVLMConverter`, `gemini_ocr` | `from zul.utilities.OCR.docling_OCR import DoclingVLMConverter` |
-| `markdown_converter` | `md_to_pdf`, `md_to_ppt` | `from zul.utilities.markdown_converter.md_to_pdf import ...` |
-| `embedding_service` | `AIConfig`, `LLMConfig`, `EmbeddingConfig` | `from zul.utilities.embedding_service import AIConfig` |
+| Modul | Isi | Contoh Impor | Extra |
+|-------|-----|--------------|-------|
+| `vector_DB` | `MilvusHelper` (config-based) | `from zul.utilities.vector_DB.milvus_helper import MilvusHelper` | `zul[milvus]` |
+| `vector_DB` | `RedisHelper` (config-based), `RedisVectorDB` | `from zul.utilities.vector_DB.redis_helper import RedisHelper` | `zul[redis]` |
+| `OCR` | `DoclingVLMConverter`, `gemini_ocr` | `from zul.utilities.OCR.docling_OCR import DoclingVLMConverter` | `zul[gemini]` untuk Gemini |
+| `markdown_converter` | `MarkdownToPDFConverter`, `DynamicMarkdownToPPTXService` | `from zul.utilities.markdown_converter.md_to_pdf import MarkdownToPDFConverter` | `zul[converter]` |
+| `embedding_service` | `AIService`, `AIConfig`, `LLMConfig`, `EmbeddingConfig` | `from zul.utilities.embedding_service import AIConfig` | — |
+| `analysis` | `ChartGenerator` | `from zul.utilities.analysis import ChartGenerator` | `zul[analysis]` |
+| `script_helper` | `PDFProcessor`, `TimerDecorator`, `save_file`, `json_helper` | `from zul.utilities.script_helper.read_pdf2 import PDFProcessor` | `zul[pdf]` untuk PDF |
+
+> Path impor lama (`zul.utilities.docling_OCR`, `zul.utilities.redis_vector_helper`, `zul.utilities.md_to_pdf`, `zul.utilities.md_to_ppt`, `zul.utilities.time`) tetap bisa dipakai; isinya kini hanya meneruskan ke modul di atas.
 
 ---
 
@@ -239,9 +275,13 @@ Template `hexa` dan utilitas menyertakan komponen LangChain berikut:
 
 | Komponen | Implementasi | Lokasi |
 |----------|--------------|--------|
-| **Agent** | ReAct agent (tool-calling) via LangGraph | `application/AI/agents/react/` |
+| **Agent** | ReAct agent (tool-calling) via LangGraph Graph API (`StateGraph` + `ToolNode`) | `application/AI/agents/react/` |
+| **Human-in-the-loop** | ReAct + node `human_review` yang memanggil `interrupt()`; keputusan approve / edit / reject | `application/AI/agents/human_in_the_loop/` |
+| **Subagents** | Supervisor yang memanggil subagent spesialis sebagai tool | `application/AI/agents/subagents/` |
+| **State** | `AgentState`: `messages` (reducer `add_messages`) + `remaining_steps` | `domain/entities/agents/react/` |
+| **Memory** | Checkpointer `InMemorySaver`, percakapan per `thread_id` | `infrastructure/AI/memory/checkpointer.py` |
 | **Graph** | `StateGraph` (contoh state machine LangGraph) | `utilities/react_graph.py` |
-| **Tools** | `get_weather` (`@tool`) — placeholder siap diganti | `infrastructure/AI/tools/weather_tool.py` |
+| **Tools** | `get_weather`, `send_email` (`@tool`) — placeholder siap diganti | `infrastructure/AI/tools/` |
 | **LLM** | `ChatOpenAI` (`gpt-4o-mini`) via factory | `infrastructure/AI/llm/openai.py` |
 | **Prompt** | Template prompt ReAct | `domain/templates/prompt/react/` |
 
@@ -329,6 +369,23 @@ uv tool install git+https://github.com/kazuma313/zul_utilities.git
 # via pip
 pip install git+https://github.com/kazuma313/zul_utilities.git
 ```
+
+Instalasi dasar sudah cukup untuk CLI. Dependency tiap utilitas dipasang lewat *extra* — pilih yang dipakai saja:
+
+```bash
+pip install "zul[milvus,redis] @ git+https://github.com/kazuma313/zul_utilities.git"
+pip install "zul[all] @ git+https://github.com/kazuma313/zul_utilities.git"
+```
+
+| Extra | Untuk |
+|-------|-------|
+| `milvus` | `MilvusHelper` |
+| `redis` | `RedisHelper`, `RedisVectorDB` |
+| `converter` | Markdown → PDF / PPTX |
+| `analysis` | `ChartGenerator` |
+| `pdf` | `PDFProcessor` |
+| `gemini` | OCR dengan Gemini |
+| `all` | Semua di atas |
 </details>
 
 <details>
@@ -338,8 +395,7 @@ pip install git+https://github.com/kazuma313/zul_utilities.git
 git clone https://github.com/kazuma313/zul_utilities.git
 cd zul_utilities
 
-uv sync              # buat virtual env + install dependency
-uv pip install -e .  # install package dalam mode editable
+uv sync              # buat virtual env + install zul (editable), semua extra, dan dev tools
 ```
 </details>
 
@@ -363,19 +419,44 @@ zul build hexa
 
 # Langsung dengan nama
 zul build hexa --name my-ai-app
+
+# Tanpa konfirmasi (untuk script / CI)
+zul build hexa --name my-ai-app --yes
 ```
+
+Proyek yang dihasilkan langsung bisa dijalankan:
+
+```bash
+cd my-ai-app
+pip install -r requirements.txt
+cp .env.example .env                              # isi OPENAI_API_KEY
+uvicorn src.interface.http.main:app --reload
+```
+
+| Endpoint | Template agent |
+|----------|----------------|
+| `POST /chat` | ReAct |
+| `POST /hitl/chat`, `POST /hitl/review` | Human-in-the-loop (persetujuan manusia sebelum tool tertentu jalan) |
+| `POST /subagents/chat` | Supervisor + subagents |
+| `GET /health` | — |
 
 ### Setup config utilitas
 
 ```bash
-# Buat milvus_config.json di folder proyek saat ini
-zul install milvus_helper
+# Buat milvus_config.json di folder proyek saat ini (siap dipakai MilvusHelper)
+zul install milvus-helper
+
+# Buat redis_config.yaml (siap dipakai RedisHelper)
+zul install redis-helper
+
+# Nama file & format bisa diganti; --force menimpa file yang sudah ada
+zul install milvus-helper --config-name milvus.yaml --force
 ```
 
 ### Cek versi & bantuan
 
 ```bash
-zul version
+zul --version
 zul --help
 zul build --help
 ```
@@ -426,15 +507,20 @@ EMBEDDING_MODEL=text-embedding-3-small
 ## 🧪 Development
 
 ```bash
-uv sync --all-extras     # install dependency + dev tools
+uv sync                  # install dependency + dev tools
 
-pytest                   # jalankan test
-pytest --cov=zul         # test + coverage
+pytest tests             # test CLI, utilities, dan template (tanpa server eksternal)
+pytest tests --cov=zul   # test + coverage
 
-black src/               # format
-ruff check src/          # lint
-mypy src/                # type check
+black src tests scripts                              # format
+ruff check src tests scripts                         # lint
+python scripts/comment_style.py src tests scripts    # bentuk komentar
+
+mkdocs serve             # pratinjau dokumentasi di http://127.0.0.1:8001
+mkdocs build --strict    # pastikan tidak ada tautan/anchor rusak
 ```
+
+Panduan lengkap: [Berkontribusi ke Zul](docs/panduan/berkontribusi.md).
 
 ---
 

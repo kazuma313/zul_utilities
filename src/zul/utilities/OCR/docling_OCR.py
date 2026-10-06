@@ -1,30 +1,90 @@
-from typing import Dict, Any
-from docling.datamodel.pipeline_options_vlm_model import ApiVlmOptions, ResponseFormat
+"""
+Konversi dokumen ke Markdown / teks / dict dengan Docling dan Vision Language Model.
+
+Gunanya:
+    Membaca PDF, gambar, DOCX, PPTX, HTML, CSV, dan Markdown, lalu
+    mengubahnya menjadi teks terstruktur. Halaman PDF dan gambar dikirim ke
+    VLM lewat endpoint chat completions yang kompatibel dengan OpenAI.
+
+Cara pakai:
+    from zul.utilities.OCR.docling_OCR import DoclingVLMConverter
+
+    converter = DoclingVLMConverter(
+        model="Qwen3-VL-8B-Instruct",
+        hostname_and_port="https://HOST/v1/chat/completions",
+        api_key="API_KEY",
+        prompt="Convert this page to markdown.",
+        response_format="markdown",
+    )
+
+    markdown = converter.convert_to_markdown("dokumen.pdf")
+    text = converter.convert_to_text("dokumen.pdf")
+
+Menyertakan deskripsi gambar dan flowchart:
+    converter = DoclingVLMConverter(..., enable_picture_description=True,
+                                    picture_prompt="Describe the flowchart in detail.")
+
+Mengambil tabel sebagai DataFrame:
+    result = converter.convert("dokumen.pdf")
+    for table in result.document.tables:
+        dataframe = table.export_to_dataframe(doc=result.document)
+"""
+
+import os
+from typing import Any
+
+from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import (
-    VlmPipelineOptions,
     PictureDescriptionApiOptions,
+    VlmPipelineOptions,
 )
+from docling.datamodel.pipeline_options_vlm_model import ApiVlmOptions, ResponseFormat
 from docling.document_converter import (
-    DocumentConverter,
-    PdfFormatOption,
-    ImageFormatOption,
-    WordFormatOption,
-    HTMLFormatOption,
-    PowerpointFormatOption,
     AsciiDocFormatOption,
     CsvFormatOption,
+    DocumentConverter,
+    HTMLFormatOption,
+    ImageFormatOption,
     MarkdownFormatOption,
-)
-from docling.datamodel.base_models import InputFormat
-from docling.pipeline.vlm_pipeline import VlmPipeline
-from typing import Any, Dict
-from docling.document_converter import DocumentConverter
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import (
-    VlmPipelineOptions,
-    PictureDescriptionApiOptions,
+    PdfFormatOption,
+    PowerpointFormatOption,
+    WordFormatOption,
 )
 from docling.pipeline.vlm_pipeline import VlmPipeline
+
+# --------------------------------------------------------------------------
+# Nilai Bawaan
+# --------------------------------------------------------------------------
+#
+# Model dan endpoint ini dipakai oleh create_default(). Keduanya
+# bisa diganti lewat environment variable DOCLING_VLM_MODEL
+# dan DOCLING_VLM_URL, tanpa menyentuh kode sama sekali.
+#
+
+DEFAULT_VLM_MODEL = "ops/Qwen3-VL-8B-Instruct"
+DEFAULT_VLM_URL = "https://llmservice.air.id/chat/completions"
+
+# --------------------------------------------------------------------------
+# Format Respons
+# --------------------------------------------------------------------------
+#
+# Kunci selalu ditulis dengan huruf kecil sebab response_format dari
+# pemanggil diubah ke huruf kecil lebih dulu sebelum dicocokkan.
+# Dengan begitu "Markdown" dan "markdown" sama-sama diterima.
+#
+
+RESPONSE_FORMATS = {
+    "doctags": ResponseFormat.DOCTAGS,
+    "markdown": ResponseFormat.MARKDOWN,
+    "deepseek_markdown": ResponseFormat.DEEPSEEKOCR_MARKDOWN,
+    "html": ResponseFormat.HTML,
+    "otsl": ResponseFormat.OTSL,
+    "plaintext": ResponseFormat.PLAINTEXT,
+}
+
+# --------------------------------------------------------------------------
+# Konverter Dokumen
+# --------------------------------------------------------------------------
 
 
 class DoclingVLMConverter:
@@ -39,7 +99,7 @@ class DoclingVLMConverter:
         hostname_and_port: str,
         api_key: str = "",
         prompt: str = "Convert this page to docling.",
-        picture_prompt: str = None,  # type: ignore
+        picture_prompt: str | None = None,
         response_format: str = "doctags",
         temperature: float = 0.0,
         max_tokens: int = 4096,
@@ -49,20 +109,23 @@ class DoclingVLMConverter:
         enable_picture_description: bool = False,
     ):
         """
-        Initialize the DoclingVLMConverter. See previous docstring.
-        """
-        format_mapping = {
-            "doctags": ResponseFormat.DOCTAGS,
-            "markdown": ResponseFormat.MARKDOWN,
-            "deepseek_markdown": ResponseFormat.DEEPSEEKOCR_MARKDOWN,
-            "HTML": ResponseFormat.HTML,
-            "otsl": ResponseFormat.OTSL,
-            "plaintext": ResponseFormat.PLAINTEXT,
-        }
+        Initialize the DoclingVLMConverter.
 
+        Args:
+            model: Nama model VLM di endpoint.
+            hostname_and_port: URL lengkap endpoint chat completions
+                (OpenAI-compatible).
+            api_key: API key; kosong berarti tanpa header Authorization.
+            prompt: Prompt konversi per halaman.
+            picture_prompt: Prompt deskripsi gambar; default = prompt +
+                instruksi diagram.
+            response_format: doctags | markdown | deepseek_markdown | html |
+                otsl | plaintext (tidak case-sensitive).
+            enable_picture_description: Deskripsikan gambar/flowchart dengan VLM.
+        """
         format_key = response_format.lower()
-        if format_key not in format_mapping:
-            valid_formats = ", ".join(format_mapping.keys())
+        if format_key not in RESPONSE_FORMATS:
+            valid_formats = ", ".join(RESPONSE_FORMATS)
             raise ValueError(
                 f"Invalid response_format '{response_format}'. "
                 f"Valid options: {valid_formats}"
@@ -76,7 +139,7 @@ class DoclingVLMConverter:
             picture_prompt
             or prompt + " Describe diagrams, flowcharts, and shapes concisely."
         )
-        self.response_format = format_mapping[format_key]
+        self.response_format = RESPONSE_FORMATS[format_key]
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.skip_special_tokens = skip_special_tokens
@@ -85,6 +148,10 @@ class DoclingVLMConverter:
         self.enable_picture_description = enable_picture_description
 
         self._doc_converter = None
+
+    # ----------------------------------------------------------------------
+    # Opsi Pipeline VLM
+    # ----------------------------------------------------------------------
 
     def _create_vlm_options(self) -> ApiVlmOptions:
         """Create VLM options for OpenAI-compatible endpoints."""
@@ -129,7 +196,6 @@ class DoclingVLMConverter:
                     {"Authorization": f"Bearer {self.api_key}"} if self.api_key else {}
                 ),
                 prompt=self.picture_prompt,
-                # temperature=self.temperature, # type: ignore
             )
 
         return pipeline_options
@@ -177,6 +243,10 @@ class DoclingVLMConverter:
             )
         return self._doc_converter
 
+    # ----------------------------------------------------------------------
+    # Konversi Dokumen
+    # ----------------------------------------------------------------------
+
     def convert(self, document_path: str) -> Any:
         """
         Convert a document using converter.convert() and return the RAW result object.
@@ -195,7 +265,7 @@ class DoclingVLMConverter:
         converter = self._get_converter()
         return converter.convert(document_path)  # Returns raw result
 
-    def convert_to_dict(self, document_path: str) -> Dict:
+    def convert_to_dict(self, document_path: str) -> dict:
         """Convert and return result.document.export_to_dict()."""
         result = self.convert(document_path)
         return result.document.export_to_dict()
@@ -210,14 +280,23 @@ class DoclingVLMConverter:
         result = self.convert(document_path)
         return result.document.export_to_markdown()
 
+    # ----------------------------------------------------------------------
+    # Konstruktor Alternatif
+    # ----------------------------------------------------------------------
+
     @classmethod
     def create_default(
         cls, api_key: str = "sk", enable_picture_description: bool = False
     ) -> "DoclingVLMConverter":
-        """Create default converter for Qwen3-VL-8B-Instruct."""
+        """
+        Create default converter for Qwen3-VL-8B-Instruct.
+
+        Model dan endpoint bisa diganti lewat environment variable
+        DOCLING_VLM_MODEL dan DOCLING_VLM_URL.
+        """
         return cls(
-            model="ops/Qwen3-VL-8B-Instruct",
-            hostname_and_port="https://llmservice.air.id/chat/completions",
+            model=os.getenv("DOCLING_VLM_MODEL", DEFAULT_VLM_MODEL),
+            hostname_and_port=os.getenv("DOCLING_VLM_URL", DEFAULT_VLM_URL),
             api_key=api_key,
             prompt="Convert this page to markdown.",
             response_format="markdown",
@@ -225,7 +304,10 @@ class DoclingVLMConverter:
         )
 
 
-# Example usage:
+# --------------------------------------------------------------------------
+# Contoh Pemakaian
+# --------------------------------------------------------------------------
+
 if __name__ == "__main__":
     # Method 1: Using default configuration and getting result object
     converter = DoclingVLMConverter.create_default(api_key="sk")

@@ -1,3 +1,23 @@
+"""
+Prompt OCR: dokumen -> Markdown dengan deskripsi gambar dalam Bahasa Indonesia.
+
+Gunanya:
+    `OCR_VLM_FLOW_DESCRIPTION_PROMPT` meminta model mengubah dokumen menjadi
+    Markdown, mendeskripsikan setiap gambar, dan menjelaskan flowchart
+    langkah demi langkah. Rumus dikonversi ke LaTeX.
+
+Cara pakai:
+    from zul.utilities.Prompts.ocr import OCR_VLM_FLOW_DESCRIPTION_PROMPT
+    from zul.utilities.OCR.gemini_ocr import create_gemini_client, process_pdf_with_gemini
+
+    markdown = process_pdf_with_gemini(
+        client=client,
+        pdf_path="dokumen.pdf",
+        prompt=OCR_VLM_FLOW_DESCRIPTION_PROMPT,
+        logger=logger,
+    )
+"""
+
 OCR_VLM_FLOW_DESCRIPTION_PROMPT = """**Role:** You are a "Visual Document Specialist," an AI expert at converting complex documents into clean Markdown. Your most critical skill is providing rich, readable descriptions of all visual elements **in Bahasa Indonesia**.
 
 **Objective:** Convert the provided document into a single, well-structured Markdown file, ensuring all visual descriptions are in Bahasa Indonesia.

@@ -1,7 +1,48 @@
+"""
+OCR dokumen PDF dengan Google Gemini (butuh `pip install "zul[gemini]"`).
+
+Gunanya:
+    Mengunggah PDF ke Gemini, meminta model mengekstrak isinya sesuai
+    prompt, lalu menghapus file dari server Gemini setelah selesai.
+
+Cara pakai:
+    import os
+    from zul.utilities.OCR.gemini_ocr import (
+        create_gemini_client, process_pdf_with_gemini, setup_logger,
+    )
+
+    logger = setup_logger()
+    client = create_gemini_client(api_key=os.environ["GOOGLE_API_KEY"], logger=logger)
+
+    markdown = process_pdf_with_gemini(
+        client=client,
+        pdf_path="dokumen.pdf",
+        prompt="Extract the text content from this PDF as markdown.",
+        logger=logger,
+        model_name="gemini-2.5-pro",
+    )
+
+Kedua fungsi mengembalikan None jika gagal (API key kosong, file tidak
+ada, atau request error); detailnya ditulis ke logger.
+"""
+
+import logging
+import os
+
+from google import genai
+
+# --------------------------------------------------------------------------
+# Logger dan Client
+# --------------------------------------------------------------------------
+
+
 def setup_logger():
     """Sets up a basic console logger."""
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
     return logging.getLogger(__name__)
+
 
 def create_gemini_client(api_key: str, logger: logging.Logger) -> genai.Client | None:
     """
@@ -22,17 +63,27 @@ def create_gemini_client(api_key: str, logger: logging.Logger) -> genai.Client |
         client = genai.Client(api_key=api_key)
         logger.info("Gemini client initialized successfully.")
         return client
-    except Exception as e:
+    except Exception:
         logger.error("Failed to initialize Gemini client.", exc_info=True)
         return None
-    
+
+
+# --------------------------------------------------------------------------
+# Memproses PDF
+# --------------------------------------------------------------------------
+#
+# File diunggah dulu ke server Gemini, baru dirujuk dalam request bersama
+# prompt. Blok finally menghapus file itu dari server baik request-nya
+# berhasil maupun gagal, supaya dokumen tidak tertinggal di server.
+#
+
 
 def process_pdf_with_gemini(
-    client: genai.Client, 
-    pdf_path: str, 
-    prompt: str, 
+    client: genai.Client,
+    pdf_path: str,
+    prompt: str,
     logger: logging.Logger,
-    model_name: str = "gemini-2.5-pro"
+    model_name: str = "gemini-2.5-pro",
 ) -> str | None:
     """
     Uses a pre-initialized Gemini client to process a PDF.
@@ -42,7 +93,8 @@ def process_pdf_with_gemini(
         pdf_path (str): The local file path to the PDF.
         prompt (str): The prompt to send to the model.
         logger (logging.Logger): The logger instance for output.
-        model_name (str, optional): The Gemini model to use. Defaults to "gemini-2.5-pro".
+        model_name (str, optional): The Gemini model to use.
+            Defaults to "gemini-2.5-pro".
 
     Returns:
         str | None: The generated text content, or None if an error occurs.
@@ -66,34 +118,41 @@ def process_pdf_with_gemini(
         logger.info("Response received successfully.")
         return response.text
 
-    except Exception as e:
-        logger.error("An error occurred during the PDF processing workflow.", exc_info=True)
+    except Exception:
+        logger.error(
+            "An error occurred during the PDF processing workflow.", exc_info=True
+        )
         return None
-    
+
     finally:
-        # Cleanup is still part of the process
         if uploaded_file:
             logger.info(f"Deleting uploaded file from server: {uploaded_file.name}...")
             try:
                 client.files.delete(name=uploaded_file.name)
                 logger.info("File cleanup complete.")
             except Exception:
-                logger.error(f"Failed to delete file {uploaded_file.name}.", exc_info=True)
+                logger.error(
+                    f"Failed to delete file {uploaded_file.name}.", exc_info=True
+                )
 
+
+# --------------------------------------------------------------------------
+# Contoh Pemakaian
+# --------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    import os
     logger = setup_logger()
     GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-    client = create_gemini_client(api_key=GOOGLE_API_KEY, 
-                                logger=logger)
-    
-    OCR_PROMPT = "Extract the text content from this PDF and return it in markdown format."
+    client = create_gemini_client(api_key=GOOGLE_API_KEY, logger=logger)
+
+    OCR_PROMPT = (
+        "Extract the text content from this PDF and return it in markdown format."
+    )
     pdf_path_1 = "path/to/your/document.pdf"
     response = process_pdf_with_gemini(
-                client=client,
-                pdf_path=pdf_path_1,
-                prompt=OCR_PROMPT,
-                model_name="gemini-2.5-pro",
-                logger=logger
-            )
+        client=client,
+        pdf_path=pdf_path_1,
+        prompt=OCR_PROMPT,
+        model_name="gemini-2.5-pro",
+        logger=logger,
+    )

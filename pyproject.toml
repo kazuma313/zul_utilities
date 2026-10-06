@@ -15,9 +15,20 @@ dependencies = [
     "langgraph>=1.0.2",
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
-    "typer[all]>=0.12.0",
-    "ultralytics>=8.4.120",
+    "pyyaml>=6.0",
+    "typer>=0.12.0",
 ]
+
+# Setiap utilitas punya dependency sendiri. Install hanya yang dipakai:
+#   pip install "zul[milvus,redis] @ git+https://github.com/kazuma313/zul_utilities.git"
+[project.optional-dependencies]
+milvus = ["pymilvus>=2.5.0"]
+redis = ["redis>=6.4.0", "redisvl>=0.10.0", "numpy>=2.0.0"]
+converter = ["markdown>=3.5", "xhtml2pdf>=0.2.17", "python-pptx>=1.0.2"]
+analysis = ["matplotlib>=3.9", "pandas>=2.0", "scipy>=1.16.2", "numpy>=2.0.0"]
+pdf = ["pypdf>=4.0", "langchain-text-splitters>=0.3.0"]
+gemini = ["google-genai>=1.0.0"]
+all = ["zul[milvus,redis,converter,analysis,pdf,gemini]"]
 
 [project.scripts]
 zul = "zul.cli:app"
@@ -28,6 +39,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
+    "zul[all]",
     "black>=23.0.0",
     "ipykernel>=7.1.0",
     "langchain>=1.0.5",
@@ -36,27 +48,58 @@ dev = [
     "ollama>=0.6.0",
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
+    "fastapi>=0.115",
+    "httpx>=0.27",
+    "mkdocs>=1.6,<2",
+    "mkdocs-material>=9.5",
+    "markdown-callouts>=0.4",
     "ruff>=0.1.0",
     "streamlit>=1.51.0",
-    "redis>=6.4.0",
-    "redisvl>=0.10.0",
-    "xhtml2pdf>=0.2.17",
-    "scipy>=1.16.2",
-    "python-pptx>=1.0.2",
     "nltk>=3.9.2",
-    "numpy>=2.3.4",
     "torch",
     "torchvision",
+    "ultralytics>=8.4.120",
 ]
 
 [tool.pytest.ini_options]
 testpaths = [
+    "tests",
     "research/sorting_algorithm",
     "research/image_processing",
     "research/probability_simulation",
     "research/string_algorithms",
 ]
 addopts = "-ra"
+
+# Gaya kode untuk tools (src/, tests/, scripts/):
+#   uv run black src tests scripts
+#   uv run ruff check src tests scripts
+#   uv run python scripts/comment_style.py src tests scripts
+# research/ dan tutorial/ berisi latihan, jadi tidak ikut diperiksa.
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+extend-exclude = "/(research|tutorial)/"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+extend-exclude = ["research", "tutorial"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+# B008:  Typer dan FastAPI memang memanggil fungsi di nilai default parameter.
+# UP042: mengganti (str, Enum) dengan StrEnum mengubah hasil str() dari enum.
+ignore = ["B008", "UP042"]
+
+# Isi prompt adalah teks untuk model; memotong barisnya mengubah prompt-nya.
+[tool.ruff.lint.per-file-ignores]
+"src/zul/utilities/Prompts/*.py" = ["E501"]
+
+# "src" adalah package proyek hasil `zul build hexa`, jadi di dalam template
+# impor `src.*` dikelompokkan sebagai kode sendiri, terpisah dari library.
+[tool.ruff.lint.isort]
+known-first-party = ["zul", "tests", "src"]
 
 [[tool.uv.index]]
 name = "pytorch"

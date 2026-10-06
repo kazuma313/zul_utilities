@@ -1,5 +1,30 @@
+"""
+Simpan hasil eksperimen ke folder `data/`.
+
+Cara pakai:
+    from zul.utilities.script_helper.save_file import (
+        save_latency_to_csv,
+        save_text_to_md,
+    )
+
+    save_text_to_md(markdown, "hasil_ocr")               # data/hasil_ocr.md
+
+    save_latency_to_csv(
+        {"short": [0.11, 0.12], "long": [0.31, 0.29]},
+        file_name="latency_milvus",
+    )                                                    # data/latency_milvus.csv
+
+Folder `data/` dibuat otomatis di direktori kerja saat ini.
+"""
+
 import os
+
 import pandas as pd
+
+# --------------------------------------------------------------------------
+# Menyimpan ke Folder data
+# --------------------------------------------------------------------------
+
 
 def save_text_to_md(text_result: str, filename: str):
     """
@@ -17,22 +42,20 @@ def save_text_to_md(text_result: str, filename: str):
         f.write(text_result)
 
 
-def save_latency_to_csv(mappinging: dict, file_name:str ="query_latency_recursive_results"):
+def save_latency_to_csv(
+    mapping: dict, file_name: str = "query_latency_recursive_results"
+):
     """
-    Save latency data to a CSV file.
+    Save latency data to a CSV file inside the 'data' directory.
 
-    :param retrieve_short: List of latencies for short queries.
-    :param retrieve_medium: List of latencies for medium queries.
-    :param retrieve_long: List of latencies for long queries.
-    :param retrieve_extra_long: List of latencies for extra long queries.
+    :param mapping: Dict of column name -> list of latencies, e.g.
+        {"short": [...], "medium": [...], "long": [...], "extra_long": [...]}.
+    :param file_name: The name of the file (without extension).
     """
     # Ensure the 'data' directory exists
     os.makedirs("data", exist_ok=True)
-    
-    # Create dictionary with latency data
 
-    # Convert to DataFrame
-    df_latency = pd.DataFrame(mappinging)
+    df_latency = pd.DataFrame(mapping)
 
-    # Save to CSV
-    df_latency.to_csv(f'{file_name}.csv', index=False)
+    file_path = os.path.join("data", f"{file_name}.csv")
+    df_latency.to_csv(file_path, index=False)

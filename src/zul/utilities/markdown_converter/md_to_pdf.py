@@ -1,8 +1,41 @@
+"""
+Konversi Markdown menjadi PDF dengan styling siap cetak.
+
+Gunanya:
+    Mengubah jawaban LLM atau laporan berformat Markdown (heading, tabel,
+    daftar, kode) menjadi PDF, baik ke file maupun ke bytes untuk diunduh.
+
+Cara pakai (`pip install "zul[converter]"`):
+    from zul.utilities.markdown_converter.md_to_pdf import MarkdownToPDFConverter
+
+    converter = MarkdownToPDFConverter(page_size="A4", margin="2cm")
+
+    converter.convert("# Judul\n\nIsi.", output_path="output", filename="laporan.pdf")
+    pdf_bytes = converter.convert_to_bytes("# Judul")      # untuk respons HTTP
+
+Mengganti tampilan:
+    converter.set_custom_styles("body { font-family: Georgia; font-size: 11pt; }")
+
+Contoh:
+    Dari respons API yang isinya Markdown, yaitu objek apa pun yang punya
+    method `.json()` (misalnya hasil `requests.get(...)`):
+
+        converter.convert_from_response(
+            response=response,
+            output_path="output",
+            filename="content_contoh_persyaratan.pdf",
+        )
+"""
+
 import os
-import markdown
 from io import BytesIO
+
+import markdown
 from xhtml2pdf import pisa
-from typing import Optional
+
+# --------------------------------------------------------------------------
+# Konverter Markdown ke PDF
+# --------------------------------------------------------------------------
 
 
 class MarkdownToPDFConverter:
@@ -18,6 +51,15 @@ class MarkdownToPDFConverter:
         >>> converter = MarkdownToPDFConverter()
         >>> converter.convert("# Hello World", "/path/to/output", "hello.pdf")
     """
+
+    # ----------------------------------------------------------------------
+    # Tampilan Bawaan
+    # ----------------------------------------------------------------------
+    #
+    # CSS ini adalah template bagi str.format: page_size dan margin
+    # baru diisi ketika PDF dibuat. Itu sebabnya semua kurung
+    # kurawal milik CSS-nya harus ditulis ganda di sini.
+    #
 
     DEFAULT_STYLES = """
     @page {{
@@ -204,7 +246,7 @@ class MarkdownToPDFConverter:
         self,
         page_size: str = "A4",
         margin: str = "2cm",
-        markdown_extensions: Optional[list] = None,
+        markdown_extensions: list | None = None,
     ):
         """
         Inisialisasi converter dengan konfigurasi.
@@ -221,10 +263,20 @@ class MarkdownToPDFConverter:
             "codehilite",
             "tables",
         ]
+        self._styles = self.DEFAULT_STYLES
+
+    # ----------------------------------------------------------------------
+    # Menyusun HTML
+    # ----------------------------------------------------------------------
 
     def get_styles(self) -> str:
         """Menghasilkan CSS styling untuk PDF."""
-        return self.DEFAULT_STYLES.format(page_size=self.page_size, margin=self.margin)
+        try:
+            return self._styles.format(page_size=self.page_size, margin=self.margin)
+        except (KeyError, IndexError, ValueError):
+            # CSS biasa (kurung kurawal tunggal)
+            # bukan template: pakai apa adanya
+            return self._styles
 
     def create_html_document(self, content: str) -> str:
         """
@@ -261,6 +313,10 @@ class MarkdownToPDFConverter:
             str: Konten HTML
         """
         return markdown.markdown(markdown_content, extensions=self.markdown_extensions)
+
+    # ----------------------------------------------------------------------
+    # Konversi
+    # ----------------------------------------------------------------------
 
     def convert(
         self, markdown_content: str, output_path: str, filename: str = "output.pdf"
@@ -357,17 +413,25 @@ class MarkdownToPDFConverter:
             print(f"✗ Error saat memproses response: {e}")
             return False
 
+    # ----------------------------------------------------------------------
+    # Mengganti Tampilan
+    # ----------------------------------------------------------------------
+
     def set_custom_styles(self, custom_styles: str) -> None:
         """
         Set custom CSS styles untuk PDF.
 
         Args:
-            custom_styles (str): Custom CSS string
+            custom_styles (str): Custom CSS string. Boleh CSS biasa, atau template
+                seperti DEFAULT_STYLES (kurung kurawal ganda + {page_size}, {margin}).
         """
-        self.DEFAULT_STYLES = custom_styles
+        self._styles = custom_styles
 
 
-# Contoh penggunaan
+# --------------------------------------------------------------------------
+# Contoh Pemakaian
+# --------------------------------------------------------------------------
+
 if __name__ == "__main__":
     # Contoh 1: Penggunaan dasar
     converter = MarkdownToPDFConverter()
@@ -398,7 +462,7 @@ def hello():
 
     converter.convert(
         markdown_content=sample_markdown,
-        output_path="/Users/rizalmaulana/Downloads",
+        output_path="output",
         filename="contoh_dokumen.pdf",
     )
 
@@ -407,77 +471,6 @@ def hello():
 
     custom_converter.convert(
         markdown_content=sample_markdown,
-        output_path="/Users/rizalmaulana/Downloads",
+        output_path="output",
         filename="custom_dokumen.pdf",
     )
-
-    # Contoh 3: Dari response API (uncomment jika ada response object)
-    # converter.convert_from_response(
-    #     response=response,
-    #     output_path="/Users/rizalmaulana/Downloads",
-    #     filename="content_contoh_persyaratan.pdf"
-    # )
-
-
-# DEFAULT_STYLES = """
-#         @page {{
-#             size: {page_size};
-#             margin: {margin};
-#         }}
-#         body {{
-#             font-family: 'Arial', sans-serif;
-#             font-size: 12pt;
-#             line-height: 1.6;
-#             color: #333;
-#         }}
-#         h1 {{
-#             color: #2c3e50;
-#             border-bottom: 3px solid #3498db;
-#             padding-bottom: 10px;
-#             margin-top: 20px;
-#         }}
-#         h2 {{
-#             color: #34495e;
-#             border-bottom: 2px solid #95a5a6;
-#             padding-bottom: 8px;
-#             margin-top: 18px;
-#         }}
-#         h3 {{
-#             color: #7f8c8d;
-#             margin-top: 15px;
-#         }}
-#         p {{
-#             text-align: justify;
-#             margin: 10px 0;
-#         }}
-#         ul, ol {{
-#             margin: 10px 0;
-#             padding-left: 30px;
-#         }}
-#         code {{
-#             background-color: #f4f4f4;
-#             padding: 2px 6px;
-#             border-radius: 3px;
-#             font-family: 'Courier New', monospace;
-#         }}
-#         pre {{
-#             background-color: #f4f4f4;
-#             padding: 15px;
-#             border-radius: 5px;
-#             overflow-x: auto;
-#         }}
-#         table {{
-#             border-collapse: collapse;
-#             width: 100%;
-#             margin: 15px 0;
-#         }}
-#         table th, table td {{
-#             border: 1px solid #ddd;
-#             padding: 8px;
-#             text-align: left;
-#         }}
-#         table th {{
-#             background-color: #3498db;
-#             color: white;
-#         }}
-#     """

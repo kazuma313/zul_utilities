@@ -1,9 +1,68 @@
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-from typing import List, Dict, Any, Optional
-from scipy import stats
+"""
+Chart perbandingan beberapa dataset beserta uji statistiknya.
+
+Gunanya:
+    Membandingkan hasil eksperimen (latency, throughput, akurasi) dalam satu
+    chart, sekaligus mendapat ringkasan statistik: mean, median, std, dan uji
+    signifikansi (t-test untuk 2 dataset, ANOVA untuk 3 atau lebih).
+
+Cara pakai (`pip install "zul[analysis]"`):
+    from zul.utilities.analysis import ChartGenerator
+
+    chart = ChartGenerator()
+    stats = chart.create_comparison_chart({
+        "chart_type": "bar",          # bar | line | box | histogram | dashboard
+        "data": {
+            "Milvus": [12.1, 11.8, 12.4],
+            "Redis": [9.7, 10.2, 9.9],
+        },
+        "title": "Latency pencarian",
+        "ylabel": "ms",
+    })
+    chart.save("latency.png")
+    chart.clear()
+
+    print(stats["Milvus"]["mean"], stats["statistical_tests"])
+
+Dari file CSV:
+    create_chart_from_csv(chart, "hasil.csv", {
+        "chart_type": "line",
+        "data_columns": ["milvus_ms", "redis_ms"],
+        "label_column": "query",
+    })
+
+Contoh lengkap semua tipe chart ada di blok `__main__` di akhir file.
+"""
+
 import json
+from typing import Any
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from scipy import stats
+
+# --------------------------------------------------------------------------
+# Kompatibilitas Matplotlib
+# --------------------------------------------------------------------------
+#
+# Matplotlib 3.9 mengubah nama parameter labels jadi tick_labels.
+# Nama baru dicoba dulu, kemudian nama lama dipakai jika versi
+# matplotlib yang terpasang belum mengenal nama baru itu.
+#
+
+
+def _boxplot(ax, box_data, labels):
+    """Draw a box plot; matplotlib 3.9 renamed `labels` to `tick_labels`."""
+    try:
+        return ax.boxplot(box_data, tick_labels=labels, patch_artist=True)
+    except TypeError:
+        return ax.boxplot(box_data, labels=labels, patch_artist=True)
+
+
+# --------------------------------------------------------------------------
+# Pembuat Chart
+# --------------------------------------------------------------------------
 
 
 class ChartGenerator:
@@ -12,7 +71,7 @@ class ChartGenerator:
     for flexible multi-dataset comparisons.
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize the ChartGenerator with configuration.
 
@@ -25,217 +84,22 @@ class ChartGenerator:
                        "alpha": 0.7
                    }
 
-
         Example:
-        # Initialize chart generator
-        chart_gen = ChartGenerator({
-            "figsize": [14, 10],
-            "colors": ["#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6"],
-            "alpha": 0.8
-        })
-
-        # Example 1: Latency comparison between A, B, and C
-        latency_config = {
-            "chart_type": "dashboard",
-            "data": {
-                "System A (Current)": [45.2, 52.1, 48.7, 44.3, 51.2, 47.8, 49.1, 46.5],
-                "System B (Optimized)": [38.7, 41.2, 39.8, 37.5, 42.1, 40.3, 38.9, 41.7],
-                "System C (Experimental)": [35.1, 37.8, 36.2, 34.9, 38.5, 36.7, 35.8, 37.2]
-            },
-            "title": "Latency Performance Comparison: A vs B vs C",
-            "xlabel": "Test Scenarios",
-            "ylabel": "Latency (ms)",
-            "metric_name": "Latency",
-            "show_statistics": True
-        }
-
-        print("Creating 3-way latency comparison dashboard...")
-        stats = chart_gen.create_comparison_chart(latency_config)
-        chart_gen.show()
-        chart_gen.save("3way_latency_comparison.png")
-        chart_gen.clear()
-
-        # Example 2: 5-way throughput comparison
-        throughput_config = {
-            "chart_type": "bar",
-            "data": {
-                "Algorithm A": [1200, 1150, 1180, 1220, 1190],
-                "Algorithm B": [1350, 1320, 1380, 1340, 1360],
-                "Algorithm C": [1420, 1450, 1410, 1480, 1440],
-                "Algorithm D": [1380, 1400, 1360, 1420, 1390],
-                "Algorithm E": [1500, 1520, 1480, 1540, 1510]
-            },
-            "labels": ["Test 1", "Test 2", "Test 3", "Test 4", "Test 5"],
-            "title": "Throughput Comparison: 5 Algorithms",
-            "xlabel": "Test Scenarios",
-            "ylabel": "Throughput (requests/sec)",
-            "show_difference": True,
-            "show_statistics": True,
-            "colors": ["#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6"]
-        }
-
-        print("Creating 5-way throughput comparison...")
-        throughput_stats = chart_gen.create_comparison_chart(throughput_config)
-        chart_gen.show()
-        chart_gen.save("5way_throughput_comparison.png")
-        chart_gen.clear()
-
-        # Example 3: Memory usage comparison with box plots
-        memory_config = {
-            "chart_type": "box",
-            "data": {
-                "Version 1.0": [512, 520, 508, 525, 515, 518, 522, 510, 528, 516],
-                "Version 2.0": [480, 485, 475, 490, 478, 482, 488, 476, 492, 480],
-                "Version 2.1": [465, 470, 460, 475, 468, 472, 478, 463, 480, 467],
-                "Version 3.0": [445, 450, 440, 455, 448, 452, 458, 443, 460, 447]
-            },
-            "title": "Memory Usage Comparison Across Versions",
-            "ylabel": "Memory Usage (MB)",
-            "show_statistics": True
-        }
-
-        print("Creating memory usage box plot comparison...")
-        memory_stats = chart_gen.create_comparison_chart(memory_config)
-        chart_gen.show()
-        chart_gen.save("memory_usage_comparison.png")
-        chart_gen.clear()
-
-        # Example 4: Response time line chart with trend analysis
-        response_time_config = {
-            "chart_type": "line",
-            "data": {
-                "Database A": [25.5, 24.8, 26.2, 25.1, 24.9, 25.8, 26.0, 25.3, 24.7, 25.6],
-                "Database B": [22.1, 21.8, 22.5, 21.9, 22.3, 22.0, 21.7, 22.4, 21.6, 22.2],
-                "Database C": [28.9, 29.2, 28.5, 29.8, 28.7, 29.1, 28.3, 29.5, 28.8, 29.0]
-            },
-            "labels": ["Hour 1", "Hour 2", "Hour 3", "Hour 4", "Hour 5",
-                        "Hour 6", "Hour 7", "Hour 8", "Hour 9", "Hour 10"],
-            "title": "Database Response Time Over Time",
-            "xlabel": "Time Period",
-            "ylabel": "Response Time (ms)",
-            "show_statistics": True,
-            "additional_options": {
-                "markers": True
-            }
-        }
-
-        print("Creating response time line chart...")
-        response_stats = chart_gen.create_comparison_chart(response_time_config)
-        chart_gen.show()
-        chart_gen.save("response_time_comparison.png")
-        chart_gen.clear()
-
-        # Example 5: Load testing histogram comparison
-        load_test_config = {
-            "chart_type": "histogram",
-            "data": {
-                "Baseline Load": np.random.normal(100, 15, 1000).tolist(),
-                "2x Load": np.random.normal(85, 20, 1000).tolist(),
-                "4x Load": np.random.normal(75, 25, 1000).tolist(),
-                "8x Load": np.random.normal(65, 30, 1000).tolist()
-            },
-            "title": "Performance Distribution Under Different Loads",
-            "xlabel": "Performance Score",
-            "ylabel": "Frequency",
-            "additional_options": {
-                "bins": 30,
-                "overlay": True,
-                "density": True
-            }
-        }
-
-        print("Creating load testing histogram comparison...")
-        load_stats = chart_gen.create_comparison_chart(load_test_config)
-        chart_gen.show()
-        chart_gen.save("load_test_histogram.png")
-        chart_gen.clear()
-
-        # Print comprehensive statistics
-        print("\n" + "="*80)
-        print("COMPREHENSIVE ANALYSIS RESULTS")
-        print("="*80)
-
-        print("\n1. LATENCY COMPARISON (3 Systems):")
-        if 'performance_comparisons' in stats:
-            for comparison, data in stats['performance_comparisons'].items():
-                improvement = data['improvement_percentage']
-                status = "BETTER" if data['is_better'] else "WORSE"
-                print(f"   {comparison}: {improvement:+.1f}% ({status})")
-
-        print("\n2. THROUGHPUT COMPARISON (5 Algorithms):")
-        for algo, algo_stats in throughput_stats.items():
-            if algo != 'statistical_tests' and algo != 'performance_comparisons':
-                print(f"   {algo}: {algo_stats['mean']:.0f} ± {algo_stats['std']:.0f} req/sec")
-
-        print("\n3. STATISTICAL SIGNIFICANCE:")
-        if 'statistical_tests' in stats:
-            if 'anova' in stats['statistical_tests']:
-                p_val = stats['statistical_tests']['anova']['p_value']
-                sig = "SIGNIFICANT" if p_val < 0.05 else "NOT SIGNIFICANT"
-                print(f"   ANOVA p-value: {p_val:.6f} ({sig})")
-
-        # Example 6: Custom configuration from JSON file/string
-        json_config = /"/"/"
-        {
-            "chart_type": "dashboard",
-            "data": {
-                "Production": [95.2, 94.8, 95.5, 94.9, 95.1],
-                "Staging": [93.1, 92.8, 93.5, 92.9, 93.2],
-                "Development": [88.5, 87.9, 89.1, 88.2, 88.8]
-            },
-            "title": "System Availability Comparison",
-            "xlabel": "Monitoring Periods",
-            "ylabel": "Availability (%)",
-            "metric_name": "Availability",
-            "colors": ["#27ae60", "#f39c12", "#e74c3c"],
-            "show_statistics": true,
-            "figsize": [15, 10]
-        }
-        /"/"/"
-
-        print("\nCreating system availability comparison from JSON...")
-        availability_config = json.loads(json_config)
-        availability_stats = chart_gen.create_comparison_chart(availability_config)
-        chart_gen.show()
-        chart_gen.save("availability_comparison.png")
-        chart_gen.clear()
-
-
-        # Batch creation example
-        batch_configs = [
-            {
-                "chart_type": "bar",
+            chart_gen = ChartGenerator({"figsize": [14, 10], "alpha": 0.8})
+            stats = chart_gen.create_comparison_chart({
+                "chart_type": "dashboard",
                 "data": {
-                    "Q1": [100, 110, 105],
-                    "Q2": [120, 125, 115],
-                    "Q3": [130, 135, 125],
-                    "Q4": [140, 145, 135]
+                    "System A (Current)": [45.2, 52.1, 48.7, 44.3],
+                    "System B (Optimized)": [38.7, 41.2, 39.8, 37.5],
                 },
-                "labels": ["Product A", "Product B", "Product C"],
-                "title": "Quarterly Sales Comparison",
-                "ylabel": "Sales ($K)",
-                "save_filename": "quarterly_sales.png"
-            },
-            {
-                "chart_type": "line",
-                "data": {
-                    "Server 1": [85, 87, 83, 89, 86],
-                    "Server 2": [92, 94, 90, 95, 93],
-                    "Server 3": [78, 80, 76, 82, 79]
-                },
-                "title": "Server Performance Trends",
-                "ylabel": "Performance Score",
-                "save_filename": "server_performance.png"
-            }
-        ]
+                "title": "Latency Performance Comparison",
+                "ylabel": "Latency (ms)",
+            })
+            chart_gen.save("latency_comparison.png")
+            chart_gen.clear()
 
-        chart_gen = ChartGenerator()
-        batch_results = batch_create_charts(chart_gen, batch_configs)
-
-        print("\nBatch processing completed!")
-        print(f"Created {len(batch_results)} charts with statistical analysis.")
-
-
+        More examples (bar, line, box, histogram, batch, JSON config) are in
+        the `__main__` block at the bottom of this file.
         """
         default_config = {
             "style": "default",
@@ -262,24 +126,30 @@ class ChartGenerator:
         self.current_fig = None
         self.current_ax = None
 
-    def create_comparison_chart(self, chart_config: Dict[str, Any]) -> Dict[str, Any]:
+    # ----------------------------------------------------------------------
+    # Memilih Tipe Chart
+    # ----------------------------------------------------------------------
+
+    def create_comparison_chart(self, chart_config: dict[str, Any]) -> dict[str, Any]:
         """
         Create a comparison chart based on JSON configuration.
 
         Args:
             chart_config: Dictionary containing all chart parameters
                 {
-                    "chart_type": "bar|line|box|histogram|scatter|dashboard",
+                    "chart_type": "bar|line|box|histogram|dashboard",
                     "data": {
                         "dataset_name_1": [values],
                         "dataset_name_2": [values],
                         ...
                     },
-                    "labels": ["label1", "label2", ...],  # Optional for categories/x-axis
+                    # Optional: categories / x-axis labels
+                    "labels": ["label1", "label2", ...],
                     "title": "Chart Title",
                     "xlabel": "X-axis Label",
                     "ylabel": "Y-axis Label",
-                    "colors": ["color1", "color2", ...],  # Optional, uses default if not provided
+                    # Optional: the default colors are used if not provided
+                    "colors": ["color1", "color2", ...],
                     "show_statistics": True,
                     "show_difference": True,
                     "additional_options": {
@@ -300,14 +170,16 @@ class ChartGenerator:
             return self._create_comparison_box_chart(chart_config)
         elif chart_type == "histogram":
             return self._create_comparison_histogram(chart_config)
-        # elif chart_type == "scatter":
-        #     return self._create_comparison_scatter_chart(chart_config)
         elif chart_type == "dashboard":
             return self._create_comparison_dashboard(chart_config)
         else:
             raise ValueError(f"Unsupported chart type: {chart_type}")
 
-    def _create_comparison_bar_chart(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    # ----------------------------------------------------------------------
+    # Chart per Tipe
+    # ----------------------------------------------------------------------
+
+    def _create_comparison_bar_chart(self, config: dict[str, Any]) -> dict[str, Any]:
         """Create comparison bar chart from JSON config."""
         data = config["data"]
         datasets = list(data.keys())
@@ -355,7 +227,7 @@ class ChartGenerator:
             }
 
             # Add value annotations
-            for j, (bar_rect, value) in enumerate(zip(bar, dataset_values)):
+            for bar_rect, value in zip(bar, dataset_values, strict=False):
                 self.current_ax.annotate(
                     f"{value:.1f}",
                     xy=(
@@ -371,7 +243,7 @@ class ChartGenerator:
         if show_difference and len(datasets) >= 2:
             baseline_data = list(data.values())[0]
 
-            for i, label_idx in enumerate(labels):
+            for i, _ in enumerate(labels):
                 if i < len(baseline_data):
                     baseline_val = baseline_data[i]
                     y_pos = max([data[ds][i] for ds in datasets]) * 1.15
@@ -416,7 +288,7 @@ class ChartGenerator:
 
         return stats_summary
 
-    def _create_comparison_line_chart(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _create_comparison_line_chart(self, config: dict[str, Any]) -> dict[str, Any]:
         """Create comparison line chart from JSON config."""
         data = config["data"]
         datasets = list(data.keys())
@@ -487,7 +359,7 @@ class ChartGenerator:
 
         return stats_summary
 
-    def _create_comparison_box_chart(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _create_comparison_box_chart(self, config: dict[str, Any]) -> dict[str, Any]:
         """Create comparison box plot from JSON config."""
         data = config["data"]
         datasets = list(data.keys())
@@ -504,10 +376,10 @@ class ChartGenerator:
         # Prepare data for box plot
         box_data = [data[dataset] for dataset in datasets]
 
-        bp = self.current_ax.boxplot(box_data, labels=datasets, patch_artist=True)
+        bp = _boxplot(self.current_ax, box_data, datasets)
 
         # Color the boxes
-        for patch, color in zip(bp["boxes"], colors):
+        for patch, color in zip(bp["boxes"], colors, strict=False):
             patch.set_facecolor(color)  # type: ignore
             patch.set_alpha(self.config["alpha"])
 
@@ -554,7 +426,7 @@ class ChartGenerator:
 
         return stats_summary
 
-    def _create_comparison_histogram(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    def _create_comparison_histogram(self, config: dict[str, Any]) -> dict[str, Any]:
         """Create comparison histogram from JSON config."""
         data = config["data"]
         datasets = list(data.keys())
@@ -632,7 +504,11 @@ class ChartGenerator:
 
         return stats_summary
 
-    def _create_comparison_dashboard(self, config: Dict[str, Any]) -> Dict[str, Any]:
+    # ----------------------------------------------------------------------
+    # Dashboard
+    # ----------------------------------------------------------------------
+
+    def _create_comparison_dashboard(self, config: dict[str, Any]) -> dict[str, Any]:
         """Create comprehensive comparison dashboard from JSON config."""
         data = config["data"]
         datasets = list(data.keys())
@@ -676,11 +552,9 @@ class ChartGenerator:
 
         # 2. Box plot comparison
         ax2 = self.current_fig.add_subplot(gs[0, 1])
-        bp = ax2.boxplot(
-            [data[ds] for ds in datasets], labels=datasets, patch_artist=True
-        )
+        bp = _boxplot(ax2, [data[ds] for ds in datasets], datasets)
 
-        for patch, color in zip(bp["boxes"], colors):
+        for patch, color in zip(bp["boxes"], colors, strict=False):
             patch.set_facecolor(color)  # type: ignore
             patch.set_alpha(self.config["alpha"])
 
@@ -694,8 +568,6 @@ class ChartGenerator:
         x_range = range(max(len(data[ds]) for ds in datasets))
 
         for i, (dataset_name, dataset_values) in enumerate(data.items()):
-            # Pad shorter datasets with None
-            # padded_values = dataset_values + [None] * (len(x_range) - len(dataset_values))
             ax3.plot(
                 x_range[: len(dataset_values)],
                 dataset_values,
@@ -781,9 +653,19 @@ class ChartGenerator:
 
         return stats_summary
 
+    # ----------------------------------------------------------------------
+    # Uji Statistik
+    # ----------------------------------------------------------------------
+    #
+    # Dua dataset dibandingkan dengan t-test, Mann-Whitney U, dan
+    # Kolmogorov-Smirnov. Kalau datasetnya tiga atau lebih,
+    # dipakai ANOVA dan Kruskal-Wallis. Hasilnya disebut
+    # signifikan bila nilai p-value kurang dari 0,05.
+    #
+
     def _perform_statistical_tests(
-        self, data: Dict[str, List[float]]
-    ) -> Dict[str, Any]:
+        self, data: dict[str, list[float]]
+    ) -> dict[str, Any]:
         """Perform comprehensive statistical tests on multiple datasets."""
         datasets = list(data.keys())
         results = {}
@@ -801,7 +683,9 @@ class ChartGenerator:
             }
 
             # Mann-Whitney U test
-            u_stat, u_p_value = stats.mannwhitneyu(data_a, data_b, alternative="two-sided")  # type: ignore
+            u_stat, u_p_value = stats.mannwhitneyu(  # type: ignore
+                data_a, data_b, alternative="two-sided"
+            )
             results["mann_whitney"] = {
                 "statistic": u_stat,
                 "p_value": u_p_value,
@@ -839,15 +723,15 @@ class ChartGenerator:
         return results
 
     def _calculate_performance_comparisons(
-        self, data: Dict[str, List[float]]
-    ) -> Dict[str, Any]:
+        self, data: dict[str, list[float]]
+    ) -> dict[str, Any]:
         """Calculate performance improvements between datasets."""
         datasets = list(data.keys())
         baseline = datasets[0]
         baseline_mean = np.mean(data[baseline])
 
         comparisons = {}
-        for i, dataset in enumerate(datasets[1:], 1):
+        for dataset in datasets[1:]:
             dataset_mean = np.mean(data[dataset])
             improvement_pct = ((baseline_mean - dataset_mean) / baseline_mean) * 100
 
@@ -860,16 +744,20 @@ class ChartGenerator:
 
         return comparisons
 
-    def _format_statistics_text(self, stats_summary: Dict[str, Any]) -> str:
+    # ----------------------------------------------------------------------
+    # Teks Ringkasan
+    # ----------------------------------------------------------------------
+
+    def _format_statistics_text(self, stats_summary: dict[str, Any]) -> str:
         """Format statistics summary as readable text."""
         text_lines = ["Statistical Summary:\n"]
 
-        for dataset_name, stats in stats_summary.items():
+        for dataset_name, dataset_stats in stats_summary.items():
             if dataset_name != "statistical_tests":
                 text_lines.append(f"{dataset_name}:")
-                text_lines.append(f"  Mean: {stats['mean']:.2f}")
-                text_lines.append(f"  Median: {stats['median']:.2f}")
-                text_lines.append(f"  Std: {stats['std']:.2f}")
+                text_lines.append(f"  Mean: {dataset_stats['mean']:.2f}")
+                text_lines.append(f"  Median: {dataset_stats['median']:.2f}")
+                text_lines.append(f"  Std: {dataset_stats['std']:.2f}")
                 text_lines.append("")
 
         if "statistical_tests" in stats_summary:
@@ -891,7 +779,7 @@ class ChartGenerator:
         return "\n".join(text_lines)
 
     def _format_comprehensive_statistics_text(
-        self, stats_summary: Dict[str, Any], datasets: List[str], metric_name: str
+        self, stats_summary: dict[str, Any], datasets: list[str], metric_name: str
     ) -> str:
         """Format comprehensive statistics for dashboard."""
         text_lines = [f"{metric_name} Analysis:\n"]
@@ -899,11 +787,13 @@ class ChartGenerator:
         # Dataset statistics
         for dataset_name in datasets:
             if dataset_name in stats_summary:
-                stats = stats_summary[dataset_name]
+                dataset_stats = stats_summary[dataset_name]
                 text_lines.append(f"{dataset_name}:")
-                text_lines.append(f"  Mean: {stats['mean']:.2f}")
-                text_lines.append(f"  Std: {stats['std']:.2f}")
-                text_lines.append(f"  Range: {stats['min']:.1f} - {stats['max']:.1f}")
+                text_lines.append(f"  Mean: {dataset_stats['mean']:.2f}")
+                text_lines.append(f"  Std: {dataset_stats['std']:.2f}")
+                text_lines.append(
+                    f"  Range: {dataset_stats['min']:.1f} - {dataset_stats['max']:.1f}"
+                )
                 text_lines.append("")
 
         # Performance comparisons
@@ -931,6 +821,10 @@ class ChartGenerator:
 
         return "\n".join(text_lines)
 
+    # ----------------------------------------------------------------------
+    # Menampilkan dan Menyimpan
+    # ----------------------------------------------------------------------
+
     def show(self) -> None:
         """Display the current chart."""
         if self.current_fig:
@@ -949,9 +843,14 @@ class ChartGenerator:
             self.current_ax = None
 
 
+# --------------------------------------------------------------------------
+# Chart dari CSV dan Batch
+# --------------------------------------------------------------------------
+
+
 def create_chart_from_csv(
-    chart_gen: ChartGenerator, csv_file: str, config: Dict[str, Any]
-) -> Dict[str, Any]:
+    chart_gen: ChartGenerator, csv_file: str, config: dict[str, Any]
+) -> dict[str, Any]:
     """
     Create charts from CSV data with JSON configuration.
 
@@ -969,7 +868,7 @@ def create_chart_from_csv(
 
     # Extract data based on configuration
     data_columns = config.get("data_columns", [])
-    label_column = config.get("label_column", None)
+    label_column = config.get("label_column")
 
     chart_config = config.copy()
     chart_config["data"] = {}
@@ -988,8 +887,8 @@ def create_chart_from_csv(
 
 
 def batch_create_charts(
-    chart_gen: ChartGenerator, configs: List[Dict[str, Any]]
-) -> List[Dict[str, Any]]:
+    chart_gen: ChartGenerator, configs: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
     """
     Create multiple charts from a list of configurations.
 
@@ -1022,7 +921,10 @@ def batch_create_charts(
     return results
 
 
-# Example usage with JSON configuration
+# --------------------------------------------------------------------------
+# Contoh Pemakaian
+# --------------------------------------------------------------------------
+
 if __name__ == "__main__":
     # Initialize chart generator
     chart_gen = ChartGenerator(
@@ -1049,7 +951,7 @@ if __name__ == "__main__":
     }
 
     print("Creating 3-way latency comparison dashboard...")
-    stats = chart_gen.create_comparison_chart(latency_config)
+    latency_stats = chart_gen.create_comparison_chart(latency_config)
     chart_gen.show()
     chart_gen.save("3way_latency_comparison.png")
     chart_gen.clear()
@@ -1159,8 +1061,8 @@ if __name__ == "__main__":
     print("=" * 80)
 
     print("\n1. LATENCY COMPARISON (3 Systems):")
-    if "performance_comparisons" in stats:
-        for comparison, data in stats["performance_comparisons"].items():
+    if "performance_comparisons" in latency_stats:
+        for comparison, data in latency_stats["performance_comparisons"].items():
             improvement = data["improvement_percentage"]
             status = "BETTER" if data["is_better"] else "WORSE"
             print(f"   {comparison}: {improvement:+.1f}% ({status})")
@@ -1173,11 +1075,11 @@ if __name__ == "__main__":
             )
 
     print("\n3. STATISTICAL SIGNIFICANCE:")
-    if "statistical_tests" in stats:
-        if "anova" in stats["statistical_tests"]:
-            p_val = stats["statistical_tests"]["anova"]["p_value"]
-            sig = "SIGNIFICANT" if p_val < 0.05 else "NOT SIGNIFICANT"
-            print(f"   ANOVA p-value: {p_val:.6f} ({sig})")
+    tests = latency_stats.get("statistical_tests", {})
+    if "anova" in tests:
+        p_val = tests["anova"]["p_value"]
+        sig = "SIGNIFICANT" if p_val < 0.05 else "NOT SIGNIFICANT"
+        print(f"   ANOVA p-value: {p_val:.6f} ({sig})")
 
     # Example 6: Custom configuration from JSON file/string
     json_config = """

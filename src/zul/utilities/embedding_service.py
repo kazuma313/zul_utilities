@@ -1,58 +1,56 @@
 """
-ai_service.py — AI Service with Pydantic v2 validation + YAML/JSON config support.
+AI Service: satu pintu untuk memanggil LLM dan model embedding.
 
-HOW TO USE:
-    # Option 1: Load from a config file (.yaml or .json — auto-detected)
-    service = AIService.from_file("config.yaml")
-    service = AIService.from_file("config.json")
+Gunanya:
+    Membungkus `ChatOpenAI` dan `OpenAIEmbeddings` dari LangChain dengan
+    konfigurasi yang divalidasi Pydantic. Konfigurasi bisa datang dari file
+    YAML/JSON, dari environment variable, atau dirakit langsung di kode.
 
-    # Option 2: Load from environment variables only (no file needed)
-    service = AIService.from_env()
+Cara pakai:
+    from zul.utilities.embedding_service import AIService
 
-    # Option 3: Build config manually in code (useful for tests)
-    config = AIConfig(llm=LLMConfig(api_key="sk-..."))
-    service = AIService(config)
+    service = AIService.from_file("config.yaml")    # atau config.json
+    service = AIService.from_env()                  # tanpa file
 
-    # Call the service
     response = service.chat("What is the capital of France?")
     print(response.content)
 
     embed = service.embed("Paris is the capital of France.")
     print(embed.dimensions)
 
-CONFIG PRIORITY (highest → lowest):
-    1. Environment variable  (e.g. LLM_API_KEY)
-    2. Config file value     (config.yaml or config.json)
-    3. Built-in default      (the `default=` on each field)
+Contoh merakit konfigurasi di kode (berguna untuk test):
+    from zul.utilities.embedding_service import AIConfig, AIService, LLMConfig
 
-DEPENDENCIES:
-    pip install pydantic pyyaml langchain-openai
+    config = AIConfig(llm=LLMConfig(api_key="sk-..."))
+    service = AIService(config)
+
+Urutan prioritas nilai konfigurasi, dari yang menang:
+    1. Environment variable   (misalnya LLM_API_KEY)
+    2. Nilai di file config   (config.yaml atau config.json)
+    3. Nilai bawaan           (`default=` di setiap field)
 """
 
-# ── Standard library ──────────────────────────────────────────────────────────
 import json
 import logging
 import os
 from functools import cached_property
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
-# ── Third-party ───────────────────────────────────────────────────────────────
 import yaml
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from pydantic import BaseModel, Field, SecretStr, field_validator, model_validator
 
-# Module-level logger. Messages appear as: "2024-01-01 [INFO] ai_service: ..."
 logger = logging.getLogger(__name__)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 1 — HELPER FUNCTION
+# --------------------------------------------------------------------------
+# Membaca File Config
+# --------------------------------------------------------------------------
 #
-# A plain function that reads a config file and returns its contents as a dict.
-# Keeping it as a standalone function (not a method) makes it easy to test
-# and reuse without needing any class instance.
-# ══════════════════════════════════════════════════════════════════════════════
+# Fungsi ini sengaja berdiri sendiri, bukan sebagai method kelas, agar mudah
+# diuji dan bisa dipakai ulang tanpa harus membuat instance apa pun dulu.
+#
+
 
 def _load_config_file(path: Path) -> dict[str, Any]:
     """
@@ -90,18 +88,16 @@ def _load_config_file(path: Path) -> dict[str, Any]:
     )
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 2 — CONFIGURATION MODELS
+# --------------------------------------------------------------------------
+# Model Konfigurasi
+# --------------------------------------------------------------------------
 #
-# These Pydantic models define what valid configuration looks like.
-# Pydantic will automatically:
-#   - Check that values have the right types (e.g. temperature must be a float)
-#   - Enforce constraints (e.g. temperature must be between 0.0 and 2.0)
-#   - Give you clear error messages if something is wrong
+# Model Pydantic di bawah ini menentukan bentuk konfigurasi yang sah:
+# tipe setiap nilai, batasnya, dan pesan error yang jelas saat ada
+# yang salah. Tiap model juga membaca environment variable lebih
+# dulu, dan nilai di sana mengalahkan nilai dari file config.
 #
-# Each model has a `apply_env_overrides` validator that checks environment
-# variables first. If an env var is set, it wins over the config file value.
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 class LLMConfig(BaseModel):
     """
@@ -116,10 +112,10 @@ class LLMConfig(BaseModel):
         default="https://llmservice.air.id",
         description="API endpoint URL for the LLM.",
     )
-    # SecretStr is a special Pydantic type that hides the value in logs and repr.
-    # To get the actual string, call: api_key.get_secret_value()
+    # SecretStr menyembunyikan nilainya dari log dan repr. Untuk mendapatkan
+    # teks aslinya, panggil api_key.get_secret_value() ketika dibutuhkan.
     api_key: SecretStr = Field(
-        default="",
+        default=SecretStr(""),
         description="API key. Use the LLM_API_KEY env var — don't hardcode this.",
     )
     model: str = Field(
@@ -130,7 +126,7 @@ class LLMConfig(BaseModel):
         default=0.1,
         ge=0.0,  # ge = greater-than-or-equal — Pydantic rejects values below 0.0
         le=2.0,  # le = less-than-or-equal    — Pydantic rejects values above 2.0
-        description="Output randomness. 0.0 = focused/deterministic, 2.0 = very random.",
+        description="Output randomness. 0.0 = deterministic, 2.0 = very random.",
     )
     max_tokens: int = Field(
         default=2048,
@@ -143,9 +139,9 @@ class LLMConfig(BaseModel):
         description="Seconds before an API request times out.",
     )
 
-    # `model_validator(mode="before")` runs BEFORE individual fields are validated.
-    # This is where we apply environment variable overrides so that by the time
-    # Pydantic checks types, the env var values are already in place.
+    # Validator ber-mode "before" berjalan sebelum tiap field diperiksa. Di
+    # sinilah nilai dari environment variable dimasukkan, sehingga ketika
+    # Pydantic memeriksa tipenya, nilai itu sudah berada di tempatnya.
     @model_validator(mode="before")
     @classmethod
     def apply_env_overrides(cls, values: dict[str, Any]) -> dict[str, Any]:
@@ -156,12 +152,12 @@ class LLMConfig(BaseModel):
         To add a new override, just add a line here.
         """
         env_map = {
-            "base_url":    ("LLM_BASE_URL",    str),
-            "api_key":     ("LLM_API_KEY",      str),
-            "model":       ("LLM_MODEL",        str),
-            "temperature": ("LLM_TEMPERATURE",  float),
-            "max_tokens":  ("LLM_MAX_TOKENS",   int),
-            "timeout":     ("LLM_TIMEOUT",      int),
+            "base_url": ("LLM_BASE_URL", str),
+            "api_key": ("LLM_API_KEY", str),
+            "model": ("LLM_MODEL", str),
+            "temperature": ("LLM_TEMPERATURE", float),
+            "max_tokens": ("LLM_MAX_TOKENS", int),
+            "timeout": ("LLM_TIMEOUT", int),
         }
         for field_name, (env_var, cast_type) in env_map.items():
             env_value = os.getenv(env_var)
@@ -169,8 +165,9 @@ class LLMConfig(BaseModel):
                 values[field_name] = cast_type(env_value)
         return values
 
-    # `model_validator(mode="after")` runs AFTER all fields are set and validated.
-    # Use this for checks that need to look at the final, fully-resolved values.
+    # Validator dengan mode "after" berjalan setelah seluruh field terisi
+    # dan lolos pemeriksaan. Gunakan mode ini untuk aturan yang perlu
+    # melihat nilai akhirnya dari lebih dari satu field sekaligus.
     @model_validator(mode="after")
     def check_api_key(self) -> "LLMConfig":
         """Reject placeholder or empty API keys."""
@@ -185,8 +182,6 @@ class LLMConfig(BaseModel):
         return self
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-
 class EmbeddingConfig(BaseModel):
     """
     Settings for the text embedding model.
@@ -200,7 +195,7 @@ class EmbeddingConfig(BaseModel):
         description="API endpoint URL for the embedding model.",
     )
     api_key: SecretStr = Field(
-        default="",
+        default=SecretStr(""),
         description="API key. Use the EMBEDDING_API_KEY env var — don't hardcode this.",
     )
     model: str = Field(
@@ -219,9 +214,9 @@ class EmbeddingConfig(BaseModel):
         """Check environment variables and override matching fields if set."""
         env_map = {
             "base_url": ("EMBEDDING_BASE_URL", str),
-            "api_key":  ("EMBEDDING_API_KEY",  str),
-            "model":    ("EMBEDDING_MODEL",    str),
-            "timeout":  ("EMBEDDING_TIMEOUT",  int),
+            "api_key": ("EMBEDDING_API_KEY", str),
+            "model": ("EMBEDDING_MODEL", str),
+            "timeout": ("EMBEDDING_TIMEOUT", int),
         }
         for field_name, (env_var, cast_type) in env_map.items():
             env_value = os.getenv(env_var)
@@ -243,9 +238,8 @@ class EmbeddingConfig(BaseModel):
         return self
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-
-# All accepted log level strings — used both for validation and the error message.
+# Seluruh nama level log yang diterima. Daftar ini dipakai untuk
+# pemeriksaan, dan juga ditampilkan di dalam pesan error-nya.
 _VALID_LOG_LEVELS = {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
 
 
@@ -263,7 +257,7 @@ class ServiceConfig(BaseModel):
     )
     log_level: str = Field(
         default="INFO",
-        description=f"Logging verbosity. One of: {', '.join(sorted(_VALID_LOG_LEVELS))}",
+        description="Logging verbosity: DEBUG, INFO, WARNING, ERROR, or CRITICAL.",
     )
 
     @model_validator(mode="before")
@@ -271,13 +265,14 @@ class ServiceConfig(BaseModel):
     def apply_env_overrides(cls, values: dict[str, Any]) -> dict[str, Any]:
         """Check environment variables and override matching fields if set."""
         if (v := os.getenv("SERVICE_ENABLE_EMBEDDING")) is not None:
-            # Accept "true", "1", "yes" as True — anything else is False
+            # Nilai "true", "1", dan "yes" berarti True; selain itu False.
             values["enable_embedding"] = v.lower() in ("1", "true", "yes")
         if (v := os.getenv("SERVICE_LOG_LEVEL")) is not None:
             values["log_level"] = v
         return values
 
-    # `field_validator` targets a single named field (unlike `model_validator`).
+    # Berbeda dari model_validator, field_validator cuma
+    # memeriksa satu field saja yang namanya disebut.
     @field_validator("log_level")
     @classmethod
     def check_log_level(cls, value: str) -> str:
@@ -291,12 +286,14 @@ class ServiceConfig(BaseModel):
         return upper  # store uppercase so logging.basicConfig accepts it
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 3 — ROOT CONFIG (combines all three sub-configs above)
+# --------------------------------------------------------------------------
+# Konfigurasi Utama
+# --------------------------------------------------------------------------
 #
-# This is the single object that represents the entire configuration.
-# It holds LLMConfig, EmbeddingConfig, and ServiceConfig as nested fields.
-# ══════════════════════════════════════════════════════════════════════════════
+# Objek ini mewakili semua konfigurasi. Di dalamnya ada LLMConfig,
+# EmbeddingConfig, dan ServiceConfig sebagai field bersarang.
+#
+
 
 class AIConfig(BaseModel):
     """
@@ -308,10 +305,10 @@ class AIConfig(BaseModel):
     """
 
     llm: LLMConfig = Field(
-        default_factory=LLMConfig,  # create a fresh LLMConfig with defaults if not provided
+        default_factory=LLMConfig,
         description="Language model settings.",
     )
-    embedding: Optional[EmbeddingConfig] = Field(
+    embedding: EmbeddingConfig | None = Field(
         default=None,  # None means embedding is not configured
         description="Embedding model settings. Set to null/None to disable.",
     )
@@ -320,10 +317,9 @@ class AIConfig(BaseModel):
         description="Service-level flags (log level, feature toggles).",
     )
 
-    # ── Class methods act as alternate constructors ───────────────────────────
-    # Using `@classmethod` lets you call AIConfig.from_file(...) without
-    # needing an existing instance first.
-
+    # Dua classmethod di bawah ini adalah konstruktor alternatif.
+    # Keduanya bisa dipanggil langsung dari kelasnya, misalnya
+    # AIConfig.from_file(...), tanpa membuat instance dulu.
     @classmethod
     def from_file(cls, path: str | Path = "config.yaml") -> "AIConfig":
         """
@@ -341,19 +337,21 @@ class AIConfig(BaseModel):
             ValueError: If validation fails (bad value, missing key, wrong type).
         """
         config_path = Path(path)
-        raw = _load_config_file(config_path)           # returns a plain dict
+        raw = _load_config_file(config_path)  # returns a plain dict
         logger.debug("Loaded config from '%s': %s", config_path, raw)
-        return cls.model_validate(raw)                 # Pydantic validates the dict
+        return cls.model_validate(raw)  # Pydantic validates the dict
 
     @classmethod
     def from_env(cls) -> "AIConfig":
         """
         Build config from environment variables only — no file needed.
 
-        Calls the default constructor, which triggers `apply_env_overrides`
-        validators on each sub-config automatically.
+        Each sub-config reads its own environment variables through its
+        `apply_env_overrides` validator. Embedding is configured only when
+        EMBEDDING_API_KEY is set; without it the service is chat-only.
         """
-        return cls()
+        embedding = EmbeddingConfig() if os.getenv("EMBEDDING_API_KEY") else None
+        return cls(embedding=embedding)
 
     def safe_summary(self) -> dict[str, Any]:
         """
@@ -371,21 +369,23 @@ class AIConfig(BaseModel):
             },
             "embedding": (
                 {**self.embedding.model_dump(exclude={"api_key"}), "api_key": "***"}
-                if self.embedding else None
+                if self.embedding
+                else None
             ),
             "service": self.service.model_dump(),
         }
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 4 — RESPONSE MODELS
+# --------------------------------------------------------------------------
+# Model Respons
+# --------------------------------------------------------------------------
 #
-# Instead of returning raw strings or lists, each service method returns a
-# typed Pydantic model. This means:
-#   - You always know what fields are available (your editor can autocomplete)
-#   - You can serialise to JSON easily with  response.model_dump()
-#   - You can validate / pass responses between functions safely
-# ══════════════════════════════════════════════════════════════════════════════
+# Setiap method service mengembalikan model Pydantic, bukan teks
+# atau list mentah. Dengan begitu field yang tersedia selalu
+# jelas, editor bisa melengkapinya secara otomatis, dan
+# hasilnya dapat diubah ke JSON dengan model_dump().
+#
+
 
 class ChatResponse(BaseModel):
     """
@@ -400,19 +400,19 @@ class ChatResponse(BaseModel):
     Example:
         response = service.chat("Hello!")
         print(response.content)            # "Hello! How can I help you?"
-        print(response.usage)              # {"prompt_tokens": 5, "completion_tokens": 12, ...}
+        print(response.usage)              # {"prompt_tokens": 5, ...}
         print(response.model_dump())       # full dict — easy to log or store
     """
 
     content: str = Field(description="The text returned by the model.")
     model: str = Field(description="Model name that generated this response.")
-    finish_reason: Optional[str] = Field(
+    finish_reason: str | None = Field(
         default=None,
         description="Why the model stopped. Common values: 'stop', 'length'.",
     )
-    usage: Optional[dict[str, int]] = Field(
+    usage: dict[str, int] | None = Field(
         default=None,
-        description="Token usage: {'prompt_tokens': ..., 'completion_tokens': ..., 'total_tokens': ...}",
+        description="Token counts: prompt_tokens, completion_tokens, total_tokens.",
     )
 
 
@@ -437,17 +437,16 @@ class EmbedResponse(BaseModel):
     model: str = Field(description="Embedding model used.")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 5 — AI SERVICE
+# --------------------------------------------------------------------------
+# AI Service
+# --------------------------------------------------------------------------
 #
-# The main class you interact with. It wraps LangChain's ChatOpenAI and
-# OpenAIEmbeddings, using the config above to initialise them.
+# Kelas inilah yang kamu pakai. Ia adalah pembungkus ChatOpenAI dan
+# OpenAIEmbeddings dari LangChain. Kedua client baru akan dibuat
+# saat pertama kali dibutuhkan, yaitu waktu chat() atau embed()
+# dipanggil, dan dipakai ulang di tiap pemanggilan berikutnya.
 #
-# The LLM and embedding clients are created lazily using @cached_property.
-# "Lazy" means: they are only created the first time you actually call .chat()
-# or .embed(), not when you create the AIService instance. After that, the same
-# client object is reused every time (that's the "cached" part).
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 class AIService:
     """
@@ -469,14 +468,16 @@ class AIService:
 
     def __init__(self, config: AIConfig) -> None:
         self.config = config
-        # Configure the Python logging system as soon as we have a config.
+        # Logging diatur begitu konfigurasi tersedia.
         logging.basicConfig(
             level=config.service.log_level,
             format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
         )
         logger.info("AIService ready. Config: %s", config.safe_summary())
 
-    # ── Alternate constructors ────────────────────────────────────────────────
+    # ----------------------------------------------------------------------
+    # Konstruktor Alternatif
+    # ----------------------------------------------------------------------
 
     @classmethod
     def from_file(cls, path: str | Path = "config.yaml") -> "AIService":
@@ -506,14 +507,15 @@ class AIService:
         config = AIConfig.from_env()
         return cls(config)
 
-    # ── Internal: lazy client initialisation ─────────────────────────────────
+    # ----------------------------------------------------------------------
+    # Client LangChain
+    # ----------------------------------------------------------------------
     #
-    # @cached_property works like @property, but the result is stored after
-    # the first access. Every subsequent access returns the stored value
-    # without running the function again.
+    # cached_property bekerja seperti property, namun hasilnya
+    # disimpan setelah akses pertama. Jadi akses berikutnya
+    # mengambil nilai yang tersimpan itu. Kedua client ini
+    # privat; dari luar kelas, pakai chat() dan embed().
     #
-    # These are "private" by convention (prefixed with _). You don't call them
-    # directly — use the public .chat() and .embed() methods instead.
 
     @cached_property
     def _llm(self) -> ChatOpenAI:
@@ -530,9 +532,8 @@ class AIService:
         )
 
     @cached_property
-    def _embedding_client(self) -> Optional[OpenAIEmbeddings]:
-        """LangChain OpenAIEmbeddings client — created once on first use, or None if disabled."""
-        # Short-circuit and return None if embedding is turned off or not configured.
+    def _embedding_client(self) -> OpenAIEmbeddings | None:
+        """LangChain OpenAIEmbeddings client, or None if embedding is disabled."""
         if not self.config.service.enable_embedding:
             logger.debug("Embedding disabled via service.enable_embedding=false.")
             return None
@@ -549,7 +550,9 @@ class AIService:
             timeout=cfg.timeout,
         )
 
-    # ── Public API ────────────────────────────────────────────────────────────
+    # ----------------------------------------------------------------------
+    # API Publik
+    # ----------------------------------------------------------------------
 
     def chat(self, prompt: str) -> ChatResponse:
         """
