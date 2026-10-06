@@ -1,0 +1,21 @@
+{
+  "organization": "Example Institute",
+  "tagline": "Every layout of the template in one deck",
+  "slides": [
+    {"layout": "cover", "title": "Layout Catalogue", "subtitle": "Template Demo", "presenter": "Your Name"},
+    {"layout": "intro", "title": "Hello !", "lead": "A short italic lead sentence that tells the audience what this deck is about.", "paragraphs": ["First paragraph. Two or three sentences work best here.", "Second paragraph. Leave it out if you only need one."], "image": "sample_photo.jpg"},
+    {"layout": "agenda", "title": "Agenda"},
+    {"layout": "section", "title": "Section Header", "text": "A wide photo on top, a big title and one paragraph. Use it to open a part of the deck.", "image": "sample_photo.jpg"},
+    {"layout": "three_cards", "title": "Three Cards", "text": "A paragraph on the left and up to three cards on the right.", "cards": [{"header": "First card", "body": "About 200 characters fit in a card."}, {"header": "Second card", "body": "The middle card is dark."}, {"header": "Third card", "body": "Leave cards out and they disappear."}]},
+    {"layout": "team", "title": "Team", "text": "Up to three people with photo, name, role and note.", "overview_title": "Overview", "overview_items": ["Point one", "Point two", "Point three"], "people": [{"name": "Person One", "role": "Role one", "note": "Note"}, {"name": "Person Two", "role": "Role two", "note": "Note"}]},
+    {"layout": "two_cards", "title": "Two Cards", "text": "A paragraph, two cards and a tall photo.", "cards": [{"header": "Left card", "body": "Dark card."}, {"header": "Right card", "body": "White card."}]},
+    {"layout": "people", "title": "People Grid", "text": "Up to four people in a grid.", "people": [{"name": "Person A", "role": "Role"}, {"name": "Person B", "role": "Role"}, {"name": "Person C", "role": "Role"}]},
+    {"layout": "chart", "title": "Chart Slide", "text": "A native chart in the dark card. Right-click it in PowerPoint to edit the data.", "chart": {"type": "column", "categories": ["A", "B", "C"], "series": [{"name": "2025", "values": [3, 8, 16]}, {"name": "2026", "values": [6, 14, 18]}]}},
+    {"layout": "timeline", "title": "Timeline", "text": "Up to four columns with two items each.", "columns": [{"header": "Phase 1", "items": ["First task", "Second task"]}, {"header": "Phase 2", "items": ["First task", "Second task"]}, {"header": "Phase 3", "items": ["Only one task"]}]},
+    {"layout": "analysis", "title": "Analysis", "text": "Text on the left, a chart on the white card.", "chart": {"type": "line", "categories": ["Q1", "Q2", "Q3", "Q4"], "series": [{"name": "Series 1", "values": [12, 19, 15, 28]}]}},
+    {"layout": "stat_chart", "title": "Stat and Chart", "text": "A paragraph, one big number and a chart.", "stat": "65%", "stat_text": "One sentence that explains the number.", "chart": {"type": "doughnut", "categories": ["Yes", "No", "Unsure"], "series": [{"name": "Answers", "values": [65, 25, 10]}]}},
+    {"layout": "gallery", "title": "Gallery", "text": "Three photos. Slots without a file keep the template photo.", "images": ["sample_photo.jpg"]},
+    {"layout": "testimonials", "title": "Testimonial", "lead": "Up to four quotes with a star rating.", "items": [{"name": "Reviewer One", "rating": 5, "text": "A short quote of one or two sentences."}, {"name": "Reviewer Two", "rating": 3, "text": "Ratings from 1 to 5 fill the stars."}]},
+    {"layout": "closing", "title": "Thank You", "subtitle": "contact@example.org"}
+  ]
+}

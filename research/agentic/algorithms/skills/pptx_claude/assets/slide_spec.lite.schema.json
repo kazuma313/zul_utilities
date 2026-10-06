@@ -1,0 +1,377 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "pptx-claude deck",
+ "description": "LITE schema: the 8 layouts recommended for models under ~14B parameters. Smaller grammar = faster and more reliable constrained decoding.",
+ "type": "object",
+ "properties": {
+  "theme": {
+   "enum": [
+    "midnight",
+    "coral",
+    "forest",
+    "ocean",
+    "charcoal",
+    "cherry"
+   ]
+  },
+  "slides": {
+   "type": "array",
+   "minItems": 3,
+   "maxItems": 25,
+   "items": {
+    "anyOf": [
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "title"
+       },
+       "title": {
+        "type": "string"
+       },
+       "subtitle": {
+        "type": "string"
+       },
+       "icon": {
+        "type": "string",
+        "description": "react-icons name such as FaRocket, see references/icons.md"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "bullets"
+       },
+       "title": {
+        "type": "string"
+       },
+       "bullets": {
+        "type": "array",
+        "items": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "object",
+           "properties": {
+            "icon": {
+             "type": "string",
+             "description": "react-icons name such as FaRocket, see references/icons.md"
+            },
+            "text": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "text"
+           ],
+           "additionalProperties": false
+          }
+         ]
+        },
+        "minItems": 2,
+        "maxItems": 6
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "bullets"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "two_column"
+       },
+       "title": {
+        "type": "string"
+       },
+       "left_header": {
+        "type": "string"
+       },
+       "left": {
+        "type": "string"
+       },
+       "right_header": {
+        "type": "string"
+       },
+       "right": {
+        "type": "string"
+       },
+       "left_icon": {
+        "type": "string",
+        "description": "react-icons name such as FaRocket, see references/icons.md"
+       },
+       "right_icon": {
+        "type": "string",
+        "description": "react-icons name such as FaRocket, see references/icons.md"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "left_header",
+       "left",
+       "right_header",
+       "right"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "table"
+       },
+       "title": {
+        "type": "string"
+       },
+       "headers": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 2,
+        "maxItems": 6
+       },
+       "rows": {
+        "type": "array",
+        "items": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         },
+         "minItems": 1,
+         "maxItems": 6
+        },
+        "minItems": 1,
+        "maxItems": 8
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "headers",
+       "rows"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "stat_callout"
+       },
+       "title": {
+        "type": "string"
+       },
+       "stats": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "value": {
+           "type": "string"
+          },
+          "label": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "value",
+          "label"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 4
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "stats"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "chart"
+       },
+       "title": {
+        "type": "string"
+       },
+       "chart_type": {
+        "enum": [
+         "bar",
+         "line",
+         "pie",
+         "doughnut",
+         "area"
+        ]
+       },
+       "chart_data": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "name": {
+           "type": "string"
+          },
+          "labels": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           },
+           "minItems": 1,
+           "maxItems": 12
+          },
+          "values": {
+           "type": "array",
+           "items": {
+            "type": "number"
+           },
+           "minItems": 1,
+           "maxItems": 12
+          }
+         },
+         "required": [
+          "name",
+          "labels",
+          "values"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 4
+       },
+       "chart_options": {
+        "type": "object",
+        "properties": {
+         "show_legend": {
+          "type": "boolean"
+         },
+         "show_value": {
+          "type": "boolean"
+         },
+         "bar_dir": {
+          "enum": [
+           "col",
+           "bar"
+          ]
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "chart_type",
+       "chart_data"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "quote"
+       },
+       "title": {
+        "type": "string"
+       },
+       "quote": {
+        "type": "string"
+       },
+       "attribution": {
+        "type": "string"
+       },
+       "context": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "quote",
+       "attribution"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "conclusion_cta"
+       },
+       "title": {
+        "type": "string"
+       },
+       "points": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 5
+       },
+       "cta": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "points",
+       "cta"
+      ],
+      "additionalProperties": false
+     }
+    ]
+   }
+  }
+ },
+ "required": [
+  "theme",
+  "slides"
+ ],
+ "additionalProperties": false
+}

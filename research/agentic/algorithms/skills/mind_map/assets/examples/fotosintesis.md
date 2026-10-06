@@ -1,0 +1,29 @@
+# Fotosintesis
+## Pengertian
+- Proses tumbuhan membuat makanan sendiri
+  - Mengubah energi cahaya menjadi energi kimia
+  - Terjadi di kloroplas (klorofil)
+## Bahan yang dibutuhkan
+- Cahaya matahari
+- Air (H2O) dari akar
+- Karbon dioksida (CO2) dari stomata
+## Tahapan
+- Reaksi terang
+  - Di membran tilakoid
+  - Menghasilkan ATP dan NADPH
+  - Melepaskan oksigen
+- Reaksi gelap (siklus Calvin)
+  - Di stroma
+  - Mengikat CO2 menjadi glukosa
+## Hasil
+- Glukosa (C6H12O6)
+- Oksigen (O2)
+## Faktor yang mempengaruhi
+- Intensitas cahaya
+- Suhu
+- Kadar CO2
+- Ketersediaan air
+## Manfaat
+- Sumber makanan bagi makhluk hidup
+- Menghasilkan oksigen untuk bernapas
+- Menyerap CO2 dari udara

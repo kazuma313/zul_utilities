@@ -1,0 +1,23 @@
+# Survei kebiasaan belanja online mahasiswa
+- Responden
+  - 350 mahasiswa dari 500 undangan
+  - Usia 18-24 tahun
+  - 5 kampus di Medan
+- Metode
+  - Survei online 24 pertanyaan
+  - 12 wawancara mendalam
+  - Analisis riwayat transaksi
+- Temuan
+  - 72% belanja online minimal sebulan
+  - Harga utama alasan belanja
+  - Rata-rata belanja Rp 310.000
+- Pembayaran
+  - 64% menggunakan e-wallet
+  - 41% menyesal beli karena diskon
+- Tren
+  - Belanja live streaming naik 17%
+  - 23% menggunakan paylater
+- Rekomendasi
+  - Membuat anggaran bulanan
+  - Kampus adakan kelas literasi keuangan
+  - Platform tampilkan batas paylater

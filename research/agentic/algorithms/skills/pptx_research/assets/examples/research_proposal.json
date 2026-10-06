@@ -1,0 +1,226 @@
+{
+ "organization": "Universitas Nusantara",
+ "tagline": "Research Proposal - Faculty of Economics 2026",
+ "slides": [
+  {
+   "layout": "cover",
+   "title": "Digital Cooperatives",
+   "subtitle": "Research Proposal",
+   "presenter": "Kurnia Matondang"
+  },
+  {
+   "layout": "intro",
+   "title": "Hello !",
+   "lead": "This study asks why some village cooperatives adopt mobile services quickly while others do not, and what that means for member welfare.",
+   "paragraphs": [
+    "Cooperatives serve more than 20 million members in Indonesia, yet most transactions still happen on paper. Mobile services promise lower costs and faster loans, but adoption is uneven.",
+    "We propose a twelve-month mixed-methods study in North Sumatra that combines member interviews with a survey of 400 households."
+   ]
+  },
+  {
+   "layout": "section",
+   "title": "Background of the Study",
+   "text": "Savings and loan cooperatives are the main source of credit for rural households that banks do not reach. Since 2022 the ministry has promoted digital services, but only a minority of cooperatives have moved beyond spreadsheets. Earlier studies describe the technology; few explain the human and organisational reasons behind slow adoption."
+  },
+  {
+   "layout": "three_cards",
+   "title": "Problem Statement",
+   "text": "Members of paper-based cooperatives wait days for small loans and travel far for simple transactions. Managers say digital tools are expensive and members will not use them. Neither claim has been tested with data.",
+   "cards": [
+    {
+     "header": "Scope of the Study",
+     "body": "Forty savings and loan cooperatives in four districts of North Sumatra, observed from January to December 2027."
+    },
+    {
+     "header": "Relevance of the Study",
+     "body": "Results guide the ministry's digitalisation grants and help cooperatives decide where to invest first."
+    },
+    {
+     "header": "Research Question",
+     "body": "Which member, manager and organisational factors explain adoption of mobile services, and does adoption improve welfare?"
+    }
+   ]
+  },
+  {
+   "layout": "team",
+   "title": "Framework",
+   "text": "Three established theories frame the study. Each one explains a different level: the individual member, the organisation, and the wider market.",
+   "overview_title": "Overview",
+   "overview_items": [
+    "Diffusion of Innovations",
+    "Technology Acceptance Model",
+    "Institutional Theory"
+   ],
+   "people": [
+    {
+     "name": "E. Rogers",
+     "role": "Diffusion of Innovations",
+     "note": "Member level"
+    },
+    {
+     "name": "F. Davis",
+     "role": "Technology Acceptance",
+     "note": "User level"
+    },
+    {
+     "name": "W. R. Scott",
+     "role": "Institutional Theory",
+     "note": "Organisation level"
+    }
+   ]
+  },
+  {
+   "layout": "two_cards",
+   "title": "Methodology",
+   "text": "A sequential mixed-methods design. Interviews come first and shape the survey, so the questionnaire uses the words members use themselves.",
+   "cards": [
+    {
+     "header": "Qualitative Methods",
+     "body": "Thirty-two semi-structured interviews with members, managers and officials, analysed with thematic coding."
+    },
+    {
+     "header": "Quantitative Methods",
+     "body": "Household survey of 400 members in 40 cooperatives, analysed with multilevel logistic regression."
+    }
+   ]
+  },
+  {
+   "layout": "people",
+   "title": "Qualitative Data",
+   "text": "Interview participants are chosen to cover the range of roles inside a cooperative. Each group sees adoption from a different side.",
+   "text2": "All interviews are recorded with consent and transcribed in Bahasa Indonesia.",
+   "people": [
+    {
+     "name": "Members",
+     "role": "16 interviews"
+    },
+    {
+     "name": "Managers",
+     "role": "8 interviews"
+    },
+    {
+     "name": "Field officers",
+     "role": "4 interviews"
+    },
+    {
+     "name": "Officials",
+     "role": "4 interviews"
+    }
+   ]
+  },
+  {
+   "layout": "chart",
+   "title": "Quantitative Data",
+   "text": "The pilot survey of 60 households already shows a clear gap between cooperatives with and without mobile services. The full survey tests whether the gap remains after controlling for income and distance.",
+   "chart": {
+    "type": "column",
+    "categories": [
+     "Loan in 2 days",
+     "Monthly saving",
+     "Uses app weekly"
+    ],
+    "series": [
+     {
+      "name": "Paper-based",
+      "values": [
+       18,
+       41,
+       5
+      ]
+     },
+     {
+      "name": "Mobile",
+      "values": [
+       63,
+       58,
+       47
+      ]
+     }
+    ]
+   },
+   "stat": {
+    "value": "400",
+    "label": "households in the full survey"
+   }
+  },
+  {
+   "layout": "timeline",
+   "title": "Proposed Timeline",
+   "text": "Fieldwork avoids the harvest months, when members are hard to reach. A two-week buffer is included before each deadline.",
+   "columns": [
+    {
+     "header": "Jan - Mar",
+     "items": [
+      "Ethics approval and research permits",
+      "Recruit and train four field assistants"
+     ]
+    },
+    {
+     "header": "Apr - Jun",
+     "items": [
+      "Interviews in four districts",
+      "Transcription and thematic coding"
+     ]
+    },
+    {
+     "header": "Jul - Sep",
+     "items": [
+      "Survey design and pilot test",
+      "Household survey, 400 respondents"
+     ]
+    },
+    {
+     "header": "Oct - Dec",
+     "items": [
+      "Statistical analysis",
+      "Report, policy brief and seminar"
+     ]
+    }
+   ]
+  },
+  {
+   "layout": "stat_chart",
+   "title": "Expected Findings",
+   "text": "We expect trust in the manager to matter more than age or education. If confirmed, training managers is a cheaper policy lever than subsidising phones.",
+   "stat": "65%",
+   "stat_text": "of pilot respondents said they would use the app if their manager recommended it.",
+   "chart": {
+    "type": "radar",
+    "categories": [
+     "Trust",
+     "Cost",
+     "Skills",
+     "Signal",
+     "Habit"
+    ],
+    "series": [
+     {
+      "name": "Members",
+      "values": [
+       9,
+       5,
+       6,
+       4,
+       7
+      ]
+     },
+     {
+      "name": "Managers",
+      "values": [
+       6,
+       8,
+       5,
+       5,
+       4
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "layout": "closing",
+   "title": "Thank You",
+   "subtitle": "Questions and suggestions are welcome: kurnia@example.ac.id"
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+[
+  {"layout": "title", "title": "Kebiasaan Belanja Online Mahasiswa", "subtitle": "Hasil survei 350 mahasiswa di 5 kampus di Medan, Maret-April 2026 (data contoh)", "icon": "FaShoppingCart"},
+  {"layout": "stat_callout", "title": "Survei dalam angka", "stats": [
+    {"value": "350", "label": "Responden dari 500 yang diundang"},
+    {"value": "72%", "label": "Belanja online minimal sebulan sekali"},
+    {"value": "Rp 310.000", "label": "Rata-rata belanja per bulan"},
+    {"value": "64%", "label": "Membayar dengan e-wallet"}]},
+  {"layout": "numbered_list", "title": "Cara data dikumpulkan", "items": [
+    {"number": "01", "title": "Survei online", "description": "24 pertanyaan, diisi 350 mahasiswa usia 18-24 tahun"},
+    {"number": "02", "title": "Wawancara mendalam", "description": "12 mahasiswa menjelaskan alasan di balik jawaban survei"},
+    {"number": "03", "title": "Riwayat transaksi", "description": "Dianalisis untuk mencocokkan jawaban dengan belanja sebenarnya"}]},
+  {"layout": "chart", "title": "Harga adalah alasan utama belanja online", "chart_type": "bar", "chart_data": [
+    {"name": "Persen responden", "labels": ["Harga", "Kemudahan", "Pilihan produk"], "values": [54, 31, 15]}],
+    "chart_options": {"show_legend": false, "show_value": true}},
+  {"layout": "chart", "title": "Belanja lewat live streaming naik lebih dari dua kali", "chart_type": "bar", "chart_data": [
+    {"name": "Persen responden", "labels": ["2024", "2026"], "values": [12, 29]}],
+    "chart_options": {"show_legend": false, "show_value": true}},
+  {"layout": "challenges", "title": "Hal yang perlu diwaspadai", "items": [
+    {"title": "Menyesal karena diskon", "description": "41% pernah menyesal membeli barang karena diskon"},
+    {"title": "Paylater", "description": "23% mahasiswa memakai paylater untuk belanja"},
+    {"title": "Live streaming", "description": "Naik dari 12% menjadi 29% dalam dua tahun"}],
+    "tip": "Diskon dan cicilan memudahkan belanja yang tidak direncanakan."},
+  {"layout": "table", "title": "Rekomendasi untuk tiga pihak", "headers": ["Pihak", "Yang perlu dilakukan"], "rows": [
+    ["Mahasiswa", "Membuat anggaran belanja bulanan"],
+    ["Kampus", "Mengadakan kelas literasi keuangan"],
+    ["Platform", "Menampilkan batas paylater dengan jelas"]]},
+  {"layout": "conclusion_cta", "title": "Kesimpulan", "points": [
+    "Belanja online sudah rutin: 72% belanja minimal sebulan sekali",
+    "Harga mendorong pembelian, dan diskon sering berujung penyesalan",
+    "Live streaming dan paylater tumbuh, jadi literasi keuangan makin penting"],
+    "cta": "Mulai dari anggaran bulanan"}
+]

@@ -1,0 +1,117 @@
+{
+  "organization": "",
+  "tagline": "Proposal Penelitian: Pengaruh PayLater Terhadap Kebiasaan Belanja Mahasiswa",
+  "slides": [
+    {
+      "layout": "cover",
+      "title": "Pengaruh PayLater Terhadap Kebiasaan Belanja Mahasiswa",
+      "subtitle": "Research Proposal",
+      "presenter": ""
+    },
+    {
+      "layout": "intro",
+      "title": "Selamat Datang",
+      "lead": "Penelitian ini mengeksplorasi dampak penggunaan PayLater terhadap kebiasaan belanja mahasiswa di Indonesia.",
+      "paragraphs": [
+        "Survei kebiasaan belanja online mahasiswa dilakukan pada 350 responden dari 500 mahasiswa usia 18-24 tahun di 5 kampus Medan, Maret-April 2026.",
+        "Metode survei meliputi 24 pertanyaan online, 12 wawancara mendalam, dan analisis riwayat transaksi."
+      ]
+    },
+    {
+      "layout": "section",
+      "title": "Latar Belakang Penelitian",
+      "text": "Kebiasaan belanja online mahasiswa meningkat pesat di Indonesia, dengan 72% yang belanja minimal sebulan sekali. Penelitian ini fokus pada pengaruh PayLater sebagai alat pembayaran non-tunai yang semakin populer."
+    },
+    {
+      "layout": "three_cards",
+      "title": "Pernyataan Masalah",
+      "text": "Bagaimana penggunaan PayLater memengaruhi kebiasaan belanja mahasiswa secara berkelanjutan?",
+      "cards": [
+        {
+          "header": "Siklus Studi",
+          "body": "350 mahasiswa usia 18-24 tahun di 5 kampus Medan, Maret-April 2026"
+        },
+        {
+          "header": "Relevansi Studi",
+          "body": "Meningkatkan kesadaran keuangan mahasiswa dan memperbaiki kebiasaan belanja berkelanjutan"
+        },
+        {
+          "header": "Pertanyaan Penelitian",
+          "body": "Apakah penggunaan PayLater berdampak pada kebiasaan belanja mahasiswa secara signifikan?"
+        }
+      ]
+    },
+    {
+      "layout": "two_cards",
+      "title": "Metode Penelitian",
+      "text": "Kombinasi survei dan analisis data untuk memahami pola belanja mahasiswa.",
+      "cards": [
+        {
+          "header": "Metode Kualitatif",
+          "body": "12 wawancara mendalam dengan mahasiswa untuk mengidentifikasi motivasi belanja"
+        },
+        {
+          "header": "Metode Kuantitatif",
+          "body": "Analisis data survei online 24 pertanyaan dengan 350 responden"
+        }
+      ]
+    },
+    {
+      "layout": "chart",
+      "title": "Data Kuantitatif",
+      "text": "Rata-rata belanja mahasiswa per bulan dan metode pembayaran.",
+      "chart": {
+        "type": "column",
+        "categories": ["Jumlah Transaksi", "Rata-rata Belanja"],
+        "series": [
+          {
+            "name": "Mahasiswa",
+            "values": [350, 310000]
+          }
+        ]
+      }
+    },
+    {
+      "layout": "timeline",
+      "title": "Jadwal Penelitian",
+      "columns": [
+        {
+          "header": "Jan - Mar",
+          "items": [
+            "Pengumpulan data survei online",
+            "Analisis wawancara mendalam"
+          ]
+        },
+        {
+          "header": "Apr - Jun",
+          "items": [
+            "Analisis data kuantitatif",
+            "Penyusunan rekomendasi"
+          ]
+        }
+      ]
+    },
+    {
+      "layout": "stat_chart",
+      "title": "Hasil Diharapkan",
+      "text": "Penggunaan PayLater berdampak pada kebiasaan belanja mahasiswa.",
+      "stat": "23%",
+      "stat_text": "Persentase mahasiswa yang menggunakan PayLater",
+      "chart": {
+        "type": "radar",
+        "categories": ["Kebiasaan Belanja", "Penggunaan PayLater", "Diskon"],
+        "series": [
+          {
+            "name": "Mahasiswa",
+            "values": [29, 23, 41]
+          }
+        ]
+      }
+    },
+    {
+      "layout": "closing",
+      "title": "Terima Kasih",
+      "subtitle": "Dengan penelitian ini, mahasiswa dapat lebih terarah dalam pengelolaan keuangan dan kebiasaan belanja mereka."
+    }
+  ]
+}

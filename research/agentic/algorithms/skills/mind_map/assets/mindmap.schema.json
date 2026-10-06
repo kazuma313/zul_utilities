@@ -1,0 +1,76 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "mind map",
+ "description": "Depth-limited (root + 3 levels), no $ref so every guided-decoding backend accepts it.",
+ "type": "object",
+ "properties": {
+  "root": {
+   "type": "string",
+   "maxLength": 80
+  },
+  "nodes": {
+   "type": "array",
+   "minItems": 3,
+   "maxItems": 8,
+   "items": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string",
+      "maxLength": 80
+     },
+     "children": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "properties": {
+        "text": {
+         "type": "string",
+         "maxLength": 80
+        },
+        "children": {
+         "type": "array",
+         "maxItems": 6,
+         "items": {
+          "type": "object",
+          "properties": {
+           "text": {
+            "type": "string",
+            "maxLength": 80
+           },
+           "children": {
+            "type": "array",
+            "maxItems": 0,
+            "items": {
+             "type": "object"
+            }
+           }
+          },
+          "required": [
+           "text"
+          ],
+          "additionalProperties": false
+         }
+        }
+       },
+       "required": [
+        "text"
+       ],
+       "additionalProperties": false
+      }
+     }
+    },
+    "required": [
+     "text"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "root",
+  "nodes"
+ ],
+ "additionalProperties": false
+}

@@ -1,0 +1,17 @@
+# Test videos, 2026-10-06.  The comment above each URL is what the video is and its YouTube category.
+# Educational (podcasts, talks, a health Q&A):
+# live finance consultation, Timothy Ronald - Entertainment, recorded live stream
+https://www.youtube.com/live/56HmqxOTK0U?si=nIQaoKYTBU8MUGAt
+# crypto trading podcast, Theresa Learns - People & Blogs, 11 chapters
+https://youtu.be/Qft-J2LG0NM?si=4BZhF60S3gUFPZ77
+# health myths and facts, dr. Tirta - News & Politics
+https://youtu.be/gqCEJ1McXCQ?si=DIg0bYEvr3c6B2SX
+# short talk, MALAKA Kelas Pakar - Entertainment
+https://youtu.be/Pc3GWaOWHLk?si=Z4W_FHEmJlxeJZWU
+# one-hour podcast, MALAKA - Entertainment
+https://youtu.be/MOl6qqoJKWA?si=6uUotN-lWDD6MUdk
+# Not educational:
+# Valorant gameplay with commentary - Gaming
+https://youtu.be/NJD_0BtZrlA?si=drQd_ip-lcl4zkS-
+# Solo Leveling anime clip, Japanese - Film & Animation
+https://www.youtube.com/watch?v=uYGmdIGqUXs

@@ -1,0 +1,2 @@
+youtube-transcript-api>=1.2
+yt-dlp

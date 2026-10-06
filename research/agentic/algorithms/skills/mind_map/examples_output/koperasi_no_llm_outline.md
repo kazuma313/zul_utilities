@@ -1,0 +1,21 @@
+# Koperasi Digital di Pedesaan
+- Latar Belakang
+  - Koperasi simpan pinjam adalah sumber kredit utama
+  - Sejak 2022 pemerintah mendorong layanan digital
+  - Sebagian besar transaksi masih dilakukan di atas
+  - Studi terdahulu menjelaskan teknologinya, tetapi jarang membahas
+- Manfaat Layanan Digital
+  - Layanan digital memangkas waktu persetujuan pinjaman
+  - Anggota dapat memeriksa saldo dan mengajukan pinjaman
+  - Biaya operasional koperasi turun karena pencatatan otomatis
+  - Laporan keuangan menjadi lebih transparan bagi anggota
+- Hambatan Adopsi
+  - Keterampilan digital pengurus masih rendah, terutama
+  - Dukungan teknis dari vendor sering terlambat
+  - Sebagian anggota lansia tidak percaya pada transaksi
+  - Konektivitas internet ternyata bukan hambatan utama
+- Rekomendasi
+  - Pelatihan pengurus perlu didahulukan sebelum pembelian perangkat
+  - Pemerintah sebaiknya mendanai petugas dukungan teknis bersama
+  - Koperasi perlu mempertahankan layanan tatap muka
+  - Insentif hibah sebaiknya dikaitkan dengan jumlah anggota

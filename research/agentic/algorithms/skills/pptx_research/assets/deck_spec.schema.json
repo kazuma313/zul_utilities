@@ -1,0 +1,840 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "pptx-research deck",
+ "description": "All 15 layouts of the research-proposal template. For structured output / guided decoding (Ollama `format`, llama.cpp / LM Studio / vLLM `response_format`). No $ref on purpose.",
+ "type": "object",
+ "properties": {
+  "organization": {
+   "type": "string"
+  },
+  "tagline": {
+   "type": "string"
+  },
+  "slides": {
+   "type": "array",
+   "minItems": 4,
+   "maxItems": 20,
+   "items": {
+    "anyOf": [
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "cover"
+       },
+       "title": {
+        "type": "string"
+       },
+       "subtitle": {
+        "type": "string"
+       },
+       "presenter": {
+        "type": "string"
+       },
+       "organization": {
+        "type": "string"
+       },
+       "tagline": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "intro"
+       },
+       "title": {
+        "type": "string"
+       },
+       "lead": {
+        "type": "string"
+       },
+       "paragraphs": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 2
+       },
+       "image": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "lead",
+       "paragraphs"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "agenda"
+       },
+       "title": {
+        "type": "string"
+       },
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 2,
+        "maxItems": 8
+       },
+       "image": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "section"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "image": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "three_cards"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "cards": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "header": {
+           "type": "string"
+          },
+          "body": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "header",
+          "body"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 3
+       },
+       "image": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text",
+       "cards"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "team"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "overview_title": {
+        "type": "string"
+       },
+       "overview_items": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 4
+       },
+       "people": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "name": {
+           "type": "string"
+          },
+          "role": {
+           "type": "string"
+          },
+          "note": {
+           "type": "string"
+          },
+          "image": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "name",
+          "role"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 3
+       },
+       "image": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text",
+       "people"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "two_cards"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "cards": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "header": {
+           "type": "string"
+          },
+          "body": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "header",
+          "body"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 2
+       },
+       "image": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text",
+       "cards"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "people"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "text2": {
+        "type": "string"
+       },
+       "people": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "name": {
+           "type": "string"
+          },
+          "role": {
+           "type": "string"
+          },
+          "note": {
+           "type": "string"
+          },
+          "image": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "name",
+          "role"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 4
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text",
+       "people"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "chart"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "chart": {
+        "type": "object",
+        "properties": {
+         "type": {
+          "enum": [
+           "column",
+           "bar",
+           "line",
+           "pie",
+           "doughnut",
+           "radar",
+           "area"
+          ]
+         },
+         "categories": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          },
+          "minItems": 2,
+          "maxItems": 8
+         },
+         "series": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "name": {
+             "type": "string"
+            },
+            "values": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             },
+             "minItems": 2,
+             "maxItems": 8
+            }
+           },
+           "required": [
+            "name",
+            "values"
+           ],
+           "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 3
+         }
+        },
+        "required": [
+         "type",
+         "categories",
+         "series"
+        ],
+        "additionalProperties": false
+       },
+       "stat": {
+        "type": "object",
+        "properties": {
+         "value": {
+          "type": "string"
+         },
+         "label": {
+          "type": "string"
+         }
+        },
+        "required": [
+         "value",
+         "label"
+        ],
+        "additionalProperties": false
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text",
+       "chart"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "timeline"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "columns": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "header": {
+           "type": "string"
+          },
+          "items": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           },
+           "minItems": 1,
+           "maxItems": 2
+          }
+         },
+         "required": [
+          "header",
+          "items"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 4
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "columns"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "analysis"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "chart": {
+        "type": "object",
+        "properties": {
+         "type": {
+          "enum": [
+           "column",
+           "bar",
+           "line",
+           "pie",
+           "doughnut",
+           "radar",
+           "area"
+          ]
+         },
+         "categories": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          },
+          "minItems": 2,
+          "maxItems": 8
+         },
+         "series": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "name": {
+             "type": "string"
+            },
+            "values": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             },
+             "minItems": 2,
+             "maxItems": 8
+            }
+           },
+           "required": [
+            "name",
+            "values"
+           ],
+           "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 3
+         }
+        },
+        "required": [
+         "type",
+         "categories",
+         "series"
+        ],
+        "additionalProperties": false
+       },
+       "chart2": {
+        "type": "object",
+        "properties": {
+         "type": {
+          "enum": [
+           "column",
+           "bar",
+           "line",
+           "pie",
+           "doughnut",
+           "radar",
+           "area"
+          ]
+         },
+         "categories": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          },
+          "minItems": 2,
+          "maxItems": 8
+         },
+         "series": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "name": {
+             "type": "string"
+            },
+            "values": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             },
+             "minItems": 2,
+             "maxItems": 8
+            }
+           },
+           "required": [
+            "name",
+            "values"
+           ],
+           "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 3
+         }
+        },
+        "required": [
+         "type",
+         "categories",
+         "series"
+        ],
+        "additionalProperties": false
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text",
+       "chart"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "stat_chart"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "stat": {
+        "type": "string"
+       },
+       "stat_text": {
+        "type": "string"
+       },
+       "chart": {
+        "type": "object",
+        "properties": {
+         "type": {
+          "enum": [
+           "column",
+           "bar",
+           "line",
+           "pie",
+           "doughnut",
+           "radar",
+           "area"
+          ]
+         },
+         "categories": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          },
+          "minItems": 2,
+          "maxItems": 8
+         },
+         "series": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "name": {
+             "type": "string"
+            },
+            "values": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             },
+             "minItems": 2,
+             "maxItems": 8
+            }
+           },
+           "required": [
+            "name",
+            "values"
+           ],
+           "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 3
+         }
+        },
+        "required": [
+         "type",
+         "categories",
+         "series"
+        ],
+        "additionalProperties": false
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text",
+       "stat",
+       "stat_text",
+       "chart"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "gallery"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "images": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 3
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "text"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "testimonials"
+       },
+       "title": {
+        "type": "string"
+       },
+       "lead": {
+        "type": "string"
+       },
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "name": {
+           "type": "string"
+          },
+          "rating": {
+           "type": "integer",
+           "minimum": 1,
+           "maximum": 5
+          },
+          "text": {
+           "type": "string"
+          },
+          "image": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "name",
+          "text"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 4
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "items"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "closing"
+       },
+       "title": {
+        "type": "string"
+       },
+       "subtitle": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title"
+      ],
+      "additionalProperties": false
+     }
+    ]
+   }
+  }
+ },
+ "required": [
+  "organization",
+  "tagline",
+  "slides"
+ ],
+ "additionalProperties": false
+}

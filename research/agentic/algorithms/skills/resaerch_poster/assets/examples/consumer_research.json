@@ -1,0 +1,46 @@
+{
+  "tag": "Research Project",
+  "title": "Consumer Behavior Research",
+  "highlight": "Behavior",
+  "subtitle": "Understanding customers, shaping better strategies",
+  "hero_image": "sample_hero.jpg",
+  "footer": ["hello@example.org", "www.example.org", "Faculty of Economics, Universitas Nusantara"],
+  "size": "A2",
+  "sections": [
+    {"type": "text", "title": "Research Overview",
+     "text": "This study examines how urban consumers aged 18 to 45 choose, compare and buy everyday products. It combines a 350-respondent survey with four focus groups held in two cities during March and April 2026."},
+    {"type": "bullets", "title": "Objectives", "items": [
+      "Identify the factors that drive purchase decisions",
+      "Measure price sensitivity across income groups",
+      "Map the role of brand trust and online channels"]},
+    {"type": "facts", "title": "Target Audience", "items": [
+      {"label": "Age range", "value": "18 - 45 years old"},
+      {"label": "Gender", "value": "All"},
+      {"label": "Location", "value": "Urban areas, 2 cities"},
+      {"label": "Income level", "value": "Middle to upper"},
+      {"label": "Sample size", "value": "350 respondents"}],
+     "pictograph": {"value": 350, "total": 500, "label": "350 of 500 invited took part"}},
+    {"type": "list", "title": "Research Methods", "items": [
+      {"title": "Online survey", "text": "350 respondents, 24 questions, March 2026", "icon": "monitor"},
+      {"title": "Focus group discussion", "text": "4 groups of 8 participants in Medan and Jakarta", "icon": "message"},
+      {"title": "Data analysis", "text": "Descriptive statistics and thematic coding", "icon": "chart"}]},
+    {"type": "stats", "title": "Key Findings", "items": [
+      {"label": "Product quality is the top priority", "value": "72%", "text": "of respondents rank quality as the most important factor", "icon": "quality"},
+      {"label": "Price sensitivity matters", "value": "68%", "text": "compare prices before making a purchase", "icon": "tag"},
+      {"label": "Brand trust influences purchase", "value": "65%", "text": "choose brands they already trust", "icon": "trust"},
+      {"label": "Online shopping is growing", "value": "60%", "text": "prefer to shop online for convenience and promotions", "icon": "cart"}]},
+    {"type": "chart", "title": "Customer Insights",
+     "chart": {"type": "donut", "categories": ["Quality & price", "Promotions", "Convenience", "Brand", "Others"], "series": [{"name": "Main reason to buy", "values": [53.7, 24.4, 14.6, 4.9, 2.4]}]},
+     "text": "More than half of the respondents name quality and price together as their main reason to buy. Promotions matter for a quarter, mostly among younger buyers.",
+     "quote": "Consumers reward quality first and price second; promotions win only when both are equal."},
+    {"type": "list", "title": "Market Trends", "items": [
+      {"title": "Rise of e-commerce", "text": "Online purchases grew 18% year on year", "icon": "cart"},
+      {"title": "Mobile influence", "text": "7 in 10 respondents research products on their phone first", "icon": "phone"},
+      {"title": "Sustainability matters", "text": "38% pay more for products with less packaging", "icon": "leaf"}]},
+    {"type": "bullets", "title": "Recommendations", "items": [
+      {"title": "Focus on quality", "text": "Keep quality visible on packaging and product pages"},
+      {"title": "Competitive pricing", "text": "Match the two largest competitors on core items"},
+      {"title": "Strengthen brand trust", "text": "Publish reviews and guarantees where customers compare"}],
+     "icon": "clipboard"}
+  ]
+}

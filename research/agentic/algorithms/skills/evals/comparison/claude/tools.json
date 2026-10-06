@@ -1,0 +1,81 @@
+{
+ "math_calculator": {"expression": "350 / 500 * 100"},
+ "generate_chart": {
+  "data": [
+   {"alasan": "Harga", "persen": 54},
+   {"alasan": "Kemudahan", "persen": 31},
+   {"alasan": "Pilihan produk", "persen": 15}
+  ],
+  "chart_type": "bar",
+  "x_col": "alasan",
+  "y_col": "persen",
+  "title": "Alasan utama mahasiswa belanja online (%)"
+ },
+ "create_docx": {
+  "filename": "ringkasan_survei.docx",
+  "content": {
+   "title": "Ringkasan Eksekutif: Survei Kebiasaan Belanja Online Mahasiswa",
+   "sections": [
+    {"type": "paragraph", "text": "Survei ini memetakan kebiasaan belanja online mahasiswa usia 18-24 tahun di 5 kampus di Medan pada Maret-April 2026. Dari 500 mahasiswa yang diundang, 350 mengisi survei online 24 pertanyaan. Hasilnya dilengkapi 12 wawancara mendalam dan analisis riwayat transaksi. Angka dalam dokumen ini adalah data contoh."},
+    {"type": "heading1", "text": "Temuan utama"},
+    {"type": "bullet", "items": [
+     "72% mahasiswa belanja online minimal sebulan sekali, dengan rata-rata belanja Rp 310.000 per bulan.",
+     "64% membayar dengan e-wallet dan 23% memakai paylater; 41% pernah menyesal membeli karena diskon.",
+     "Belanja lewat live streaming naik dari 12% pada 2024 menjadi 29% pada 2026."
+    ]},
+    {"type": "heading1", "text": "Alasan utama belanja online"},
+    {"type": "table", "headers": ["Alasan", "Persentase responden"], "rows": [
+     ["Harga", "54%"],
+     ["Kemudahan", "31%"],
+     ["Pilihan produk", "15%"]
+    ]},
+    {"type": "heading1", "text": "Rekomendasi"},
+    {"type": "bullet", "items": [
+     "Mahasiswa membuat anggaran belanja bulanan.",
+     "Kampus mengadakan kelas literasi keuangan.",
+     "Platform menampilkan batas paylater dengan jelas."
+    ]}
+   ]
+  }
+ },
+ "create_xlsx": {
+  "filename": "survei_belanja_online.xlsx",
+  "data": {
+   "Alasan": [
+    {"Alasan": "Harga", "Persen": 54},
+    {"Alasan": "Kemudahan", "Persen": 31},
+    {"Alasan": "Pilihan produk", "Persen": 15}
+   ],
+   "Tren": [
+    {"Tahun": 2024, "Persen belanja lewat live streaming": 12},
+    {"Tahun": 2026, "Persen belanja lewat live streaming": 29}
+   ]
+  }
+ },
+ "create_mind_map": {
+  "outline": "# Survei Belanja Online Mahasiswa\n- Responden\n  - 350 dari 500 mahasiswa\n  - Usia 18-24 tahun\n  - 5 kampus di Medan\n- Metode\n  - Survei online 24 pertanyaan\n  - 12 wawancara mendalam\n  - Analisis riwayat transaksi\n- Temuan\n  - 72% belanja tiap bulan\n  - Rp 310.000 per bulan\n  - 64% pakai e-wallet\n  - 41% menyesal karena diskon\n- Alasan utama\n  - Harga 54%\n  - Kemudahan 31%\n  - Pilihan produk 15%\n- Tren\n  - Live streaming: 12% ke 29%\n  - Paylater 23%\n- Rekomendasi\n  - Anggaran bulanan mahasiswa\n  - Kelas literasi keuangan\n  - Batas paylater jelas",
+  "filename": "survei.svg",
+  "theme": "rainbow"
+ },
+ "web_search": {"query": "jumlah pengguna e-commerce Indonesia 2026"},
+ "view_image": {"file_id": "t1/alasan.png", "question": "Jelaskan grafik pada gambar ini. Batang mana yang paling tinggi dan berapa nilainya?"},
+ "dispatch_research_subagents": {
+  "tasks": [
+   {
+    "topic": "Tren live shopping (belanja lewat live streaming) di Indonesia 2024-2026",
+    "queries": ["tren live shopping Indonesia 2026", "pangsa transaksi live streaming e-commerce Indonesia", "TikTok Shop Shopee Live pengguna muda"],
+    "context": "Survei mahasiswa di Medan menunjukkan belanja lewat live streaming naik dari 12% (2024) ke 29% (2026). Cari data nasional untuk pembanding."
+   },
+   {
+    "topic": "Pemakaian paylater oleh mahasiswa dan anak muda di Indonesia",
+    "queries": ["pengguna paylater mahasiswa Indonesia", "data OJK paylater usia 18-25", "risiko gagal bayar paylater anak muda"],
+    "context": "Dalam survei, 23% mahasiswa memakai paylater. Cari angka pemakaian dan gagal bayar untuk kelompok usia 18-24 tahun."
+   },
+   {
+    "topic": "Aturan perlindungan konsumen e-commerce di Indonesia",
+    "queries": ["peraturan perlindungan konsumen e-commerce Indonesia", "aturan OJK paylater batas kredit transparansi", "Permendag perdagangan elektronik terbaru"],
+    "context": "Survei merekomendasikan platform menampilkan batas paylater dengan jelas. Cari aturan yang sudah mewajibkan transparansi semacam itu."
+   }
+  ]
+ }
+}

@@ -1,0 +1,71 @@
+{
+
+"theme": "ocean",
+
+"slides": [
+{
+"layout": "title",
+"title": "Hasil Survei Kebiasaan Belanja Online Mahasiswa",
+"subtitle": "Data dari 350 mahasiswa, Maret-April 2026"
+},
+{
+"layout": "bullets",
+"title": "Temuan Utama",
+"bullets": [
+"72% belanja online minimal sebulan sekali",
+"Alasan utama: harga (54%), kemudahan (31%), pilihan produk (15%)",
+"Rata-rata belanja Rp 310.000 per bulan"
+]
+},
+{
+"layout": "two_column",
+"title": "Cara Pembayaran",
+"left_header": "Kebiasaan",
+"left": "64% membayar dengan e-wallet",
+"right_header": "Tren Terbaru",
+"right": "29% belanja lewat live streaming (naik dari 12% pada 2024)"
+},
+{
+"layout": "stat_callout",
+"title": "Penggunaan Diskon",
+"stats": [
+{
+"value": "41%",
+"label": "Pernah menyesal membeli karena diskon"
+}
+]
+},
+{
+"layout": "chart",
+"title": "Perubahan Tren Belanja",
+"chart_type": "bar",
+"chart_data": [
+{
+"name": "Persentase",
+"labels": ["2024", "2026"],
+"values": [12, 29]
+}
+]
+},
+{
+"layout": "table",
+"title": "Faktor Pengaruh Belanja Online",
+"headers": ["Faktor", "Persentase"],
+"rows": [
+["Harga", "54%"],
+["Kemudahan", "31%"],
+["Pilihan Produk", "15%"]
+]
+},
+{
+"layout": "conclusion_cta",
+"title": "Rekomendasi",
+"points": [
+"Mahasiswa membuat anggaran bulanan",
+"kampus mengadakan kelas literasi keuangan",
+"platform menampilkan batas paylater dengan jelas"
+],
+"cta": "Mulai perencanaan keuangan sekarang"
+}
+]
+}

@@ -1,0 +1,111 @@
+{
+  "organization": "Universitas Negeri Medan",
+  "tagline": "Research Proposal - Fakultas Ekonomi 2026",
+  "slides": [
+    {
+      "layout": "cover",
+      "title": "Pengaruh Paylater terhadap Kebiasaan Belanja Mahasiswa",
+      "subtitle": "Research Proposal",
+      "presenter": ""
+    },
+    {
+      "layout": "intro",
+      "title": "Halo!",
+      "lead": "Penelitian ini menggambarkan kebiasaan belanja online mahasiswa.",
+      "paragraphs": [
+        "Survei dilakukan pada 350 mahasiswa dari 500 yang diundang, usia 18-24 tahun, di 5 kampus di Medan.",
+        "Metode penelitian meliputi survei online, wawancara mendalam, dan analisis riwayat transaksi."
+      ]
+    },
+    {
+      "layout": "section",
+      "title": "Latar Belakang Penelitian",
+      "text": "Penelitian ini bertujuan untuk mengeksplorasi pengaruh penggunaan paylater terhadap kebiasaan belanja mahasiswa. Dengan meningkatnya tren belanja online, penggunaan layanan paylater menjadi semakin populer."
+    },
+    {
+      "layout": "three_cards",
+      "title": "Permasalahan Penelitian",
+      "text": "Bagaimana penggunaan paylater memengaruhi kebiasaan belanja mahasiswa?",
+      "cards": [
+        {
+          "header": "Cakupan Penelitian",
+          "body": "Survei dilakukan pada 350 mahasiswa dari 5 kampus di Medan."
+        },
+        {
+          "header": "Relevansi Penelitian",
+          "body": "Penggunaan paylater meningkat dari 12% (2024) menjadi 29% (2026)."
+        },
+        {
+          "header": "Pertanyaan Penelitian",
+          "body": "Bagaimana penggunaan paylater memengaruhi kebiasaan belanja mahasiswa?"
+        }
+      ]
+    },
+    {
+      "layout": "two_cards",
+      "title": "Metodologi Penelitian",
+      "text": "Penelitian menggunakan pendekatan kuantitatif dan kualitatif untuk mengumpulkan data yang akurat.",
+      "cards": [
+        {
+          "header": "Metode Kualitatif",
+          "body": "12 wawancara mendalam dilakukan untuk memahami motivasi belanja."
+        },
+        {
+          "header": "Metode Kuantitatif",
+          "body": "Survei online dengan 24 pertanyaan dilakukan pada 350 responden."
+        }
+      ]
+    },
+    {
+      "layout": "chart",
+      "title": "Data Kuantitatif",
+      "text": "Hasil survei menunjukkan tren belanja online dan penggunaan paylater.",
+      "chart": {
+        "type": "column",
+        "categories": ["2024", "2026"],
+        "series": [
+          {
+            "name": "Belanja Live Streaming",
+            "values": [12, 29]
+          }
+        ]
+      }
+    },
+    {
+      "layout": "timeline",
+      "title": "Rencana Penelitian",
+      "columns": [
+        {
+          "header": "Jan - Mar",
+          "items": ["Pengumpulan data survei", "Analisis riwayat transaksi"]
+        },
+        {
+          "header": "Apr - Jun",
+          "items": ["Wawancara mendalam", "Penyusunan laporan"]
+        }
+      ]
+    },
+    {
+      "layout": "stat_chart",
+      "title": "Hasil yang Diharapkan",
+      "text": "Hasil penelitian akan menunjukkan dampak penggunaan paylater terhadap kebiasaan belanja mahasiswa.",
+      "stat": "41%",
+      "stat_text": "41% mahasiswa pernah menyesal membeli karena diskon.",
+      "chart": {
+        "type": "radar",
+        "categories": ["Harga", "Kemudahan", "Pilihan Produk"],
+        "series": [
+          {
+            "name": "Alasan Belanja",
+            "values": [54, 31, 15]
+          }
+        ]
+      }
+    },
+    {
+      "layout": "closing",
+      "title": "Terima Kasih",
+      "subtitle": "Terima kasih atas perhatian dan partisipasi Anda."
+    }
+  ]
+}

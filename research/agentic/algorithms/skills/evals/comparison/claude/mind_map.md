@@ -1,0 +1,26 @@
+# Belanja Online Mahasiswa
+- Responden
+  - 350 dari 500 mahasiswa
+  - Usia 18-24 tahun
+  - 5 kampus di Medan
+  - Maret-April 2026
+- Metode
+  - Survei online 24 pertanyaan
+  - 12 wawancara mendalam
+  - Analisis riwayat transaksi
+- Temuan
+  - 72% belanja tiap bulan
+  - Rata-rata Rp 310.000 per bulan
+  - 64% bayar dengan e-wallet
+  - 41% menyesal karena diskon
+- Alasan utama
+  - Harga 54%
+  - Kemudahan 31%
+  - Pilihan produk 15%
+- Tren
+  - Live streaming: 12% ke 29%
+  - Paylater dipakai 23%
+- Rekomendasi
+  - Mahasiswa: anggaran bulanan
+  - Kampus: kelas literasi keuangan
+  - Platform: batas paylater jelas

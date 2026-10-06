@@ -1,0 +1,183 @@
+{
+ "_model": {
+  "name": "qwen3:8b",
+  "reasoning": false,
+  "calls": "native"
+ },
+ "mind_map": {
+  "case": "mind_map",
+  "ok": true,
+  "seconds": 37.658435199999076,
+  "arguments": "# Survei kebiasaan belanja online mahasiswa\n- Responden\n  - 350 mahasiswa dari 500 undangan\n  - Usia 18-24 tahun\n  - 5 kampus di Medan\n- Metode\n  - Survei online 24 pertanyaan\n  - 12 wawancara mendalam\n  - Analisis riwayat transaksi\n- Temuan\n  - 72% belanja online minimal sebulan\n  - Harga utama alasan belanja\n  - Rata-rata belanja Rp 310.000\n- Pembayaran\n  - 64% menggunakan e-wallet\n  - 41% menyesal beli karena diskon\n- Tren\n  - Belanja live streaming naik 17%\n  - 23% menggunakan paylater\n- Rekomendasi\n  - Membuat anggaran bulanan\n  - Kampus adakan kelas literasi keuangan\n  - Platform tampilkan batas paylater",
+  "result": "OK: created map.svg (23 nodes, 6 branches, depth 2, 1246x460 px, theme=rainbow)",
+  "fixes": [],
+  "files": [
+   "map.svg",
+   "spec.md"
+  ]
+ },
+ "mind_map_tool": {
+  "case": "mind_map_tool",
+  "ok": true,
+  "seconds": 106.9398781000018,
+  "arguments": {
+   "filename": "survei.svg",
+   "theme": "rainbow",
+   "outline": "# Survei Kebiasaan Belanja Online Mahasiswa\n- Responden\n  - 350 mahasiswa dari 500 yang diundang\n  - Usia 18-24 tahun\n  - 5 kampus di Medan\n  - Waktu survei: Maret-April 2026\n- Metode\n  - Survei online 24 pertanyaan\n  - 12 wawancara mendalam\n  - Analisis riwayat transaksi\n- Temuan\n  - 72% belanja online minimal sebulan sekali\n  - Alasan utama: harga 54%, kemudahan 31%, pilihan produk 15%\n  - Rata-rata belanja Rp 310.000 per bulan\n  - 64% membayar dengan e-wallet\n  - 41% pernah menyesal membeli karena diskon\n- Tren\n  - Belanja lewat live streaming naik dari 12% (2024) menjadi 29% (2026)\n  - 23% memakai paylater\n- Rekomendasi\n  - Mahasiswa membuat anggaran bulanan\n  - Kampus mengadakan kelas literasi keuangan\n  - Platform menampilkan batas paylater dengan jelas"
+  },
+  "result": "OK: created C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\agentic\\algorithms\\skills\\evals\\comparison\\qwen3-8b\\mind_map_tool\\2f02084f_survei.svg (23 nodes, 5 branches, depth 2, 1247x678 px, theme=rainbow)",
+  "files": [
+   "2f02084f_survei.svg"
+  ]
+ },
+ "poster": {
+  "case": "poster",
+  "ok": true,
+  "seconds": 194.48856800000067,
+  "arguments": "{\n  \"tag\": \"Research Project\",\n  \"title\": \"Poster Hasil Survei Kebiasaan Belanja Online Mahasiswa\",\n  \"subtitle\": \"Analisis Kebiasaan dan Tren Belanja Online\",\n  \"footer\": {\n    \"slogan\": \"Menginspirasi Perubahan Positif\",\n    \"text\": \"\"\n  },\n  \"sections\": [\n    {\n      \"type\": \"text\",\n      \"title\": \"Penelitian\",\n      \"text\": \"Survei ini mengevaluasi kebiasaan belanja online mahasiswa di Indonesia, dengan fokus pada pola pengeluaran, metode pembayaran, dan tren belanja terkini.\"\n    },\n    {\n      \"type\": \"bullets\",\n      \"title\": \"Tujuan\",\n      \"items\": [\n        {\n          \"title\": \"Menganalisis frekuensi belanja online\",\n          \"text\": \"Mengetahui seberapa sering mahasiswa belanja secara online.\"\n        },\n        {\n          \"title\": \"Menilai alasan belanja online\",\n          \"text\": \"Mengidentifikasi faktor utama yang mendorong kebiasaan belanja.\"\n        },\n        {\n          \"title\": \"Mengukur dampak pembelian impulsif\",\n          \"text\": \"Menilai tingkat kepuasan dan keputusan pembelian.\"\n        }\n      ]\n    },\n    {\n      \"type\": \"facts\",\n      \"title\": \"Responden\",\n      \"items\": [\n        {\n          \"label\": \"Usia\",\n          \"value\": \"18-24 tahun\"\n        },\n        {\n          \"label\": \"Lokasi\",\n          \"value\": \"5 kampus di Medan\"\n        },\n        {\n          \"label\": \"Jumlah sampel\",\n          \"value\": \"350 mahasiswa\"\n        }\n      ],\n      \"pictograph\": {\n        \"value\": 350,\n        \"total\": 500,\n        \"label\": \"Partisipan\"\n      }\n    },\n    {\n      \"type\": \"bullets\",\n      \"title\": \"Metode\",\n      \"items\": [\n        {\n          \"title\": \"Survei online\",\n          \"text\": \"24 pertanyaan terstruktur yang diisi oleh responden.\"\n        },\n        {\n          \"title\": \"Wawancara mendalam\",\n          \"text\": \"12 wawancara untuk memperdalam motivasi dan pengalaman belanja.\"\n        },\n        {\n          \"title\": \"Analisis riwayat transaksi\",\n          \"text\": \"Mengevaluasi data pembelian dari platform e-commerce.\"\n        }\n      ]\n    },\n    {\n      \"type\": \"stats\",\n      \"title\": \"Temuan Utama\",\n      \"items\": [\n        {\n          \"label\": \"Frekuensi belanja\",\n          \"value\": \"72%\",\n          \"text\": \"Belanja online minimal sebulan sekali.\"\n        },\n        {\n          \"label\": \"Alasan utama\",\n          \"value\": \"54%\",\n          \"text\": \"Harga menjadi faktor utama.\"\n        },\n        {\n          \"label\": \"Pembayaran\",\n          \"value\": \"64%\",\n          \"text\": \"Menggunakan e-wallet sebagai metode pembayaran.\"\n        },\n        {\n          \"label\": \"Pembelian impulsif\",\n          \"value\": \"41%\",\n          \"text\": \"Pernah menyesal membeli karena diskon.\"\n        }\n      ]\n    },\n    {\n      \"type\": \"chart\",\n      \"title\": \"Insight Konsumen\",\n      \"chart\": {\n        \"type\": \"donut\",\n        \"categories\": [\"Harga\", \"Kemudahan\", \"Pilihan Produk\"],\n        \"series\": [\n          {\n            \"name\": \"Alasan Belanja\",\n            \"values\": [54, 31, 15]\n          }\n        ]\n      },\n      \"text\": \"Mayoritas mahasiswa memilih belanja online karena harga dan kemudahan akses.\",\n      \"quote\": \"Harga dan kemudahan menjadi faktor utama dalam keputusan belanja.\"\n    },\n    {\n      \"type\": \"bullets\",\n      \"title\": \"Tren\",\n      \"items\": [\n        {\n          \"title\": \"Live streaming\",\n          \"text\": \"Naik dari 12% (2024) menjadi 29% (2026).\"\n        },\n        {\n          \"title\": \"Paylater\",\n          \"text\": \"23% mahasiswa menggunakan layanan paylater.\"\n        }\n      ]\n    },\n    {\n      \"type\": \"bullets\",\n      \"title\": \"Rekomendasi\",\n      \"items\": [\n        {\n          \"title\": \"Anggaran bulanan\",\n          \"text\": \"Mahasiswa disarankan membuat anggaran bulanan untuk pengeluaran.\"\n        },\n        {\n          \"title\": \"Kelas literasi keuangan\",\n          \"text\": \"Kampus perlu mengadakan kelas literasi keuangan untuk mahasiswa.\"\n        },\n        {\n          \"title\": \"Transparansi paylater\",\n          \"text\": \"Platform e-commerce harus menampilkan batas paylater secara jelas.\"\n        }\n      ]\n    }\n  ]\n}",
+  "result": "OK: created poster.png (8 sections, A2)",
+  "fixes": [
+   "- 1 English headings in an Indonesian poster -> translated"
+  ],
+  "files": [
+   "poster.html",
+   "poster.png",
+   "spec.json"
+  ]
+ },
+ "pptx_claude": {
+  "case": "pptx_claude",
+  "ok": true,
+  "seconds": 82.44905629999994,
+  "arguments": "{\"theme\":\"charcoal\",\"slides\":[{\"layout\":\"title\",\"title\":\"Hasil Survei Kebiasaan Belanja Online Mahasiswa\",\"subtitle\":\"Survei dilakukan pada 350 mahasiswa dari 500 yang diundang\"},{\"layout\":\"bullets\",\"title\":\"Responden dan Metode\",\"bullets\":[\"Usia 18-24 tahun\",\"5 kampus di Medan\",\"Survei online 24 pertanyaan\",\"12 wawancara mendalam\",\"Analisis riwayat transaksi\"]},{\"layout\":\"two_column\",\"title\":\"Frekuensi dan Alasan Belanja\",\"left_header\":\"Frekuensi\",\"left\":\"72% belanja minimal sebulan sekali\",\"right_header\":\"Alasan\",\"right\":\"Harga 54%, kemudahan 31%, pilihan produk 15%\"},{\"layout\":\"table\",\"title\":\"Pembayaran dan Tren\",\"headers\":[\"Metode\",\"Persentase\"],\"rows\":[[\"E-wallet\", \"64%\"],[\"Paylater\", \"23%\"],[\"Belanja via live streaming\", \"29%\"]],\"notes\":\"Live streaming naik dari 12% (2024) ke 29% (2026)\"},{\"layout\":\"stat_callout\",\"title\":\"Rata-rata Belanja dan Penyesalan\",\"stats\":[{\"value\":\"Rp 310.000\",\"label\":\"Rata-rata belanja per bulan\"},{\"value\":\"41%\",\"label\":\"Pernah menyesal membeli karena diskon\"}]},{\"layout\":\"chart\",\"title\":\"Penggunaan Paylater\",\"chart_type\":\"pie\",\"chart_data\":[{\"name\":\"Paylater\",\"labels\":[\"Pengguna paylater\",\"Tidak menggunakan\"],\"values\":[23,77]}]},{\"layout\":\"quote\",\"quote\":\"Mahasiswa perlu membuat anggaran bulanan\",\"attribution\":\"Rekomendasi survei\"},{\"layout\":\"conclusion_cta\",\"title\":\"Rekomendasi dan Tindakan\",\"points\":[\"Membuat anggaran bulanan\",\"Kampus adakan kelas literasi keuangan\",\"Platform tampilkan batas paylater dengan jelas\"],\"cta\":\"Implementasikan rekomendasi untuk pengelolaan keuangan yang lebih baik\"}]}",
+  "result": "OK: created deck.pptx (8 slides, theme=charcoal)",
+  "fixes": [],
+  "files": [
+   "deck.pptx",
+   "spec.json"
+  ]
+ },
+ "pptx_research": {
+  "case": "pptx_research",
+  "ok": true,
+  "seconds": 226.22016300000178,
+  "arguments": "{\n  \"organization\": \"Universitas Negeri Medan\",\n  \"tagline\": \"Research Proposal - Fakultas Ekonomi 2026\",\n  \"slides\": [\n    {\n      \"layout\": \"cover\",\n      \"title\": \"Pengaruh Paylater terhadap Kebiasaan Belanja Mahasiswa\",\n      \"subtitle\": \"Research Proposal\",\n      \"presenter\": \"\"\n    },\n    {\n      \"layout\": \"intro\",\n      \"title\": \"Halo!\",\n      \"lead\": \"Penelitian ini menggambarkan kebiasaan belanja online mahasiswa.\",\n      \"paragraphs\": [\n        \"Survei dilakukan pada 350 mahasiswa dari 500 yang diundang, usia 18-24 tahun, di 5 kampus di Medan.\",\n        \"Metode penelitian meliputi survei online, wawancara mendalam, dan analisis riwayat transaksi.\"\n      ]\n    },\n    {\n      \"layout\": \"section\",\n      \"title\": \"Latar Belakang Penelitian\",\n      \"text\": \"Penelitian ini bertujuan untuk mengeksplorasi pengaruh penggunaan paylater terhadap kebiasaan belanja mahasiswa. Dengan meningkatnya tren belanja online, penggunaan layanan paylater menjadi semakin populer.\"\n    },\n    {\n      \"layout\": \"three_cards\",\n      \"title\": \"Permasalahan Penelitian\",\n      \"text\": \"Bagaimana penggunaan paylater memengaruhi kebiasaan belanja mahasiswa?\",\n      \"cards\": [\n        {\n          \"header\": \"Cakupan Penelitian\",\n          \"body\": \"Survei dilakukan pada 350 mahasiswa dari 5 kampus di Medan.\"\n        },\n        {\n          \"header\": \"Relevansi Penelitian\",\n          \"body\": \"Penggunaan paylater meningkat dari 12% (2024) menjadi 29% (2026).\"\n        },\n        {\n          \"header\": \"Pertanyaan Penelitian\",\n          \"body\": \"Bagaimana penggunaan paylater memengaruhi kebiasaan belanja mahasiswa?\"\n        }\n      ]\n    },\n    {\n      \"layout\": \"two_cards\",\n      \"title\": \"Metodologi Penelitian\",\n      \"text\": \"Penelitian menggunakan pendekatan kuantitatif dan kualitatif untuk mengumpulkan data yang akurat.\",\n      \"cards\": [\n        {\n          \"header\": \"Metode Kualitatif\",\n          \"body\": \"12 wawancara mendalam dilakukan untuk memahami motivasi belanja.\"\n        },\n        {\n          \"header\": \"Metode Kuantitatif\",\n          \"body\": \"Survei online dengan 24 pertanyaan dilakukan pada 350 responden.\"\n        }\n      ]\n    },\n    {\n      \"layout\": \"chart\",\n      \"title\": \"Data Kuantitatif\",\n      \"text\": \"Hasil survei menunjukkan tren belanja online dan penggunaan paylater.\",\n      \"chart\": {\n        \"type\": \"column\",\n        \"categories\": [\"2024\", \"2026\"],\n        \"series\": [\n          {\n            \"name\": \"Belanja Live Streaming\",\n            \"values\": [12, 29]\n          }\n        ]\n      }\n    },\n    {\n      \"layout\": \"timeline\",\n      \"title\": \"Rencana Penelitian\",\n      \"columns\": [\n        {\n          \"header\": \"Jan - Mar\",\n          \"items\": [\"Pengumpulan data survei\", \"Analisis riwayat transaksi\"]\n        },\n        {\n          \"header\": \"Apr - Jun\",\n          \"items\": [\"Wawancara mendalam\", \"Penyusunan laporan\"]\n        }\n      ]\n    },\n    {\n      \"layout\": \"stat_chart\",\n      \"title\": \"Hasil yang Diharapkan\",\n      \"text\": \"Hasil penelitian akan menunjukkan dampak penggunaan paylater terhadap kebiasaan belanja mahasiswa.\",\n      \"stat\": \"41%\",\n      \"stat_text\": \"41% mahasiswa pernah menyesal membeli karena diskon.\",\n      \"chart\": {\n        \"type\": \"radar\",\n        \"categories\": [\"Harga\", \"Kemudahan\", \"Pilihan Produk\"],\n        \"series\": [\n          {\n            \"name\": \"Alasan Belanja\",\n            \"values\": [54, 31, 15]\n          }\n        ]\n      }\n    },\n    {\n      \"layout\": \"closing\",\n      \"title\": \"Terima Kasih\",\n      \"subtitle\": \"Terima kasih atas perhatian dan partisipasi Anda.\"\n    }\n  ]\n}",
+  "result": "OK: created proposal.pptx (10 slides)",
+  "fixes": [
+   "- no 'agenda' slide -> one was added from the section titles"
+  ],
+  "files": [
+   "proposal.pptx",
+   "spec.json"
+  ]
+ },
+ "docx": {
+  "case": "docx",
+  "ok": true,
+  "seconds": 50.40266260000135,
+  "arguments": {
+   "content": "{\"title\":\"Ringkasan Eksekutif Survei Kebiasaan Belanja Online Mahasiswa\",\"author\":\"Tim Survei\",\"sections\":[{\"type\":\"paragraph\",\"text\":\"Survei ini bertujuan untuk memahami kebiasaan belanja online mahasiswa di Indonesia. Survei dilakukan pada 350 dari 500 mahasiswa yang diundang, dengan usia 18-24 tahun, dari 5 kampus di Medan, pada bulan Maret-April 2026. Metode yang digunakan meliputi survei online dengan 24 pertanyaan, 12 wawancara mendalam, dan analisis riwayat transaksi. Hasil survei menunjukkan beberapa temuan utama yang dapat menjadi acuan untuk pengambilan keputusan dan pengembangan strategi.\"},{\"type\":\"bullet\",\"items\":[\"72% dari responden belanja online minimal sebulan sekali.\",\"Rata-rata belanja online per bulan mencapai Rp 310.000.\",\"64% dari responden menggunakan e-wallet sebagai metode pembayaran utama.\"]},{\"type\":\"table\",\"headers\":[\"Alasan Utama\",\"Persentase\"],\"rows\":[[\"Harga\",\"54%\"],[\"Kemudahan\",\"31%\"],[\"Pilihan Produk\",\"15%\"]]}]",
+   "filename": "ringkasan_eksekutif_survei.docx"
+  },
+  "result": "Word document created successfully. file_url:/static/downloads/5087831d162c4091b02d3f8b027fdf20_ringkasan_eksekutif_survei.docx (WARNING: MinIO upload failed — file may disappear on server restart)",
+  "files": [
+   "5087831d162c4091b02d3f8b027fdf20_ringkasan_eksekutif_survei.docx"
+  ],
+  "first_result": "Invalid JSON content: Expecting ',' delimiter: line 1 column 958 (char 957)"
+ },
+ "xlsx": {
+  "case": "xlsx",
+  "ok": true,
+  "seconds": 37.758511,
+  "arguments": {
+   "data": "{\"Alasan\":[{\"alasan\":\"harga\",\"persen\":54},{\"alasan\":\"kemudahan\",\"persen\":31},{\"alasan\":\"pilihan produk\",\"persen\":15}],\"Tren\":[{\"tahun\":2024,\"tahun belanja lewat live streaming\":12},{\"tahun\":2026,\"tahun belanja lewat live streaming\":29}]}",
+   "filename": "survei_mahasiswa.xlsx"
+  },
+  "result": "Excel file created successfully. file_url:/static/downloads/c99ce630e53a493d8116305bc833cd0b_survei_mahasiswa.xlsx (WARNING: MinIO upload failed — file may disappear on server restart)",
+  "files": [
+   "c99ce630e53a493d8116305bc833cd0b_survei_mahasiswa.xlsx"
+  ]
+ },
+ "chart": {
+  "case": "chart",
+  "ok": true,
+  "seconds": 42.23014200000034,
+  "arguments": {
+   "y_col": "persentase",
+   "title": "Alasan Utama Belanja Online",
+   "data": "[{\"alasan\":\"harga\",\"persentase\":54},{\"alasan\":\"kemudahan\",\"persentase\":31},{\"alasan\":\"pilihan produk\",\"persentase\":15}]",
+   "chart_type": "bar",
+   "x_col": "alasan"
+  },
+  "result": "Chart generated successfully. chart_url:/static/charts/8a4464dab16440068621c0153ae20d6e.png",
+  "files": [
+   "8a4464dab16440068621c0153ae20d6e.png"
+  ]
+ },
+ "calculator": {
+  "case": "calculator",
+  "ok": true,
+  "seconds": 19.377870999996958,
+  "arguments": {
+   "expression": "350/500*100"
+  },
+  "result": "70",
+  "files": []
+ },
+ "web_search": {
+  "case": "web_search",
+  "ok": true,
+  "seconds": 27.74063810000007,
+  "arguments": {
+   "query": "jumlah pengguna e-commerce di Indonesia 2025"
+  },
+  "result": "tool tidak dijalankan (butuh jaringan atau file unggahan); yang dinilai hanya argumennya",
+  "files": []
+ },
+ "image": {
+  "case": "image",
+  "ok": true,
+  "seconds": 35.40109659999871,
+  "arguments": {
+   "file_id": "t1/alasan.png",
+   "question": "Jelaskan grafik pada gambar dengan file_id t1/alasan.png. Batang mana yang paling tinggi?"
+  },
+  "result": "tool tidak dijalankan (butuh jaringan atau file unggahan); yang dinilai hanya argumennya",
+  "files": []
+ },
+ "subagents": {
+  "case": "subagents",
+  "ok": true,
+  "seconds": 111.11542620000182,
+  "arguments": {
+   "tasks": [
+    {
+     "context": "Survei tentang tren dan pengaruh live shopping di Indonesia",
+     "queries": [
+      "Tren live shopping di Indonesia 2025",
+      "Pertumbuhan live shopping di Indonesia"
+     ],
+     "topic": "Tren live shopping di Indonesia"
+    },
+    {
+     "context": "Survei tentang kebiasaan pembayaran dan pengaruh paylater pada mahasiswa",
+     "queries": [
+      "Penggunaan paylater oleh mahasiswa Indonesia",
+      "Tren pembayaran paylater di kalangan mahasiswa"
+     ],
+     "topic": "Pemakaian paylater oleh mahasiswa"
+    },
+    {
+     "context": "Survei tentang regulasi dan perlindungan konsumen dalam bisnis e-commerce",
+     "queries": [
+      "Aturan perlindungan konsumen e-commerce Indonesia",
+      "Kebijakan perlindungan konsumen di platform e-commerce"
+     ],
+     "topic": "Aturan perlindungan konsumen e-commerce"
+    }
+   ]
+  },
+  "result": "tool tidak dijalankan (butuh jaringan atau file unggahan); yang dinilai hanya argumennya",
+  "files": []
+ }
+}

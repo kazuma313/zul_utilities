@@ -1,0 +1,15 @@
+{
+  "name": "pptx-claude-skill",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Node dependencies for the pptx-claude skill. Run `npm install` in this folder once.",
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  },
+  "optionalDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.4.0",
+    "sharp": ">=0.33.0"
+  }
+}

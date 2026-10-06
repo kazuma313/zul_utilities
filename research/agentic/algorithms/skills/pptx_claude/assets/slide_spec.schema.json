@@ -1,0 +1,872 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "pptx-claude deck",
+ "description": "All 20 layouts. Use as the structured-output / guided-decoding schema (Ollama `format`, llama.cpp `json_schema`, vLLM `guided_json`, LM Studio `response_format`). No $ref on purpose: some grammar converters do not support it. The engine accepts more optional fields (colors, more chart_options) than this strict schema.",
+ "type": "object",
+ "properties": {
+  "theme": {
+   "enum": [
+    "midnight",
+    "coral",
+    "forest",
+    "ocean",
+    "charcoal",
+    "cherry"
+   ]
+  },
+  "slides": {
+   "type": "array",
+   "minItems": 3,
+   "maxItems": 25,
+   "items": {
+    "anyOf": [
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "title"
+       },
+       "title": {
+        "type": "string"
+       },
+       "subtitle": {
+        "type": "string"
+       },
+       "icon": {
+        "type": "string",
+        "description": "react-icons name such as FaRocket, see references/icons.md"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "bullets"
+       },
+       "title": {
+        "type": "string"
+       },
+       "bullets": {
+        "type": "array",
+        "items": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "object",
+           "properties": {
+            "icon": {
+             "type": "string",
+             "description": "react-icons name such as FaRocket, see references/icons.md"
+            },
+            "text": {
+             "type": "string"
+            }
+           },
+           "required": [
+            "text"
+           ],
+           "additionalProperties": false
+          }
+         ]
+        },
+        "minItems": 2,
+        "maxItems": 6
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "bullets"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "content"
+       },
+       "title": {
+        "type": "string"
+       },
+       "content": {
+        "type": "string"
+       },
+       "icon": {
+        "type": "string",
+        "description": "react-icons name such as FaRocket, see references/icons.md"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "content"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "two_column"
+       },
+       "title": {
+        "type": "string"
+       },
+       "left_header": {
+        "type": "string"
+       },
+       "left": {
+        "type": "string"
+       },
+       "right_header": {
+        "type": "string"
+       },
+       "right": {
+        "type": "string"
+       },
+       "left_icon": {
+        "type": "string",
+        "description": "react-icons name such as FaRocket, see references/icons.md"
+       },
+       "right_icon": {
+        "type": "string",
+        "description": "react-icons name such as FaRocket, see references/icons.md"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "left_header",
+       "left",
+       "right_header",
+       "right"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "two_column_bullets"
+       },
+       "title": {
+        "type": "string"
+       },
+       "left_header": {
+        "type": "string"
+       },
+       "left_bullets": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 6
+       },
+       "right_header": {
+        "type": "string"
+       },
+       "right_bullets": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 6
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "left_header",
+       "left_bullets",
+       "right_header",
+       "right_bullets"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "table"
+       },
+       "title": {
+        "type": "string"
+       },
+       "headers": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 2,
+        "maxItems": 6
+       },
+       "rows": {
+        "type": "array",
+        "items": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         },
+         "minItems": 1,
+         "maxItems": 6
+        },
+        "minItems": 1,
+        "maxItems": 8
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "headers",
+       "rows"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "image"
+       },
+       "title": {
+        "type": "string"
+       },
+       "image_url": {
+        "type": "string"
+       },
+       "caption": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "image_url"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "image_bullets"
+       },
+       "title": {
+        "type": "string"
+       },
+       "image_url": {
+        "type": "string"
+       },
+       "bullets": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 6
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "image_url",
+       "bullets"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "stat_callout"
+       },
+       "title": {
+        "type": "string"
+       },
+       "stats": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "value": {
+           "type": "string"
+          },
+          "label": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "value",
+          "label"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 4
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "stats"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "section_divider"
+       },
+       "title": {
+        "type": "string"
+       },
+       "section_number": {
+        "type": "string"
+       },
+       "subtitle": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "section_number"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "quote"
+       },
+       "title": {
+        "type": "string"
+       },
+       "quote": {
+        "type": "string"
+       },
+       "attribution": {
+        "type": "string"
+       },
+       "context": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "quote",
+       "attribution"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "agenda"
+       },
+       "title": {
+        "type": "string"
+       },
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "number": {
+           "type": "string"
+          },
+          "label": {
+           "type": "string"
+          },
+          "duration": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "label"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 7
+       },
+       "highlight": {
+        "type": "integer"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "items"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "timeline"
+       },
+       "title": {
+        "type": "string"
+       },
+       "steps": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "phase": {
+           "type": "string"
+          },
+          "label": {
+           "type": "string"
+          },
+          "description": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "phase",
+          "label",
+          "description"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 5
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "steps"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "icon_grid"
+       },
+       "title": {
+        "type": "string"
+       },
+       "cards": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "icon": {
+           "type": "string",
+           "description": "react-icons name such as FaRocket, see references/icons.md"
+          },
+          "header": {
+           "type": "string"
+          },
+          "body": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "header",
+          "body"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 6
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "cards"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "features_stats"
+       },
+       "title": {
+        "type": "string"
+       },
+       "features": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "title": {
+           "type": "string"
+          },
+          "subtitle": {
+           "type": "string"
+          },
+          "description": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "title",
+          "description"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 4
+       },
+       "stats": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "value": {
+           "type": "string"
+          },
+          "label": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "value",
+          "label"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 3
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "features",
+       "stats"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "definition"
+       },
+       "title": {
+        "type": "string"
+       },
+       "definition": {
+        "type": "string"
+       },
+       "cards": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "icon": {
+           "type": "string",
+           "description": "react-icons name such as FaRocket, see references/icons.md"
+          },
+          "header": {
+           "type": "string"
+          },
+          "body": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "header",
+          "body"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 4
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "definition",
+       "cards"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "numbered_list"
+       },
+       "title": {
+        "type": "string"
+       },
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "number": {
+           "type": "string"
+          },
+          "title": {
+           "type": "string"
+          },
+          "description": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "title",
+          "description"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 6
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "items"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "conclusion_cta"
+       },
+       "title": {
+        "type": "string"
+       },
+       "points": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "minItems": 1,
+        "maxItems": 5
+       },
+       "cta": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "points",
+       "cta"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "challenges"
+       },
+       "title": {
+        "type": "string"
+       },
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "title": {
+           "type": "string"
+          },
+          "description": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "title",
+          "description"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 4
+       },
+       "tip": {
+        "type": "string"
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "items"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "layout": {
+        "const": "chart"
+       },
+       "title": {
+        "type": "string"
+       },
+       "chart_type": {
+        "enum": [
+         "bar",
+         "line",
+         "pie",
+         "doughnut",
+         "area"
+        ]
+       },
+       "chart_data": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "name": {
+           "type": "string"
+          },
+          "labels": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           },
+           "minItems": 1,
+           "maxItems": 12
+          },
+          "values": {
+           "type": "array",
+           "items": {
+            "type": "number"
+           },
+           "minItems": 1,
+           "maxItems": 12
+          }
+         },
+         "required": [
+          "name",
+          "labels",
+          "values"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 1,
+        "maxItems": 4
+       },
+       "chart_options": {
+        "type": "object",
+        "properties": {
+         "show_legend": {
+          "type": "boolean"
+         },
+         "show_value": {
+          "type": "boolean"
+         },
+         "bar_dir": {
+          "enum": [
+           "col",
+           "bar"
+          ]
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       },
+       "notes": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "layout",
+       "title",
+       "chart_type",
+       "chart_data"
+      ],
+      "additionalProperties": false
+     }
+    ]
+   }
+  }
+ },
+ "required": [
+  "theme",
+  "slides"
+ ],
+ "additionalProperties": false
+}

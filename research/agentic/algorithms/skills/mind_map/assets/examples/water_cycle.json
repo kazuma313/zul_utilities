@@ -1,0 +1,25 @@
+{
+  "title": "Science grade 7 - summary",
+  "theme": "blue",
+  "root": "The Water Cycle",
+  "nodes": [
+    {"text": "Evaporation", "children": [
+      {"text": "Sun heats water", "children": []},
+      {"text": "Liquid becomes vapour", "children": []},
+      {"text": "Transpiration from plants", "children": []}]},
+    {"text": "Condensation", "children": [
+      {"text": "Vapour rises and cools", "children": []},
+      {"text": "Forms clouds", "children": [{"text": "Releases heat", "children": []}]}]},
+    {"text": "Precipitation", "children": [
+      {"text": "Rain, snow, sleet, hail", "children": []},
+      {"text": "Most falls into oceans", "children": []},
+      {"text": "Some becomes groundwater", "children": [{"text": "Feeds wells and springs", "children": []}]}]},
+    {"text": "Collection", "children": [
+      {"text": "Oceans, lakes, rivers", "children": []},
+      {"text": "Ready to evaporate again", "children": []}]},
+    {"text": "Why it matters", "children": [
+      {"text": "Drinking water", "children": []},
+      {"text": "Farming", "children": []},
+      {"text": "Weather and climate", "children": []}]}
+  ]
+}

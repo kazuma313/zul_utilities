@@ -1,0 +1,83 @@
+{
+ "organization": "Proposal Penelitian",
+ "tagline": "Paylater dan kebiasaan belanja mahasiswa, 2026",
+ "slides": [
+  {
+   "layout": "cover",
+   "title": "Pengaruh Paylater terhadap Kebiasaan Belanja Mahasiswa",
+   "subtitle": "Proposal Penelitian"
+  },
+  {
+   "layout": "intro",
+   "title": "Ringkasan",
+   "lead": "Penelitian ini bertanya apakah mahasiswa yang memakai paylater belanja lebih banyak dan lebih sering menyesal dibanding yang tidak memakainya.",
+   "paragraphs": [
+    "Survei awal terhadap 350 mahasiswa di 5 kampus di Medan (data contoh) menunjukkan 23% memakai paylater dan 41% pernah menyesal membeli karena diskon.",
+    "Survei itu belum membandingkan pemakai dan bukan pemakai paylater. Proposal ini mengusulkan penelitian lanjutan untuk mengisi celah tersebut."
+   ]
+  },
+  {
+   "layout": "section",
+   "title": "Latar Belakang",
+   "text": "Belanja online sudah menjadi kebiasaan rutin mahasiswa: 72% belanja minimal sebulan sekali dengan rata-rata Rp 310.000 per bulan. Sebagian besar membayar dengan e-wallet (64%), dan hampir seperempatnya memakai paylater (23%). Belanja lewat live streaming juga naik dari 12% pada 2024 menjadi 29% pada 2026."
+  },
+  {
+   "layout": "three_cards",
+   "title": "Rumusan Masalah",
+   "text": "Paylater membuat mahasiswa bisa membeli sebelum punya uang. Belum ada data yang menunjukkan apakah hal itu mengubah jumlah belanja dan penyesalan setelah membeli.",
+   "cards": [
+    {"header": "Ruang Lingkup", "body": "Mahasiswa usia 18-24 tahun di 5 kampus di Medan, pemakai dan bukan pemakai paylater."},
+    {"header": "Manfaat", "body": "Menjadi dasar kelas literasi keuangan di kampus dan tampilan batas paylater di platform."},
+    {"header": "Pertanyaan Penelitian", "body": "Apakah pemakai paylater belanja lebih banyak dan lebih sering menyesal daripada bukan pemakai?"}
+   ]
+  },
+  {
+   "layout": "two_cards",
+   "title": "Metodologi",
+   "text": "Penelitian memakai metode campuran yang sama dengan survei awal, supaya hasilnya bisa dibandingkan langsung.",
+   "cards": [
+    {"header": "Kuantitatif", "body": "Survei online 24 pertanyaan dan analisis riwayat transaksi, dibandingkan antara pemakai dan bukan pemakai paylater."},
+    {"header": "Kualitatif", "body": "12 wawancara mendalam tentang alasan memakai paylater dan pengalaman menyesal setelah membeli."}
+   ]
+  },
+  {
+   "layout": "chart",
+   "title": "Data Awal",
+   "text": "Survei awal menunjukkan harga sebagai alasan utama belanja online. Penelitian ini menguji apakah alasan itu berbeda pada pemakai paylater.",
+   "chart": {
+    "type": "column",
+    "categories": ["Harga", "Kemudahan", "Pilihan produk"],
+    "series": [{"name": "Persen responden", "values": [54, 31, 15]}]
+   },
+   "stat": {"value": "350", "label": "responden survei awal dari 500 yang diundang"}
+  },
+  {
+   "layout": "timeline",
+   "title": "Rencana Waktu",
+   "text": "Rencana empat tahap. Tanggal pasti ditetapkan setelah proposal disetujui.",
+   "columns": [
+    {"header": "Tahap 1", "items": ["Izin penelitian di 5 kampus", "Penyusunan kuesioner"]},
+    {"header": "Tahap 2", "items": ["Survei online", "Pengumpulan riwayat transaksi"]},
+    {"header": "Tahap 3", "items": ["12 wawancara mendalam", "Analisis data"]},
+    {"header": "Tahap 4", "items": ["Laporan akhir", "Rekomendasi untuk kampus dan platform"]}
+   ]
+  },
+  {
+   "layout": "stat_chart",
+   "title": "Temuan yang Diharapkan",
+   "text": "Dugaan awal: pemakai paylater belanja lebih banyak per bulan dan lebih sering menyesal. Jika terbukti, batas paylater yang tampil jelas menjadi rekomendasi utama.",
+   "stat": "23%",
+   "stat_text": "mahasiswa dalam survei awal memakai paylater.",
+   "chart": {
+    "type": "column",
+    "categories": ["2024", "2026"],
+    "series": [{"name": "Belanja lewat live streaming (%)", "values": [12, 29]}]
+   }
+  },
+  {
+   "layout": "closing",
+   "title": "Terima Kasih",
+   "subtitle": "Pertanyaan dan saran dipersilakan"
+  }
+ ]
+}

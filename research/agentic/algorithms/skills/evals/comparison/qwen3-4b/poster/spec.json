@@ -1,0 +1,136 @@
+{
+  "tag": "Research Project",
+  "title": "Kebiasaan Belanja Online Mahasiswa",
+  "subtitle": "Analisis Survei Kebiasaan Belanja Online Mahasiswa",
+  "footer": {
+    "slogan": "Pemahaman untuk Keberlanjutan",
+    "text": ""
+  },
+  "sections": [
+    {
+      "type": "text",
+      "title": "Laporan Penelitian",
+      "text": "Survei kebiasaan belanja online mahasiswa dilakukan dengan 350 responden dari 500 mahasiswa yang diundang. Usia responden berada dalam rentang 18-24 tahun, dengan 5 kampus di Medan. Data dikumpulkan pada Maret-April 2026."
+    },
+    {
+      "type": "bullets",
+      "title": "Tujuan Penelitian",
+      "items": [
+        {
+          "title": "Mengidentifikasi kebiasaan belanja online",
+          "text": "Mengukur frekuensi dan pola belanja mahasiswa"
+        },
+        {
+          "title": "Menganalisis faktor pengaruh",
+          "text": "Menemukan alasan utama belanja online"
+        }
+      ]
+    },
+    {
+      "type": "facts",
+      "title": "Target Responden",
+      "items": [
+        {
+          "label": "Usia",
+          "value": "18-24 tahun"
+        },
+        {
+          "label": "Lokasi",
+          "value": "5 kampus di Medan"
+        },
+        {
+          "label": "Jumlah Responden",
+          "value": "350 dari 500 yang diundang"
+        }
+      ],
+      "pictograph": {
+        "value": 350,
+        "total": 500,
+        "label": "Mahasiswa yang terlibat"
+      }
+    },
+    {
+      "type": "bullets",
+      "title": "Metode Penelitian",
+      "items": [
+        {
+          "title": "Survei Online",
+          "text": "24 pertanyaan untuk mengukur kebiasaan belanja"
+        },
+        {
+          "title": "Wawancara Mendalam",
+          "text": "12 wawancara untuk analisis lebih detail"
+        }
+      ]
+    },
+    {
+      "type": "stats",
+      "title": "Temuan Utama",
+      "items": [
+        {
+          "label": "Frekuensi Belanja",
+          "value": "72%",
+          "text": "Minimal sebulan sekali"
+        },
+        {
+          "label": "Alasan Utama",
+          "value": "54%",
+          "text": "Harga lebih murah"
+        },
+        {
+          "label": "Rata-rata Belanja",
+          "value": "Rp 310.000",
+          "text": "Per bulan"
+        }
+      ]
+    },
+    {
+      "type": "chart",
+      "title": "Insight Konsumen",
+      "chart": {
+        "type": "donut",
+        "categories": ["Harga", "Kemudahan", "Pilihan Produk"],
+        "series": [
+          {
+            "name": "Alasan Belanja",
+            "values": [54, 31, 15]
+          }
+        ]
+      },
+      "text": "Dari 100% alasan belanja online, 54% disebabkan oleh harga yang lebih murah.",
+      "quote": "Harga tetap menjadi faktor dominan dalam keputusan belanja online mahasiswa."
+    },
+    {
+      "type": "bullets",
+      "title": "Tren Pasar",
+      "items": [
+        {
+          "title": "Belanja Live Streaming",
+          "text": "Naik dari 12% (2024) menjadi 29% (2026)"
+        },
+        {
+          "title": "Penggunaan Paylater",
+          "text": "23% mahasiswa menggunakan layanan pembayaran belakang"
+        }
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "Rekomendasi",
+      "items": [
+        {
+          "title": "Membuat Anggaran",
+          "text": "Mahasiswa perlu membuat anggaran bulanan untuk pengeluaran belanja"
+        },
+        {
+          "title": "Kelas Literasi Keuangan",
+          "text": "Kampus harus mengadakan kelas literasi keuangan"
+        },
+        {
+          "title": "Pembatasan Paylater",
+          "text": "Platform harus menampilkan batas paylater dengan jelas"
+        }
+      ]
+    }
+  ]
+}

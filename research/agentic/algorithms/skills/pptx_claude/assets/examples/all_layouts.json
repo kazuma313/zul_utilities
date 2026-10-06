@@ -1,0 +1,62 @@
+[
+  {"layout": "title", "title": "Koperasi Digital 2026", "subtitle": "Growth plan for member services", "icon": "FaRocket", "notes": "Welcome everyone. This deck shows every layout the skill supports."},
+  {"layout": "agenda", "title": "Agenda", "highlight": 0, "items": [
+    {"number": "01", "label": "Where we are today", "duration": "5 min"},
+    {"number": "02", "label": "What members need", "duration": "10 min"},
+    {"number": "03", "label": "Roadmap and risks", "duration": "10 min"},
+    {"number": "04", "label": "Decision and next steps", "duration": "5 min"}]},
+  {"layout": "section_divider", "section_number": "01", "title": "Where we are today", "subtitle": "Numbers from the last 12 months"},
+  {"layout": "stat_callout", "title": "The year in numbers", "stats": [
+    {"value": "12,400", "label": "Active members"},
+    {"value": "78%", "label": "Use the mobile app"},
+    {"value": "Rp 4.2M", "label": "Average savings"},
+    {"value": "4.6/5", "label": "Satisfaction score"}]},
+  {"layout": "chart", "title": "Monthly new members", "chart_type": "bar", "chart_data": [
+    {"name": "New members", "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], "values": [420, 580, 510, 760, 910, 880]}],
+    "chart_options": {"show_legend": false, "show_value": true}},
+  {"layout": "bullets", "title": "What is working", "bullets": [
+    "Mobile onboarding takes under 5 minutes",
+    "Branch staff now spend more time on advice, less on forms",
+    {"icon": "FaCheckCircle", "text": "Loan approval time fell from 6 days to 2 days"},
+    {"icon": "FaUsers", "text": "Referrals bring 1 in 3 new members"}]},
+  {"layout": "content", "title": "Why members stay", "icon": "FaLightbulb", "content": "Members tell us they stay because the cooperative feels personal. They know the staff, fees are easy to understand, and problems get solved in one visit.\n\nDigital services must keep that feeling instead of replacing it."},
+  {"layout": "two_column", "title": "Branch vs. app", "left_icon": "FaUsers", "left_header": "Branch", "left": "Best for advice, complex loans and new members who want to meet someone in person.", "right_icon": "FaMobileAlt", "right_header": "App", "right": "Best for balances, transfers, small loans and anything members do more than once a month."},
+  {"layout": "two_column_bullets", "title": "Build or buy the loan engine", "left_header": "Build", "left_bullets": ["Fits our rules exactly", "No licence fee", "Needs 3 developers for 9 months"], "right_header": "Buy", "right_bullets": ["Live in 8 weeks", "Vendor handles compliance updates", "Licence cost grows with members"]},
+  {"layout": "table", "title": "Service comparison", "headers": ["Service", "Today", "Target", "Owner"], "rows": [
+    ["Account opening", "2 days", "10 minutes", "Operations"],
+    ["Small loan", "2 days", "Same day", "Credit"],
+    ["Support reply", "24 hours", "2 hours", "Member care"]]},
+  {"layout": "image", "title": "Usage by month", "image_url": "sample_chart.png", "caption": "Source: internal analytics"},
+  {"layout": "image_bullets", "title": "What the usage data says", "image_url": "sample_chart.png", "bullets": ["Growth speeds up after the April campaign", "June dip matches the school holiday", "App sessions now beat branch visits 5 to 1"]},
+  {"layout": "quote", "quote": "I opened my account during lunch break. I did not expect that from a cooperative.", "attribution": "- Ibu Sari", "context": "Member since 2025, Medan"},
+  {"layout": "definition", "title": "What we mean by digital cooperative", "definition": "A cooperative where every routine service works on a phone, and every member can still reach a person when it matters.", "cards": [
+    {"icon": "FaMobileAlt", "header": "Mobile first", "body": "Routine services in the app"},
+    {"icon": "FaUsers", "header": "Human backup", "body": "A named officer for every member"},
+    {"icon": "FaShieldAlt", "header": "Safe", "body": "Bank-grade security and audit"}]},
+  {"layout": "icon_grid", "title": "Four pillars of the plan", "cards": [
+    {"icon": "FaRocket", "header": "Fast onboarding", "body": "10-minute account opening"},
+    {"icon": "FaMoneyBillWave", "header": "Instant small loans", "body": "Same-day decisions under Rp 5M"},
+    {"icon": "FaGraduationCap", "header": "Financial education", "body": "Monthly classes in the app"},
+    {"icon": "FaChartLine", "header": "Transparent reporting", "body": "Members see cooperative results live"}]},
+  {"layout": "features_stats", "title": "What the new app delivers", "features": [
+    {"title": "One-tap transfers", "subtitle": "Between members", "description": "No fee inside the cooperative"},
+    {"title": "Loan simulator", "subtitle": "Before you apply", "description": "See instalments for any amount"},
+    {"title": "Savings goals", "subtitle": "Automatic", "description": "Round-ups move to a goal pocket"}],
+    "stats": [{"value": "3x", "label": "More monthly logins"}, {"value": "-40%", "label": "Branch queue time"}]},
+  {"layout": "timeline", "title": "Roadmap", "steps": [
+    {"phase": "Q1", "label": "Discovery", "description": "Member interviews and vendor shortlist"},
+    {"phase": "Q2", "label": "Pilot", "description": "Two branches, 500 members"},
+    {"phase": "Q3", "label": "Rollout", "description": "All branches, staff training"},
+    {"phase": "Q4", "label": "Optimise", "description": "Measure, fix, add education module"}]},
+  {"layout": "numbered_list", "title": "How we will decide", "items": [
+    {"number": "01", "title": "Member value first", "description": "Every feature must save members time or money"},
+    {"number": "02", "title": "Compliance by design", "description": "Regulator requirements are checked before build"},
+    {"number": "03", "title": "Small releases", "description": "Ship every two weeks and measure"}]},
+  {"layout": "challenges", "title": "Risks we are watching", "items": [
+    {"title": "Low digital literacy", "description": "Some members have never used a banking app"},
+    {"title": "Vendor lock-in", "description": "Switching cost grows every year"},
+    {"title": "Data security", "description": "More channels means more attack surface"},
+    {"title": "Staff workload", "description": "Training happens while branches stay open"}],
+    "tip": "Pair every risk with an owner and review monthly."},
+  {"layout": "conclusion_cta", "title": "Decision needed today", "points": ["Approve the pilot budget for Q2", "Name one sponsor from the board", "Agree on the three success metrics"], "cta": "Approve the pilot"}
+]

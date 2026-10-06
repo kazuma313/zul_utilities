@@ -1,0 +1,149 @@
+{
+  "tag": "Research Project",
+  "title": "Poster Hasil Survei Kebiasaan Belanja Online Mahasiswa",
+  "subtitle": "Analisis Kebiasaan dan Tren Belanja Online",
+  "footer": {
+    "slogan": "Menginspirasi Perubahan Positif",
+    "text": ""
+  },
+  "sections": [
+    {
+      "type": "text",
+      "title": "Penelitian",
+      "text": "Survei ini mengevaluasi kebiasaan belanja online mahasiswa di Indonesia, dengan fokus pada pola pengeluaran, metode pembayaran, dan tren belanja terkini."
+    },
+    {
+      "type": "bullets",
+      "title": "Tujuan",
+      "items": [
+        {
+          "title": "Menganalisis frekuensi belanja online",
+          "text": "Mengetahui seberapa sering mahasiswa belanja secara online."
+        },
+        {
+          "title": "Menilai alasan belanja online",
+          "text": "Mengidentifikasi faktor utama yang mendorong kebiasaan belanja."
+        },
+        {
+          "title": "Mengukur dampak pembelian impulsif",
+          "text": "Menilai tingkat kepuasan dan keputusan pembelian."
+        }
+      ]
+    },
+    {
+      "type": "facts",
+      "title": "Responden",
+      "items": [
+        {
+          "label": "Usia",
+          "value": "18-24 tahun"
+        },
+        {
+          "label": "Lokasi",
+          "value": "5 kampus di Medan"
+        },
+        {
+          "label": "Jumlah sampel",
+          "value": "350 mahasiswa"
+        }
+      ],
+      "pictograph": {
+        "value": 350,
+        "total": 500,
+        "label": "Partisipan"
+      }
+    },
+    {
+      "type": "bullets",
+      "title": "Metode",
+      "items": [
+        {
+          "title": "Survei online",
+          "text": "24 pertanyaan terstruktur yang diisi oleh responden."
+        },
+        {
+          "title": "Wawancara mendalam",
+          "text": "12 wawancara untuk memperdalam motivasi dan pengalaman belanja."
+        },
+        {
+          "title": "Analisis riwayat transaksi",
+          "text": "Mengevaluasi data pembelian dari platform e-commerce."
+        }
+      ]
+    },
+    {
+      "type": "stats",
+      "title": "Temuan Utama",
+      "items": [
+        {
+          "label": "Frekuensi belanja",
+          "value": "72%",
+          "text": "Belanja online minimal sebulan sekali."
+        },
+        {
+          "label": "Alasan utama",
+          "value": "54%",
+          "text": "Harga menjadi faktor utama."
+        },
+        {
+          "label": "Pembayaran",
+          "value": "64%",
+          "text": "Menggunakan e-wallet sebagai metode pembayaran."
+        },
+        {
+          "label": "Pembelian impulsif",
+          "value": "41%",
+          "text": "Pernah menyesal membeli karena diskon."
+        }
+      ]
+    },
+    {
+      "type": "chart",
+      "title": "Insight Konsumen",
+      "chart": {
+        "type": "donut",
+        "categories": ["Harga", "Kemudahan", "Pilihan Produk"],
+        "series": [
+          {
+            "name": "Alasan Belanja",
+            "values": [54, 31, 15]
+          }
+        ]
+      },
+      "text": "Mayoritas mahasiswa memilih belanja online karena harga dan kemudahan akses.",
+      "quote": "Harga dan kemudahan menjadi faktor utama dalam keputusan belanja."
+    },
+    {
+      "type": "bullets",
+      "title": "Tren",
+      "items": [
+        {
+          "title": "Live streaming",
+          "text": "Naik dari 12% (2024) menjadi 29% (2026)."
+        },
+        {
+          "title": "Paylater",
+          "text": "23% mahasiswa menggunakan layanan paylater."
+        }
+      ]
+    },
+    {
+      "type": "bullets",
+      "title": "Rekomendasi",
+      "items": [
+        {
+          "title": "Anggaran bulanan",
+          "text": "Mahasiswa disarankan membuat anggaran bulanan untuk pengeluaran."
+        },
+        {
+          "title": "Kelas literasi keuangan",
+          "text": "Kampus perlu mengadakan kelas literasi keuangan untuk mahasiswa."
+        },
+        {
+          "title": "Transparansi paylater",
+          "text": "Platform e-commerce harus menampilkan batas paylater secara jelas."
+        }
+      ]
+    }
+  ]
+}

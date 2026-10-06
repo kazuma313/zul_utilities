@@ -1,0 +1,39 @@
+{
+  "tag": "Hasil Survei 2026",
+  "title": "Kebiasaan Belanja Online Mahasiswa",
+  "highlight": "Belanja Online",
+  "subtitle": "Survei 350 mahasiswa di 5 kampus di Medan, Maret-April 2026 (data contoh)",
+  "footer": ["Survei kebiasaan belanja online mahasiswa", "Medan, 2026"],
+  "size": "A2",
+  "sections": [
+    {"type": "text", "title": "Ringkasan",
+     "text": "Survei ini memetakan seberapa sering mahasiswa usia 18-24 tahun belanja online, apa alasannya, dan bagaimana mereka membayar. Dari 500 mahasiswa yang diundang, 350 mengisi survei."},
+    {"type": "facts", "title": "Responden", "items": [
+      {"label": "Usia", "value": "18-24 tahun"},
+      {"label": "Lokasi", "value": "5 kampus di Medan"},
+      {"label": "Waktu", "value": "Maret-April 2026"},
+      {"label": "Jumlah", "value": "350 mahasiswa"}],
+     "pictograph": {"value": 350, "total": 500, "label": "350 dari 500 mahasiswa yang diundang mengisi survei"}},
+    {"type": "list", "title": "Metode", "items": [
+      {"title": "Survei online", "text": "24 pertanyaan, 350 responden", "icon": "monitor"},
+      {"title": "Wawancara mendalam", "text": "12 mahasiswa", "icon": "message"},
+      {"title": "Analisis data", "text": "Riwayat transaksi belanja", "icon": "chart"}]},
+    {"type": "stats", "title": "Temuan Utama", "items": [
+      {"label": "Belanja online rutin", "value": "72%", "text": "belanja online minimal sebulan sekali", "icon": "cart"},
+      {"label": "Belanja per bulan", "value": "Rp 310.000", "text": "rata-rata pengeluaran belanja online", "icon": "tag"},
+      {"label": "E-wallet paling banyak dipakai", "value": "64%", "text": "membayar dengan e-wallet", "icon": "phone"},
+      {"label": "Menyesal setelah membeli", "value": "41%", "text": "pernah menyesal membeli karena diskon", "icon": "trust"}]},
+    {"type": "chart", "title": "Alasan Utama Belanja Online",
+     "chart": {"type": "donut", "categories": ["Harga", "Kemudahan", "Pilihan produk"], "series": [{"name": "Alasan utama", "values": [54, 31, 15]}]},
+     "text": "Lebih dari separuh responden memilih belanja online karena harga. Kemudahan menjadi alasan bagi 31%, dan pilihan produk bagi 15%.",
+     "quote": "Harga adalah alasan utama; diskon juga yang paling sering berujung penyesalan."},
+    {"type": "list", "title": "Tren", "items": [
+      {"title": "Live streaming naik", "text": "Dari 12% pada 2024 menjadi 29% pada 2026", "icon": "phone"},
+      {"title": "Paylater", "text": "23% mahasiswa memakai paylater", "icon": "tag"}]},
+    {"type": "bullets", "title": "Rekomendasi", "items": [
+      {"title": "Mahasiswa", "text": "Membuat anggaran belanja bulanan"},
+      {"title": "Kampus", "text": "Mengadakan kelas literasi keuangan"},
+      {"title": "Platform", "text": "Menampilkan batas paylater dengan jelas"}],
+     "icon": "clipboard"}
+  ]
+}

@@ -1,0 +1,6 @@
+[
+  {"layout": "title", "title": "Weekly Team Update", "subtitle": "Week 38"},
+  {"layout": "bullets", "title": "Done this week", "bullets": ["Released version 2.1", "Fixed the login bug", "Onboarded two new teammates"]},
+  {"layout": "stat_callout", "title": "Key numbers", "stats": [{"value": "98%", "label": "Uptime"}, {"value": "14", "label": "Tickets closed"}]},
+  {"layout": "conclusion_cta", "title": "Next week", "points": ["Start the payments work", "Plan the Q4 roadmap"], "cta": "Questions? Ask in the team channel"}
+]

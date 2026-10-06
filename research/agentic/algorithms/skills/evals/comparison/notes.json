@@ -1,0 +1,75 @@
+{
+ "_page": "Catatan pengukuran. GPU laptop dipakai bersama aplikasi lain (sebuah game terbuka) selama uji ini, jadi waktu gemma3:4b dan qwen3:8b 3 sampai 10 kali lebih lambat dari pengukuran sebelumnya di GPU yang kosong (gemma3:4b: slide 9-12 detik, poster 16-17 detik). qwen3:4b diukur di GPU terintegrasi AMD lewat server aplikasi Ollama, jadi waktunya tidak sebanding dengan dua model lain. Delapan kasus tool qwen3:4b dijalankan dengan penalaran (3-16 menit per panggilan); poster, slide, dan mind map dari dokumen dijalankan tanpa penalaran dengan JSON berskema (1-4 menit). Poster dan slide deck semua model lokal adalah hasil setelah skill diperbaiki; apa yang terjadi di percobaan sebelumnya ditulis di catatan tiap kolom. Isi hasil tidak terpengaruh oleh kecepatan.",
+ "mind_map": {
+  "gemma3-4b": "Semua angka benar dan lengkap, tiga tingkat. Satu salah tempat: 'Penyesalan diskon 41%' masuk ke cabang Metode Pembayaran.",
+  "qwen3-8b": "Ringkas dan rapi, tetapi rincian alasan (54/31/15) hilang. 'Live streaming naik 17%' kurang tepat: sumbernya 12% menjadi 29%, artinya naik 17 poin persen. '41% menyesal' juga masuk ke cabang Pembayaran.",
+  "claude": "Enam cabang, semua angka dari sumber, alasan utama dijadikan cabang sendiri.",
+  "qwen3-4b": "Lima cabang, angka benar, 72 detik. Ditulis sebagai JSON berskema tanpa penalaran. '41% menyesal' tidak masuk, dan beberapa baris masih panjang. Percobaan pertama dengan penalaran: 26 menit untuk satu jawaban dan belum selesai setelah 30 menit."
+ },
+ "mind_map_tool": {
+  "gemma3-4b": "Isi outline benar. Nama file yang diminta (survei.svg) tidak diisi, jadi tool memakai nama bawaan mindmap.png. Lewat skema JSON, argumen yang tidak wajib sering dilewati model ini.",
+  "qwen3-8b": "Nama file benar. Beberapa baris berupa kalimat panjang ('Alasan utama: harga 54%, kemudahan 31%, ...'), padahal aturannya maksimal 8 kata per baris.",
+  "claude": "Nama file dan tema sesuai permintaan, tiap baris frasa pendek.",
+  "qwen3-4b": "Nama file dan tema benar, isi lengkap dan angkanya benar. Satu baris terlalu panjang ('Alasan: harga (54%), kemudahan (31%), pilihan produk (15%)'). Butuh 16 menit, sebagian besar untuk menalar."
+ },
+ "docx": {
+  "gemma3-4b": "Model menulis dokumennya sebagai Markdown, bukan JSON yang diminta tool, sehingga awalnya ditolak. Tool sekarang membaca Markdown. Isinya: tabel 'alasan' ikut memuat Live Streaming 29 dan Paylater 23, padahal keduanya bukan alasan belanja; ada kalimat 'memaksimalkan peluang bisnis' yang tidak ada di sumber.",
+  "qwen3-8b": "JSON kurang satu kurung penutup, sehingga awalnya ditolak. Tool sekarang menutupnya sendiri. Isi dan tabel benar; 'mahasiswa di Indonesia' kurang tepat (sumbernya Medan), dan penulis 'Tim Survei' tidak ada di sumber.",
+  "claude": "Paragraf pembuka, tiga butir temuan, tabel alasan, dan rekomendasi. Semua angka dari sumber.",
+  "qwen3-4b": "JSON sah pada percobaan pertama; paragraf, tiga butir, dan tabel benar. Penulis 'Tim Analisis' tidak ada di sumber, dan 12 wawancara tidak disebut."
+ },
+ "xlsx": {
+  "gemma3-4b": "Baris ditulis sebagai {\"harga\", \"54\"} (tanpa kunci), sehingga awalnya ditolak. Tool sekarang membacanya sebagai baris. File jadi, tetapi isinya lemah: judul kolom sheet Alasan salah ('tahun'), dan sheet Tren berupa pasangan label-nilai, bukan tabel tahun dan persen.",
+  "qwen3-8b": "Dua sheet dengan angka benar. Judul kolom sheet Tren salah tulis: 'tahun belanja lewat live streaming' (seharusnya persen).",
+  "claude": "Dua sheet sesuai permintaan, angka sebagai bilangan.",
+  "qwen3-4b": "Angka dan dua sheet benar. JSON-nya menutup workbook setelah sheet pertama, sehingga awalnya hanya sheet Alasan yang jadi dan sheet Tren hilang tanpa pesan kesalahan; tool sekarang menyambung kedua sheet."
+ },
+ "chart": {
+  "gemma3-4b": "Data dan sumbu benar. Judul tidak diisi, jadi grafik berjudul 'Chart'.",
+  "qwen3-8b": "Data, sumbu, dan judul benar.",
+  "claude": "Data, sumbu, dan judul benar.",
+  "qwen3-4b": "Data dan judul benar. Nama kolom ditulis dalam bahasa Inggris, jadi label sumbu menjadi 'reason' dan 'percentage'."
+ },
+ "calculator": {
+  "gemma3-4b": "Ekspresi dan hasil benar.",
+  "qwen3-8b": "Ekspresi dan hasil benar.",
+  "claude": "Ekspresi dan hasil benar.",
+  "qwen3-4b": "Ekspresi dan hasil benar, tetapi butuh 4 menit untuk satu perhitungan karena model menalar dulu."
+ },
+ "web_search": {
+  "gemma3-4b": "Kata kunci tepat.",
+  "qwen3-8b": "Kata kunci tepat; menambahkan tahun 2025 sendiri.",
+  "claude": "Kata kunci tepat; menambahkan tahun 2026.",
+  "qwen3-4b": "Kata kunci tepat, ditulis dalam bahasa Inggris."
+ },
+ "image": {
+  "gemma3-4b": "file_id dan pertanyaan benar.",
+  "qwen3-8b": "file_id dan pertanyaan benar.",
+  "claude": "file_id dan pertanyaan benar.",
+  "qwen3-4b": "file_id benar. Pertanyaannya dipersingkat menjadi 'Batang mana yang paling tinggi?'; permintaan menjelaskan grafik hilang."
+ },
+ "subagents": {
+  "gemma3-4b": "Tiga tugas, masing-masing tiga kata kunci (dalam bahasa Inggris). Konteksnya umum.",
+  "qwen3-8b": "Tiga tugas, masing-masing dua kata kunci. Konteksnya umum.",
+  "claude": "Tiga tugas, tiga kata kunci per tugas, konteks membawa angka survei yang perlu dibandingkan.",
+  "qwen3-4b": "Tiga tugas, dua kata kunci per tugas, semuanya dalam bahasa Inggris. Konteksnya sama untuk ketiga tugas dan umum."
+ },
+ "poster": {
+  "gemma3-4b": "Angka benar: donat 54/31/15, 72%, 54%, 310.000. Hanya 7 bagian: Rekomendasi tidak ditulis. 'Live Streaming Shopping' dan 'PayLater Usage' masih berbahasa Inggris; 13 judul dan label lain diterjemahkan oleh skill. Percobaan pertama: donat hanya dua kategori sehingga tampil 63,5% dan 36,5%, semua judul bagian berbahasa Inggris, dan footer berisi email serta situs karangan.",
+  "qwen3-8b": "Delapan bagian, semua angka benar, seluruh judul dan label sudah berbahasa Indonesia. Kurang tepat: 'mahasiswa di Indonesia' (sumbernya Medan), kata 'Poster' ikut masuk judul, dan Rp 310.000 tidak dipakai. Percobaan pertama: judul bagian dan label berbahasa Inggris ('Frequency', 'Reason', 'Payment').",
+  "claude": "Tujuh bagian, semua angka dari sumber. Versi pertama memperlihatkan tiga cacat skill, bukan cacat spec: 'Rp 310.000' terpotong menjadi 'Rp 310.00', legenda donat pecah per huruf di kartu sempit, dan judul bagian terpotong. Ketiganya sudah diperbaiki di skill.",
+  "qwen3-4b": "Delapan bagian, berbahasa Indonesia, angka benar (72%, 54%, Rp 310.000, donat 54/31/15), tanpa kontak karangan. Kurang tepat: paylater diterjemahkan 'layanan pembayaran belakang'. Percobaan sebelum bahasa disebut jelas di permintaan: seluruh poster berbahasa Inggris."
+ },
+ "pptx_claude": {
+  "gemma3-4b": "Enam slide. Tidak ada slide alasan belanja (54/31/15), dan satu angka salah pasang: 'Paylater meningkat dari 12% menjadi 23%' (12% adalah angka live streaming 2024). '310000' ditulis tanpa Rp dan tanpa titik. Model menulis 9 slide; tiga slide pengisi setelah kesimpulan dipotong skill. Percobaan pertama: hanya 3 slide, karena 3 adalah batas bawah skema.",
+  "qwen3-8b": "Delapan slide dengan delapan tata letak berbeda, semua angka benar ('Rp 310.000' utuh; 77% bukan pemakai paylater dihitung dari 23%). Percobaan pertama: tabel tren berisi 'Paylater 2024: 12%' yang tidak ada di sumber, dan grafik satu batang.",
+  "claude": "Delapan slide: angka utama, metode, dua grafik, risiko, tabel rekomendasi, kesimpulan. Semua angka dari sumber.",
+  "qwen3-4b": "Tujuh slide berbahasa Indonesia, semua angka benar, ada grafik tren dan tabel alasan. Responden, metode, dan paylater 23% tidak dimuat. Percobaan sebelum bahasa disebut jelas: seluruh slide berbahasa Inggris."
+ },
+ "pptx_research": {
+  "gemma3-4b": "Sembilan slide. Sampul tanpa nama penyaji, grafik 72% vs 28% benar. Kekurangan: 'Hello !' tidak diterjemahkan, kartu rumusan masalah hanya dua dari tiga, jadwal hanya dua kolom. Slide radar berisi angka 0, 1, 0 dibuang skill karena angkanya tidak ada di sumber. Percobaan pertama: penyaji karangan 'Dr. Andi Rahman', radar berisi 5, 7, 3 yang disalin dari contoh di prompt, dan satu grafik mencampur rupiah dengan persen.",
+  "qwen3-8b": "Sepuluh slide, kedua grafik memakai angka sumber (12 dan 29; 54, 31, 15), tanpa penyaji atau kontak karangan. Satu kalimat salah pasang: 'penggunaan paylater meningkat dari 12% menjadi 29%' (itu angka live streaming). Subjudul sampul masih 'Research Proposal'. Percobaan pertama: penyaji 'Universitas Negeri Medan', alamat email karangan di slide penutup, dan radar 5, 7, 3, 6 dari contoh prompt.",
+  "claude": "Sepuluh slide. Karena sumber tidak memuat jadwal, lini masa ditulis sebagai empat tahap tanpa tanggal; organisasi dan penyaji dikosongkan atau diisi netral, tidak dikarang.",
+  "qwen3-4b": "Sepuluh slide berbahasa Indonesia, tanpa penyaji atau lembaga karangan. Dua grafik memakai angka sumber dengan label yang salah: 350 disebut 'Jumlah Transaksi' dan digabung dengan Rp 310.000, dan 29% (live streaming) diberi label 'Kebiasaan Belanja'. Percobaan pertama dengan penalaran: dua kali menghabiskan 8.192 token untuk menalar tanpa menulis jawaban (61 menit, gagal). Percobaan kedua tanpa penalaran: 'Universitas Indonesia' dikarang sebagai lembaga dan judul slide berbahasa Inggris."
+ }
+}

@@ -1,0 +1,32 @@
+# Zul
+- CLI
+  - zul build hexa
+    - Proyek hexagonal siap jalan
+  - zul install
+    - milvus-helper
+    - redis-helper
+- Template hexa
+  - Agent
+    - ReAct
+    - Human-in-the-loop
+    - Subagents
+  - REST API
+  - Memory percakapan
+  - Test dengan model palsu
+- Utilities
+  - Vector database
+    - Milvus
+    - Redis
+  - OCR
+  - LLM dan embedding
+  - Markdown ke PDF dan PPTX
+- Dokumentasi
+  - Tutorial
+  - Panduan
+  - Referensi
+  - Konsep
+  - Playground
+- Skill
+  - Mind map
+  - Slide dan poster
+  - Dokumen dan spreadsheet

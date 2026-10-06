@@ -1,0 +1,41 @@
+{
+  "tag": "Research",
+  "title": "Technology",
+  "subtitle": "Shaping a better future",
+  "lead": "How digital tools change the way students learn, teachers teach and communities share information. A mixed-methods study with 420 survey respondents and 24 interviews in three Indonesian cities.",
+  "theme": "purple",
+  "footer": {"slogan": "Technology today, a better tomorrow.", "text": "Faculty of Computer Science, Universitas Nusantara  |  research@example.ac.id  |  www.example.ac.id"},
+  "size": "A2",
+  "sections": [
+    {"type": "text", "title": "Abstract", "width": "half",
+     "text": "This study examines how technology adoption affects learning outcomes, teaching practice and civic participation. We combine a survey of 420 respondents with 24 interviews and a document analysis of school policies. Adoption is high but uneven: access is no longer the main barrier, skills and support are."},
+    {"type": "columns", "title": "Methodology", "width": "half", "items": [
+      {"title": "Surveys", "text": "420 respondents in 3 cities, 32 questions", "icon": "people"},
+      {"title": "Interviews", "text": "24 teachers, students and officials", "icon": "message"},
+      {"title": "Data analysis", "text": "Regression and thematic coding", "icon": "chart"}]},
+    {"type": "text", "title": "Introduction", "width": "narrow",
+     "text": "Since 2020 every school in the sample has an internet connection, yet only 41% of teachers use digital tools weekly. This gap between access and use is the starting point of the study."},
+    {"type": "list", "title": "Key Findings", "width": "wide", "items": [
+      {"title": "1. Research", "text": "Students with weekly device use score 12% higher in reading tests", "icon": "search"},
+      {"title": "2. Communication", "text": "Teachers who join online communities adopt new tools twice as fast", "icon": "globe"},
+      {"title": "3. Challenges", "text": "Skills and technical support, not connectivity, limit adoption", "icon": "shield"}]},
+    {"type": "bullets", "title": "Research Questions", "numbered": true, "width": "narrow", "items": [
+      "How does device use relate to learning outcomes?",
+      "Which factors explain teacher adoption?",
+      "What support do schools need most?",
+      "How do communities use school technology?"]},
+    {"type": "stats", "title": "Benefits of Technology", "width": "narrow", "items": [
+      {"label": "Higher reading scores", "value": "+12%", "text": "with weekly device use"},
+      {"label": "Faster adoption", "value": "2x", "text": "in online teacher communities"},
+      {"label": "Time saved", "value": "3 h", "text": "per teacher per week on admin"},
+      {"label": "Parents reached", "value": "68%", "text": "through school messaging apps"}]},
+    {"type": "chart", "title": "Conclusion", "width": "narrow",
+     "chart": {"type": "donut", "categories": ["Skills", "Support", "Connectivity", "Cost"], "series": [{"name": "Main barrier", "values": [44, 31, 14, 11]}]},
+     "text": "Investment should move from hardware to training and support."},
+    {"type": "columns", "title": "Recommendations", "items": [
+      {"title": "For students", "text": "Weekly guided practice with digital tools, not only free access", "icon": "book"},
+      {"title": "For educators", "text": "Peer communities and paid time for training", "icon": "people"},
+      {"title": "For society", "text": "Open school labs after hours for parents and neighbours", "icon": "globe"},
+      {"title": "For government", "text": "Fund technical support staff, one per five schools", "icon": "flag"}]}
+  ]
+}

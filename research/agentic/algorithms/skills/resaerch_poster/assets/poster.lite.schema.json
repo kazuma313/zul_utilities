@@ -1,0 +1,364 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "research poster",
+ "description": "LITE: 5 section types for models under ~14B parameters ('list' left out; 'bullets' covers it).",
+ "type": "object",
+ "properties": {
+  "tag": {
+   "type": "string"
+  },
+  "title": {
+   "type": "string"
+  },
+  "highlight": {
+   "type": "string"
+  },
+  "subtitle": {
+   "type": "string"
+  },
+  "footer": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "object",
+     "properties": {
+      "slogan": {
+       "type": "string"
+      },
+      "text": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "slogan",
+      "text"
+     ],
+     "additionalProperties": false
+    }
+   ]
+  },
+  "sections": {
+   "type": "array",
+   "items": {
+    "anyOf": [
+     {
+      "type": "object",
+      "properties": {
+       "type": {
+        "const": "text"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "width": {
+        "enum": [
+         "narrow",
+         "half",
+         "wide",
+         "full"
+        ]
+       }
+      },
+      "required": [
+       "type",
+       "title",
+       "text"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "type": {
+        "const": "bullets"
+       },
+       "title": {
+        "type": "string"
+       },
+       "text": {
+        "type": "string"
+       },
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "title": {
+           "type": "string"
+          },
+          "text": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "title",
+          "text"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 5
+       },
+       "width": {
+        "enum": [
+         "narrow",
+         "half",
+         "wide",
+         "full"
+        ]
+       }
+      },
+      "required": [
+       "type",
+       "title",
+       "items"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "type": {
+        "const": "facts"
+       },
+       "title": {
+        "type": "string"
+       },
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "label": {
+           "type": "string"
+          },
+          "value": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "label",
+          "value"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 6
+       },
+       "pictograph": {
+        "type": "object",
+        "properties": {
+         "value": {
+          "type": "number"
+         },
+         "total": {
+          "type": "number"
+         },
+         "label": {
+          "type": "string"
+         }
+        },
+        "required": [
+         "value",
+         "total",
+         "label"
+        ],
+        "additionalProperties": false
+       },
+       "width": {
+        "enum": [
+         "narrow",
+         "half",
+         "wide",
+         "full"
+        ]
+       }
+      },
+      "required": [
+       "type",
+       "title",
+       "items"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "type": {
+        "const": "stats"
+       },
+       "title": {
+        "type": "string"
+       },
+       "items": {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "label": {
+           "type": "string"
+          },
+          "value": {
+           "type": "string"
+          },
+          "text": {
+           "type": "string"
+          }
+         },
+         "required": [
+          "label",
+          "value",
+          "text"
+         ],
+         "additionalProperties": false
+        },
+        "minItems": 2,
+        "maxItems": 5
+       },
+       "width": {
+        "enum": [
+         "narrow",
+         "half",
+         "wide",
+         "full"
+        ]
+       }
+      },
+      "required": [
+       "type",
+       "title",
+       "items"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "type": "object",
+      "properties": {
+       "type": {
+        "const": "chart"
+       },
+       "title": {
+        "type": "string"
+       },
+       "chart": {
+        "type": "object",
+        "properties": {
+         "type": {
+          "enum": [
+           "donut",
+           "pie",
+           "column",
+           "bar",
+           "line"
+          ]
+         },
+         "categories": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          },
+          "minItems": 2,
+          "maxItems": 6
+         },
+         "series": {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "name": {
+             "type": "string"
+            },
+            "values": {
+             "type": "array",
+             "items": {
+              "type": "number"
+             },
+             "minItems": 2,
+             "maxItems": 6
+            }
+           },
+           "required": [
+            "name",
+            "values"
+           ],
+           "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 3
+         }
+        },
+        "required": [
+         "type",
+         "categories",
+         "series"
+        ],
+        "additionalProperties": false
+       },
+       "text": {
+        "type": "string"
+       },
+       "quote": {
+        "type": "string"
+       },
+       "width": {
+        "enum": [
+         "narrow",
+         "half",
+         "wide",
+         "full"
+        ]
+       }
+      },
+      "required": [
+       "type",
+       "title",
+       "chart",
+       "text"
+      ],
+      "additionalProperties": false
+     }
+    ]
+   },
+   "minItems": 4,
+   "maxItems": 8
+  },
+  "hero_image": {
+   "type": "string"
+  },
+  "size": {
+   "enum": [
+    "A0",
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "LETTER",
+    "TABLOID",
+    "24X36",
+    "36X48"
+   ]
+  },
+  "lead": {
+   "type": "string"
+  },
+  "theme": {
+   "enum": [
+    "blue",
+    "purple"
+   ]
+  }
+ },
+ "required": [
+  "tag",
+  "title",
+  "subtitle",
+  "footer",
+  "sections"
+ ],
+ "additionalProperties": false
+}
