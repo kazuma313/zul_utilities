@@ -18,6 +18,25 @@ Input (average_distance_from_origin):
     seed (int | None) - random seed, default None.
 Output (average_distance_from_origin): (float) - rata-rata jarak Euclidean
     dari origin setelah n_steps, dirata-rata dari `trials` simulasi.
+    
+pesudocode:
+set random seed
+
+each_step = 1
+
+distance_list = []
+
+random_step = rand.chouce([-1, 1])
+
+for _ in range (trials):
+
+    random_steps =  ranint(1, n_steps)
+    distance_list.append(random_steps*each_step)
+    
+
+average_distance = sum(distance_list)/trials
+
+return average_distance
 """
 
 
