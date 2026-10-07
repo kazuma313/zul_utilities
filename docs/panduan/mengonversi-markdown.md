@@ -2,11 +2,11 @@
 
 Teks Markdown, misalnya jawaban LLM, bisa diubah menjadi file PDF atau presentasi PowerPoint. Hasilnya bisa ditulis ke file atau diambil sebagai bytes untuk langsung diunduh lewat API.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)). Kedua converter di halaman ini memakai extra `converter`, yang dipasang di langkah pertama.
+**Sebelum mulai:** kamu butuh Zul yang sudah ter-install ([Instalasi Zul](instalasi-zul.md)). Kedua converter di halaman ini memakai extra `converter`, yang di-install di langkah pertama.
 
 ## Mengubah Markdown menjadi PDF
 
-1. Pasang Zul dengan extra `converter`:
+1. Install Zul dengan extra `converter`:
 
     ```shell
     pip install "zul[converter] @ git+https://github.com/kazuma313/zul_utilities.git"

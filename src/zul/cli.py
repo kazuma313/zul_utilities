@@ -2,7 +2,7 @@
 CLI Entry Point untuk Zul
 
 Gunanya:
-    Mendaftarkan semua perintah `zul`. Entry point ini dipasang oleh
+    Mendaftarkan semua perintah `zul`. Entry point ini di-install oleh
     `[project.scripts]` di pyproject.toml: `zul = "zul.cli:app"`.
 
 Cara pakai:
@@ -73,7 +73,7 @@ app.add_typer(install.app, name="install")
 
 
 def get_version() -> str:
-    """Versi zul yang terinstall, dibaca dari metadata package (pyproject.toml)."""
+    """Versi zul yang ter-install, dibaca dari metadata package (pyproject.toml)."""
     try:
         return package_version(PACKAGE_NAME)
     except PackageNotFoundError:

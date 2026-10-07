@@ -371,7 +371,7 @@ uv tool install git+https://github.com/kazuma313/zul_utilities.git
 pip install git+https://github.com/kazuma313/zul_utilities.git
 ```
 
-Instalasi dasar hanya memasang Typer, InquirerPy, Pydantic, PyYAML, dan NumPy: cukup untuk CLI, config vector database, `FakeEmbeddingModel`, logger, dan timer. Dependency tiap utilitas dipasang lewat *extra* — pilih yang dipakai saja:
+Instalasi dasar hanya berisi Typer, InquirerPy, Pydantic, PyYAML, dan NumPy: cukup untuk CLI, config vector database, `FakeEmbeddingModel`, logger, dan timer. Dependency tiap utilitas di-install lewat *extra* — pilih yang dipakai saja:
 
 ```bash
 pip install "zul[milvus,redis] @ git+https://github.com/kazuma313/zul_utilities.git"
@@ -386,12 +386,12 @@ pip install "zul[all] @ git+https://github.com/kazuma313/zul_utilities.git"
 | `converter` | Markdown → PDF / PPTX |
 | `analysis` | `ChartGenerator`, `save_file` |
 | `pdf` | `PDFProcessor` |
-| `ocr` | `DoclingVLMConverter` (Docling, ikut memasang PyTorch) |
+| `ocr` | `DoclingVLMConverter` (Docling, ikut meng-install PyTorch) |
 | `llm` | `AIService`, `ai_models`, `react_graph` (LangChain OpenAI, LangGraph) |
 | `gemini` | OCR dengan Gemini |
 | `all` | Semua di atas |
 
-> Sejak versi 0.2.0, Docling, LangChain OpenAI, dan LangGraph tidak lagi ikut instalasi dasar. Kode yang memakai `DoclingVLMConverter` perlu `zul[ocr]`, dan kode yang memakai `AIService` atau `react_graph` perlu `zul[llm]`. Langkah lengkapnya, termasuk memasang tanpa dependency sama sekali, ada di [Memasang Zul](docs/panduan/memasang-zul.md).
+> Langkah lengkapnya, termasuk instalasi tanpa dependency sama sekali, ada di [Instalasi Zul](docs/panduan/instalasi-zul.md).
 </details>
 
 <details>

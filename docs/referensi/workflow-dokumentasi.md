@@ -38,13 +38,13 @@ Langkah-langkahnya, berurutan:
 | Langkah | Yang dijalankan | Gagal jika |
 |---|---|---|
 | Checkout | `actions/checkout`, tanpa menyimpan kredensial git | Repository tidak bisa diambil. |
-| Pasang uv dan Python | `astral-sh/setup-uv` dengan uv `0.12.3` dan Python `3.11`, cache berdasarkan `uv.lock` | uv atau Python tidak bisa diunduh. |
-| Pasang dependency dokumentasi | `uv sync --frozen --only-group docs` | `uv.lock` tidak memuat paket grup `docs`. |
+| Install uv dan Python | `astral-sh/setup-uv` dengan uv `0.12.3` dan Python `3.11`, cache berdasarkan `uv.lock` | uv atau Python tidak bisa diunduh. |
+| Install dependency dokumentasi | `uv sync --frozen --only-group docs` | `uv.lock` tidak memuat paket grup `docs`. |
 | Bangun situs | `uv run --no-sync mkdocs build --strict` | Ada peringatan apa pun, termasuk tautan rusak dan tulisan blog tanpa tanggal atau ringkasan. |
 | Periksa hasil build | Memeriksa `site/index.html`, `site/404.html`, dan `site/blog/index.html` | Salah satu file itu tidak ada atau kosong. |
 | Unggah artifact | `actions/upload-pages-artifact` dengan folder `site` | Folder `site` tidak bisa diunggah. |
 
-`--frozen` memasang versi persis dari `uv.lock` tanpa menyusun ulang versinya. `--only-group docs` hanya memasang paket situs dokumentasi, tanpa Zul dan dependency pengembangan lainnya.
+`--frozen` meng-install versi persis dari `uv.lock` tanpa menyusun ulang versinya. `--only-group docs` hanya meng-install paket situs dokumentasi, tanpa Zul dan dependency pengembangan lainnya.
 
 Artifact bernama `github-pages` dan disimpan 7 hari. File dan folder yang namanya diawali titik tidak ikut masuk artifact.
 
@@ -114,7 +114,7 @@ Pull request dari Dependabot hanya mengubah `.github/workflows/docs.yml`, jadi j
 
 | Langkah di workflow | Perintah di komputermu |
 |---|---|
-| Pasang dependency dokumentasi | `uv sync` |
+| Install dependency dokumentasi | `uv sync` |
 | Bangun situs | `uv run mkdocs build --strict` |
 | Pratinjau | `uv run mkdocs serve`, lalu buka `http://127.0.0.1:8001` |
 

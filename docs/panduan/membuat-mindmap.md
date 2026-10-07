@@ -6,7 +6,7 @@ Skill `mind_map` mengubah topik, catatan, atau dokumen menjadi mind map. Skill i
 
 Gambar di atas dibuat dari outline `assets/examples/zul.md` di folder skill. [Versi interaktifnya](../assets/mindmap/zul.html) bisa digeser dan diperbesar.
 
-**Sebelum mulai:** `uv` atau Python 3.9 ke atas terpasang, dan kamu berada di root repository Zul. Skill `mind_map` ada di `research/agentic/algorithms/skills/mind_map/`. Perintah di halaman ini dijalankan dari folder itu:
+**Sebelum mulai:** `uv` atau Python 3.9 ke atas ter-install, dan kamu berada di root repository Zul. Skill `mind_map` ada di `research/agentic/algorithms/skills/mind_map/`. Perintah di halaman ini dijalankan dari folder itu:
 
 ```shell
 cd research/agentic/algorithms/skills/mind_map

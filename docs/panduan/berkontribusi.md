@@ -6,7 +6,7 @@ Mengubah Zul sendiri mencakup menambah perintah, memperbaiki helper, mengembangk
 
 ## Menyiapkan lingkungan
 
-1. Clone repository dan pasang semuanya:
+1. Clone repository dan install semuanya:
 
     ```shell
     git clone https://github.com/kazuma313/zul_utilities.git
@@ -14,9 +14,9 @@ Mengubah Zul sendiri mencakup menambah perintah, memperbaiki helper, mengembangk
     uv sync
     ```
 
-    `uv sync` membuat `.venv`, memasang Zul dalam mode editable beserta semua extra, dan memasang tool pengembangan: pytest, ruff, black, dan MkDocs.
+    `uv sync` membuat `.venv`, meng-install Zul dalam mode editable beserta semua extra, dan meng-install tool pengembangan: pytest, ruff, black, dan MkDocs.
 
-2. Pastikan semuanya terpasang:
+2. Pastikan semuanya ter-install:
 
     ```shell
     uv run zul --version

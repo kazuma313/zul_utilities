@@ -40,9 +40,9 @@ cd my-agent
 
 Semua perintah berikutnya dijalankan dari folder ini.
 
-## Memasang dependency
+## Instalasi dependency
 
-Buat virtual environment, aktifkan, lalu pasang dependency proyek:
+Buat virtual environment, aktifkan, lalu install dependency proyek:
 
 ```shell
 python -m venv .venv

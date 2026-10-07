@@ -4,11 +4,11 @@ Skill `youtube_transcript` mengambil transcript video YouTube beserta metadatany
 
 Skill ini hanya mengambil caption yang sudah ada di YouTube. Video tanpa caption tidak punya transcript, karena skill ini tidak mengubah suara menjadi teks.
 
-**Sebelum mulai:** `uv` terpasang, kamu berada di root repository Zul, dan komputermu bisa membuka youtube.com. Skill ini ada di `research/agentic/algorithms/skills/youtube_transcript/`.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka youtube.com. Skill ini ada di `research/agentic/algorithms/skills/youtube_transcript/`.
 
-## Memasang kebutuhannya
+## Instalasi kebutuhannya
 
-Pasang dua paket yang dipakai skill ini ke environment proyek:
+Install dua paket yang dipakai skill ini ke environment proyek:
 
 ```shell
 uv pip install "youtube-transcript-api>=1.2" yt-dlp

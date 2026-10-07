@@ -2,7 +2,7 @@
 
 `AIService` memanggil chat model dan model embedding yang kompatibel dengan OpenAI. Pengaturannya ditulis sekali, di file config atau environment variable, lalu `chat()` dan `embed()` dipanggil dari script, notebook, atau pipeline data.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)), alamat endpoint yang kompatibel dengan OpenAI, dan API key-nya. `AIService` membutuhkan extra `llm`:
+**Sebelum mulai:** kamu butuh Zul yang sudah ter-install ([Instalasi Zul](instalasi-zul.md)), alamat endpoint yang kompatibel dengan OpenAI, dan API key-nya. `AIService` membutuhkan extra `llm`:
 
 ```shell
 pip install "zul[llm] @ git+https://github.com/kazuma313/zul_utilities.git"

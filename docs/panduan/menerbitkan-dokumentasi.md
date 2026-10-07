@@ -8,7 +8,7 @@ Situs dokumentasi dan aplikasi adalah dua hal yang diterbitkan terpisah. Situs d
 
 ## Menerbitkan situs ke GitHub Pages
 
-Repository ini membawa workflow di `.github/workflows/docs.yml`. Workflow itu memasang tool dokumentasi dengan versi persis dari `uv.lock`, membangun situs dengan `mkdocs build --strict`, menerbitkannya, lalu membuka situs yang terbit untuk memastikan bisa diakses.
+Repository ini membawa workflow di `.github/workflows/docs.yml`. Workflow itu meng-install tool dokumentasi dengan versi persis dari `uv.lock`, membangun situs dengan `mkdocs build --strict`, menerbitkannya, lalu membuka situs yang terbit untuk memastikan bisa diakses.
 
 1. Di halaman repository, buka **Settings**, lalu **Pages**. Pada **Source**, pilih **GitHub Actions**.
 
@@ -109,7 +109,7 @@ Pembaca situs yang sudah terbit belum tentu punya proyek yang berjalan. Karena i
 | **Simulasi** | Contoh jawaban yang sudah disiapkan untuk tiga fitur bawaan template. Tidak ada model yang dipanggil. |
 | **Terhubung** | Agent di aplikasimu, termasuk fitur yang kamu daftarkan sendiri. |
 
-Panel mencoba menghubungi `http://localhost:8000` saat halaman dibuka. Jika tidak ada jawaban, panel memakai simulasi. Pembaca tetap bisa melihat cara kerja agent tanpa memasang apa pun.
+Panel mencoba menghubungi `http://localhost:8000` saat halaman dibuka. Jika tidak ada jawaban, panel memakai simulasi. Pembaca tetap bisa melihat cara kerja agent tanpa meng-install apa pun.
 
 ## Menyambungkan situs yang terbit ke aplikasimu
 

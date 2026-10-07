@@ -2,11 +2,11 @@
 
 PDF, gambar, dan dokumen lain bisa diubah menjadi Markdown atau teks, supaya bisa dipotong menjadi chunk dan disimpan ke vector database. Ada dua jalur: `DoclingVLMConverter`, yang mengirim halaman ke *Vision Language Model* (VLM) pilihanmu, dan fungsi OCR berbasis Google Gemini.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)). Untuk jalur Docling, kamu butuh endpoint *chat completions* yang kompatibel dengan OpenAI dan melayani sebuah model VLM. Untuk jalur Gemini, kamu butuh API key Google. Jika PDF-mu berisi teks yang bisa diseleksi, kamu tidak butuh OCR: pakai `PDFProcessor` di [Memakai helper kecil](memakai-helper.md).
+**Sebelum mulai:** kamu butuh Zul yang sudah ter-install ([Instalasi Zul](instalasi-zul.md)). Untuk jalur Docling, kamu butuh endpoint *chat completions* yang kompatibel dengan OpenAI dan melayani sebuah model VLM. Untuk jalur Gemini, kamu butuh API key Google. Jika PDF-mu berisi teks yang bisa diseleksi, kamu tidak butuh OCR: pakai `PDFProcessor` di [Memakai helper kecil](memakai-helper.md).
 
 ## Mengonversi dokumen dengan Docling
 
-1. Pasang Zul dengan extra `ocr`. Extra ini memasang Docling, yang ikut membawa PyTorch, jadi unduhannya besar:
+1. Install Zul dengan extra `ocr`. Extra ini meng-install Docling, yang ikut membawa PyTorch, jadi unduhannya besar:
 
     ```shell
     pip install "zul[ocr] @ git+https://github.com/kazuma313/zul_utilities.git"
@@ -107,7 +107,7 @@ Secara bawaan, gambar di dalam dokumen tidak dijelaskan.
 
 Jalur ini mengunggah PDF ke Gemini, meminta model memprosesnya sesuai prompt, lalu menghapus file dari server Gemini.
 
-1. Pasang Zul dengan extra `gemini`:
+1. Install Zul dengan extra `gemini`:
 
     ```shell
     pip install "zul[gemini] @ git+https://github.com/kazuma313/zul_utilities.git"

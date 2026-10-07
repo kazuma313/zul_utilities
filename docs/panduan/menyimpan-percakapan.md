@@ -16,7 +16,7 @@ Template memakai `InMemorySaver`, yang menyimpan percakapan di memori proses. It
 
 Contoh ini mengikuti [dokumentasi LangGraph tentang memory](https://docs.langchain.com/oss/python/langgraph/add-memory).
 
-1. Pasang paket checkpointer PostgreSQL dan tambahkan keduanya ke `requirements.txt`:
+1. Install paket checkpointer PostgreSQL dan tambahkan keduanya ke `requirements.txt`:
 
     ```shell
     pip install -U "psycopg[binary,pool]" langgraph-checkpoint-postgres

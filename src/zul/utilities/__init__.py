@@ -13,7 +13,7 @@ Peta modul, dengan extra yang dibutuhkan di dalam kurung siku:
     script_helper/        PDFProcessor [pdf], simpan file [analysis], AIService
                           ringkas [llm], timer, konversi JSON
 
-Modul tanpa kurung siku sudah jalan dengan instalasi dasar. Extra dipasang
+Modul tanpa kurung siku sudah jalan dengan instalasi dasar. Extra di-install
 sesuai fitur yang dipakai, contoh:
     pip install "zul[milvus,redis]"
 """

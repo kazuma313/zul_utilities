@@ -48,7 +48,7 @@ from scipy import stats
 #
 # Matplotlib 3.9 mengubah nama parameter labels jadi tick_labels.
 # Nama baru dicoba dulu, kemudian nama lama dipakai jika versi
-# matplotlib yang terpasang belum mengenal nama baru itu.
+# matplotlib yang ter-install belum mengenal nama baru itu.
 #
 
 

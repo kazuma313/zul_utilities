@@ -2,7 +2,7 @@
 
 Tulisan di [Blog](../blog/index.md) situs ini dibuat dari template bertanggal, dengan gambar dan file pendukung di folder tersendiri, lalu terbit lewat workflow dokumentasi.
 
-**Sebelum mulai:** `uv` terpasang dan kamu berada di root repository Zul.
+**Sebelum mulai:** `uv` ter-install dan kamu berada di root repository Zul.
 
 ## Tempat file blog
 

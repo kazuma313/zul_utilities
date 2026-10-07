@@ -10,7 +10,7 @@ Setiap push ke `main` yang mengubah dokumentasi melewati urutan yang sama:
 flowchart TB
     subgraph build ["Job build"]
         direction LR
-        A[Pasang versi dari uv.lock] --> B[mkdocs build --strict] --> C[Periksa file hasil build]
+        A[Install versi dari uv.lock] --> B[mkdocs build --strict] --> C[Periksa file hasil build]
     end
     subgraph deploy ["Job deploy"]
         direction LR
@@ -38,11 +38,11 @@ Penerbitan dokumentasi bisa gagal walaupun isi halamannya tidak berubah, karena 
 
 ## Satu sumber versi
 
-Jika versi tool dokumentasi ditulis di dua tempat, misalnya di `pyproject.toml` untuk komputermu dan di file requirements terpisah untuk CI, keduanya lama-lama berbeda. Batas yang longgar seperti `mkdocs-material>=9.7` juga membuat CI memasang rilis baru yang belum pernah kamu coba.
+Jika versi tool dokumentasi ditulis di dua tempat, misalnya di `pyproject.toml` untuk komputermu dan di file requirements terpisah untuk CI, keduanya lama-lama berbeda. Batas yang longgar seperti `mkdocs-material>=9.7` juga membuat CI meng-install rilis baru yang belum pernah kamu coba.
 
-Karena itu tool dokumentasi ditulis sekali, sebagai grup `docs` di `pyproject.toml`, dan versi persisnya tercatat di `uv.lock`. Grup `dev` memuat grup `docs`, sehingga `uv sync` di komputermu dan `uv sync --only-group docs` di CI memasang paket yang sama, sampai ke hash file-nya. Versi baru hanya masuk saat kamu menjalankan `uv lock` dan meng-commit hasilnya.
+Karena itu tool dokumentasi ditulis sekali, sebagai grup `docs` di `pyproject.toml`, dan versi persisnya tercatat di `uv.lock`. Grup `dev` memuat grup `docs`, sehingga `uv sync` di komputermu dan `uv sync --only-group docs` di CI meng-install paket yang sama, sampai ke hash file-nya. Versi baru hanya masuk saat kamu menjalankan `uv lock` dan meng-commit hasilnya.
 
-Workflow memakai `--frozen`, bukan `--locked`. `--locked` menolak bekerja jika `uv.lock` tidak cocok dengan `pyproject.toml`, termasuk untuk paket yang tidak ada hubungannya dengan dokumentasi. Dengan `--frozen`, penerbitan dokumentasi tidak terhalang oleh perubahan dependency lain. Akibatnya, jika kamu menambah paket ke grup `docs` tanpa menjalankan `uv lock`, paket itu tidak terpasang di CI, dan build gagal dengan pesan bahwa plugin atau ekstensinya tidak ditemukan.
+Workflow memakai `--frozen`, bukan `--locked`. `--locked` menolak bekerja jika `uv.lock` tidak cocok dengan `pyproject.toml`, termasuk untuk paket yang tidak ada hubungannya dengan dokumentasi. Dengan `--frozen`, penerbitan dokumentasi tidak terhalang oleh perubahan dependency lain. Akibatnya, jika kamu menambah paket ke grup `docs` tanpa menjalankan `uv lock`, paket itu tidak ter-install di CI, dan build gagal dengan pesan bahwa plugin atau ekstensinya tidak ditemukan.
 
 ## Action yang dikunci ke commit
 

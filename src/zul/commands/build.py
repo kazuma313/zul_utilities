@@ -37,7 +37,7 @@ app = typer.Typer(no_args_is_help=True, help="Buat proyek baru dari template")
 # Lokasi dan Aturan Template
 # --------------------------------------------------------------------------
 #
-# Template ikut terpasang bersama package, di folder templates yang
+# Template ikut ter-install bersama package, di folder templates yang
 # bersebelahan dengan folder commands. File hasil samping Python
 # dilewati supaya tidak ikut tersalin ke dalam proyek baru.
 #

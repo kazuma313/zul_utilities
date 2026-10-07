@@ -6,7 +6,7 @@
 # Supaya hasil build selalu sama dengan build di komputermu:
 # - setiap action dikunci ke commit SHA (versinya tertulis di komentar),
 # - versi uv, Python, dan runner ditulis persis,
-# - paket Python dipasang persis dari uv.lock (grup "docs" di pyproject).
+# - paket Python di-install persis dari uv.lock (grup "docs" di pyproject).
 # Dependabot (.github/dependabot.yml) membuka PR saat ada versi action baru.
 #
 # Sebelum dipakai pertama kali, buka Settings > Pages di repository dan
@@ -60,7 +60,7 @@ jobs:
           cache-dependency-glob: uv.lock
 
       # --frozen memakai uv.lock apa adanya, tanpa menyusun ulang versi.
-      - name: Pasang dependency dokumentasi
+      - name: Install dependency dokumentasi
         run: uv sync --frozen --only-group docs
 
       # --strict menggagalkan build jika ada tautan atau anchor yang rusak,

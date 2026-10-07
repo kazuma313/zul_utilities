@@ -38,8 +38,8 @@ Workflow hanya berjalan jika push atau pull request mengubah salah satu path ber
 | Langkah | Isinya |
 |---|---|
 | `actions/checkout` | Mengambil kode tanpa menyimpan kredensial git di runner (`persist-credentials: false`). |
-| `astral-sh/setup-uv` | Memasang uv 0.12.3 dan Python 3.11, dengan cache yang kuncinya `uv.lock`. |
-| Pasang dependency dokumentasi | `uv sync --frozen --only-group docs` memasang grup `docs` saja, dengan versi persis dari `uv.lock`. |
+| `astral-sh/setup-uv` | Install uv 0.12.3 dan Python 3.11, dengan cache yang kuncinya `uv.lock`. |
+| Install dependency dokumentasi | `uv sync --frozen --only-group docs` meng-install grup `docs` saja, dengan versi persis dari `uv.lock`. |
 | Bangun situs | `mkdocs build --strict` gagal jika ada tautan atau anchor yang rusak, atau tulisan blog tanpa tanggal. |
 | Periksa hasil build | `index.html`, `404.html`, dan `blog/index.html` harus ada dan tidak kosong. |
 | `actions/upload-pages-artifact` | Menyimpan folder `site/` sebagai artifact selama 7 hari, supaya job deploy bisa diulang tanpa build ulang. |

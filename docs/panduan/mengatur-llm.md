@@ -49,7 +49,7 @@ Ganti `API_KEY` dengan key server-mu, alamat di `LLM_BASE_URL` dengan alamat ser
 
 Untuk provider yang punya paket LangChain sendiri, tulis adapter baru. Adapter adalah fungsi yang mengembalikan chat model LangChain.
 
-1. Pasang paket provider-nya dan tambahkan ke `requirements.txt`.
+1. Install paket provider-nya dan tambahkan ke `requirements.txt`.
 
 2. Buat file baru di `src/infrastructure/AI/llm/` berisi fungsi `get_llm_model`. Bentuknya mengikuti `openai.py` di folder yang sama: baca pengaturan dari environment, lalu kembalikan chat model.
 

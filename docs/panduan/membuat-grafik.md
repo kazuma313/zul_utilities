@@ -2,11 +2,11 @@
 
 `ChartGenerator` membandingkan dua dataset atau lebih, misalnya latency pencarian di Milvus dan Redis. Satu pemanggilan menghasilkan grafik perbandingan dan ringkasan statistik beserta uji signifikansinya.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)) dan data berupa daftar angka untuk setiap hal yang dibandingkan.
+**Sebelum mulai:** kamu butuh Zul yang sudah ter-install ([Instalasi Zul](instalasi-zul.md)) dan data berupa daftar angka untuk setiap hal yang dibandingkan.
 
 ## Membuat grafik pertama
 
-1. Pasang Zul dengan extra `analysis`:
+1. Install Zul dengan extra `analysis`:
 
     ```shell
     pip install "zul[analysis] @ git+https://github.com/kazuma313/zul_utilities.git"

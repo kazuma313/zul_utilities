@@ -2,11 +2,11 @@
 
 Redis bisa dipakai sebagai vector database lewat [RedisVL](https://docs.redisvl.com/): membuat index, menyimpan record, lalu mencari dengan vektor, teks, atau gabungan keduanya. Zul menyediakan dua kelas untuk itu. `RedisHelper` membaca skema dari file config, cocok untuk aplikasi. `RedisVectorDB` menerima skema lewat kode, cocok untuk notebook dan eksperimen.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)) dan server Redis yang punya modul pencarian (RediSearch) versi 2.6 atau lebih baru, seperti yang ada di Redis Stack.
+**Sebelum mulai:** kamu butuh Zul yang sudah ter-install ([Instalasi Zul](instalasi-zul.md)) dan server Redis yang punya modul pencarian (RediSearch) versi 2.6 atau lebih baru, seperti yang ada di Redis Stack.
 
 ## Menyiapkan RedisHelper dari file config
 
-1. Pasang Zul dengan extra `redis`:
+1. Install Zul dengan extra `redis`:
 
     ```shell
     pip install "zul[redis] @ git+https://github.com/kazuma313/zul_utilities.git"

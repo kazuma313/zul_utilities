@@ -2,7 +2,7 @@
 
 Helper kecil di `zul.utilities` yang tidak punya panduan sendiri: embedding palsu untuk test, logger, pengukur waktu, pembaca PDF, penyimpan hasil eksperimen, dan pengubah Document menjadi JSON. Setiap bagian berdiri sendiri.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)). Tiga tugas membutuhkan extra: membaca PDF memakai extra `pdf`, menyimpan latency ke CSV memakai extra `analysis`, dan menjalankan graph LangGraph memakai extra `llm`. Perintah pemasangannya ada di bagian masing-masing.
+**Sebelum mulai:** kamu butuh Zul yang sudah ter-install ([Instalasi Zul](instalasi-zul.md)). Tiga tugas membutuhkan extra: membaca PDF memakai extra `pdf`, menyimpan latency ke CSV memakai extra `analysis`, dan menjalankan graph LangGraph memakai extra `llm`. Perintah instalasinya ada di bagian masing-masing.
 
 ## Membuat embedding palsu untuk test
 
@@ -124,7 +124,7 @@ Helper kecil di `zul.utilities` yang tidak punya panduan sendiri: embedding pals
 
 `PDFProcessor` membaca teks yang tertanam di PDF dan memotongnya menjadi chunk, sebagai langkah awal pipeline RAG. Untuk PDF hasil scan, pakai OCR di [Mengubah dokumen menjadi teks](membaca-dokumen-ocr.md).
 
-1. Pasang Zul dengan extra `pdf`:
+1. Install Zul dengan extra `pdf`:
 
     ```shell
     pip install "zul[pdf] @ git+https://github.com/kazuma313/zul_utilities.git"
@@ -172,9 +172,9 @@ Helper kecil di `zul.utilities` yang tidak punya panduan sendiri: embedding pals
 
 ## Menyimpan hasil eksperimen
 
-Dua fungsi menyimpan hasil ke folder `data/` di direktori kerja saat ini. Folder itu dibuat jika belum ada. Modul ini mengimpor `pandas`, jadi pasang extra `analysis` lebih dulu.
+Dua fungsi menyimpan hasil ke folder `data/` di direktori kerja saat ini. Folder itu dibuat jika belum ada. Modul ini mengimpor `pandas`, jadi install extra `analysis` lebih dulu.
 
-1. Pasang Zul dengan extra `analysis`:
+1. Install Zul dengan extra `analysis`:
 
     ```shell
     pip install "zul[analysis] @ git+https://github.com/kazuma313/zul_utilities.git"
@@ -247,7 +247,7 @@ Dua fungsi menyimpan hasil ke folder `data/` di direktori kerja saat ini. Folder
 
 Modul `react_graph` berisi graph satu node sebagai titik awal memahami `StateGraph`, sebelum membaca agent yang lebih lengkap di proyek hasil `zul build hexa`.
 
-1. Pasang Zul dengan extra `llm`:
+1. Install Zul dengan extra `llm`:
 
     ```shell
     pip install "zul[llm] @ git+https://github.com/kazuma313/zul_utilities.git"

@@ -24,7 +24,7 @@ PROJECT = tomllib.loads(PYPROJECT.read_text(encoding="utf-8"))["project"]
 # Setiap modul di src/zul, selain template, tercatat di salah satu daftar
 # ini. Modul inti jalan dengan `pip install zul` saja, dan modul lain
 # cukup dengan dependency utama ditambah extra-nya. Tabel extra
-# di docs/panduan/memasang-zul.md mengikuti daftar yang sama.
+# di docs/panduan/instalasi-zul.md mengikuti daftar yang sama.
 #
 
 CORE_MODULES = [
@@ -77,10 +77,9 @@ EXTRA_MODULES = {
 # Distribusi Yang Diizinkan
 # --------------------------------------------------------------------------
 #
-# Daftar distribusi yang terpasang dihitung dari metadata paket
-# di environment ini, termasuk dependency dari dependency.
-# Hasilnya sama dengan daftar yang dipasang pip untuk
-# `zul` atau `zul[EXTRA]` di platform yang sama.
+# Distribusi yang ter-install dihitung dari metadata paket di environment
+# ini, termasuk dependency dari dependency. Hasilnya sama dengan yang
+# di-install pip untuk zul atau zul[EXTRA] di platform yang sama.
 #
 
 
@@ -140,7 +139,7 @@ def blocked_modules(allowed: set[str]) -> list[str]:
 # Mengimpor Dengan Library Terbatas
 # --------------------------------------------------------------------------
 #
-# Environment development memasang semua extra, jadi test ini memakai Python
+# Environment development berisi semua extra, jadi test ini memakai Python
 # baru yang menolak import library di luar daftar. Penolakannya berupa
 # ModuleNotFoundError, seperti yang dilihat pengguna tanpa extra itu.
 #

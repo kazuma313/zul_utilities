@@ -2,7 +2,7 @@
 
 Test untuk agent, tool, dan endpoint bisa ditulis tanpa memanggil LLM asli. Test seperti ini berjalan dalam hitungan detik, tidak butuh API key, dan hasilnya selalu sama.
 
-**Sebelum mulai:** dependency pengembangan sudah terpasang dengan `pip install -r requirements-dev.txt`.
+**Sebelum mulai:** dependency pengembangan sudah di-install dengan `pip install -r requirements-dev.txt`.
 
 ## Menjalankan test
 

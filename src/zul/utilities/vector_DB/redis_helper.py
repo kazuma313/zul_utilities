@@ -219,7 +219,7 @@ class RedisVectorDB:
             if module_version is None:
                 print(
                     "Modul Search (RediSearch) tidak ditemukan. "
-                    "Instal Redis Stack atau load modul secara manual."
+                    "Install Redis Stack atau load modul secara manual."
                 )
             elif module_version >= MIN_SEARCH_MODULE_VERSION:
                 requirements["vector_search_supported"] = True

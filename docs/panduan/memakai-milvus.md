@@ -2,11 +2,11 @@
 
 `MilvusHelper` membuat collection [Milvus](https://milvus.io/) dari satu file config, lalu menyimpan, mencari, mengambil, dan menghapus data. Skema collection tercatat di file YAML atau JSON, dan helper membuatnya saat pertama kali dijalankan.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)) dan server Milvus yang bisa dihubungi dari komputermu.
+**Sebelum mulai:** kamu butuh Zul yang sudah ter-install ([Instalasi Zul](instalasi-zul.md)) dan server Milvus yang bisa dihubungi dari komputermu.
 
 ## Menyiapkan helper dan file config
 
-1. Pasang Zul dengan extra `milvus`:
+1. Install Zul dengan extra `milvus`:
 
     ```shell
     pip install "zul[milvus] @ git+https://github.com/kazuma313/zul_utilities.git"

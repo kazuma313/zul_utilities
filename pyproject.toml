@@ -1,6 +1,6 @@
 [project]
 name = "zul"
-version = "0.2.0"
+version = "0.0.1"
 description = "CLI tool untuk membuat template proyek dan utilities"
 readme = "README.md"
 authors = [
@@ -9,7 +9,7 @@ authors = [
 requires-python = ">=3.11"
 # Dependency utama hanya untuk perintah zul, config vector database, dan
 # helper kecil seperti FakeEmbeddingModel. Library yang besar, seperti
-# Docling yang ikut membawa torch, dipasang lewat extra di bawah.
+# Docling yang ikut membawa torch, di-install lewat extra di bawah.
 #
 # tests/test_dependencies.py memastikan modul inti tetap bisa diimpor
 # tanpa extra, dan setiap extra cukup untuk modul yang memakainya.
@@ -63,7 +63,7 @@ dev = [
     "ultralytics>=8.4.120",
 ]
 # Dependency situs dokumentasi. Workflow .github/workflows/docs.yml
-# memasang grup ini saja, dengan versi persis seperti di uv.lock.
+# hanya meng-install grup ini, dengan versi persis dari uv.lock.
 # Material tidak berjalan di MkDocs 2, jadi MkDocs tetap di 1.x.
 docs = [
     "mkdocs>=1.6,<2",

@@ -2,7 +2,7 @@
 
 Proyek baru dibuat dari template `hexa` dengan `zul build hexa`, lalu disiapkan sampai bisa dijalankan.
 
-**Sebelum mulai:** Zul sudah terpasang ([Memasang Zul](memasang-zul.md)) dan `zul --version` berjalan.
+**Sebelum mulai:** Zul sudah ter-install ([Instalasi Zul](instalasi-zul.md)) dan `zul --version` berjalan.
 
 ## Langkah-langkah
 
@@ -20,7 +20,7 @@ Proyek baru dibuat dari template `hexa` dengan `zul build hexa`, lalu disiapkan 
     cd NAMA_PROYEK
     ```
 
-3. Buat virtual environment, aktifkan, lalu pasang dependency:
+3. Buat virtual environment, aktifkan, lalu install dependency:
 
     ```shell
     python -m venv .venv
@@ -28,7 +28,7 @@ Proyek baru dibuat dari template `hexa` dengan `zul build hexa`, lalu disiapkan 
     pip install -r requirements-dev.txt
     ```
 
-    Di Windows, aktifkan environment dengan `.venv\Scripts\activate`. File `requirements-dev.txt` memasang isi `requirements.txt` ditambah `pytest` dan `httpx` untuk test.
+    Di Windows, aktifkan environment dengan `.venv\Scripts\activate`. File `requirements-dev.txt` meng-install isi `requirements.txt` ditambah `pytest` dan `httpx` untuk test.
 
 4. Salin contoh file environment:
 

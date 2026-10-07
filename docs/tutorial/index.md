@@ -18,7 +18,7 @@ Ketiga tutorial berurutan: setiap tutorial melanjutkan proyek dari tutorial sebe
 
 ## Yang kamu butuhkan
 
-- Python 3.11 atau lebih baru, dan Zul yang sudah terpasang. Cara memasangnya ada di [Memasang Zul](../panduan/memasang-zul.md).
+- Python 3.11 atau lebih baru, dan Zul yang sudah ter-install. Cara instalasinya ada di [Instalasi Zul](../panduan/instalasi-zul.md).
 - API key OpenAI, atau endpoint lain yang kompatibel dengan OpenAI.
 - Dokumentasi ini dibuka sebagai situs, bukan dibaca di GitHub. Tutorial memakai panel Playground di halamannya, dan panel itu hanya tampil di situs.
 

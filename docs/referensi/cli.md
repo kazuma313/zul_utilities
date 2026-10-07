@@ -1,6 +1,6 @@
 # Perintah zul
 
-`zul` adalah perintah baris yang terpasang bersama package Zul. Perintah ini membuat proyek baru dari template dan menulis file config awal untuk helper vector database.
+`zul` adalah perintah baris yang ter-install bersama package Zul. Perintah ini membuat proyek baru dari template dan menulis file config awal untuk helper vector database.
 
 Bentuk lengkap setiap perintah adalah sebagai berikut:
 
@@ -18,8 +18,8 @@ Tabel berikut merangkum perintah yang tersedia:
 
 | Perintah | Kegunaan |
 |---|---|
-| [`zul --version`](#opsi-global) | Mencetak versi Zul yang terpasang. |
-| [`zul version`](#zul-version) | Mencetak versi Zul yang terpasang. |
+| [`zul --version`](#opsi-global) | Mencetak versi Zul yang ter-install. |
+| [`zul version`](#zul-version) | Mencetak versi Zul yang ter-install. |
 | [`zul build hexa`](#zul-build-hexa) | Membuat proyek hexagonal baru dari template. |
 | [`zul install milvus-helper`](#zul-install-milvus-helper) | Menulis file config awal untuk `MilvusHelper`. |
 | [`zul install redis-helper`](#zul-install-redis-helper) | Menulis file config awal untuk `RedisHelper`. |
@@ -40,14 +40,14 @@ Opsi berikut berlaku pada perintah `zul` itu sendiri:
 Keluaran `zul --version` berbentuk seperti ini:
 
 ```text
-zul version 0.2.0
+zul version 0.0.1
 ```
 
-Versi dibaca dari metadata package yang terpasang. Jika metadata itu tidak ditemukan, yang tercetak adalah `zul version unknown`.
+Versi dibaca dari metadata package yang ter-install. Jika metadata itu tidak ditemukan, yang tercetak adalah `zul version unknown`.
 
 ## `zul version`
 
-Mencetak versi Zul yang terpasang. Keluarannya sama dengan `zul --version`, dan perintah ini tidak punya opsi selain `--help`.
+Mencetak versi Zul yang ter-install. Keluarannya sama dengan `zul --version`, dan perintah ini tidak punya opsi selain `--help`.
 
 ## `zul build hexa`
 
@@ -281,7 +281,7 @@ Mengganti teks `{{ project_name }}` di `README.md` milik `project_dir` dengan `p
 
 ### `get_version()`
 
-Mengembalikan versi Zul yang terpasang sebagai `str`, atau `"unknown"` jika metadata package tidak ditemukan. Fungsi ini ada di `zul.cli`.
+Mengembalikan versi Zul yang ter-install sebagai `str`, atau `"unknown"` jika metadata package tidak ditemukan. Fungsi ini ada di `zul.cli`.
 
 ### Konstanta
 
@@ -298,7 +298,7 @@ Mengembalikan versi Zul yang terpasang sebagai `str`, atau `"unknown"` jika meta
 
 ## Halaman terkait
 
-- [Panduan: Memasang Zul](../panduan/memasang-zul.md)
+- [Panduan: Instalasi Zul](../panduan/instalasi-zul.md)
 - [Panduan: Membuat proyek baru](../panduan/membuat-proyek.md)
 - [Panduan: Berkontribusi ke Zul](../panduan/berkontribusi.md), untuk menambah perintah atau template baru
 - [Referensi: Struktur proyek hexa](struktur-proyek.md)

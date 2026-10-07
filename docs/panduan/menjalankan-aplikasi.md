@@ -2,7 +2,7 @@
 
 REST API proyekmu berjalan dengan dua cara: untuk pengembangan, dan di dalam container.
 
-**Sebelum mulai:** dependency proyek sudah terpasang dan `.env` sudah berisi API key. Rinciannya ada di [Membuat proyek baru](membuat-proyek.md) dan [Mengatur model dan API key](mengatur-llm.md).
+**Sebelum mulai:** dependency proyek sudah ter-install dan `.env` sudah berisi API key. Rinciannya ada di [Membuat proyek baru](membuat-proyek.md) dan [Mengatur model dan API key](mengatur-llm.md).
 
 ## Menjalankan server pengembangan
 

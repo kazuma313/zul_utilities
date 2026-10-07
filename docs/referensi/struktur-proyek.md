@@ -33,7 +33,7 @@ my-app/
 | Path | Fungsi |
 |---|---|
 | `data/` | Tempat dataset, data awal, dan fixture. Kosong di template. |
-| `dockerfile/Dockerfile` | Membangun image aplikasi dari `python:3.11-slim`. Image memasang `requirements.txt`, menyalin `src/`, dan menjalankan `uvicorn` di port 8000. |
+| `dockerfile/Dockerfile` | Membangun image aplikasi dari `python:3.11-slim`. Image meng-install `requirements.txt`, menyalin `src/`, dan menjalankan `uvicorn` di port 8000. |
 | `logs/` | Tempat file log. `app.log` dibuat saat aplikasi mulai. |
 | `notebooks/` | Tempat notebook eksperimen dan prototipe. Kosong di template. |
 | `src/` | Seluruh kode aplikasi. Rinciannya ada di [Folder src](#folder-src). |

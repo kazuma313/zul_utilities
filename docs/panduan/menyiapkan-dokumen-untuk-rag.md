@@ -4,7 +4,7 @@ Skill `contextual_retrieval` memotong dokumen menjadi chunk dan memberi setiap c
 
 Sebuah chunk sering tidak bisa dipahami sendirian. Kalimat "Kenapa sih orang-orang masih mengharapkan harganya akan turun lagi?" tidak menyebut siapa yang bicara, di acara apa, dan tentang harga apa. Contextual retrieval menaruh keterangan itu di depan chunk sebelum chunk di-embed dan diindeks, sehingga pertanyaan seperti "apa kata KJo soal harga Bitcoin" bisa menemukannya.
 
-**Sebelum mulai:** `uv` terpasang, kamu berada di root repository Zul, dan Ollama berjalan dengan model yang disarankan di bagian [Memilih model](#memilih-model). Skill ini ada di `research/agentic/algorithms/skills/contextual_retrieval/` dan tidak membutuhkan paket tambahan.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan Ollama berjalan dengan model yang disarankan di bagian [Memilih model](#memilih-model). Skill ini ada di `research/agentic/algorithms/skills/contextual_retrieval/` dan tidak membutuhkan paket tambahan.
 
 ## Cara skill ini menjaga hasilnya tetap bisa dipercaya
 
