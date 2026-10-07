@@ -125,6 +125,47 @@ body[data-md-color-scheme][data-md-color-primary] {
   .md-sidebar--primary {
     width: 13.2rem;
   }
+
+  /*
+   * Panel kiri (navigasi dokumentasi dan panel penulis di tulisan blog)
+   * menempel dari bawah header sampai bawah layar. Bawaan Material
+   * memendekkannya saat footer terlihat, jadi isinya terpotong
+   * di layar pendek. Footer kini dimulai di kanan panel.
+   *
+   * align-self ikut menentukan ukuran elemen fixed di dalam flexbox. Dengan
+   * flex-start bawaan Material, tingginya mengikuti isi dan top serta
+   * bottom diabaikan; dengan stretch, kotaknya mengisi dari header
+   * sampai bawah layar.
+   */
+  :is(.md-sidebar--primary:not([hidden]), .md-sidebar--post) {
+    position: fixed;
+    bottom: 0;
+    left: max(0px, calc((100% - 88rem) / 2));
+    height: auto;
+    align-self: stretch;
+    z-index: 1;
+    background-color: var(--md-default-bg-color);
+  }
+
+  :is(.md-sidebar--primary:not([hidden]), .md-sidebar--post) .md-sidebar__scrollwrap {
+    height: 100% !important;
+  }
+
+  .md-sidebar--primary:not([hidden]) ~ .md-content {
+    margin-left: 13.2rem;
+  }
+
+  .md-content--post {
+    padding-left: 12.1rem;
+  }
+
+  body:has(.md-sidebar--primary:not([hidden])) :is(.md-footer__inner, .md-footer-meta__inner) {
+    padding-left: 13.4rem;
+  }
+
+  body:has(.md-sidebar--post) :is(.md-footer__inner, .md-footer-meta__inner) {
+    padding-left: 12.3rem;
+  }
 }
 
 .md-typeset > :is(p, ul, dl, blockquote, h1, h2, h3, h4) {
@@ -917,11 +958,20 @@ body[data-md-color-primary] .md-tabs {
   border-top: 1px solid var(--zul-border);
 }
 
+/*
+ * Footer dibuat pendek supaya halaman tidak berakhir dengan blok kosong
+ * yang tinggi. Tombol panah tetap berukuran bawaan: lebar maksimum judul
+ * dihitung Material dari ukuran tombol itu, jadi judulnya tidak terpotong.
+ */
 .md-footer__link {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  margin-top: 0.9rem;
+  margin-bottom: 0.2rem;
   opacity: 1;
   transition: color 120ms ease;
+}
+
+.md-footer__title {
+  margin-bottom: 0.4rem;
 }
 
 .md-footer__link:is(:hover, :focus) {
@@ -948,6 +998,15 @@ body[data-md-color-primary] .md-tabs {
 .md-footer-meta .md-copyright,
 html .md-footer-meta.md-typeset a {
   color: var(--zul-muted);
+}
+
+/* Lisensi dan keterangan pembuat situs dalam satu baris. */
+.md-copyright {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.3rem;
+  padding: 0.3rem 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
