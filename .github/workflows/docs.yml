@@ -18,6 +18,8 @@ on:
     branches: [main]
     paths:
       - "docs/**"
+      - "overrides/**"
+      - "scripts/docs_hooks.py"
       - "mkdocs.yml"
       - "pyproject.toml"
       - "uv.lock"
@@ -26,6 +28,8 @@ on:
   pull_request:
     paths:
       - "docs/**"
+      - "overrides/**"
+      - "scripts/docs_hooks.py"
       - "mkdocs.yml"
       - "pyproject.toml"
       - "uv.lock"

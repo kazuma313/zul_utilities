@@ -108,7 +108,7 @@ Order ORD-1042 is shipped
 Untuk melihat agent memakai tool itu, kirim pesan lewat panel di bawah ini, lalu lihat jejaknya:
 
 <div class="zul-playground" data-feature="ReAct" data-examples="What is the status of order ORD-1042?">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+Panel Playground hanya tampil di situs dokumentasi, <a href="https://zulkit.my.id/">zulkit.my.id</a>.
 </div>
 
 ## Halaman terkait

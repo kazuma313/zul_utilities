@@ -75,7 +75,7 @@ SubagentSpec(
 Kirim permintaan yang termasuk bidang subagent barumu lewat panel berikut, lalu lihat jejaknya. Langkah subagent tampil menjorok di bawah permintaan supervisor:
 
 <div class="zul-playground" data-feature="Subagents" data-examples="What is the status of order ORD-1042?">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+Panel Playground hanya tampil di situs dokumentasi, <a href="https://zulkit.my.id/">zulkit.my.id</a>.
 </div>
 
 Client sungguhan memanggil `POST /subagents/chat`, dengan bentuk request dan respons yang sama seperti `POST /chat`:

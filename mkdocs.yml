@@ -47,6 +47,9 @@ validation:
 
 theme:
   name: material
+  # Template yang menimpa bawaan Material. Saat ini hanya header, supaya
+  # versi Zul tampil di samping nama situs.
+  custom_dir: overrides
   language: id
   logo: assets/logo.jpg
   favicon: assets/logo.jpg
@@ -94,6 +97,10 @@ extra_css:
 
 extra_javascript:
   - assets/javascripts/playground.js
+
+# Hook ini membaca versi Zul dari pyproject.toml untuk header situs.
+hooks:
+  - scripts/docs_hooks.py
 
 # Daftar plugin menggantikan bawaan, jadi search harus ditulis ulang.
 # Blog membaca tulisan di docs/blog/posts/. Setiap tulisan wajib punya

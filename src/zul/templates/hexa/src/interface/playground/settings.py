@@ -24,12 +24,17 @@ load_dotenv()
 # Nilai Bawaan
 # --------------------------------------------------------------------------
 #
-# Alamat bawaan ialah alamat situs dokumentasi Zul ketika dijalankan di
-# komputermu dengan perintah mkdocs serve. Browser menganggap alamat
-# 127.0.0.1 dan localhost berbeda, sehingga keduanya didaftarkan.
+# Alamat bawaan ialah situs dokumentasi Zul yang sudah terbit di
+# zulkit.my.id, dan situs yang dijalankan di komputermu dengan
+# mkdocs serve. Browser menganggap 127.0.0.1 dan localhost
+# sebagai alamat berbeda, jadi keduanya didaftarkan.
 #
 
-DEFAULT_ORIGINS = ("http://127.0.0.1:8001", "http://localhost:8001")
+DEFAULT_ORIGINS = (
+    "https://zulkit.my.id",
+    "http://127.0.0.1:8001",
+    "http://localhost:8001",
+)
 
 TRUE_VALUES = ("1", "true", "yes", "on")
 

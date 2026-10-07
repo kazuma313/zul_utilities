@@ -541,6 +541,13 @@ def test_documentation_site_may_call_the_playground(client):
     assert response.headers["access-control-allow-origin"] == DOCS_ORIGIN
 
 
+def test_published_documentation_site_may_call_the_playground(client):
+    origin = "https://zulkit.my.id"
+    response = client.get("/playground/features", headers={"Origin": origin})
+
+    assert response.headers["access-control-allow-origin"] == origin
+
+
 def test_other_sites_may_not_call_the_playground(client):
     response = client.get("/playground/features", headers={"Origin": OTHER_ORIGIN})
 

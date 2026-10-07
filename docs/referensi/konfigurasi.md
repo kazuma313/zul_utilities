@@ -8,7 +8,7 @@ Proyek hasil `zul build hexa` membaca lima environment variable: tiga untuk chat
 | [`LLM_MODEL`](#llm_model) | Tidak | `gpt-4o-mini` | `get_llm_model()` |
 | [`LLM_BASE_URL`](#llm_base_url) | Tidak | Endpoint OpenAI | `get_llm_model()` |
 | [`PLAYGROUND_ENABLED`](#playground_enabled) | Tidak | Mati | `playground_enabled()` |
-| [`PLAYGROUND_ORIGINS`](#playground_origins) | Tidak | `http://127.0.0.1:8001` dan `http://localhost:8001` | `playground_origins()` |
+| [`PLAYGROUND_ORIGINS`](#playground_origins) | Tidak | `https://zulkit.my.id`, `http://127.0.0.1:8001`, dan `http://localhost:8001` | `playground_origins()` |
 
 `get_llm_model()` ada di `src/infrastructure/AI/llm/openai.py`. `playground_enabled()` dan `playground_origins()` ada di `src/interface/playground/settings.py`.
 
@@ -101,10 +101,10 @@ Daftar alamat halaman yang boleh memanggil API dari browser, dipisah koma. Varia
 | Sifat | Nilai |
 |---|---|
 | Wajib | Tidak |
-| Default | `http://127.0.0.1:8001,http://localhost:8001` |
+| Default | `https://zulkit.my.id,http://127.0.0.1:8001,http://localhost:8001` |
 | Format | Satu atau lebih alamat, dipisah koma |
 
-Nilai bawaannya adalah alamat situs dokumentasi Zul saat dijalankan di komputermu. Browser menganggap `127.0.0.1` dan `localhost` sebagai alamat yang berbeda, sehingga keduanya didaftarkan.
+Nilai bawaannya adalah alamat situs dokumentasi Zul: yang sudah terbit di `zulkit.my.id`, dan yang dijalankan di komputermu dengan `mkdocs serve`. Browser menganggap `127.0.0.1` dan `localhost` sebagai alamat yang berbeda, sehingga keduanya didaftarkan.
 
 Spasi di sekitar setiap alamat dan garis miring di akhir alamat dibuang. Entri kosong dilewati. Jika tidak ada alamat yang tersisa, nilai bawaan dipakai.
 
@@ -134,7 +134,7 @@ LLM_MODEL=gpt-4o-mini
 # Ia menampilkan argumen dan hasil setiap tool, jadi matikan di produksi.
 PLAYGROUND_ENABLED=true
 # Alamat halaman yang boleh memanggil API ini dari browser, dipisah koma.
-# PLAYGROUND_ORIGINS=http://127.0.0.1:8001,http://localhost:8001
+# PLAYGROUND_ORIGINS=https://zulkit.my.id,http://127.0.0.1:8001,http://localhost:8001
 ```
 
 File ini mengisi `PLAYGROUND_ENABLED=true`. Jadi `.env` yang disalin darinya menyalakan playground, walaupun nilai bawaan variabel itu mati. File `.env` sudah tercantum di `.gitignore` template.

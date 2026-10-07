@@ -170,7 +170,7 @@ Setiap item `events`:
 
 ## Akses dari browser
 
-Aplikasi hanya mengizinkan request browser dari alamat yang terdaftar di `PLAYGROUND_ORIGINS`. Bawaannya `http://127.0.0.1:8001` dan `http://localhost:8001`. Method yang diizinkan adalah `GET` dan `POST`, dengan header `Content-Type`.
+Aplikasi hanya mengizinkan request browser dari alamat yang terdaftar di `PLAYGROUND_ORIGINS`. Bawaannya `https://zulkit.my.id`, `http://127.0.0.1:8001`, dan `http://localhost:8001`. Method yang diizinkan adalah `GET` dan `POST`, dengan header `Content-Type`.
 
 Aturan ini berlaku untuk seluruh aplikasi selama playground menyala, bukan hanya untuk path `/playground/*`. Request yang tidak berasal dari browser, misalnya curl, tidak terpengaruh.
 

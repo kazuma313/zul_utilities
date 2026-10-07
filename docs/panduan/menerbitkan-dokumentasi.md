@@ -26,7 +26,7 @@ Repository ini membawa workflow di `.github/workflows/docs.yml`. Workflow itu me
 
 4. Buka tab **Actions** di repository. Tunggu workflow **Dokumentasi** selesai. Alamat situsnya tampil di langkah `deploy`.
 
-Setelah itu, setiap push ke `main` yang mengubah `docs/`, `mkdocs.yml`, `pyproject.toml`, atau `uv.lock` menerbitkan ulang situsnya. Pull request yang mengubah file-file itu hanya dibangun, tidak diterbitkan, jadi kesalahannya ketahuan sebelum digabung. Untuk menerbitkan tanpa push baru, buka workflow **Dokumentasi** di tab **Actions**, lalu klik **Run workflow**.
+Setelah itu, setiap push ke `main` yang mengubah `docs/`, `overrides/`, `mkdocs.yml`, `pyproject.toml`, atau `uv.lock` menerbitkan ulang situsnya. Versi Zul di header situs dibaca dari `pyproject.toml`, jadi situs ikut terbit ulang saat versinya naik. Pull request yang mengubah file-file itu hanya dibangun, tidak diterbitkan, jadi kesalahannya ketahuan sebelum digabung. Untuk menerbitkan tanpa push baru, buka workflow **Dokumentasi** di tab **Actions**, lalu klik **Run workflow**.
 
 ## Memakai domain sendiri
 

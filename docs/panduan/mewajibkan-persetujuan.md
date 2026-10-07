@@ -29,7 +29,7 @@ Jika himpunan itu berisi nama yang bukan salah satu isi `TOOLS`, perakit agent m
 Minta agent menjalankan tool itu lewat panel berikut. Agent harus berhenti dan menampilkan form keputusan:
 
 <div class="zul-playground" data-feature="Human-in-the-loop">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+Panel Playground hanya tampil di situs dokumentasi, <a href="https://zulkit.my.id/">zulkit.my.id</a>.
 </div>
 
 ## Mengirim keputusan lewat API

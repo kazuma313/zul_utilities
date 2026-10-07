@@ -101,7 +101,7 @@ Server menjawab:
 Panel di bawah ini memakai server yang baru kamu jalankan. Tombol status di bilah panel harus bertuliskan **Terhubung**. Jika tertulis **Simulasi**, panel belum terhubung ke proyekmu dan hanya menampilkan contoh jawaban. Klik tombol itu, lalu klik **Sambungkan**.
 
 <div class="zul-playground" data-feature="ReAct">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+Panel Playground hanya tampil di situs dokumentasi, <a href="https://zulkit.my.id/">zulkit.my.id</a>.
 </div>
 
 Klik contoh pesan **What is the weather in sf?**. Agent menjawab dengan keadaan cuaca di San Francisco. Kalimat persisnya ditentukan model, jadi bisa berbeda di tiap percobaan.

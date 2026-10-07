@@ -2,7 +2,7 @@
 
 Panel Playground di dokumentasi ini menjalankan agent yang sedang kamu buat, sebelum endpoint dan test-nya selesai. Panel menampilkan setiap langkah agent: tool yang diminta, argumennya, hasilnya, dan aksi yang menunggu keputusan.
 
-**Sebelum mulai:** kamu punya proyek hasil `zul build hexa`, dan dokumentasi ini dibuka sebagai situs dengan `uv run mkdocs serve` di repository Zul.
+**Sebelum mulai:** kamu punya proyek hasil `zul build hexa`.
 
 ## Menyalakan playground
 
@@ -99,7 +99,7 @@ print(turn.answer)
 
 ## Mengizinkan alamat dokumentasi lain
 
-Browser hanya boleh memanggil API-mu dari alamat yang diizinkan. Bawaannya adalah alamat `mkdocs serve`: `http://127.0.0.1:8001` dan `http://localhost:8001`. Jika dokumentasimu dibuka dari alamat lain, daftarkan alamat itu di `.env`, dipisah koma:
+Browser hanya boleh memanggil API-mu dari alamat yang diizinkan. Bawaannya adalah situs ini, `https://zulkit.my.id`, dan alamat `mkdocs serve`: `http://127.0.0.1:8001` dan `http://localhost:8001`. Jika dokumentasimu dibuka dari alamat lain, daftarkan alamat itu di `.env`, dipisah koma:
 
 ```ini title=".env"
 PLAYGROUND_ORIGINS=http://127.0.0.1:8001,https://ALAMAT_DOKUMENTASI

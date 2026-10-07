@@ -75,7 +75,7 @@ Node kemudian mengembalikan perubahan untuk field itu, misalnya `{"documents": h
 Kirim pesan yang memicu tool lewat panel di bawah ini, lalu lihat jejaknya. Node baru muncul di antara `llm_call` dan `tool_node`, dengan keterangan "meneruskan tanpa perubahan":
 
 <div class="zul-playground" data-feature="ReAct">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+Panel Playground hanya tampil di situs dokumentasi, <a href="https://zulkit.my.id/">zulkit.my.id</a>.
 </div>
 
 Terminal server juga menampilkan baris log dari node itu, misalnya `tool=get_weather args={'location': 'sf'}`.

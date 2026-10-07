@@ -62,7 +62,7 @@ Dua prompt bawaan memuat aturan yang dibutuhkan agent-nya. Pertahankan aturan it
 Kirim pesan lewat panel di bawah ini dan perhatikan apakah gaya jawabannya mengikuti prompt barumu:
 
 <div class="zul-playground" data-feature="ReAct">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+Panel Playground hanya tampil di situs dokumentasi, <a href="https://zulkit.my.id/">zulkit.my.id</a>.
 </div>
 
 ## Halaman terkait

@@ -31,7 +31,7 @@ flowchart TB
     F --> G["Situs terbit di zulkit.my.id"]
 ```
 
-Workflow hanya berjalan jika push atau pull request mengubah salah satu path berikut: `docs/**`, `mkdocs.yml`, `pyproject.toml`, `uv.lock`, `.python-version`, dan `.github/workflows/docs.yml`. Perubahan yang hanya menyentuh `src/` tidak menerbitkan ulang situs.
+Workflow hanya berjalan jika push atau pull request mengubah salah satu path berikut: `docs/**`, `overrides/**`, `scripts/docs_hooks.py`, `mkdocs.yml`, `pyproject.toml`, `uv.lock`, `.python-version`, dan `.github/workflows/docs.yml`. Perubahan yang hanya menyentuh `src/` tidak menerbitkan ulang situs.
 
 ### Job build
 
@@ -59,7 +59,9 @@ Penerbitan berjalan satu per satu dalam grup concurrency `pages` dan tidak perna
 | `.github/workflows/docs.yml` | Job build dan deploy. Setiap action dikunci ke commit SHA, dan versinya tertulis di komentar. |
 | `.github/dependabot.yml` | Dependabot membuka satu pull request sebulan sekali jika ada versi action baru, dengan awalan commit `ci`. |
 | `mkdocs.yml` | Pengaturan situs: `site_url`, menu, tema, plugin `search` dan `blog`, file yang dikecualikan, dan tombol sunting (`edit_uri` dan `content.action.edit`). |
-| `pyproject.toml` | Grup dependency `docs`: `mkdocs`, `mkdocs-material`, dan `markdown-callouts`. |
+| `pyproject.toml` | Grup dependency `docs`: `mkdocs`, `mkdocs-material`, dan `markdown-callouts`. Versi Zul di header situs juga dibaca dari sini. |
+| `overrides/partials/header.html` | Header Material dengan tambahan versi Zul di samping nama situs. |
+| `scripts/docs_hooks.py` | Hook MkDocs yang membaca versi Zul dari `pyproject.toml`. |
 | `uv.lock` | Versi persis setiap paket, sehingga build di GitHub dan di komputer saya memakai versi yang sama. |
 | `.python-version` | Versi Python, yaitu 3.11. |
 | `docs/` | Isi situs, termasuk CSS dan JavaScript di `docs/assets/`. |

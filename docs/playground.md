@@ -11,7 +11,7 @@ hide:
 Panel ini mengirim pesan ke agent dan menampilkan setiap langkah yang diambilnya sebelum menjawab. Jejak langkahnya tampil di sebelah kanan.
 
 <div class="zul-playground" data-layout="wide">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+Panel Playground hanya tampil di situs dokumentasi, <a href="https://zulkit.my.id/">zulkit.my.id</a>.
 </div>
 
 <div class="zul-columns" markdown>

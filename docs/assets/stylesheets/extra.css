@@ -205,6 +205,21 @@ body[data-md-color-primary] .md-tabs {
   letter-spacing: -0.01em;
 }
 
+/* Versi Zul di samping nama situs, dari pyproject.toml lewat hook. */
+.zul-version {
+  align-self: center;
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.4rem;
+  font-family: var(--md-code-font-family);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.5;
+  color: var(--zul-muted);
+  border: 1px solid var(--zul-border);
+  border-radius: 999px;
+}
+
 .md-tabs {
   border-bottom: 1px solid var(--zul-border);
 }

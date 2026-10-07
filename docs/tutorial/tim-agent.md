@@ -11,7 +11,7 @@ Supervisor di proyekmu punya dua subagent: `weather_agent` untuk cuaca dan `emai
 Panel di bawah ini memakai supervisor itu. Tombol status di bilah panel harus bertuliskan **Terhubung**. Jika tertulis **Simulasi**, panel belum terhubung ke proyekmu dan hanya menampilkan contoh jawaban. Klik tombol itu, lalu klik **Sambungkan**.
 
 <div class="zul-playground" data-feature="Subagents">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+Panel Playground hanya tampil di situs dokumentasi, <a href="https://zulkit.my.id/">zulkit.my.id</a>.
 </div>
 
 Klik contoh pesan **Cek cuaca di sf, lalu email hasilnya ke alice@example.com**.
