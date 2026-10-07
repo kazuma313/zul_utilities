@@ -1,8 +1,16 @@
 # Membangun situs dokumentasi dan menerbitkannya ke GitHub Pages.
 #
+# Push ke main yang mengubah dokumentasi membangun lalu menerbitkan situs.
+# Pull request hanya membangun, jadi kesalahan ketahuan sebelum digabung.
+#
+# Supaya hasil build selalu sama dengan build di komputermu:
+# - setiap action dikunci ke commit SHA (versinya tertulis di komentar),
+# - versi uv, Python, dan runner ditulis persis,
+# - paket Python dipasang persis dari uv.lock (grup "docs" di pyproject).
+# Dependabot (.github/dependabot.yml) membuka PR saat ada versi action baru.
+#
 # Sebelum dipakai pertama kali, buka Settings > Pages di repository dan
-# pilih "GitHub Actions" sebagai Source. Setelah itu, setiap push ke main
-# yang mengubah dokumentasi memicu workflow ini.
+# pilih "GitHub Actions" sebagai Source.
 name: Dokumentasi
 
 on:
@@ -11,49 +19,91 @@ on:
     paths:
       - "docs/**"
       - "mkdocs.yml"
-      - "requirements-docs.txt"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".python-version"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".python-version"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Hanya satu penerbitan yang berjalan; push yang lebih baru menggantikannya.
+# Penerbitan berjalan satu per satu dan tidak pernah dibatalkan di tengah
+# jalan; run yang menunggu digantikan oleh run terbaru. Build untuk pull
+# request boleh dibatalkan begitu ada commit baru di pull request itu.
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: ${{ github.event_name == 'pull_request' && format('docs-{0}', github.ref) || 'pages' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.3"
           python-version: "3.11"
-          cache: pip
-          cache-dependency-path: requirements-docs.txt
+          enable-cache: true
+          cache-dependency-glob: uv.lock
 
+      # --frozen memakai uv.lock apa adanya, tanpa menyusun ulang versi.
       - name: Pasang dependency dokumentasi
-        run: pip install -r requirements-docs.txt
+        run: uv sync --frozen --only-group docs
 
-      # --strict menggagalkan build jika ada tautan atau anchor yang rusak.
+      # --strict menggagalkan build jika ada tautan atau anchor yang rusak,
+      # atau tulisan blog tanpa tanggal.
       - name: Bangun situs
-        run: mkdocs build --strict
+        run: uv run --no-sync mkdocs build --strict
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Periksa hasil build
+        run: |
+          for page in index.html 404.html blog/index.html; do
+            test -s "site/$page" || { echo "::error::site/$page tidak ada"; exit 1; }
+          done
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: site
+          # Artifact disimpan seminggu supaya job deploy masih bisa
+          # dijalankan ulang tanpa membangun ulang situsnya.
+          retention-days: 7
 
   deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+      # Memastikan situs benar-benar bisa dibuka. CDN GitHub Pages bisa
+      # perlu beberapa detik, jadi permintaan diulang sampai 5 kali.
+      - name: Periksa situs yang terbit
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          for path in "" "blog/"; do
+            curl --fail --silent --show-error --location --output /dev/null \
+              --retry 5 --retry-delay 10 --retry-all-errors "${PAGE_URL}${path}"
+            echo "OK ${PAGE_URL}${path}"
+          done

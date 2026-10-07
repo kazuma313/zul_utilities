@@ -1,0 +1,14 @@
+# Dependabot membuka satu pull request sebulan sekali jika ada versi baru
+# untuk action di .github/workflows. Pull request itu memicu build
+# dokumentasi, jadi versi baru diuji sebelum kamu menggabungkannya.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci

@@ -6484,6 +6484,11 @@ dev = [
     { name = "ultralytics" },
     { name = "zul", extra = ["all"] },
 ]
+docs = [
+    { name = "markdown-callouts" },
+    { name = "mkdocs" },
+    { name = "mkdocs-material" },
+]
 
 [package.metadata]
 requires-dist = [
@@ -6524,7 +6529,7 @@ dev = [
     { name = "langchain-ollama", specifier = ">=1.0.0" },
     { name = "markdown-callouts", specifier = ">=0.4" },
     { name = "mkdocs", specifier = ">=1.6,<2" },
-    { name = "mkdocs-material", specifier = ">=9.5" },
+    { name = "mkdocs-material", specifier = ">=9.7,<10" },
     { name = "mypy", specifier = ">=1.0.0" },
     { name = "nltk", specifier = ">=3.9.2" },
     { name = "ollama", specifier = ">=0.6.0" },
@@ -6536,4 +6541,9 @@ dev = [
     { name = "torchvision", index = "https://download.pytorch.org/whl/cu130" },
     { name = "ultralytics", specifier = ">=8.4.120" },
     { name = "zul", extras = ["all"] },
+]
+docs = [
+    { name = "markdown-callouts", specifier = ">=0.4" },
+    { name = "mkdocs", specifier = ">=1.6,<2" },
+    { name = "mkdocs-material", specifier = ">=9.7,<10" },
 ]

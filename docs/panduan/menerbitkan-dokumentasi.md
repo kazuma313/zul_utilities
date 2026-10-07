@@ -8,7 +8,7 @@ Situs dokumentasi dan aplikasi adalah dua hal yang diterbitkan terpisah. Situs d
 
 ## Menerbitkan situs ke GitHub Pages
 
-Repository ini membawa workflow di `.github/workflows/docs.yml`. Workflow itu membangun situs dengan `mkdocs build --strict`, lalu menerbitkannya.
+Repository ini membawa workflow di `.github/workflows/docs.yml`. Workflow itu memasang tool dokumentasi dengan versi persis dari `uv.lock`, membangun situs dengan `mkdocs build --strict`, menerbitkannya, lalu membuka situs yang terbit untuk memastikan bisa diakses.
 
 1. Di halaman repository, buka **Settings**, lalu **Pages**. Pada **Source**, pilih **GitHub Actions**.
 
@@ -26,17 +26,46 @@ Repository ini membawa workflow di `.github/workflows/docs.yml`. Workflow itu me
 
 4. Buka tab **Actions** di repository. Tunggu workflow **Dokumentasi** selesai. Alamat situsnya tampil di langkah `deploy`.
 
-Setelah itu, setiap push ke `main` yang mengubah folder `docs/` atau `mkdocs.yml` menerbitkan ulang situsnya. Untuk menerbitkan tanpa push baru, buka workflow **Dokumentasi** di tab **Actions**, lalu klik **Run workflow**.
+Setelah itu, setiap push ke `main` yang mengubah `docs/`, `mkdocs.yml`, `pyproject.toml`, atau `uv.lock` menerbitkan ulang situsnya. Pull request yang mengubah file-file itu hanya dibangun, tidak diterbitkan, jadi kesalahannya ketahuan sebelum digabung. Untuk menerbitkan tanpa push baru, buka workflow **Dokumentasi** di tab **Actions**, lalu klik **Run workflow**.
 
 ## Memeriksa situs sebelum diterbitkan
 
-Workflow menolak menerbitkan situs yang punya tautan rusak. Jalankan pemeriksaan yang sama di komputermu sebelum push:
+Workflow menghentikan penerbitan jika salah satu pemeriksaan berikut gagal:
+
+| Pemeriksaan | Gagal jika |
+|---|---|
+| `mkdocs build --strict` | Ada tautan atau anchor yang rusak, atau tulisan blog tanpa tanggal atau tanpa ringkasan. |
+| Hasil build | `index.html`, `404.html`, atau `blog/index.html` tidak ada di folder `site/`. |
+| Situs yang terbit | Halaman utama atau halaman blog tidak bisa dibuka setelah lima kali percobaan. |
+
+Jalankan pemeriksaan build yang sama di komputermu sebelum push:
 
 ```shell
 uv run mkdocs build --strict
 ```
 
 Hasilnya ada di folder `site/`. Folder itu berisi file statis, jadi bisa juga diunggah ke layanan hosting statis lain.
+
+## Memperbarui versi tool dokumentasi
+
+Versi MkDocs, tema Material, dan plugin-nya dikunci di `uv.lock`, di grup `docs` pada `pyproject.toml`. Karena itu situs yang dibangun workflow sama dengan yang kamu lihat di komputermu.
+
+1. Perbarui satu paket, misalnya tema Material:
+
+    ```shell
+    uv lock --upgrade-package mkdocs-material
+    ```
+
+2. Bangun situsnya dan periksa tampilannya:
+
+    ```shell
+    uv run mkdocs build --strict
+    uv run mkdocs serve
+    ```
+
+3. Commit `uv.lock`, lalu push. Workflow memakai versi barunya.
+
+Versi action GitHub di workflow diperbarui oleh Dependabot. Sebulan sekali Dependabot membuka satu pull request jika ada versi baru, dan build dokumentasi berjalan di pull request itu. Gabungkan pull request-nya jika build-nya lolos.
 
 ## Playground di situs yang sudah terbit
 

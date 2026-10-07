@@ -50,15 +50,21 @@ dev = [
     "pytest-cov>=4.0.0",
     "fastapi>=0.115",
     "httpx>=0.27",
-    "mkdocs>=1.6,<2",
-    "mkdocs-material>=9.5",
-    "markdown-callouts>=0.4",
+    { include-group = "docs" },
     "ruff>=0.1.0",
     "streamlit>=1.51.0",
     "nltk>=3.9.2",
     "torch",
     "torchvision",
     "ultralytics>=8.4.120",
+]
+# Dependency situs dokumentasi. Workflow .github/workflows/docs.yml
+# memasang grup ini saja, dengan versi persis seperti di uv.lock.
+# Material tidak berjalan di MkDocs 2, jadi MkDocs tetap di 1.x.
+docs = [
+    "mkdocs>=1.6,<2",
+    "mkdocs-material>=9.7,<10",
+    "markdown-callouts>=0.4",
 ]
 
 [tool.pytest.ini_options]
