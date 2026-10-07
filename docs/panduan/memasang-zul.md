@@ -4,6 +4,9 @@ Zul terpasang sebagai perintah `zul` di terminal dan sebagai library Python. Set
 
 **Sebelum mulai:** kamu butuh Python 3.11 atau lebih baru (periksa dengan `python --version`), Git, dan [uv](https://github.com/astral-sh/uv) atau `pip`.
 
+> [!NOTE]
+> Contoh perintah di dokumentasi ini memakai sintaks shell Unix. Di Windows, perintah `zul`, `uv`, `pip`, dan `pytest` sama persis. Yang berbeda hanya perintah sistem seperti `cp`, dan perbedaannya disebut di tempatnya.
+
 ## Memasang perintah zul
 
 Zul belum diterbitkan di PyPI, jadi instalasinya memakai alamat repository.

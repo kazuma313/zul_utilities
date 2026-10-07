@@ -10,18 +10,16 @@ hide:
 
 <div class="zul-hero__text" markdown>
 
-# Bangun proyek AI yang rapi sejak perintah pertama
+# Proyek AI yang rapi dari satu perintah
 
-Zul membuat kerangka proyek AI berarsitektur hexagonal dengan satu perintah: agent LangGraph, REST API, memory, dan test sudah di dalamnya. Zul juga membawa helper untuk vector database, OCR, dan pemanggilan LLM.
+Zul membuat kerangka proyek AI berarsitektur hexagonal: agent LangGraph, REST API, memory, dan test sudah di dalamnya. Zul juga membawa helper untuk vector database, OCR, dan pemanggilan LLM.
 
 <div class="zul-actions" markdown>
 
 [Tutorial pertama](tutorial/agent-pertama.md)
-[Playground](playground.md)
+[Panduan](panduan/index.md)
 
 </div>
-
-Proyek baru dibuat dengan satu perintah:
 
 ```shell
 zul build hexa --name my-agent
@@ -29,28 +27,73 @@ zul build hexa --name my-agent
 
 </div>
 
-<div class="zul-hero__demo" markdown>
-
-<div class="zul-playground" data-feature="Human-in-the-loop" data-simulate data-autoplay="Kirim email ke alice@example.com: rapat besok jam 10">
-Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
+<div class="zul-hero__art">
+<svg class="zul-stack" viewBox="0 0 470 466" role="img" aria-labelledby="zul-stack-title zul-stack-desc">
+  <title id="zul-stack-title">Empat lapisan proyek hasil zul build hexa</title>
+  <desc id="zul-stack-desc">Lapisan interface, application, domain, dan infrastructure bertumpuk. Request POST /chat masuk lewat interface, dan infrastructure memanggil LLM.</desc>
+  <path class="zs-wire" id="zs-wire-in" d="M 102 125 H 112 Q 124 125 134 131 L 216.0 185.2"/>
+  <path class="zs-wire" id="zs-wire-out" d="M 380.5 343.8 L 430 418 V 432"/>
+  <g class="zs-pill">
+    <rect x="6" y="112" width="96" height="26" rx="13"/>
+    <text x="54" y="129">POST /chat</text>
+  </g>
+  <g class="zs-pill">
+    <rect x="400" y="432" width="60" height="26" rx="13"/>
+    <text x="430" y="449">LLM</text>
+  </g>
+  <circle class="zs-dot" r="4.5">
+    <animateMotion dur="2.6s" repeatCount="indefinite" begin="1.2s" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#zs-wire-in"/></animateMotion>
+  </circle>
+  <circle class="zs-dot zs-dot--out" r="4.5">
+    <animateMotion dur="2.6s" repeatCount="indefinite" begin="2.5s" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#zs-wire-out"/></animateMotion>
+  </circle>
+  <g class="zs-drop" style="--zs-delay:0.00s">
+    <g class="zs-float zs-float--3">
+      <g class="zs-layer zs-layer--infrastructure">
+        <polygon class="zs-left" points="125.5,321.0 290.0,416.0 290.0,376.0 125.5,281.0"/>
+        <polygon class="zs-right" points="454.5,321.0 290.0,416.0 290.0,376.0 454.5,281.0"/>
+        <polygon class="zs-top" points="290.0,186.0 454.5,281.0 290.0,376.0 125.5,281.0"/>
+        <text class="zs-name" transform="matrix(0.8660 0.5 0 1 125.5 281.0)" x="12" y="24.5">infrastructure</text>
+        <text class="zs-note" transform="matrix(0.8660 -0.5 0 1 290.0 376.0)" x="12" y="24.0">LLM · database · tool</text>
+      </g>
+    </g>
+  </g>
+  <g class="zs-drop" style="--zs-delay:0.12s">
+    <g class="zs-float zs-float--2">
+      <g class="zs-layer zs-layer--domain">
+        <polygon class="zs-left" points="125.5,265.0 290.0,360.0 290.0,320.0 125.5,225.0"/>
+        <polygon class="zs-right" points="454.5,265.0 290.0,360.0 290.0,320.0 454.5,225.0"/>
+        <polygon class="zs-top" points="290.0,130.0 454.5,225.0 290.0,320.0 125.5,225.0"/>
+        <text class="zs-name" transform="matrix(0.8660 0.5 0 1 125.5 225.0)" x="12" y="24.5">domain</text>
+        <text class="zs-note" transform="matrix(0.8660 -0.5 0 1 290.0 320.0)" x="12" y="24.0">entitas · aturan bisnis</text>
+      </g>
+    </g>
+  </g>
+  <g class="zs-drop" style="--zs-delay:0.24s">
+    <g class="zs-float zs-float--1">
+      <g class="zs-layer zs-layer--application">
+        <polygon class="zs-left" points="125.5,209.0 290.0,304.0 290.0,264.0 125.5,169.0"/>
+        <polygon class="zs-right" points="454.5,209.0 290.0,304.0 290.0,264.0 454.5,169.0"/>
+        <polygon class="zs-top" points="290.0,74.0 454.5,169.0 290.0,264.0 125.5,169.0"/>
+        <text class="zs-name" transform="matrix(0.8660 0.5 0 1 125.5 169.0)" x="12" y="24.5">application</text>
+        <text class="zs-note" transform="matrix(0.8660 -0.5 0 1 290.0 264.0)" x="12" y="24.0">use case · agent</text>
+      </g>
+    </g>
+  </g>
+  <g class="zs-drop" style="--zs-delay:0.36s">
+    <g class="zs-float zs-float--0">
+      <g class="zs-layer zs-layer--interface">
+        <polygon class="zs-left" points="125.5,153.0 290.0,248.0 290.0,208.0 125.5,113.0"/>
+        <polygon class="zs-right" points="454.5,153.0 290.0,248.0 290.0,208.0 454.5,113.0"/>
+        <polygon class="zs-top" points="290.0,18.0 454.5,113.0 290.0,208.0 125.5,113.0"/>
+        <text class="zs-name" transform="matrix(0.8660 0.5 0 1 125.5 113.0)" x="12" y="24.5">interface</text>
+        <text class="zs-note" transform="matrix(0.8660 -0.5 0 1 290.0 208.0)" x="12" y="24.0">HTTP · CLI · Streamlit</text>
+        <text class="zs-project" transform="matrix(0.8660 0.5 -0.8660 0.5 237.3 105.4)">my-agent/</text>
+      </g>
+    </g>
+  </g>
+</svg>
 </div>
-
-Panel ini menampilkan simulasi agent human-in-the-loop dari template. Agent itu berhenti sebelum mengirim email dan menunggu keputusan manusia.
-
-</div>
-
-</div>
-
-## Peta dokumentasi
-
-Dokumentasi ini dibagi menjadi empat bagian, menurut kebutuhan pembaca: belajar atau bekerja, langkah atau pengetahuan.
-
-<div class="zul-map" markdown>
-
-| | Saat belajar | Saat bekerja |
-|---|---|---|
-| **Butuh langkah** | [Tutorial](tutorial/index.md)<br>Pelajaran dari awal sampai ada agent yang berjalan di komputermu. | [Panduan](panduan/index.md)<br>Resep untuk satu tugas: menambah tool, memakai Milvus, menerbitkan dokumentasi. |
-| **Butuh pengetahuan** | [Konsep](konsep/index.md)<br>Alasan di balik rancangannya: kenapa strukturnya begini, bagaimana agent bisa berhenti menunggu. | [Referensi](referensi/index.md)<br>Fakta untuk dicari cepat: opsi perintah, bentuk request, parameter, nilai bawaan. |
 
 </div>
 
@@ -65,8 +108,5 @@ Dokumentasi ini dibagi menjadi empat bagian, menurut kebutuhan pembaca: belajar 
 | LLM dan embedding | `AIService` | [Memanggil LLM dan embedding](panduan/memanggil-llm-dan-embedding.md) |
 | Dokumen | Markdown ke PDF dan PPTX | [Mengubah Markdown menjadi PDF dan PPTX](panduan/mengonversi-markdown.md) |
 | Analisis | `ChartGenerator` dengan uji statistik | [Membuat grafik perbandingan](panduan/membuat-grafik.md) |
-
-> [!NOTE]
-> Contoh perintah di dokumentasi ini memakai sintaks shell Unix. Di Windows, perintah `zul`, `uv`, `pip`, dan `pytest` sama persis. Yang berbeda hanya perintah sistem seperti `cp`, dan perbedaannya disebut di tempatnya.
 
 </div>

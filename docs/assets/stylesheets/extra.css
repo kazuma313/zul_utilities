@@ -679,34 +679,30 @@ body[data-md-color-primary] .md-tabs {
 /* ── Sampul ───────────────────────────────────────────────────────────────── */
 
 /*
- * Sampul dibuka dengan agent yang sedang bekerja: di kanan, panel playground
- * menampilkan satu percakapan dan berhenti menunggu keputusan pembaca.
+ * Sampul berisi judul, satu kalimat, dua tombol, dan perintah zul. Di kanan,
+ * empat lapisan proyek hasil `zul build hexa` tersusun dari bawah ke atas,
+ * lalu sebuah request mengalir masuk lewat interface dan keluar ke LLM.
  */
 .md-typeset .zul-hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 2rem;
-  align-items: start;
-  margin: 1rem 0 3.4rem;
+  gap: 1.5rem;
+  align-items: center;
+  margin: 1.5rem 0 3.2rem;
 }
 
 @media screen and (min-width: 60em) {
   .md-typeset .zul-hero {
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: 2.6rem;
-  }
-}
-
-@media screen and (min-width: 60em) {
-  .md-typeset .zul-hero__text {
-    padding-top: 2.2rem;
+    gap: 2rem;
+    min-height: 26rem;
   }
 }
 
 .md-typeset .zul-hero h1 {
-  font-size: clamp(2rem, 1.3rem + 1.9vw, 2.7rem);
-  line-height: 1.08;
-  margin-bottom: 0.5em;
+  font-size: clamp(2.1rem, 1.3rem + 2.2vw, 2.9rem);
+  line-height: 1.06;
+  margin-bottom: 0.45em;
 }
 
 .md-typeset .zul-hero h1 .headerlink {
@@ -714,22 +710,13 @@ body[data-md-color-primary] .md-tabs {
 }
 
 .md-typeset .zul-hero__text > p {
-  max-width: 25rem;
+  max-width: 26rem;
   font-size: 1.1em;
   line-height: 1.6;
 }
 
 .md-typeset .zul-hero__text .highlight {
-  max-width: 25rem;
-}
-
-.md-typeset .zul-hero__demo .zul-playground {
-  margin: 0;
-}
-
-/* Di sampul, percakapan ditampilkan utuh tanpa digulung. */
-.md-typeset .zul-hero__demo .zpg__log {
-  max-height: none;
+  max-width: 21rem;
 }
 
 /* Halaman tanpa panel samping tidak menampilkan tombol sunting di sudut. */
@@ -737,96 +724,173 @@ body[data-md-color-primary] .md-tabs {
   display: none;
 }
 
-.md-typeset .zul-hero__demo > p {
-  margin: 0.6rem 0 0;
-  font-size: 0.68rem;
-  color: var(--zul-muted);
+/* ── Tumpukan lapisan di sampul ───────────────────────────────────────────── */
+
+/* Lebar penuh kolom: dengan margin auto, item grid menyusut ke 300px bawaan SVG. */
+.md-typeset .zul-hero__art {
+  width: 100%;
+  max-width: 28rem;
+  justify-self: center;
 }
 
-/* ── Peta dokumentasi ─────────────────────────────────────────────────────── */
+.zul-stack {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--md-code-font-family);
+}
+
+.zul-stack .zs-wire {
+  fill: none;
+  stroke: var(--zul-muted);
+  stroke-opacity: 0.5;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.zul-stack .zs-pill rect {
+  fill: var(--zul-page);
+  stroke: var(--zul-border);
+}
+
+.zul-stack .zs-pill text {
+  font-size: 11px;
+  text-anchor: middle;
+  fill: var(--zul-text);
+}
+
+.zul-stack .zs-dot {
+  fill: var(--zul-accent);
+}
+
+.zul-stack .zs-dot--out {
+  fill: var(--zul-cyan);
+}
+
+.zul-stack .zs-layer polygon {
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.zul-stack .zs-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.zul-stack .zs-note {
+  font-size: 11px;
+}
+
+.zul-stack .zs-project {
+  font-size: 17px;
+  font-weight: 600;
+  fill: var(--zul-accent);
+}
+
+/* Warna lapisan, mode terang. */
+.zs-layer--interface polygon { stroke: #3f37c9; }
+.zs-layer--interface .zs-top { fill: #ffffff; }
+.zs-layer--interface .zs-left { fill: #eef0ff; }
+.zs-layer--interface .zs-right { fill: #e0e3fb; }
+.zs-layer--interface text { fill: #0b1f4d; }
+
+.zs-layer--application polygon { stroke: #2c2699; }
+.zs-layer--application .zs-top { fill: #6159dc; }
+.zs-layer--application .zs-left { fill: #3f37c9; }
+.zs-layer--application .zs-right { fill: #2c2699; }
+.zs-layer--application text { fill: #ffffff; }
+
+.zs-layer--domain polygon { stroke: #071538; }
+.zs-layer--domain .zs-top { fill: #22386f; }
+.zs-layer--domain .zs-left { fill: #0b1f4d; }
+.zs-layer--domain .zs-right { fill: #071538; }
+.zs-layer--domain text { fill: #ffffff; }
+
+.zs-layer--infrastructure polygon { stroke: #0b8fb0; }
+.zs-layer--infrastructure .zs-top { fill: #e2f5fa; }
+.zs-layer--infrastructure .zs-left { fill: #c6ebf4; }
+.zs-layer--infrastructure .zs-right { fill: #a9dfec; }
+.zs-layer--infrastructure text { fill: #0b1f4d; }
+
+/* Warna lapisan, mode gelap. */
+[data-md-color-scheme="slate"] .zs-layer--interface polygon { stroke: #7cd8f2; }
+[data-md-color-scheme="slate"] .zs-layer--interface .zs-top { fill: #17265a; }
+[data-md-color-scheme="slate"] .zs-layer--interface .zs-left { fill: #111d45; }
+[data-md-color-scheme="slate"] .zs-layer--interface .zs-right { fill: #0c1636; }
+[data-md-color-scheme="slate"] .zs-layer--interface text { fill: #eef2ff; }
+
+[data-md-color-scheme="slate"] .zs-layer--application polygon { stroke: #a9b4ff; }
+[data-md-color-scheme="slate"] .zs-layer--application .zs-top { fill: #6159dc; }
+[data-md-color-scheme="slate"] .zs-layer--application .zs-left { fill: #4a43c9; }
+[data-md-color-scheme="slate"] .zs-layer--application .zs-right { fill: #3a33b0; }
+
+[data-md-color-scheme="slate"] .zs-layer--domain polygon { stroke: #a9b4ff; }
+[data-md-color-scheme="slate"] .zs-layer--domain .zs-top { fill: #2b3f86; }
+[data-md-color-scheme="slate"] .zs-layer--domain .zs-left { fill: #1f2f6b; }
+[data-md-color-scheme="slate"] .zs-layer--domain .zs-right { fill: #172456; }
+[data-md-color-scheme="slate"] .zs-layer--domain text { fill: #eef2ff; }
+
+[data-md-color-scheme="slate"] .zs-layer--infrastructure polygon { stroke: #7cd8f2; }
+[data-md-color-scheme="slate"] .zs-layer--infrastructure .zs-top { fill: #0e5266; }
+[data-md-color-scheme="slate"] .zs-layer--infrastructure .zs-left { fill: #0b4152; }
+[data-md-color-scheme="slate"] .zs-layer--infrastructure .zs-right { fill: #083443; }
+[data-md-color-scheme="slate"] .zs-layer--infrastructure text { fill: #e2f5fa; }
 
 /*
- * Empat bagian dokumentasi disusun pada dua sumbu, seperti peta Diátaxis:
- * kolom membedakan saat belajar dan saat bekerja, baris membedakan
- * langkah praktis dan pengetahuan.
+ * Satu gerakan saat halaman dibuka: lapisan tersusun dari bawah ke atas.
+ * Setelah itu lapisan atas naik turun pelan, sehingga celah di antara
+ * lapisan melebar dan menyempit, dan titik request bergerak di kabelnya.
  */
-.md-typeset .zul-map {
-  margin: 1.4rem 0 0;
+@keyframes zs-drop {
+  from { transform: translateY(-28px); opacity: 0; }
+  to { transform: none; opacity: 1; }
 }
 
-.md-typeset .zul-map .md-typeset__table {
-  display: block;
+@keyframes zs-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(var(--zs-lift, 0)); }
 }
 
-.md-typeset .zul-map table:not([class]) {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-  font-size: 0.74rem;
-  border: 1px solid var(--zul-border);
-  border-radius: var(--zul-radius);
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
+@keyframes zs-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.md-typeset .zul-map table:not([class]) :is(th, td) {
-  padding: 1rem 1.1rem;
-  border: 0;
-  border-right: 1px solid var(--zul-border);
-  border-bottom: 1px solid var(--zul-border);
-  white-space: normal;
+.zul-stack .zs-drop {
+  animation: zs-drop 700ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--zs-delay, 0s) both;
 }
 
-.md-typeset .zul-map table:not([class]) :is(th, td):last-child {
-  border-right: 0;
+.zul-stack .zs-float {
+  animation: zs-float 6s ease-in-out 1.1s infinite;
 }
 
-.md-typeset .zul-map table:not([class]) tbody tr:last-child td {
-  border-bottom: 0;
+.zul-stack .zs-float--0 { --zs-lift: -7px; }
+.zul-stack .zs-float--1 { --zs-lift: -4.5px; }
+.zul-stack .zs-float--2 { --zs-lift: -2px; }
+
+.zul-stack :is(.zs-wire, .zs-pill) {
+  animation: zs-fade 600ms ease 700ms both;
 }
 
-.md-typeset .zul-map table:not([class]) :is(th, td):first-child {
-  width: 22%;
-  font-weight: 600;
-  color: var(--zul-muted);
-  background: var(--zul-surface);
+/* Titik baru tampil saat gerakannya dimulai; sebelumnya ia diam di pojok gambar. */
+.zul-stack .zs-dot {
+  animation: zs-fade 200ms linear 1.2s both;
 }
 
-.md-typeset .zul-map table:not([class]) th {
-  font-size: 0.7rem;
-  background: var(--zul-surface);
+.zul-stack .zs-dot--out {
+  animation-delay: 2.5s;
 }
 
-.md-typeset .zul-map table:not([class]) td:first-child strong {
-  color: inherit;
-}
+@media (prefers-reduced-motion: reduce) {
+  .zul-stack :is(.zs-drop, .zs-float, .zs-wire, .zs-pill) {
+    animation: none;
+  }
 
-.md-typeset .zul-map table:not([class]) td:not(:first-child) {
-  color: var(--zul-text);
-  transition: background-color 140ms ease;
-}
-
-.md-typeset .zul-map table:not([class]) td:not(:first-child):hover {
-  background: var(--zul-accent-soft);
-}
-
-.md-typeset .zul-map table:not([class]) tbody tr:hover {
-  background: none;
-}
-
-.md-typeset .zul-map table:not([class]) td:not(:first-child) a {
-  display: inline-block;
-  margin-bottom: 0.25rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--zul-ink);
-  text-decoration: none;
-}
-
-.md-typeset .zul-map table:not([class]) td:not(:first-child):hover a {
-  color: var(--zul-accent);
+  .zul-stack .zs-dot {
+    display: none;
+  }
 }
 
 /* ── Dua kolom keterangan ─────────────────────────────────────────────────── */
