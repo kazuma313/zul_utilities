@@ -5,7 +5,7 @@ Gunanya:
     Titik awal untuk memahami StateGraph sebelum membaca agent yang lebih
     lengkap di template hexa (`zul build hexa`).
 
-Cara pakai:
+Cara pakai (`pip install "zul[llm]"`):
     from zul.utilities.react_graph import graph
 
     graph.invoke({"a": "hello"})      # {'a': 'goodbye'}

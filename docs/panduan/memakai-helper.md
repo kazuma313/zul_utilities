@@ -2,7 +2,7 @@
 
 Helper kecil di `zul.utilities` yang tidak punya panduan sendiri: embedding palsu untuk test, logger, pengukur waktu, pembaca PDF, penyimpan hasil eksperimen, dan pengubah Document menjadi JSON. Setiap bagian berdiri sendiri.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)). Dua tugas membutuhkan extra: membaca PDF memakai extra `pdf`, dan menyimpan latency ke CSV memakai extra `analysis`. Perintah pemasangannya ada di bagian masing-masing.
+**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)). Tiga tugas membutuhkan extra: membaca PDF memakai extra `pdf`, menyimpan latency ke CSV memakai extra `analysis`, dan menjalankan graph LangGraph memakai extra `llm`. Perintah pemasangannya ada di bagian masing-masing.
 
 ## Membuat embedding palsu untuk test
 
@@ -247,7 +247,13 @@ Dua fungsi menyimpan hasil ke folder `data/` di direktori kerja saat ini. Folder
 
 Modul `react_graph` berisi graph satu node sebagai titik awal memahami `StateGraph`, sebelum membaca agent yang lebih lengkap di proyek hasil `zul build hexa`.
 
-1. Impor graph yang sudah ter-compile, lalu panggil dengan state awal:
+1. Pasang Zul dengan extra `llm`:
+
+    ```shell
+    pip install "zul[llm] @ git+https://github.com/kazuma313/zul_utilities.git"
+    ```
+
+2. Impor graph yang sudah ter-compile, lalu panggil dengan state awal:
 
     ```python
     from zul.utilities.react_graph import graph
@@ -261,7 +267,7 @@ Modul `react_graph` berisi graph satu node sebagai titik awal memahami `StateGra
     {'a': 'goodbye'}
     ```
 
-2. Untuk mempelajari cara kerja graph agent yang sebenarnya, baca [Cara kerja agent ReAct](../konsep/agent-react.md).
+Cara kerja graph agent yang sebenarnya ada di [Cara kerja agent ReAct](../konsep/agent-react.md).
 
 ## Memeriksa hasilnya
 

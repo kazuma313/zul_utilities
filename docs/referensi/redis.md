@@ -8,7 +8,7 @@ Baris berikut mengimpor keduanya:
 from zul.utilities.vector_DB.redis_helper import RedisHelper, RedisVectorDB
 ```
 
-Modul ini membutuhkan extra `redis` (`redis`, `redisvl`, `numpy`). Modul menulis log lewat logger `zul.utilities.vector_DB.redis_helper` dan tidak mengatur handler atau level logging.
+Modul ini membutuhkan extra `redis` (`redis`, `redisvl`). Modul menulis log lewat logger `zul.utilities.vector_DB.redis_helper` dan tidak mengatur handler atau level logging.
 
 ## Konstanta dan tipe modul
 

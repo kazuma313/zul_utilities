@@ -14,7 +14,7 @@ from zul.utilities.OCR.gemini_ocr import (
 from zul.utilities.Prompts.ocr import OCR_VLM_FLOW_DESCRIPTION_PROMPT
 ```
 
-`docling_OCR` tidak membutuhkan extra. `gemini_ocr` membutuhkan extra `gemini` (`google-genai`).
+`docling_OCR` membutuhkan extra `ocr` (`docling`). `gemini_ocr` membutuhkan extra `gemini` (`google-genai`).
 
 ## Konstanta `docling_OCR`
 

@@ -8,12 +8,12 @@ Tabel berikut memetakan setiap modul ke isinya dan extra yang dibutuhkan:
 |---|---|---|
 | `zul.utilities.logger` | [`get_logger`](#logger) | Tidak ada |
 | `zul.utilities.fake_embedding` | [`FakeEmbeddingModel`](#fakeembeddingmodeldimension2560-seednone) | Tidak ada |
-| `zul.utilities.script_helper.ai_models` | [`AIService` versi ringkas](#ai_models) | Tidak ada |
+| `zul.utilities.script_helper.ai_models` | [`AIService` versi ringkas](#ai_models) | `llm` |
 | `zul.utilities.script_helper.eval_performance` | [`timer_func`, `TimerDecorator`](#eval_performance) | Tidak ada |
 | `zul.utilities.script_helper.json_helper` | [`documents_to_custom_json`](#documents_to_custom_jsondocuments-key_mappingnone-return_dictfalse) | Tidak ada |
 | `zul.utilities.script_helper.read_pdf2` | [`PDFConfig`](#pdfconfig), [`PDFProcessor`](#pdfprocessorconfignone) | `pdf` |
 | `zul.utilities.script_helper.save_file` | [`save_text_to_md`, `save_latency_to_csv`](#save_file) | `analysis` |
-| `zul.utilities.react_graph` | [`graph`](#react_graph) | Tidak ada |
+| `zul.utilities.react_graph` | [`graph`](#react_graph) | `llm` |
 
 ## Logger
 
@@ -124,7 +124,7 @@ Memanggil `encode(texts)`, sehingga objek model bisa dipanggil langsung seperti 
 
 ## `ai_models`
 
-`AIService` versi ringkas yang memakai dataclass dan environment variable. Lokasi: `zul.utilities.script_helper.ai_models`. Untuk validasi Pydantic, file config, dan model respons, pakai versi lengkap di [AI Service](ai-service.md).
+`AIService` versi ringkas yang memakai dataclass dan environment variable. Lokasi: `zul.utilities.script_helper.ai_models`. Modul ini membutuhkan extra `llm` (`langchain-openai`). Untuk validasi Pydantic, file config, dan model respons, pakai versi lengkap di [AI Service](ai-service.md).
 
 ### `LLMConfig`
 
@@ -392,7 +392,7 @@ Menulis data latency ke `data/FILE_NAME.csv`, tanpa kolom indeks.
 
 ## `react_graph`
 
-Contoh graph LangGraph terkecil: satu state dan satu node. Lokasi: `zul.utilities.react_graph`.
+Contoh graph LangGraph terkecil: satu state dan satu node. Lokasi: `zul.utilities.react_graph`. Modul ini membutuhkan extra `llm` (`langgraph`).
 
 | Nama | Jenis | Keterangan |
 |---|---|---|

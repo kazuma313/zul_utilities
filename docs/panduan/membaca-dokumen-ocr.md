@@ -6,9 +6,13 @@ PDF, gambar, dan dokumen lain bisa diubah menjadi Markdown atau teks, supaya bis
 
 ## Mengonversi dokumen dengan Docling
 
-Docling terpasang bersama Zul, jadi jalur ini tidak membutuhkan extra.
+1. Pasang Zul dengan extra `ocr`. Extra ini memasang Docling, yang ikut membawa PyTorch, jadi unduhannya besar:
 
-1. Buat converter dengan nama model, alamat endpoint, dan format keluaran model:
+    ```shell
+    pip install "zul[ocr] @ git+https://github.com/kazuma313/zul_utilities.git"
+    ```
+
+2. Buat converter dengan nama model, alamat endpoint, dan format keluaran model:
 
     ```python
     from zul.utilities.OCR.docling_OCR import DoclingVLMConverter
@@ -24,7 +28,7 @@ Docling terpasang bersama Zul, jadi jalur ini tidak membutuhkan extra.
 
     Ganti `NAMA_MODEL` dengan nama model VLM di endpoint, misalnya `Qwen3-VL-8B-Instruct`. Ganti `HOST` dengan alamat server model, dan `API_KEY` dengan key-nya. `hostname_and_port` adalah URL lengkap endpoint, termasuk path-nya.
 
-2. Konversi dokumen ke bentuk yang kamu butuhkan:
+3. Konversi dokumen ke bentuk yang kamu butuhkan:
 
     ```python
     markdown = converter.convert_to_markdown("dokumen.pdf")
@@ -34,7 +38,7 @@ Docling terpasang bersama Zul, jadi jalur ini tidak membutuhkan extra.
 
     Converter menerima PDF, gambar, DOCX, PPTX, HTML, AsciiDoc, CSV, dan Markdown. Halaman PDF dan gambar dikirim ke VLM.
 
-3. Saat memakai model lain, cocokkan `response_format` dengan format yang ditulis model itu. Pakai `markdown` untuk VLM umum yang diminta menulis Markdown, dan `doctags` (nilai bawaan) untuk model yang menulis DocTags. Nilai di luar daftar yang didukung melempar `ValueError`. Daftarnya ada di [Referensi OCR](../referensi/ocr.md).
+4. Saat memakai model lain, cocokkan `response_format` dengan format yang ditulis model itu. Pakai `markdown` untuk VLM umum yang diminta menulis Markdown, dan `doctags` (nilai bawaan) untuk model yang menulis DocTags. Nilai di luar daftar yang didukung melempar `ValueError`. Daftarnya ada di [Referensi OCR](../referensi/ocr.md).
 
 ## Menyertakan deskripsi gambar
 

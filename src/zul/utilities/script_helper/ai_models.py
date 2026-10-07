@@ -5,7 +5,7 @@ Gunanya:
     Memanggil LLM dan model embedding lewat endpoint yang kompatibel
     dengan OpenAI, dengan konfigurasi dari environment variable.
 
-Cara pakai:
+Cara pakai (`pip install "zul[llm]"`):
     from zul.utilities.script_helper.ai_models import AIService
 
     service = AIService()             # membaca LLM_* dan EMBEDDING_*

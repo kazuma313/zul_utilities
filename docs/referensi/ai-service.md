@@ -16,7 +16,7 @@ from zul.utilities.embedding_service import (
 )
 ```
 
-Modul ini tidak membutuhkan extra.
+Modul ini membutuhkan extra `llm` (`langchain-openai`).
 
 ## Urutan prioritas nilai
 

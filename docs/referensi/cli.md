@@ -40,7 +40,7 @@ Opsi berikut berlaku pada perintah `zul` itu sendiri:
 Keluaran `zul --version` berbentuk seperti ini:
 
 ```text
-zul version 0.1.3
+zul version 0.2.0
 ```
 
 Versi dibaca dari metadata package yang terpasang. Jika metadata itu tidak ditemukan, yang tercetak adalah `zul version unknown`.

@@ -6,7 +6,7 @@ Gunanya:
     mengubahnya menjadi teks terstruktur. Halaman PDF dan gambar dikirim ke
     VLM lewat endpoint chat completions yang kompatibel dengan OpenAI.
 
-Cara pakai:
+Cara pakai (`pip install "zul[ocr]"`):
     from zul.utilities.OCR.docling_OCR import DoclingVLMConverter
 
     converter = DoclingVLMConverter(

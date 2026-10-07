@@ -175,9 +175,9 @@ boilerplate/
 |-------|-----|--------------|-------|
 | `vector_DB` | `MilvusHelper` (config-based) | `from zul.utilities.vector_DB.milvus_helper import MilvusHelper` | `zul[milvus]` |
 | `vector_DB` | `RedisHelper` (config-based), `RedisVectorDB` | `from zul.utilities.vector_DB.redis_helper import RedisHelper` | `zul[redis]` |
-| `OCR` | `DoclingVLMConverter`, `gemini_ocr` | `from zul.utilities.OCR.docling_OCR import DoclingVLMConverter` | `zul[gemini]` untuk Gemini |
+| `OCR` | `DoclingVLMConverter`, `gemini_ocr` | `from zul.utilities.OCR.docling_OCR import DoclingVLMConverter` | `zul[ocr]` untuk Docling, `zul[gemini]` untuk Gemini |
 | `markdown_converter` | `MarkdownToPDFConverter`, `DynamicMarkdownToPPTXService` | `from zul.utilities.markdown_converter.md_to_pdf import MarkdownToPDFConverter` | `zul[converter]` |
-| `embedding_service` | `AIService`, `AIConfig`, `LLMConfig`, `EmbeddingConfig` | `from zul.utilities.embedding_service import AIConfig` | — |
+| `embedding_service` | `AIService`, `AIConfig`, `LLMConfig`, `EmbeddingConfig` | `from zul.utilities.embedding_service import AIConfig` | `zul[llm]` |
 | `analysis` | `ChartGenerator` | `from zul.utilities.analysis import ChartGenerator` | `zul[analysis]` |
 | `script_helper` | `PDFProcessor`, `TimerDecorator`, `save_file`, `json_helper` | `from zul.utilities.script_helper.read_pdf2 import PDFProcessor` | `zul[pdf]` untuk PDF |
 
@@ -371,10 +371,11 @@ uv tool install git+https://github.com/kazuma313/zul_utilities.git
 pip install git+https://github.com/kazuma313/zul_utilities.git
 ```
 
-Instalasi dasar sudah cukup untuk CLI. Dependency tiap utilitas dipasang lewat *extra* — pilih yang dipakai saja:
+Instalasi dasar hanya memasang Typer, InquirerPy, Pydantic, PyYAML, dan NumPy: cukup untuk CLI, config vector database, `FakeEmbeddingModel`, logger, dan timer. Dependency tiap utilitas dipasang lewat *extra* — pilih yang dipakai saja:
 
 ```bash
 pip install "zul[milvus,redis] @ git+https://github.com/kazuma313/zul_utilities.git"
+uv add "zul[milvus,redis] @ git+https://github.com/kazuma313/zul_utilities.git"
 pip install "zul[all] @ git+https://github.com/kazuma313/zul_utilities.git"
 ```
 
@@ -383,10 +384,14 @@ pip install "zul[all] @ git+https://github.com/kazuma313/zul_utilities.git"
 | `milvus` | `MilvusHelper` |
 | `redis` | `RedisHelper`, `RedisVectorDB` |
 | `converter` | Markdown → PDF / PPTX |
-| `analysis` | `ChartGenerator` |
+| `analysis` | `ChartGenerator`, `save_file` |
 | `pdf` | `PDFProcessor` |
+| `ocr` | `DoclingVLMConverter` (Docling, ikut memasang PyTorch) |
+| `llm` | `AIService`, `ai_models`, `react_graph` (LangChain OpenAI, LangGraph) |
 | `gemini` | OCR dengan Gemini |
 | `all` | Semua di atas |
+
+> Sejak versi 0.2.0, Docling, LangChain OpenAI, dan LangGraph tidak lagi ikut instalasi dasar. Kode yang memakai `DoclingVLMConverter` perlu `zul[ocr]`, dan kode yang memakai `AIService` atau `react_graph` perlu `zul[llm]`. Langkah lengkapnya, termasuk memasang tanpa dependency sama sekali, ada di [Memasang Zul](docs/panduan/memasang-zul.md).
 </details>
 
 <details>

@@ -6399,28 +6399,26 @@ wheels = [
 
 [[package]]
 name = "zul"
-version = "0.1.3"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
-    { name = "docling" },
     { name = "inquirerpy" },
-    { name = "jinja2" },
-    { name = "langchain-openai" },
-    { name = "langgraph" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pydantic" },
-    { name = "pydantic-settings" },
     { name = "pyyaml" },
     { name = "typer" },
 ]
 
 [package.optional-dependencies]
 all = [
+    { name = "docling" },
     { name = "google-genai" },
+    { name = "langchain-openai" },
     { name = "langchain-text-splitters" },
+    { name = "langgraph" },
     { name = "markdown" },
     { name = "matplotlib" },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pandas" },
     { name = "pymilvus" },
     { name = "pypdf" },
@@ -6433,8 +6431,6 @@ all = [
 ]
 analysis = [
     { name = "matplotlib" },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pandas" },
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
@@ -6447,16 +6443,21 @@ converter = [
 gemini = [
     { name = "google-genai" },
 ]
+llm = [
+    { name = "langchain-openai" },
+    { name = "langgraph" },
+]
 milvus = [
     { name = "pymilvus" },
+]
+ocr = [
+    { name = "docling" },
 ]
 pdf = [
     { name = "langchain-text-splitters" },
     { name = "pypdf" },
 ]
 redis = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "numpy", version = "2.5.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "redis" },
     { name = "redisvl" },
 ]
@@ -6492,20 +6493,17 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "docling", specifier = ">=2.74.0" },
+    { name = "docling", marker = "extra == 'ocr'", specifier = ">=2.74.0" },
     { name = "google-genai", marker = "extra == 'gemini'", specifier = ">=1.0.0" },
     { name = "inquirerpy", specifier = ">=0.3.4" },
-    { name = "jinja2", specifier = ">=3.1.0" },
-    { name = "langchain-openai", specifier = ">=1.0.2" },
+    { name = "langchain-openai", marker = "extra == 'llm'", specifier = ">=1.0.2" },
     { name = "langchain-text-splitters", marker = "extra == 'pdf'", specifier = ">=0.3.0" },
-    { name = "langgraph", specifier = ">=1.0.2" },
+    { name = "langgraph", marker = "extra == 'llm'", specifier = ">=1.0.2" },
     { name = "markdown", marker = "extra == 'converter'", specifier = ">=3.5" },
     { name = "matplotlib", marker = "extra == 'analysis'", specifier = ">=3.9" },
-    { name = "numpy", marker = "extra == 'analysis'", specifier = ">=2.0.0" },
-    { name = "numpy", marker = "extra == 'redis'", specifier = ">=2.0.0" },
+    { name = "numpy", specifier = ">=2.0.0" },
     { name = "pandas", marker = "extra == 'analysis'", specifier = ">=2.0" },
     { name = "pydantic", specifier = ">=2.0.0" },
-    { name = "pydantic-settings", specifier = ">=2.0.0" },
     { name = "pymilvus", marker = "extra == 'milvus'", specifier = ">=2.5.0" },
     { name = "pypdf", marker = "extra == 'pdf'", specifier = ">=4.0" },
     { name = "python-pptx", marker = "extra == 'converter'", specifier = ">=1.0.2" },
@@ -6515,9 +6513,9 @@ requires-dist = [
     { name = "scipy", marker = "extra == 'analysis'", specifier = ">=1.16.2" },
     { name = "typer", specifier = ">=0.12.0" },
     { name = "xhtml2pdf", marker = "extra == 'converter'", specifier = ">=0.2.17" },
-    { name = "zul", extras = ["milvus", "redis", "converter", "analysis", "pdf", "gemini"], marker = "extra == 'all'" },
+    { name = "zul", extras = ["milvus", "redis", "converter", "analysis", "pdf", "ocr", "llm", "gemini"], marker = "extra == 'all'" },
 ]
-provides-extras = ["milvus", "redis", "converter", "analysis", "pdf", "gemini", "all"]
+provides-extras = ["milvus", "redis", "converter", "analysis", "pdf", "ocr", "llm", "gemini", "all"]
 
 [package.metadata.requires-dev]
 dev = [

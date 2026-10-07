@@ -12,7 +12,7 @@ from zul.utilities.analysis import (
 )
 ```
 
-Modul ini membutuhkan extra `analysis` (`matplotlib`, `pandas`, `scipy`, `numpy`).
+Modul ini membutuhkan extra `analysis` (`matplotlib`, `pandas`, `scipy`).
 
 ## `ChartGenerator(config=None)`
 

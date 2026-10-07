@@ -6,7 +6,7 @@ Gunanya:
     konfigurasi yang divalidasi Pydantic. Konfigurasi bisa datang dari file
     YAML/JSON, dari environment variable, atau dirakit langsung di kode.
 
-Cara pakai:
+Cara pakai (`pip install "zul[llm]"`):
     from zul.utilities.embedding_service import AIService
 
     service = AIService.from_file("config.yaml")    # atau config.json
