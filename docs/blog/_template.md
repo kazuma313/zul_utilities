@@ -40,4 +40,9 @@ Cara memanggilnya dari tulisan ini:
 Gambar dengan versi terang dan gelap:
 ![Keterangan](../resources/{{folder}}/grafik-terang.svg#only-light)
 ![Keterangan](../resources/{{folder}}/grafik-gelap.svg#only-dark)
+
+Diagram tidak perlu disimpan sebagai gambar: tulis di blok kode berbahasa
+mermaid. Contohnya ada di panduan "Menulis tulisan blog", bagian
+"Menambah diagram mermaid". Jangan menaruh blok kode di dalam komentar
+ini, karena blok kode tetap digambar walaupun berada di dalam komentar.
 -->

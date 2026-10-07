@@ -66,6 +66,21 @@ Untuk gambar yang punya versi terang dan gelap, tambahkan `#only-light` dan `#on
 ![Grafik waktu per chunk](../resources/2026-10-07-judul-tulisan/grafik-gelap.svg#only-dark)
 ```
 
+Simpan gambar PNG dengan lebar sekitar 1.200 sampai 1.500 piksel. Kolom tulisan lebarnya sekitar 730 piksel, jadi gambar selebar itu tetap tajam di layar beresolusi tinggi.
+
+## Menambah diagram mermaid
+
+Untuk diagram alur, urutan proses, atau arsitektur sebuah sistem, tulis diagramnya di blok kode `mermaid`. Diagram tidak perlu disimpan sebagai gambar: situs menggambarnya saat halaman dibuka, dan warnanya mengikuti mode terang atau gelap.
+
+````markdown
+```mermaid
+flowchart LR
+    A["Klien"] --> B["API"] --> C[("Database")]
+```
+````
+
+Tema situs mewarnai flowchart, sequence diagram, state diagram, class diagram, dan entity-relationship diagram. Jenis diagram mermaid lain tetap tergambar, tetapi dengan warna bawaan mermaid. Contoh tulisan yang memakai flowchart, sequence diagram, gambar PNG, dan file unduhan adalah [Dari video YouTube sampai bisa dicari AI](../blog/posts/2026-10-07-dari-video-youtube-sampai-bisa-dicari-ai.md).
+
 ## Mengatur tanggal
 
 Setiap tulisan wajib punya tanggal di header-nya. Tanpa tanggal, build gagal dan situs tidak diterbitkan:

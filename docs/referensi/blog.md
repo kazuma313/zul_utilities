@@ -77,6 +77,24 @@ Akhiran `#only-light` atau `#only-dark` pada path gambar membuat gambar itu hany
 
 PDF di folder resources ikut terbit. Hanya PDF di root `docs/` yang dikecualikan.
 
+## Diagram dan HTML
+
+Blok kode berbahasa `mermaid` digambar sebagai diagram oleh [Mermaid](https://mermaid.js.org) di browser pembaca. Pengaturannya ada di `pymdownx.superfences` pada `mkdocs.yml`. Warna diagram mengikuti mode terang atau gelap untuk jenis berikut:
+
+| Jenis | Baris pertama blok |
+|---|---|
+| Flowchart | `flowchart LR` atau `flowchart TB` |
+| Sequence diagram | `sequenceDiagram` |
+| State diagram | `stateDiagram-v2` |
+| Class diagram | `classDiagram` |
+| Entity-relationship diagram | `erDiagram` |
+
+Jenis lain, misalnya `pie` atau `gantt`, tetap tergambar dengan warna bawaan Mermaid.
+
+Blok kode di dalam komentar HTML (`<!-- ... -->`) tetap diproses dan ditampilkan. Untuk menyembunyikan contoh diagram, hapus blok kodenya, jangan hanya mengomentarinya.
+
+Tulisan juga boleh memuat HTML. Contohnya, video YouTube disematkan dengan `<iframe>` ke alamat `https://www.youtube-nocookie.com/embed/ID_VIDEO`, dengan gaya `width: 100%; aspect-ratio: 16 / 9` supaya lebarnya mengikuti kolom.
+
 ## Alamat halaman
 
 Plugin membuat halaman-halaman berikut. Alamatnya relatif terhadap alamat situs, `https://kazuma313.github.io/zul_utilities/`:

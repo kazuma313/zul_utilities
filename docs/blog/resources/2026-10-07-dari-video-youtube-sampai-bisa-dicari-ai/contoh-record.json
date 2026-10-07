@@ -1,0 +1,25 @@
+{
+  "id": "6c14acc799cc#5",
+  "doc_id": "6c14acc799cc",
+  "chunk_index": 5,
+  "n_chunks": 13,
+  "title": "Menyimpan dan mencari vektor di Milvus",
+  "source": "corpus\\memakai-milvus.md",
+  "section": [
+    "Menyimpan dan mencari vektor di Milvus",
+    "Mencari vektor termirip"
+  ],
+  "start": 4796,
+  "end": 5746,
+  "text": "1. Ubah teks query menjadi vektor dengan model yang sama:\n\n    ```python\n    query_vector = embedding.encode(\"dokumen\").flatten().tolist()\n    ```\n\n2. Cari vektor yang paling mirip dengan `search`:\n\n    ```python\n    hits = milvus.search(\n        collection_name=\"my_collection\",\n        query_vectors=[query_vector],\n        anns_field=\"embedding\",\n        limit=5,\n        output_fields=[\"id\"],\n    )\n    ```\n\n    `query_vectors` berupa daftar, jadi kamu bisa mengirim beberapa query sekaligus. Hasilnya adalah satu daftar hasil untuk setiap query, dalam format `pymilvus`.\n\n3. Untuk mempersempit pencarian, tambahkan argumen kata kunci lain. Argumen itu diteruskan ke `MilvusClient.search`. Contoh berikut menambah filter:\n\n    ```python\n    hits = milvus.search(\n        collection_name=\"my_collection\",\n        query_vectors=[query_vector],\n        anns_field=\"embedding\",\n        limit=5,\n        filter='kategori == \"peraturan\"',\n    )\n    ```",
+  "header": "Dokumen: Menyimpan dan mencari vektor di Milvus. Sumber: memakai-milvus.md. Bagian: Mencari vektor termirip.",
+  "context": "Dokumen menjelaskan cara mencari vektor termirip menggunakan MilvusHelper, termasuk contoh kode dan penjelasan penggunaan filter untuk mempersempit pencarian.",
+  "context_source": "model",
+  "contextualized_text": "Dokumen: Menyimpan dan mencari vektor di Milvus. Sumber: memakai-milvus.md. Bagian: Mencari vektor termirip.\nDokumen menjelaskan cara mencari vektor termirip menggunakan MilvusHelper, termasuk contoh kode dan penjelasan penggunaan filter untuk mempersempit pencarian.\n\n1. Ubah teks query menjadi vektor dengan model yang sama:\n\n    ```python\n    query_vector = embedding.encode(\"dokumen\").flatten().tolist()\n    ```\n\n2. Cari vektor yang paling mirip dengan `search`:\n\n    ```python\n    hits = milvus.search(\n        collection_name=\"my_collection\",\n        query_vectors=[query_vector],\n        anns_field=\"embedding\",\n        limit=5,\n        output_fields=[\"id\"],\n    )\n    ```\n\n    `query_vectors` berupa daftar, jadi kamu bisa mengirim beberapa query sekaligus. Hasilnya adalah satu daftar hasil untuk setiap query, dalam format `pymilvus`.\n\n3. Untuk mempersempit pencarian, tambahkan argumen kata kunci lain. Argumen itu diteruskan ke `MilvusClient.search`. Contoh berikut menambah filter:\n\n    ```python\n    hits = milvus.search(\n        collection_name=\"my_collection\",\n        query_vectors=[query_vector],\n        anns_field=\"embedding\",\n        limit=5,\n        filter='kategori == \"peraturan\"',\n    )\n    ```",
+  "model": "qwen3:8b",
+  "checks": [],
+  "rejected_context": "",
+  "attempts": 1,
+  "seconds": 9.74,
+  "metadata": {}
+}
