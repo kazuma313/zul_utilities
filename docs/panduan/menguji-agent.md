@@ -1,6 +1,6 @@
 # Menguji agent
 
-Halaman ini menunjukkan cara menulis test untuk agent, tool, dan endpoint tanpa memanggil LLM asli. Test seperti ini berjalan dalam hitungan detik, tidak butuh API key, dan hasilnya selalu sama.
+Test untuk agent, tool, dan endpoint bisa ditulis tanpa memanggil LLM asli. Test seperti ini berjalan dalam hitungan detik, tidak butuh API key, dan hasilnya selalu sama.
 
 **Sebelum mulai:** dependency pengembangan sudah terpasang dengan `pip install -r requirements-dev.txt`.
 
@@ -222,7 +222,7 @@ def test_chat_endpoint_returns_the_agent_answer(scripted_model):
 
 Blok `finally` membersihkan pengganti itu supaya test lain tidak memakai use case ini.
 
-## Lihat juga
+## Halaman terkait
 
 - [Menguji tanpa LLM asli](../konsep/pengujian.md) untuk apa yang dibuktikan test seperti ini, dan apa yang tidak.
 - [Mencoba fitur di playground](mencoba-di-playground.md) untuk mencoba agent dengan model sungguhan.

@@ -1,6 +1,6 @@
 # Workflow dokumentasi
 
-Situs ini dibangun dan diterbitkan ke GitHub Pages oleh workflow GitHub Actions bernama **Dokumentasi**, di `.github/workflows/docs.yml`. Versi action-nya diperbarui oleh Dependabot, yang diatur di `.github/dependabot.yml`. Halaman ini mencantumkan pemicu, job, langkah, pemeriksaan, izin, dan versi yang dikunci di kedua file itu. Untuk langkah menerbitkan situs, lihat [Menerbitkan dokumentasi](../panduan/menerbitkan-dokumentasi.md).
+Situs ini dibangun dan diterbitkan ke GitHub Pages oleh workflow GitHub Actions bernama **Dokumentasi**, di `.github/workflows/docs.yml`. Versi action-nya diperbarui oleh Dependabot, yang diatur di `.github/dependabot.yml`. Langkah menerbitkan situs ada di [Menerbitkan dokumentasi](../panduan/menerbitkan-dokumentasi.md).
 
 ## Pemicu
 
@@ -118,7 +118,7 @@ Pull request dari Dependabot hanya mengubah `.github/workflows/docs.yml`, jadi j
 | Bangun situs | `uv run mkdocs build --strict` |
 | Pratinjau | `uv run mkdocs serve`, lalu buka `http://127.0.0.1:8001` |
 
-## Lihat juga
+## Halaman terkait
 
 - [Menerbitkan dokumentasi](../panduan/menerbitkan-dokumentasi.md) untuk langkah menerbitkan dan memperbarui versi.
 - [Cara situs dokumentasi diterbitkan](../konsep/penerbitan-dokumentasi.md) untuk alasan di balik pengaturan ini.

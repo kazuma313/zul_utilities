@@ -1,6 +1,6 @@
 # Menambah tool
 
-Halaman ini menunjukkan cara menulis tool baru dan memberikannya ke agent, sehingga agent bisa mengambil data atau melakukan aksi yang sebelumnya tidak bisa.
+Tool baru memberi agent kemampuan mengambil data atau melakukan aksi yang sebelumnya tidak bisa.
 
 **Sebelum mulai:** kamu punya proyek hasil `zul build hexa` yang berjalan. Contoh di halaman ini menambah tool pengambil status pesanan ke agent ReAct.
 
@@ -58,8 +58,8 @@ Tempat mendaftarkan tool berbeda untuk setiap agent di template:
 | Agent | Tempat mendaftarkan |
 |---|---|
 | ReAct | Argumen `tools` di `get_react_agent`, file `chat_controller.py` |
-| Human-in-the-loop | Konstanta `TOOLS` di `hitl_controller.py`. Lihat [Mewajibkan persetujuan untuk sebuah tool](mewajibkan-persetujuan.md) jika tool-nya berisiko. |
-| Subagents | Field `tools` pada `SubagentSpec` di `subagents_controller.py`. Lihat [Menambah subagent](menambah-subagent.md). |
+| Human-in-the-loop | Konstanta `TOOLS` di `hitl_controller.py`. Tool yang berisiko dibahas di [Mewajibkan persetujuan untuk sebuah tool](mewajibkan-persetujuan.md). |
+| Subagents | Field `tools` pada `SubagentSpec` di `subagents_controller.py`. Rinciannya ada di [Menambah subagent](menambah-subagent.md). |
 
 ## Menulis deskripsi yang dipahami model
 
@@ -111,7 +111,7 @@ Untuk melihat agent memakai tool itu, kirim pesan lewat panel di bawah ini, lalu
 Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
 </div>
 
-## Lihat juga
+## Halaman terkait
 
 - [Cara kerja agent ReAct](../konsep/agent-react.md) untuk apa yang terjadi saat model meminta tool, termasuk saat argumennya salah.
 - [Menguji agent](menguji-agent.md) untuk menguji pemanggilan tool dengan model palsu.

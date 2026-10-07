@@ -1,6 +1,6 @@
 # Menyimpan percakapan di database
 
-Halaman ini menunjukkan cara mengganti penyimpan percakapan bawaan dengan PostgreSQL, sehingga percakapan bertahan setelah server berhenti dan bisa dibagi antar proses.
+Penyimpan percakapan bawaan bisa diganti dengan PostgreSQL, sehingga percakapan bertahan setelah server berhenti dan bisa dibagi antar proses.
 
 **Sebelum mulai:** kamu punya database PostgreSQL yang bisa dihubungi dari aplikasi, beserta alamat koneksinya.
 
@@ -76,7 +76,7 @@ for message in snapshot.values["messages"]:
 
 Untuk thread yang belum pernah dipakai, `snapshot.values` berupa dict kosong.
 
-## Lihat juga
+## Halaman terkait
 
 - [Memory dan thread](../konsep/memory.md) untuk cara kerja checkpointer, pilihan `thread_id`, dan batasan yang tetap ada setelah pindah ke database.
 - [API agent](../referensi/agent.md) untuk `get_checkpointer` dan parameter `checkpointer` di setiap perakit agent.

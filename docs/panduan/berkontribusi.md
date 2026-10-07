@@ -1,6 +1,6 @@
 # Berkontribusi ke Zul
 
-Halaman ini untuk kamu yang ingin mengubah Zul sendiri: menambah perintah, memperbaiki helper, mengembangkan template, atau menulis dokumentasi. Untuk memakai Zul, mulai dari [Memasang Zul](memasang-zul.md).
+Mengubah Zul sendiri mencakup menambah perintah, memperbaiki helper, mengembangkan template, dan menulis dokumentasi.
 
 **Sebelum mulai:** kamu butuh Python 3.11 atau lebih baru, Git, dan [uv](https://github.com/astral-sh/uv).
 
@@ -32,9 +32,9 @@ Halaman ini untuk kamu yang ingin mengubah Zul sendiri: menambah perintah, mempe
 | `src/zul/templates/hexa/` | Template proyek yang disalin `zul build hexa`. |
 | `src/zul/utilities/` | Helper yang bisa diimpor. |
 | `tests/` | Test untuk CLI, utilities, dan template. |
-| `research/agentic/algorithms/skills/` | Kumpulan skill untuk agent AI. Lihat [Membuat mind map](membuat-mindmap.md). |
+| `research/agentic/algorithms/skills/` | Kumpulan skill untuk agent AI. Rinciannya ada di [Membuat mind map](membuat-mindmap.md). |
 | `scripts/comment_style.py` | Pemeriksa bentuk komentar. |
-| `scripts/new_post.py` | Pembuat tulisan blog baru dari template. Lihat [Menulis tulisan blog](menulis-blog.md). |
+| `scripts/new_post.py` | Pembuat tulisan blog baru dari template. Rinciannya ada di [Menulis tulisan blog](menulis-blog.md). |
 | `docs/` | Sumber dokumentasi ini. Blog ada di `docs/blog/`. |
 | `mkdocs.yml` | Susunan menu, tema, dan plugin situs dokumentasi. |
 | `.github/workflows/docs.yml` | Workflow yang membangun dan menerbitkan situs dokumentasi. |
@@ -172,7 +172,7 @@ Blog di `docs/blog/` berada di luar keempat jenis itu: isinya catatan bertanggal
 
 ### Menaruh panel playground
 
-Halaman tutorial dan panduan bisa memuat panel untuk mencoba agent. Lihat [Mencoba fitur di playground](mencoba-di-playground.md) untuk atributnya. Tulis satu kalimat di dalam `div` sebagai pengganti saat halaman dibaca di GitHub:
+Halaman tutorial dan panduan bisa memuat panel untuk mencoba agent. Atributnya ada di [Mencoba fitur di playground](mencoba-di-playground.md). Tulis satu kalimat di dalam `div` sebagai pengganti saat halaman dibaca di GitHub:
 
 ```html
 <div class="zul-playground" data-feature="ReAct">

@@ -2,7 +2,7 @@
 
 Satu agent dengan banyak tool dari bidang yang berbeda cenderung bingung: prompt-nya panjang, dan model sering memilih tool yang salah. Pola subagents memecah pekerjaan itu. Satu agent utama, yang disebut supervisor, menerima permintaan user dan mendelegasikan tiap bagian ke subagent yang ahli di satu bidang.
 
-Halaman ini menjelaskan bagaimana delegasi itu bekerja, kenapa subagent tidak punya memory, kenapa supervisor hanya melihat pesan terakhir subagent, dan kapan pola ini cocok. Kodenya ada di `src/application/AI/agents/subagents/subagents.py`. Polanya mengikuti [subagents dari LangChain](https://docs.langchain.com/oss/python/langchain/multi-agent/subagents).
+Kodenya ada di `src/application/AI/agents/subagents/subagents.py`. Polanya mengikuti [subagents dari LangChain](https://docs.langchain.com/oss/python/langchain/multi-agent/subagents).
 
 ## Pola tool per agent
 
@@ -90,7 +90,7 @@ needs (facts, confirmations, anything that failed) in that final message.
 """
 ```
 
-Perhatikan bahwa aturan itu juga menyebut kegagalan. Supervisor hanya bisa memberi tahu user bahwa sesuatu gagal jika subagent menuliskannya.
+Aturan itu juga menyebut kegagalan, karena supervisor hanya bisa memberi tahu user bahwa sesuatu gagal jika subagent menuliskannya.
 
 ## Batas langkah subagent
 
@@ -128,7 +128,7 @@ Beberapa hal mengikuti langsung dari cara subagent dibungkus:
 > [!WARNING]
 > `email_agent` menjalankan `send_email` tanpa persetujuan manusia. Di template tool itu hanya placeholder, tetapi setelah kamu menyambungkannya ke layanan email sungguhan, setiap permintaan yang didelegasikan ke `email_agent` langsung terkirim.
 
-## Lihat juga
+## Halaman terkait
 
 - [Konsep: Cara kerja agent ReAct](agent-react.md)
 - [Konsep: Cara kerja human-in-the-loop](human-in-the-loop.md)

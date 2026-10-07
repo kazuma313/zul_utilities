@@ -1,8 +1,8 @@
 # Mengatur model dan API key
 
-Halaman ini menunjukkan cara memberi proyekmu API key, mengganti model, dan mengarahkannya ke endpoint selain OpenAI.
+Proyek hasil `zul build hexa` membaca API key, nama model, dan alamat endpoint dari `.env`, jadi ketiganya bisa diganti, termasuk ke endpoint selain OpenAI.
 
-**Sebelum mulai:** kamu punya proyek hasil `zul build hexa` dengan file `.env` di root-nya. Lihat [Membuat proyek baru](membuat-proyek.md).
+**Sebelum mulai:** kamu punya proyek hasil `zul build hexa` dengan file `.env` di root-nya. Rinciannya ada di [Membuat proyek baru](membuat-proyek.md).
 
 ## Mengisi API key
 
@@ -74,7 +74,7 @@ Jika key dan model benar, respons berisi `answer`. Jika `OPENAI_API_KEY` kosong,
 - Simpan API key hanya di `.env` atau di pengaturan platform deployment. File `.env` sudah ada di `.gitignore` proyek.
 - Jangan menulis key di kode, notebook, atau file config yang di-commit. Key yang pernah ter-commit tetap ada di riwayat git walau barisnya sudah dihapus. Ganti key seperti itu dengan yang baru.
 
-## Lihat juga
+## Halaman terkait
 
 - [Environment variable](../referensi/konfigurasi.md) untuk daftar lengkap variabel dan nilai bawaannya.
 - [Arsitektur hexagonal](../konsep/arsitektur-hexagonal.md) untuk alasan adapter LLM tinggal di layer infrastructure.

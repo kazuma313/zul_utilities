@@ -1,6 +1,6 @@
 # MilvusHelper
 
-`MilvusHelper` membuat koneksi, database, collection, dan index Milvus dari satu file config, lalu menyediakan operasi insert, search, query, dan delete. Halaman ini juga memuat skema file config dan fungsi pembaca config.
+`MilvusHelper` membuat koneksi, database, collection, dan index Milvus dari satu file config, lalu menyediakan operasi insert, search, query, dan delete.
 
 Baris berikut mengimpor kelasnya:
 
@@ -420,7 +420,7 @@ collections:
       efConstruction: 200
 ```
 
-## Lihat juga
+## Halaman terkait
 
 - [Menyimpan dan mencari vektor di Milvus](../panduan/memakai-milvus.md) untuk langkah pemakaian.
 - [Perintah zul](cli.md) untuk `zul install milvus-helper` dan opsinya.

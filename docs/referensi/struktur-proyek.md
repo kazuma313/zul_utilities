@@ -1,6 +1,6 @@
 # Struktur proyek hexa
 
-Halaman ini mencantumkan setiap folder dan file di proyek hasil `zul build hexa`, beserta fungsinya. Susunannya mengikuti arsitektur hexagonal: aturan bisnis di `domain`, alur kerja di `application`, teknologi di `infrastructure`, dan pintu masuk di `interface`.
+Proyek hasil `zul build hexa` tersusun mengikuti arsitektur hexagonal: aturan bisnis di `domain`, alur kerja di `application`, teknologi di `infrastructure`, dan pintu masuk di `interface`.
 
 Hampir setiap folder punya `__init__.py` berisi docstring tentang kegunaan folder itu, cara memakainya, dan contoh kode. Pohon di halaman ini tidak menampilkan file `__init__.py`, kecuali yang berisi kode.
 
@@ -36,10 +36,10 @@ my-app/
 | `dockerfile/Dockerfile` | Membangun image aplikasi dari `python:3.11-slim`. Image memasang `requirements.txt`, menyalin `src/`, dan menjalankan `uvicorn` di port 8000. |
 | `logs/` | Tempat file log. `app.log` dibuat saat aplikasi mulai. |
 | `notebooks/` | Tempat notebook eksperimen dan prototipe. Kosong di template. |
-| `src/` | Seluruh kode aplikasi. Lihat [Folder src](#folder-src). |
+| `src/` | Seluruh kode aplikasi. Rinciannya ada di [Folder src](#folder-src). |
 | `test/conftest.py` | Fixture `scripted_model`, yaitu pembuat LLM palsu untuk test. |
 | `test/test_chat_usecase.py` | Empat test contoh untuk `ChatUseCase`. |
-| `.env.example` | Contoh environment variable. Lihat [Referensi environment variable](konfigurasi.md). |
+| `.env.example` | Contoh environment variable. Rinciannya ada di [Referensi environment variable](konfigurasi.md). |
 | `.gitignore` | Daftar file yang tidak masuk git, termasuk `.env` dan file `*.log`. |
 | `pytest.ini` | Memasukkan root proyek ke path impor dan menetapkan `test/` sebagai folder test. |
 | `README.md` | Ringkasan proyek. Judulnya berisi nama proyek. |
@@ -303,7 +303,7 @@ Tabel berikut memetakan jenis kode ke lokasinya:
 
 `NAMA` adalah nama agent yang kamu buat, misalnya `rag`.
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi: Perintah zul](cli.md)
 - [Referensi: API agent](agent.md)

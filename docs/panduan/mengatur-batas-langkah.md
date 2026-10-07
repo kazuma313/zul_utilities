@@ -1,8 +1,8 @@
 # Mengatur batas langkah
 
-Halaman ini menunjukkan cara mengubah berapa banyak langkah yang boleh diambil agent untuk satu pesan. Batas ini mencegah agent yang terus-menerus meminta tool menghabiskan token tanpa henti.
+Batas langkah menentukan berapa banyak langkah yang boleh diambil agent untuk satu pesan. Batas ini mencegah agent yang terus-menerus meminta tool menghabiskan token tanpa henti.
 
-**Sebelum mulai:** kamu tahu bahwa setiap node yang dijalankan graph dihitung sebagai satu langkah, dan satu putaran tool di agent ReAct memakai dua langkah. Lihat [Cara kerja agent ReAct](../konsep/agent-react.md).
+**Sebelum mulai:** kamu tahu bahwa setiap node yang dijalankan graph dihitung sebagai satu langkah, dan satu putaran tool di agent ReAct memakai dua langkah. Rinciannya ada di [Cara kerja agent ReAct](../konsep/agent-react.md).
 
 ## Mengubah batas untuk semua agent
 
@@ -58,7 +58,7 @@ Maaf, saya butuh lebih banyak langkah untuk menyelesaikan permintaan ini.
 
 Jika kamu melihat jawaban itu pada permintaan yang wajar, batasnya terlalu rendah untuk tugas tersebut.
 
-## Lihat juga
+## Halaman terkait
 
 - [Cara kerja agent ReAct](../konsep/agent-react.md) untuk alasan batas ini ada dan cara agent menutup percakapan sebelum langkahnya habis.
 - [API agent](../referensi/agent.md) untuk `MAX_AGENT_STEPS`, `STEPS_PER_TOOL_ROUND`, dan `STEP_LIMIT_MESSAGE`.

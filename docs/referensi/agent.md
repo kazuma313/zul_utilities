@@ -1,6 +1,6 @@
 # API agent
 
-Halaman ini mencantumkan API Python proyek hasil `zul build hexa`: state, exception, prompt, perakit agent, use case, adapter, dan fungsi composition root di controller. Urutannya mengikuti layer kode, dari `domain` sampai `interface`.
+API Python proyek hasil `zul build hexa`: state, exception, prompt, perakit agent, use case, adapter, dan fungsi composition root di controller, diurutkan mengikuti layer kode dari `domain` sampai `interface`.
 
 Semua path di halaman ini relatif terhadap root proyek, dan semua impor berawalan `src`. Contoh berikut mengimpor perakit agent ReAct dan use case chat:
 
@@ -699,7 +699,7 @@ Tabel berikut mengumpulkan semua konstanta di halaman ini. Path relatif terhadap
 | `WEATHER_AGENT_SYSTEM_PROMPT` | `domain/templates/prompt/subagents/subagents_prompt_templates.py` | System prompt `weather_agent` |
 | `EMAIL_AGENT_SYSTEM_PROMPT` | `domain/templates/prompt/subagents/subagents_prompt_templates.py` | System prompt `email_agent` |
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi: Format review human-in-the-loop](format-review.md)
 - [Referensi: HTTP API](http-api.md)

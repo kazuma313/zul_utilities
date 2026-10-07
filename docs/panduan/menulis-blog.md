@@ -1,6 +1,6 @@
 # Menulis tulisan blog
 
-Halaman ini menunjukkan cara menambah tulisan ke [Blog](../blog/index.md) di situs ini: membuat file tulisan bertanggal dari template, menaruh gambar dan file pendukungnya, lalu menerbitkannya.
+Tulisan di [Blog](../blog/index.md) situs ini dibuat dari template bertanggal, dengan gambar dan file pendukung di folder tersendiri, lalu terbit lewat workflow dokumentasi.
 
 **Sebelum mulai:** `uv` terpasang dan kamu berada di root repository Zul.
 
@@ -124,7 +124,7 @@ Untuk menyimpan tulisan yang belum selesai tanpa menerbitkannya, tambahkan `draf
 
 3. Buka tab **Actions** di repository dan tunggu workflow **Dokumentasi** selesai. Tulisanmu lalu ada di `https://kazuma313.github.io/zul_utilities/blog/`.
 
-## Lihat juga
+## Halaman terkait
 
 - [Format tulisan blog](../referensi/blog.md) untuk semua kunci header, alamat halaman, dan opsi `scripts/new_post.py`.
 - [Menerbitkan dokumentasi](menerbitkan-dokumentasi.md) untuk cara kerja workflow penerbitan.

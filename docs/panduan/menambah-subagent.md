@@ -1,8 +1,8 @@
 # Menambah subagent
 
-Halaman ini menunjukkan cara menambah agent spesialis ke supervisor, sehingga supervisor bisa mendelegasikan satu bidang pekerjaan baru. Contohnya menambah subagent yang menangani pesanan.
+Supervisor bisa mendelegasikan satu bidang pekerjaan baru setelah diberi agent spesialis untuk bidang itu. Contohnya subagent yang menangani pesanan.
 
-**Sebelum mulai:** tool untuk subagent itu sudah ditulis. Lihat [Menambah tool](menambah-tool.md). Contoh ini memakai tool `get_order_status`.
+**Sebelum mulai:** tool untuk subagent itu sudah ditulis, seperti di [Menambah tool](menambah-tool.md). Contoh ini memakai tool `get_order_status`.
 
 ## Langkah-langkah
 
@@ -86,7 +86,7 @@ curl -X POST http://localhost:8000/subagents/chat \
   -d "{\"message\": \"What is the status of order ORD-1042?\"}"
 ```
 
-## Lihat juga
+## Halaman terkait
 
 - [Cara kerja subagents](../konsep/subagents.md) untuk kapan pola ini cocok, dan kenapa subagent tidak punya memory.
 - [API agent](../referensi/agent.md) untuk field `SubagentSpec` dan parameter `build_supervisor_agent`.

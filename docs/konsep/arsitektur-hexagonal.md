@@ -1,6 +1,6 @@
 # Arsitektur hexagonal
 
-Proyek hasil `zul build hexa` dibagi menjadi empat layer: `domain`, `application`, `infrastructure`, dan `interface`. Halaman ini menjelaskan apa tugas tiap layer, kenapa arah dependensinya diatur, dan apa harga yang kamu bayar untuk pembagian itu.
+Proyek hasil `zul build hexa` dibagi menjadi empat layer: `domain`, `application`, `infrastructure`, dan `interface`.
 
 ## Masalah yang diselesaikan
 
@@ -62,13 +62,13 @@ Pengecualian ini dipilih karena state adalah bentuk data yang dipakai bersama ol
 
 Pembagian ini memberi tiga hal:
 
-- **Test tidak butuh model sungguhan.** Karena agent menerima chat model lewat parameter, test memberinya model palsu yang menjawab sesuai naskah. Lihat [Menguji tanpa LLM asli](pengujian.md).
+- **Test tidak butuh model sungguhan.** Karena agent menerima chat model lewat parameter, test memberinya model palsu yang menjawab sesuai naskah. Penjelasannya ada di [Menguji tanpa LLM asli](pengujian.md).
 - **Mengganti teknologi mengubah sedikit file.** Pindah provider model atau pindah penyimpan percakapan hanya menyentuh `infrastructure` dan composition root.
 - **Pintu masuk bisa bertambah.** Endpoint playground, bot, atau perintah CLI memakai agent dan use case yang sama dengan REST API, tanpa menyalin logikanya.
 
 Harganya adalah lebih banyak file, dan satu lapis pemanggilan tambahan bahkan untuk fitur yang sederhana. Untuk skrip sekali jalan atau prototipe yang akan dibuang, struktur ini berlebihan. Struktur ini mulai terbayar saat proyek punya lebih dari satu pintu masuk, lebih dari satu agent, atau perlu diuji tanpa memanggil model.
 
-## Lihat juga
+## Halaman terkait
 
 - [Perjalanan sebuah request](alur-request.md) untuk melihat keempat layer bekerja pada satu request.
 - [Struktur proyek](../referensi/struktur-proyek.md) untuk isi setiap folder di tiap layer.

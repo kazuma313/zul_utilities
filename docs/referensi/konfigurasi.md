@@ -1,6 +1,6 @@
 # Environment variable
 
-Proyek hasil `zul build hexa` membaca lima environment variable: tiga untuk chat model dan dua untuk playground. Halaman ini mencantumkan setiap variabel, lalu file pendukung di root proyek: `.env.example`, `requirements.txt`, `requirements-dev.txt`, dan `pytest.ini`.
+Proyek hasil `zul build hexa` membaca lima environment variable: tiga untuk chat model dan dua untuk playground. File pendukungnya di root proyek adalah `.env.example`, `requirements.txt`, `requirements-dev.txt`, dan `pytest.ini`.
 
 | Variabel | Wajib | Default | Dibaca oleh |
 |---|---|---|---|
@@ -92,7 +92,7 @@ if playground_enabled():
 Jika mati, setiap request ke `/playground/*` menjawab `404`. Endpoint playground dijelaskan di [Referensi Playground API](playground-api.md).
 
 > [!WARNING]
-> Playground menampilkan argumen dan hasil setiap tool. Isi `PLAYGROUND_ENABLED=false` di lingkungan produksi.
+> Playground menampilkan argumen dan hasil setiap tool, jadi nilai untuk lingkungan produksi adalah `PLAYGROUND_ENABLED=false`.
 
 ## `PLAYGROUND_ORIGINS`
 
@@ -202,9 +202,9 @@ testpaths = test
 
 Pengaturan yang merupakan keputusan rancangan ditulis sebagai konstanta Python, bukan environment variable. Contohnya `MAX_AGENT_STEPS`, `TOOLS_REQUIRING_APPROVAL`, dan `SUBAGENTS`. Semuanya dicantumkan di [Referensi API agent](agent.md).
 
-Helper di `zul.utilities` membaca environment variable miliknya sendiri. Lihat [Referensi AI Service](ai-service.md) dan [Referensi OCR](ocr.md).
+Helper di `zul.utilities` membaca environment variable miliknya sendiri. Rinciannya ada di [Referensi AI Service](ai-service.md) dan [Referensi OCR](ocr.md).
 
-## Lihat juga
+## Halaman terkait
 
 - [Panduan: Mengatur model dan API key](../panduan/mengatur-llm.md)
 - [Panduan: Menjalankan aplikasi](../panduan/menjalankan-aplikasi.md)

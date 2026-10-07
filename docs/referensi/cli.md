@@ -1,6 +1,6 @@
 # Perintah zul
 
-`zul` adalah perintah baris yang terpasang bersama package Zul. Perintah ini membuat proyek baru dari template dan menulis file config awal untuk helper vector database. Halaman ini mencantumkan setiap perintah, opsinya, kode keluarnya, dan pesan yang dicetaknya.
+`zul` adalah perintah baris yang terpasang bersama package Zul. Perintah ini membuat proyek baru dari template dan menulis file config awal untuk helper vector database.
 
 Bentuk lengkap setiap perintah adalah sebagai berikut:
 
@@ -296,7 +296,7 @@ Mengembalikan versi Zul yang terpasang sebagai `str`, atau `"unknown"` jika meta
 | `DEFAULT_MILVUS_CONFIG` | `zul.commands.install` | Isi awal file config Milvus. |
 | `DEFAULT_REDIS_CONFIG` | `zul.commands.install` | Isi awal file config Redis. |
 
-## Lihat juga
+## Halaman terkait
 
 - [Panduan: Memasang Zul](../panduan/memasang-zul.md)
 - [Panduan: Membuat proyek baru](../panduan/membuat-proyek.md)

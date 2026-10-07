@@ -1,6 +1,6 @@
 # Format review human-in-the-loop
 
-Agent human-in-the-loop bertukar dua bentuk data dengan manusia: payload `pending_review` yang berisi aksi yang menunggu persetujuan, dan daftar keputusan yang menjawabnya. Halaman ini mencantumkan bentuk keduanya, aturan validasinya, dan pesan error-nya.
+Agent human-in-the-loop bertukar dua bentuk data dengan manusia: payload `pending_review` yang berisi aksi yang menunggu persetujuan, dan daftar keputusan yang menjawabnya.
 
 Kedua bentuk mengikuti format human-in-the-loop LangChain (`action_requests`, `review_configs`, `decisions`).
 
@@ -205,7 +205,7 @@ No decision was given for this action. It was not executed.
 
 Lewat `ReviewedChatUseCase` dan `POST /hitl/review`, keadaan ini tidak terjadi karena jumlah keputusan sudah diperiksa lebih dulu.
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi: HTTP API](http-api.md)
 - [Referensi: API agent](agent.md)

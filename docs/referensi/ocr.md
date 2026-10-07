@@ -199,7 +199,7 @@ Prompt OCR berupa `str`. Lokasi: `zul.utilities.Prompts.ocr`. Prompt ini meminta
 
 Modul `zul.utilities.docling_OCR` tetap bisa dipakai dan meneruskan ke `zul.utilities.OCR.docling_OCR`. Dari path lama itu hanya `DoclingVLMConverter` yang bisa diimpor.
 
-## Lihat juga
+## Halaman terkait
 
 - [Mengubah dokumen menjadi teks](../panduan/membaca-dokumen-ocr.md) untuk langkah pemakaian.
 - [Helper kecil](helper.md) untuk `PDFProcessor`, yang membaca PDF berteks tanpa memanggil model.

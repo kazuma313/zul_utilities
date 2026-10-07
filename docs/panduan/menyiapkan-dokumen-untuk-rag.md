@@ -1,6 +1,6 @@
 # Menyiapkan dokumen untuk RAG
 
-Halaman ini menunjukkan cara memotong dokumen menjadi chunk dan memberi setiap chunk konteks dengan skill `contextual_retrieval`, supaya hasilnya siap dimasukkan ke vector database dan dicari oleh AI. Metodenya mengikuti [Contextual Retrieval dari Anthropic](https://www.anthropic.com/engineering/contextual-retrieval), dengan model lokal di laptop.
+Skill `contextual_retrieval` memotong dokumen menjadi chunk dan memberi setiap chunk konteks, supaya hasilnya siap dimasukkan ke vector database dan dicari oleh AI. Metodenya mengikuti [Contextual Retrieval dari Anthropic](https://www.anthropic.com/engineering/contextual-retrieval), dengan model lokal di laptop.
 
 Sebuah chunk sering tidak bisa dipahami sendirian. Kalimat "Kenapa sih orang-orang masih mengharapkan harganya akan turun lagi?" tidak menyebut siapa yang bicara, di acara apa, dan tentang harga apa. Contextual retrieval menaruh keterangan itu di depan chunk sebelum chunk di-embed dan diindeks, sehingga pertanyaan seperti "apa kata KJo soal harga Bitcoin" bisa menemukannya.
 
@@ -104,7 +104,7 @@ Dua hal yang perlu kamu ketahui dari pengujian itu:
 
 `nomic-embed-text` lemah untuk teks berbahasa Indonesia. Pada pengujian ini, embedding hanya menemukan 67% jawaban di lima hasil teratas, sedangkan BM25 menemukan 95%. Untuk koleksi berbahasa Indonesia, bandingkan dengan model embedding multibahasa seperti `bge-m3` memakai skrip yang sama.
 
-## Lihat juga
+## Halaman terkait
 
 - `SKILL.md` di folder skill untuk semua kolom record dan opsi skrip.
 - `research/contextual_retrieval_assessment/README.md` untuk laporan lengkap penilaian model, beserta dokumen, hasil, dan catatan penilaiannya.

@@ -1,8 +1,8 @@
 # Menjalankan aplikasi
 
-Halaman ini menunjukkan cara menyalakan REST API proyekmu: untuk pengembangan, dan di dalam container.
+REST API proyekmu berjalan dengan dua cara: untuk pengembangan, dan di dalam container.
 
-**Sebelum mulai:** dependency proyek sudah terpasang dan `.env` sudah berisi API key. Lihat [Membuat proyek baru](membuat-proyek.md) dan [Mengatur model dan API key](mengatur-llm.md).
+**Sebelum mulai:** dependency proyek sudah terpasang dan `.env` sudah berisi API key. Rinciannya ada di [Membuat proyek baru](membuat-proyek.md) dan [Mengatur model dan API key](mengatur-llm.md).
 
 ## Menjalankan server pengembangan
 
@@ -53,9 +53,9 @@ Server yang hidup menjawab:
 {"status": "ok"}
 ```
 
-Untuk mencoba endpoint lain dari browser, buka dokumentasi interaktif buatan FastAPI di `http://localhost:8000/docs`. Untuk mencoba agent sambil melihat langkahnya, buka [Playground](../playground.md).
+Dokumentasi interaktif buatan FastAPI untuk semua endpoint ada di `http://localhost:8000/docs`. Agent beserta setiap langkahnya bisa dicoba di [Playground](../playground.md).
 
-## Lihat juga
+## Halaman terkait
 
 - [HTTP API](../referensi/http-api.md) untuk bentuk request dan respons setiap endpoint.
 - [Menyimpan percakapan di database](menyimpan-percakapan.md), yang wajib dilakukan sebelum menjalankan lebih dari satu worker.

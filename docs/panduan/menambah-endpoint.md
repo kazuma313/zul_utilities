@@ -1,8 +1,8 @@
 # Menambah endpoint
 
-Halaman ini menunjukkan cara menyediakan fitur baru lewat REST API. Contohnya menambah `POST /summaries` yang merangkum teks. Langkahnya mengikuti jalur yang sama dengan endpoint bawaan: use case, controller, router, lalu pendaftaran.
+Fitur baru disediakan lewat REST API dengan menambah endpoint. Contohnya `POST /summaries` yang merangkum teks. Langkahnya mengikuti jalur yang sama dengan endpoint bawaan: use case, controller, router, lalu pendaftaran.
 
-**Sebelum mulai:** kamu mengenal pembagian layer di proyek. Lihat [Perjalanan sebuah request](../konsep/alur-request.md) jika belum.
+**Sebelum mulai:** kamu mengenal pembagian layer di proyek. Penjelasannya ada di [Perjalanan sebuah request](../konsep/alur-request.md).
 
 ## Langkah-langkah
 
@@ -113,7 +113,7 @@ curl -X POST http://localhost:8000/summaries \
 
 Ganti `TEKS_YANG_DIRANGKUM` dengan teksmu. Respons berisi field `summary`. Endpoint baru juga muncul di dokumentasi interaktif, di `http://localhost:8000/docs`.
 
-## Lihat juga
+## Halaman terkait
 
 - [Menguji agent](menguji-agent.md) untuk menguji endpoint dengan model palsu.
 - [HTTP API](../referensi/http-api.md) untuk kode status yang dipakai endpoint bawaan.

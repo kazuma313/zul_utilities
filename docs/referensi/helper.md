@@ -1,6 +1,6 @@
 # Helper kecil
 
-Halaman ini mencantumkan helper di `zul.utilities` yang tidak punya halaman referensi sendiri: logger, embedding palsu, isi folder `script_helper`, dan contoh graph LangGraph terkecil.
+Helper di `zul.utilities` yang tidak punya halaman referensi sendiri: logger, embedding palsu, isi folder `script_helper`, dan contoh graph LangGraph terkecil.
 
 Tabel berikut memetakan setiap modul ke isinya dan extra yang dibutuhkan:
 
@@ -429,7 +429,7 @@ Beberapa modul pernah berada di lokasi lain. Path lama tetap bisa dipakai dan me
 
 Kode baru sebaiknya memakai lokasi sekarang.
 
-## Lihat juga
+## Halaman terkait
 
 - [Memakai helper kecil](../panduan/memakai-helper.md) untuk langkah pemakaian.
 - [AI Service](ai-service.md) untuk `AIService` versi lengkap.

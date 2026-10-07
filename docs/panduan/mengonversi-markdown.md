@@ -1,8 +1,8 @@
 # Mengubah Markdown menjadi PDF dan PPTX
 
-Halaman ini menunjukkan cara mengubah teks Markdown, misalnya jawaban LLM, menjadi file PDF atau presentasi PowerPoint. Hasilnya bisa ditulis ke file atau diambil sebagai bytes untuk langsung diunduh lewat API.
+Teks Markdown, misalnya jawaban LLM, bisa diubah menjadi file PDF atau presentasi PowerPoint. Hasilnya bisa ditulis ke file atau diambil sebagai bytes untuk langsung diunduh lewat API.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang (lihat [Memasang Zul](memasang-zul.md)). Kedua converter di halaman ini memakai extra `converter`, yang dipasang di langkah pertama.
+**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)). Kedua converter di halaman ini memakai extra `converter`, yang dipasang di langkah pertama.
 
 ## Mengubah Markdown menjadi PDF
 
@@ -202,7 +202,7 @@ Saat PPTX berhasil dibuat, `convert_markdown` mencetak nama file dan jumlah slid
 
 Buka kedua file untuk memastikan isinya sesuai.
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi Markdown converter](../referensi/markdown-converter.md) untuk semua method, sintaks slide, dan kunci gaya.
 - [Menambah endpoint](menambah-endpoint.md) untuk menaruh endpoint unduhan di proyek hasil `zul build hexa`.

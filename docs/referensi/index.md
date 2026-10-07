@@ -1,6 +1,6 @@
 # Referensi
 
-Referensi adalah tempat mencari fakta saat kamu sedang bekerja: opsi sebuah perintah, bentuk request, parameter sebuah fungsi, nilai bawaan. Halaman di bagian ini mendeskripsikan, tidak mengajari. Untuk langkah mengerjakan sesuatu, buka [Panduan](../panduan/index.md).
+Fakta untuk dicari cepat: opsi sebuah perintah, bentuk request, parameter sebuah fungsi, nilai bawaan.
 
 ## Zul CLI
 

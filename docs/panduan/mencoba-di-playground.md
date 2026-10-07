@@ -1,6 +1,6 @@
 # Mencoba fitur di playground
 
-Halaman ini menunjukkan cara mencoba agent yang sedang kamu buat lewat panel Playground di dokumentasi ini, sebelum endpoint dan test-nya selesai. Kamu melihat setiap langkah agent: tool yang diminta, argumennya, hasilnya, dan aksi yang menunggu keputusan.
+Panel Playground di dokumentasi ini menjalankan agent yang sedang kamu buat, sebelum endpoint dan test-nya selesai. Panel menampilkan setiap langkah agent: tool yang diminta, argumennya, hasilnya, dan aksi yang menunggu keputusan.
 
 **Sebelum mulai:** kamu punya proyek hasil `zul build hexa`, dan dokumentasi ini dibuka sebagai situs dengan `uv run mkdocs serve` di repository Zul.
 
@@ -110,7 +110,7 @@ Ganti `ALAMAT_DOKUMENTASI` dengan alamat situsmu, tanpa path di belakangnya. Jik
 > [!WARNING]
 > Playground menampilkan argumen dan hasil setiap tool, dan bisa menjalankan aksi agent. Isi `PLAYGROUND_ENABLED=false` di lingkungan produksi.
 
-## Lihat juga
+## Halaman terkait
 
 - [Playground API](../referensi/playground-api.md) untuk endpoint yang dipanggil panel, termasuk bentuk jejak langkahnya.
 - [Environment variable](../referensi/konfigurasi.md) untuk `PLAYGROUND_ENABLED` dan `PLAYGROUND_ORIGINS`.

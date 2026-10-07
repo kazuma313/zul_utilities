@@ -1,6 +1,6 @@
 # Cara situs dokumentasi diterbitkan
 
-Situs ini terbit ke GitHub Pages lewat workflow GitHub Actions. Halaman ini menjelaskan jalannya penerbitan, kenapa workflow-nya mengunci semua versi dan memeriksa hasilnya berlapis, dan apa yang tetap tidak dijamin. Rincian setiap langkah ada di [Workflow dokumentasi](../referensi/workflow-dokumentasi.md).
+Situs ini terbit ke GitHub Pages lewat workflow GitHub Actions yang mengunci semua versi dan memeriksa hasilnya berlapis. Rincian setiap langkah ada di [Workflow dokumentasi](../referensi/workflow-dokumentasi.md).
 
 ## Dari push sampai situs terbit
 
@@ -75,12 +75,12 @@ Draf memisahkan menulis dari menerbitkan. Tulisan dengan `draft: true` bisa diba
 ## Yang tetap tidak dijamin
 
 - **Tautan ke situs lain tidak diperiksa.** Situs lain bisa berubah atau sedang mati kapan saja. Memeriksanya membuat penerbitan gagal karena hal yang tidak bisa kamu perbaiki dari repository ini.
-- **Tampilan tidak diperiksa.** Workflow memastikan halaman ada dan bisa dibuka, bukan bahwa tampilannya benar. Periksa tampilan dengan `uv run mkdocs serve` sebelum push.
-- **Gangguan di GitHub tetap bisa menggagalkan run.** Jalankan ulang job-nya dari tab **Actions**. Artifact disimpan tujuh hari, jadi job `deploy` bisa diulang tanpa membangun ulang situsnya.
+- **Tampilan tidak diperiksa.** Workflow memastikan halaman ada dan bisa dibuka, bukan bahwa tampilannya benar. Tampilan hanya terlihat lewat `uv run mkdocs serve` atau di situs yang sudah terbit.
+- **Gangguan di GitHub tetap bisa menggagalkan run.** Run seperti itu bisa dijalankan ulang dari tab **Actions**. Artifact disimpan tujuh hari, jadi job `deploy` bisa diulang tanpa membangun ulang situsnya.
 - **Versi paket Python tidak diperbarui otomatis.** Dependabot hanya memperbarui action. Tema dan plugin diperbarui saat kamu menjalankan `uv lock --upgrade-package`.
 - **Pengaturan Pages ada di luar repository.** Jika Source di **Settings > Pages** diubah dari **GitHub Actions**, langkah penerbitan gagal sampai pengaturannya dikembalikan.
 
-## Lihat juga
+## Halaman terkait
 
 - [Workflow dokumentasi](../referensi/workflow-dokumentasi.md) untuk rincian setiap langkah dan versi yang dikunci.
 - [Menerbitkan dokumentasi](../panduan/menerbitkan-dokumentasi.md) untuk langkah menerbitkan dan memperbarui versi.

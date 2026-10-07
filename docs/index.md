@@ -16,12 +16,12 @@ Zul membuat kerangka proyek AI berarsitektur hexagonal dengan satu perintah: age
 
 <div class="zul-actions" markdown>
 
-[Mulai tutorial](tutorial/agent-pertama.md)
-[Buka playground](playground.md)
+[Tutorial pertama](tutorial/agent-pertama.md)
+[Playground](playground.md)
 
 </div>
 
-Untuk membuat proyek baru, jalankan:
+Proyek baru dibuat dengan satu perintah:
 
 ```shell
 zul build hexa --name my-agent
@@ -35,7 +35,7 @@ zul build hexa --name my-agent
 Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
 </div>
 
-Ini agent human-in-the-loop dari template, diputar sebagai simulasi. Ia berhenti sebelum mengirim email dan menunggu keputusanmu.
+Panel ini menampilkan simulasi agent human-in-the-loop dari template. Agent itu berhenti sebelum mengirim email dan menunggu keputusan manusia.
 
 </div>
 
@@ -43,7 +43,7 @@ Ini agent human-in-the-loop dari template, diputar sebagai simulasi. Ia berhenti
 
 ## Peta dokumentasi
 
-Dokumentasi ini dibagi menjadi empat bagian. Pilih dari keadaanmu sekarang: sedang belajar atau sedang bekerja, butuh langkah atau butuh pengetahuan.
+Dokumentasi ini dibagi menjadi empat bagian, menurut kebutuhan pembaca: belajar atau bekerja, langkah atau pengetahuan.
 
 <div class="zul-map" markdown>
 
@@ -56,7 +56,7 @@ Dokumentasi ini dibagi menjadi empat bagian. Pilih dari keadaanmu sekarang: seda
 
 ## Yang ada di dalam Zul
 
-| Bagian | Isi | Mulai dari |
+| Bagian | Isi | Halaman pertama |
 |---|---|---|
 | CLI | `zul build hexa`, `zul install milvus-helper`, `zul install redis-helper` | [Perintah zul](referensi/cli.md) |
 | Template proyek | Agent ReAct, human-in-the-loop, subagents, REST API, memory, test, playground | [Membuat agent pertamamu](tutorial/agent-pertama.md) |

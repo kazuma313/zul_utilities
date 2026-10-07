@@ -1,10 +1,8 @@
 # Membangun tim agent
 
-Di tutorial ini kita memakai agent ketiga di proyekmu: seorang supervisor yang membagi pekerjaan ke agent spesialis. Kita melihat cara ia mendelegasikan tugas, lalu menambahkan satu spesialis baru ke timnya.
+Agent ketiga di proyekmu adalah supervisor yang membagi pekerjaan ke agent spesialis. Tutorial ini memakai supervisor itu, lalu menambahkan satu spesialis baru ke timnya. Hasil akhirnya supervisor dengan tiga subagent, salah satunya buatanmu.
 
-Di akhir tutorial kamu punya supervisor dengan tiga subagent, salah satunya buatanmu.
-
-**Sebelum mulai:** selesaikan [Membuat agent pertamamu](agent-pertama.md), karena kita memakai tool `get_order_status` dari tutorial itu. Server-nya harus masih berjalan.
+**Sebelum mulai:** tutorial [Membuat agent pertamamu](agent-pertama.md) sudah selesai, karena tool `get_order_status` dari tutorial itu dipakai di sini, dan server-nya masih berjalan.
 
 ## Melihat supervisor mendelegasikan
 

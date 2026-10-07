@@ -1,8 +1,8 @@
 # Membuat proyek baru
 
-Halaman ini menunjukkan cara membuat proyek dari template `hexa` dan menyiapkannya sampai bisa dijalankan.
+Proyek baru dibuat dari template `hexa` dengan `zul build hexa`, lalu disiapkan sampai bisa dijalankan.
 
-**Sebelum mulai:** [pasang Zul](memasang-zul.md) sehingga `zul --version` berjalan.
+**Sebelum mulai:** Zul sudah terpasang ([Memasang Zul](memasang-zul.md)) dan `zul --version` berjalan.
 
 ## Langkah-langkah
 
@@ -62,7 +62,7 @@ Test itu tidak membutuhkan API key. Baris terakhir keluarannya:
 4 passed
 ```
 
-## Lihat juga
+## Halaman terkait
 
 - [Menjalankan aplikasi](menjalankan-aplikasi.md) untuk menyalakan server.
 - [Struktur proyek](../referensi/struktur-proyek.md) untuk isi setiap folder yang baru dibuat.

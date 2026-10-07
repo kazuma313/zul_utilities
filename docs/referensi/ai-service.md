@@ -260,7 +260,7 @@ Memeriksa apakah client embedding tersedia.
 
 Variabel `EMBEDDING_*` hanya berpengaruh jika bagian `embedding` dibuat, yaitu saat file config memuat kunci `embedding` atau saat `from_env` menemukan `EMBEDDING_API_KEY`.
 
-## Lihat juga
+## Halaman terkait
 
 - [Memanggil LLM dan embedding](../panduan/memanggil-llm-dan-embedding.md) untuk langkah pemakaian.
 - [Helper kecil](helper.md) untuk `AIService` versi ringkas di `zul.utilities.script_helper.ai_models`.

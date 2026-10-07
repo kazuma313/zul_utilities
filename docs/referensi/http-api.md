@@ -1,6 +1,6 @@
 # HTTP API
 
-Proyek hasil `zul build hexa` menyediakan REST API yang dibuat dengan FastAPI. Aplikasinya adalah objek `app` di `src/interface/http/main.py`. Halaman ini mencantumkan setiap endpoint: body request, bentuk respons, dan kode statusnya.
+Proyek hasil `zul build hexa` menyediakan REST API yang dibuat dengan FastAPI. Aplikasinya adalah objek `app` di `src/interface/http/main.py`.
 
 Semua body request dan respons memakai JSON. Contoh di halaman ini memakai alamat `http://localhost:8000`, yaitu alamat server saat dijalankan di komputermu.
 
@@ -100,7 +100,7 @@ Kode status:
 | `200` | Agent menjawab. | Tidak ada |
 | `400` | `message` hanya berisi spasi. | `Message tidak boleh kosong` |
 | `422` | `message` tidak dikirim, berupa string kosong, atau bukan string. | Daftar kesalahan per field |
-| `500` | Lihat [Kode status](#kode-status). | Tidak ada |
+| `500` | Rinciannya ada di [Kode status](#kode-status). | Tidak ada |
 
 Jika agent kehabisan langkah, respons tetap `200` dan `answer` berisi `Maaf, saya butuh lebih banyak langkah untuk menyelesaikan permintaan ini.`
 
@@ -160,7 +160,7 @@ Kode status:
 | `400` | `message` hanya berisi spasi. | `Message tidak boleh kosong` |
 | `400` | Thread itu masih punya aksi yang menunggu keputusan. | `Masih ada aksi yang menunggu persetujuan. Kirim keputusannya dulu.` |
 | `422` | `message` tidak dikirim, berupa string kosong, atau bukan string. | Daftar kesalahan per field |
-| `500` | Lihat [Kode status](#kode-status). | Tidak ada |
+| `500` | Rinciannya ada di [Kode status](#kode-status). | Tidak ada |
 
 Contoh request yang meminta agent mengirim email:
 
@@ -227,7 +227,7 @@ Kode status:
 | `400` | Jumlah keputusan tidak sama dengan jumlah aksi. | `Butuh 1 keputusan (satu per aksi), diterima 2` |
 | `400` | Keputusan `edit` tanpa `edited_action`. | `Keputusan 'edit' wajib menyertakan 'edited_action'` |
 | `422` | `thread_id` tidak dikirim, `decisions` kosong, `type` bukan salah satu dari tiga nilai, atau `edited_action` tidak berisi `name` dan `args`. | Daftar kesalahan per field |
-| `500` | Lihat [Kode status](#kode-status). | Tidak ada |
+| `500` | Rinciannya ada di [Kode status](#kode-status). | Tidak ada |
 
 Angka pada pesan jumlah keputusan mengikuti keadaan sebenarnya. Keputusan yang ditolak dengan `400` atau `422` tidak mengubah apa pun: aksi tetap menunggu dan keputusan bisa dikirim ulang.
 
@@ -277,7 +277,7 @@ Contoh respons:
 > [!NOTE]
 > Subagent `email_agent` menjalankan `send_email` tanpa langkah persetujuan. Endpoint ini tidak pernah mengembalikan `pending_review`.
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi: Format review human-in-the-loop](format-review.md)
 - [Referensi: Playground API](playground-api.md)

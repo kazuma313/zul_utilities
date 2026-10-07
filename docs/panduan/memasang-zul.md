@@ -1,6 +1,6 @@
 # Memasang Zul
 
-Halaman ini menunjukkan cara memasang Zul sebagai perintah `zul` di terminal dan sebagai library Python. Setelah selesai, `zul --version` berjalan dan `zul.utilities` bisa diimpor.
+Zul terpasang sebagai perintah `zul` di terminal dan sebagai library Python. Setelah terpasang, `zul --version` berjalan dan `zul.utilities` bisa diimpor.
 
 **Sebelum mulai:** kamu butuh Python 3.11 atau lebih baru (periksa dengan `python --version`), Git, dan [uv](https://github.com/astral-sh/uv) atau `pip`.
 
@@ -103,7 +103,7 @@ Jika instalasi gagal dengan pesan tentang `requires-python`, environment-mu mema
 uv tool install --python 3.11 git+https://github.com/kazuma313/zul_utilities.git
 ```
 
-## Lihat juga
+## Halaman terkait
 
 - [Membuat proyek baru](membuat-proyek.md) untuk langkah berikutnya.
 - [Berkontribusi](berkontribusi.md) jika kamu ingin memasang Zul dari source untuk mengubahnya.

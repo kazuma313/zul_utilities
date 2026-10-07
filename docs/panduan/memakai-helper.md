@@ -1,8 +1,8 @@
 # Memakai helper kecil
 
-Halaman ini menunjukkan cara memakai helper kecil di `zul.utilities` yang tidak punya panduan sendiri: embedding palsu untuk test, logger, pengukur waktu, pembaca PDF, penyimpan hasil eksperimen, dan pengubah Document menjadi JSON. Setiap bagian berdiri sendiri, jadi lompat langsung ke tugas yang kamu butuhkan.
+Helper kecil di `zul.utilities` yang tidak punya panduan sendiri: embedding palsu untuk test, logger, pengukur waktu, pembaca PDF, penyimpan hasil eksperimen, dan pengubah Document menjadi JSON. Setiap bagian berdiri sendiri.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang (lihat [Memasang Zul](memasang-zul.md)). Dua tugas membutuhkan extra: membaca PDF memakai extra `pdf`, dan menyimpan latency ke CSV memakai extra `analysis`. Perintah pemasangannya ada di bagian masing-masing.
+**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)). Dua tugas membutuhkan extra: membaca PDF memakai extra `pdf`, dan menyimpan latency ke CSV memakai extra `analysis`. Perintah pemasangannya ada di bagian masing-masing.
 
 ## Membuat embedding palsu untuk test
 
@@ -277,7 +277,7 @@ Perintah itu mencetak bentuk vektornya:
 (1, 4)
 ```
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi helper kecil](../referensi/helper.md) untuk semua parameter, nilai kembalian, dan path impor lama.
 - [Menyimpan dan mencari vektor di Milvus](memakai-milvus.md) dan [Menyimpan dan mencari vektor di Redis](memakai-redis.md) untuk memakai `FakeEmbeddingModel` dan pengukur waktu.

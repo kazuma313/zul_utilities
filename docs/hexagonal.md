@@ -1,4 +1,4 @@
-# 🏛️ Hexagonal Architecture - Panduan Lengkap untuk Pemula
+# 🏛️ Hexagonal Architecture dari Nol
 
 ## 📖 Apa itu Hexagonal Architecture?
 

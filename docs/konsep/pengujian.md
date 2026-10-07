@@ -1,6 +1,6 @@
 # Menguji tanpa LLM asli
 
-Test di proyek hasil `zul build hexa` tidak pernah memanggil LLM sungguhan. Halaman ini menjelaskan kenapa template memilih begitu, bagaimana LLM palsunya bekerja, apa yang dibuktikan dan tidak dibuktikan oleh test seperti itu, dan sifat arsitektur mana yang memungkinkannya.
+Test di proyek hasil `zul build hexa` tidak pernah memanggil LLM sungguhan: LLM diganti model palsu yang menjawab sesuai naskah.
 
 Kode yang dibahas ada di `test/conftest.py` dan `test/test_chat_usecase.py`. Polanya mengikuti [panduan unit testing LangChain](https://docs.langchain.com/oss/python/langchain/test/unit-testing).
 
@@ -160,7 +160,7 @@ Untuk hal-hal itu kamu butuh test yang memanggil model sungguhan. Test seperti i
 
 Pembagian ini bukan kelemahan pendekatannya, melainkan batasnya. Test cepat menjaga bahwa aplikasimu melakukan hal yang benar untuk setiap keputusan model. Test dengan model asli menjaga bahwa model mengambil keputusan yang baik. Keduanya menjawab pertanyaan yang berbeda.
 
-## Lihat juga
+## Halaman terkait
 
 - [Panduan: Menguji agent](../panduan/menguji-agent.md)
 - [Konsep: Perjalanan sebuah request](alur-request.md)

@@ -1,10 +1,8 @@
 # Membuat agent pertamamu
 
-Di tutorial ini kita membuat proyek AI baru, menjalankannya, dan berbicara dengan agent-nya. Setelah itu kita memberi agent sebuah tool buatan kita sendiri dan melihat ia memakainya.
+Proyek AI baru dibuat, dijalankan, lalu diberi sebuah tool buatan sendiri. Hasil akhirnya server yang menjawab pertanyaan, memanggil tool, dan mengingat percakapan.
 
-Di akhir tutorial kamu punya server yang menjawab pertanyaan, memanggil tool, dan mengingat percakapan.
-
-**Sebelum mulai:** siapkan hal-hal di [daftar kebutuhan tutorial](index.md), termasuk membuka dokumentasi ini sebagai situs.
+**Sebelum mulai:** semua hal di [daftar kebutuhan tutorial](index.md) sudah siap, termasuk dokumentasi ini yang dibuka sebagai situs.
 
 ## Membuat proyek
 

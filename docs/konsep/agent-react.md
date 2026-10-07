@@ -1,6 +1,6 @@
 # Cara kerja agent ReAct
 
-Agent ReAct (*Reason + Act*) adalah agent dasar di template, dan dua agent lainnya dibangun di atasnya. Halaman ini menjelaskan bagaimana putarannya bekerja, apa peran state dan reducer, kenapa graph-nya ditulis manual, kenapa ada batas langkah dan kenapa perbandingannya berbentuk `remaining_steps <= steps_per_tool_round`, dan apa yang terjadi saat sebuah tool gagal.
+Agent ReAct (*Reason + Act*) adalah agent dasar di template, dan dua agent lainnya dibangun di atasnya.
 
 Kodenya ada di `src/application/AI/agents/react/`. Agent ini ditulis dengan [LangGraph Graph API](https://docs.langchain.com/oss/python/langgraph/graph-api) dan mengikuti pola di [quickstart LangGraph](https://docs.langchain.com/oss/python/langgraph/quickstart).
 
@@ -128,7 +128,7 @@ if response.tool_calls and out_of_steps:
     response = AIMessage(id=response.id, content=STEP_LIMIT_MESSAGE)
 ```
 
-Untuk memahami perbandingannya, lihat dari sudut `llm_call` yang baru saja menerima tool call dari model. Jika tool call itu diteruskan, graph harus menjalankan satu putaran tool: `tool_node`, lalu `llm_call` berikutnya. Itu dua langkah, dan angka itulah isi `STEPS_PER_TOOL_ROUND`. Pemanggilan LLM berikutnya juga harus masih punya sedikitnya satu langkah tersisa. Jika tidak, graph berakhir dengan `GraphRecursionError` walaupun model sudah siap menjawab.
+Perbandingannya paling jelas dari sudut `llm_call` yang baru saja menerima tool call dari model. Jika tool call itu diteruskan, graph harus menjalankan satu putaran tool: `tool_node`, lalu `llm_call` berikutnya. Itu dua langkah, dan angka itulah isi `STEPS_PER_TOOL_ROUND`. Pemanggilan LLM berikutnya juga harus masih punya sedikitnya satu langkah tersisa. Jika tidak, graph berakhir dengan `GraphRecursionError` walaupun model sudah siap menjawab.
 
 Jadi tool call hanya aman diteruskan jika sisa langkah lebih besar daripada biaya satu putaran. Jika sisa langkah sama dengan atau lebih kecil daripada biaya itu, putaran berikutnya akan menghabiskan semuanya, dan percakapan harus ditutup sekarang.
 
@@ -167,13 +167,13 @@ Dua yang pertama adalah kesalahan model, dan model bisa memperbaikinya sendiri s
 Yang ketiga berbeda. Exception di dalam fungsi tool tidak diubah menjadi pesan untuk model; ia menghentikan seluruh request. Akibatnya, tanggung jawab ada di penulis tool: kegagalan yang bisa diperkirakan, seperti layanan luar yang tidak menjawab atau data yang tidak ditemukan, sebaiknya ditangkap di dalam tool dan dikembalikan sebagai teks. Dengan begitu model bisa menjelaskan masalahnya ke user alih-alih request gagal.
 
 > [!NOTE]
-> Agent human-in-the-loop tidak memakai `ToolNode`. Node tool-nya ditulis sendiri dan meniru ketiga perilaku di atas. Lihat [Cara kerja human-in-the-loop](human-in-the-loop.md).
+> Agent human-in-the-loop tidak memakai `ToolNode`. Node tool-nya ditulis sendiri dan meniru ketiga perilaku di atas. Penjelasannya ada di [Cara kerja human-in-the-loop](human-in-the-loop.md).
 
 ## Kapan agent ini cocok
 
-Pakai agent ReAct saat satu agent dengan beberapa tool sudah memenuhi kebutuhan. Jika ada tool yang harus disetujui manusia sebelum dijalankan, pakai agent human-in-the-loop. Jika pekerjaannya terbagi ke beberapa bidang yang masing-masing butuh instruksi sendiri, pakai subagents.
+Agent ReAct cocok saat satu agent dengan beberapa tool sudah memenuhi kebutuhan. Agent human-in-the-loop cocok saat ada tool yang harus disetujui manusia sebelum dijalankan. Subagents cocok saat pekerjaannya terbagi ke beberapa bidang yang masing-masing butuh instruksi sendiri.
 
-## Lihat juga
+## Halaman terkait
 
 - [Konsep: Cara kerja human-in-the-loop](human-in-the-loop.md)
 - [Konsep: Cara kerja subagents](subagents.md)

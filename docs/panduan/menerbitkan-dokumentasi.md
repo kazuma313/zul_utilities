@@ -1,6 +1,6 @@
 # Menerbitkan dokumentasi dan playground
 
-Halaman ini menunjukkan cara menerbitkan situs dokumentasi ini ke GitHub Pages, dan cara membuat panel playground di situs itu berbicara dengan aplikasimu.
+Situs dokumentasi ini terbit ke GitHub Pages, dan panel playground di situs itu bisa disambungkan ke aplikasimu.
 
 Situs dokumentasi dan aplikasi adalah dua hal yang diterbitkan terpisah. Situs dokumentasi berupa file statis. Aplikasi adalah API yang berjalan di server. Panel playground menghubungkan keduanya lewat browser pembaca.
 
@@ -107,9 +107,9 @@ Aplikasi hasil `zul build hexa` dijalankan sebagai container. Langkah membangun 
 > [!WARNING]
 > Jangan menyalakan playground di aplikasi yang bisa dijangkau publik. Playground menampilkan argumen dan hasil setiap tool, dan menjalankan aksi agent tanpa autentikasi. Di server produksi, isi `PLAYGROUND_ENABLED=false`.
 
-Sebelum menjalankan lebih dari satu worker, pindahkan penyimpan percakapan ke database. Lihat [Menyimpan percakapan di database](menyimpan-percakapan.md).
+Sebelum menjalankan lebih dari satu worker, pindahkan penyimpan percakapan ke database. Rinciannya ada di [Menyimpan percakapan di database](menyimpan-percakapan.md).
 
-## Lihat juga
+## Halaman terkait
 
 - [Workflow dokumentasi](../referensi/workflow-dokumentasi.md) untuk setiap langkah, pemeriksaan, dan versi yang dikunci di workflow.
 - [Cara situs dokumentasi diterbitkan](../konsep/penerbitan-dokumentasi.md) untuk alasan di balik pengaturan workflow itu.

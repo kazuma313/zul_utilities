@@ -1,8 +1,8 @@
 # Tutorial
 
-Tutorial adalah pelajaran yang kamu kerjakan dari awal sampai akhir. Di setiap langkah kamu mengetik sesuatu dan melihat hasilnya, sehingga di akhir pelajaran ada sesuatu yang berjalan di komputermu.
+Pelajaran dari awal sampai akhir. Setiap langkah mengetik sesuatu dan menampilkan hasilnya, dan setiap pelajaran berakhir dengan sesuatu yang berjalan di komputermu.
 
-Kerjakan ketiganya berurutan. Setiap tutorial melanjutkan proyek dari tutorial sebelumnya.
+Ketiga tutorial berurutan: setiap tutorial melanjutkan proyek dari tutorial sebelumnya.
 
 1. **[Membuat agent pertamamu](agent-pertama.md)**
 
@@ -18,7 +18,7 @@ Kerjakan ketiganya berurutan. Setiap tutorial melanjutkan proyek dari tutorial s
 
 ## Yang kamu butuhkan
 
-- Python 3.11 atau lebih baru, dan Zul yang sudah terpasang. Lihat [Memasang Zul](../panduan/memasang-zul.md).
+- Python 3.11 atau lebih baru, dan Zul yang sudah terpasang. Cara memasangnya ada di [Memasang Zul](../panduan/memasang-zul.md).
 - API key OpenAI, atau endpoint lain yang kompatibel dengan OpenAI.
 - Dokumentasi ini dibuka sebagai situs, bukan dibaca di GitHub. Tutorial memakai panel Playground di halamannya, dan panel itu hanya tampil di situs.
 

@@ -8,7 +8,7 @@ hide:
 
 # Playground
 
-Di halaman ini kamu berbicara dengan agent, lalu melihat setiap langkah yang diambilnya sebelum menjawab. Pilih fitur, kirim pesan, dan baca jejaknya di sebelah kanan.
+Panel ini mengirim pesan ke agent dan menampilkan setiap langkah yang diambilnya sebelum menjawab. Jejak langkahnya tampil di sebelah kanan.
 
 <div class="zul-playground" data-layout="wide">
 Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
@@ -62,10 +62,10 @@ Saat agent ingin menjalankan aksi yang butuh persetujuan, panel menampilkan form
 
 </div>
 
-## Lihat juga
+## Halaman terkait
 
 - [Mencoba fitur di playground](panduan/mencoba-di-playground.md): mendaftarkan fitur yang sedang kamu buat supaya muncul di daftar pilihan.
 - [Playground API](referensi/playground-api.md): endpoint yang dipanggil panel ini.
-- [Membuat agent pertamamu](tutorial/agent-pertama.md): jika kamu belum punya proyek untuk disambungkan.
+- [Membuat agent pertamamu](tutorial/agent-pertama.md): membuat proyek yang bisa disambungkan ke panel ini.
 
 </div>

@@ -1,8 +1,8 @@
 # Menambah node ke graph
 
-Halaman ini menunjukkan cara menyisipkan langkah baru ke graph agent ReAct. Contohnya menambah node yang mencatat setiap permintaan tool ke log sebelum tool dijalankan.
+Langkah baru disisipkan ke graph agent ReAct sebagai node. Contohnya node yang mencatat setiap permintaan tool ke log sebelum tool dijalankan.
 
-**Sebelum mulai:** kamu mengenal bentuk graph ReAct: `llm_call`, lalu `tool_node`, lalu kembali ke `llm_call`. Lihat [Cara kerja agent ReAct](../konsep/agent-react.md) jika belum.
+**Sebelum mulai:** kamu mengenal bentuk graph ReAct: `llm_call`, lalu `tool_node`, lalu kembali ke `llm_call`. Penjelasannya ada di [Cara kerja agent ReAct](../konsep/agent-react.md).
 
 ## Langkah-langkah
 
@@ -80,7 +80,7 @@ Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code
 
 Terminal server juga menampilkan baris log dari node itu, misalnya `tool=get_weather args={'location': 'sf'}`.
 
-## Lihat juga
+## Halaman terkait
 
 - [Mengatur batas langkah](mengatur-batas-langkah.md) untuk hubungan antara jumlah node dan batas langkah.
 - [API agent](../referensi/agent.md) untuk `AgentState`, `make_llm_call`, dan `should_continue`.

@@ -2,7 +2,7 @@
 
 Endpoint `/playground/*` menjalankan sebuah fitur dan mengembalikan jawaban agent beserta setiap langkahnya. Panel Playground di dokumentasi ini memanggil endpoint tersebut.
 
-Endpoint ini hanya terdaftar jika `PLAYGROUND_ENABLED` bernilai benar. Lihat [Environment variable](konfigurasi.md). Saat playground mati, ketiga path di halaman ini menjawab `404`.
+Endpoint ini hanya terdaftar jika `PLAYGROUND_ENABLED` bernilai benar. Rinciannya ada di [Environment variable](konfigurasi.md). Saat playground mati, ketiga path di halaman ini menjawab `404`.
 
 | Method | Path | Kegunaan |
 |---|---|---|
@@ -88,7 +88,7 @@ curl -X POST http://localhost:8000/playground/resume \
   -d "{\"feature\": \"Human-in-the-loop\", \"thread_id\": \"THREAD_ID\", \"value\": {\"decisions\": [{\"type\": \"approve\"}]}}"
 ```
 
-Ganti `THREAD_ID` dengan nilai `thread_id` dari giliran sebelumnya.
+`THREAD_ID` adalah nilai `thread_id` dari giliran sebelumnya.
 
 ## Bentuk giliran
 
@@ -96,7 +96,7 @@ Kedua endpoint `POST` mengembalikan bentuk yang sama.
 
 | Field | Tipe | Keterangan |
 |---|---|---|
-| `thread_id` | string | Id percakapan. Kirim lagi untuk melanjutkan. Id buatan server diawali `playground-`. |
+| `thread_id` | string | Id percakapan. Nilai yang sama dikirim lagi untuk melanjutkan percakapan. Id buatan server diawali `playground-`. |
 | `answer` | string atau `null` | Teks jawaban agent. `null` jika agent menunggu keputusan atau gagal. |
 | `pending_review` | apa saja atau `null` | Nilai yang diberikan agent ke `interrupt()`. `null` jika agent tidak sedang menunggu. |
 | `error` | object atau `null` | Error yang menghentikan agent: `type` (nama kelas exception) dan `message`. |

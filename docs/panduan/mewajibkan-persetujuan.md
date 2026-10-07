@@ -1,8 +1,8 @@
 # Mewajibkan persetujuan untuk sebuah tool
 
-Halaman ini menunjukkan cara membuat agent berhenti dan menunggu keputusan manusia sebelum menjalankan sebuah tool. Lakukan ini untuk tool yang efeknya tidak bisa dibatalkan: mengirim email, menghapus data, melakukan pembayaran.
+Agent bisa diatur untuk berhenti dan menunggu keputusan manusia sebelum menjalankan sebuah tool. Pengaturan ini untuk tool yang efeknya tidak bisa dibatalkan: mengirim email, menghapus data, melakukan pembayaran.
 
-**Sebelum mulai:** tool-nya sudah ditulis. Lihat [Menambah tool](menambah-tool.md). Contoh di halaman ini memakai tool bernama `delete_order`.
+**Sebelum mulai:** tool-nya sudah ditulis, seperti di [Menambah tool](menambah-tool.md). Contoh di halaman ini memakai tool bernama `delete_order`.
 
 ## Langkah-langkah
 
@@ -106,7 +106,7 @@ Persetujuan ditentukan per nama tool, bukan per isi argumen. Untuk aturan sepert
 > [!WARNING]
 > Template tidak memeriksa siapa yang mengirim keputusan. Siapa pun yang mengetahui `thread_id` bisa menyetujui aksinya. Tambahkan autentikasi dan pemeriksaan hak di depan `POST /hitl/review` sebelum memakainya di produksi.
 
-## Lihat juga
+## Halaman terkait
 
 - [Format review](../referensi/format-review.md) untuk bentuk lengkap `pending_review` dan ketiga jenis keputusan.
 - [Cara kerja human-in-the-loop](../konsep/human-in-the-loop.md) untuk aturan yang harus dijaga saat mengubah agent ini.

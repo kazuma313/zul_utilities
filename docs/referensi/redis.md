@@ -1,6 +1,6 @@
 # RedisHelper dan RedisVectorDB
 
-Dua kelas untuk memakai Redis sebagai vector database lewat RedisVL: `RedisVectorDB` menerima skema index lewat kode, dan `RedisHelper` membaca koneksi serta skema dari file config. Halaman ini juga memuat skema file config Redis.
+Dua kelas untuk memakai Redis sebagai vector database lewat RedisVL: `RedisVectorDB` menerima skema index lewat kode, dan `RedisHelper` membaca koneksi serta skema dari file config.
 
 Baris berikut mengimpor keduanya:
 
@@ -133,7 +133,7 @@ Menyimpan record ke index aktif per batch.
 
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
-| `data` | `list[dict]` | Wajib | Daftar record. Lihat [Format vektor](#format-vektor) untuk field vektor. |
+| `data` | `list[dict]` | Wajib | Daftar record. Bentuk field vektornya ada di [Format vektor](#format-vektor). |
 | `batch_size` | `int` | `100` | Jumlah record per batch. |
 
 **Mengembalikan:** `list[str]` berisi key record yang tersimpan.
@@ -244,7 +244,7 @@ Menyimpan satu record atau lebih ke index.
 
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
-| `data` | `dict` atau `list[dict]` | Wajib | Satu record atau daftar record. Field vektor harus sudah berupa vektor, lihat [Format vektor](#format-vektor). |
+| `data` | `dict` atau `list[dict]` | Wajib | Satu record atau daftar record. Field vektor harus sudah berupa vektor, sesuai [Format vektor](#format-vektor). |
 | `batch_size` | `int` | `100` | Jumlah record per batch. |
 
 **Mengembalikan:** `list[str]` berisi key record yang tersimpan.
@@ -488,7 +488,7 @@ hybrid_search:
 
 Modul `zul.utilities.redis_vector_helper` tetap bisa dipakai dan meneruskan ke lokasi sekarang. Dari path lama itu hanya `RedisVectorDB` dan `reciprocal_rank_fusion` yang bisa diimpor.
 
-## Lihat juga
+## Halaman terkait
 
 - [Menyimpan dan mencari vektor di Redis](../panduan/memakai-redis.md) untuk langkah pemakaian.
 - [Perintah zul](cli.md) untuk `zul install redis-helper` dan opsinya.

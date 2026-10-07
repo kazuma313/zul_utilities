@@ -1,10 +1,10 @@
 # Membuat mind map
 
-Halaman ini menunjukkan cara mengubah topik, catatan, atau dokumen menjadi mind map dengan skill `mind_map`. Skill itu bisa dipakai dengan tiga cara: dari outline yang kamu tulis sendiri, dengan model lokal di laptop, atau sebagai tool di agent.
+Skill `mind_map` mengubah topik, catatan, atau dokumen menjadi mind map. Skill itu bisa dipakai dengan tiga cara: dari outline yang kamu tulis sendiri, dengan model lokal di laptop, atau sebagai tool di agent.
 
 ![Mind map berisi bagian-bagian Zul: CLI, template hexa, utilities, dokumentasi, dan skill](../assets/mindmap/zul.svg)
 
-Gambar di atas dibuat dari outline `assets/examples/zul.md` di folder skill. Buka [versi interaktifnya](../assets/mindmap/zul.html) untuk menggeser dan memperbesar peta.
+Gambar di atas dibuat dari outline `assets/examples/zul.md` di folder skill. [Versi interaktifnya](../assets/mindmap/zul.html) bisa digeser dan diperbesar.
 
 **Sebelum mulai:** `uv` atau Python 3.9 ke atas terpasang, dan kamu berada di root repository Zul. Skill `mind_map` ada di `research/agentic/algorithms/skills/mind_map/`. Perintah di halaman ini dijalankan dari folder itu:
 

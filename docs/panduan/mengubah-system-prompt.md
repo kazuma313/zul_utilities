@@ -1,6 +1,6 @@
 # Mengubah system prompt
 
-Halaman ini menunjukkan cara mengubah peran, batasan, dan gaya jawaban agent lewat system prompt-nya.
+System prompt menentukan peran, batasan, dan gaya jawaban agent.
 
 **Sebelum mulai:** kamu punya proyek hasil `zul build hexa`.
 
@@ -65,7 +65,7 @@ Kirim pesan lewat panel di bawah ini dan perhatikan apakah gaya jawabannya mengi
 Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi (<code>uv run mkdocs serve</code>).
 </div>
 
-## Lihat juga
+## Halaman terkait
 
 - [API agent](../referensi/agent.md) untuk parameter `system_prompt` di setiap perakit agent.
 - [Cara kerja subagents](../konsep/subagents.md) untuk alasan di balik `_SUBAGENT_OUTPUT_RULE`.

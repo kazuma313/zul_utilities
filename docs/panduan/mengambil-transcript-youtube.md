@@ -1,6 +1,6 @@
 # Mengambil transcript YouTube
 
-Halaman ini menunjukkan cara mengambil transcript video YouTube beserta metadatanya dengan skill `youtube_transcript`: dari terminal untuk banyak video sekaligus, dari kode Python, atau sebagai tool di agent. Skill ini tidak memakai model AI. Caption diambil dari YouTube, metadata dari yt-dlp, dan semua format dibuat oleh kode.
+Skill `youtube_transcript` mengambil transcript video YouTube beserta metadatanya: dari terminal untuk banyak video sekaligus, dari kode Python, atau sebagai tool di agent. Skill ini tidak memakai model AI. Caption diambil dari YouTube, metadata dari yt-dlp, dan semua format dibuat oleh kode.
 
 Skill ini hanya mengambil caption yang sudah ada di YouTube. Video tanpa caption tidak punya transcript, karena skill ini tidak mengubah suara menjadi teks.
 
@@ -173,7 +173,7 @@ Skrip tetap meminta ke YouTube lebih dulu karena gratis, dan baru beralih ke Sup
 
 Pilihan lain adalah proxy residensial berputar. Isi `WEBSHARE_PROXY_USERNAME` dan `WEBSHARE_PROXY_PASSWORD` di `.env` untuk Webshare, atau berikan proxy apa pun dengan `--proxy URL`.
 
-## Lihat juga
+## Halaman terkait
 
 - `SKILL.md` di folder skill untuk semua opsi skrip dan arti setiap pesan kesalahan.
 - `evals/check_metadata.py` di folder skill untuk memeriksa apakah setiap file punya metadata yang cukup dan transcript yang lengkap.

@@ -1,6 +1,6 @@
 # Format tulisan blog
 
-Blog di situs ini dibangun oleh plugin blog bawaan [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/plugins/blog/). Halaman ini mencantumkan lokasi file blog, isi header tulisan, alamat halaman yang dibuat, pengaturan plugin di `mkdocs.yml`, opsi `scripts/new_post.py`, dan error yang menggagalkan build. Untuk langkah menulis tulisan, lihat [Menulis tulisan blog](../panduan/menulis-blog.md).
+Blog di situs ini dibangun oleh plugin blog bawaan [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/plugins/blog/). Langkah menulis tulisan ada di [Menulis tulisan blog](../panduan/menulis-blog.md).
 
 ## Lokasi file
 
@@ -91,7 +91,7 @@ Blok kode berbahasa `mermaid` digambar sebagai diagram oleh [Mermaid](https://me
 
 Jenis lain, misalnya `pie` atau `gantt`, tetap tergambar dengan warna bawaan Mermaid.
 
-Blok kode di dalam komentar HTML (`<!-- ... -->`) tetap diproses dan ditampilkan. Untuk menyembunyikan contoh diagram, hapus blok kodenya, jangan hanya mengomentarinya.
+Blok kode di dalam komentar HTML (`<!-- ... -->`) tetap diproses dan ditampilkan. Contoh diagram hanya hilang dari halaman jika blok kodenya dihapus.
 
 Tulisan juga boleh memuat HTML. Contohnya, video YouTube disematkan dengan `<iframe>` ke alamat `https://www.youtube-nocookie.com/embed/ID_VIDEO`, dengan gaya `width: 100%; aspect-ratio: 16 / 9` supaya lebarnya mengikuti kolom.
 
@@ -206,7 +206,7 @@ Dengan `mkdocs build --strict`, kesalahan berikut menghentikan build dan penerbi
 | Kunci di `authors` tidak ada di `.authors.yml` | `Couldn't find author 'KUNCI'` |
 | Tautan ke file yang tidak ada | `Doc file 'FILE' contains a link 'PATH', but the target '...' is not found among documentation files.` |
 
-## Lihat juga
+## Halaman terkait
 
 - [Menulis tulisan blog](../panduan/menulis-blog.md) untuk langkah membuat dan menerbitkan tulisan.
 - [Workflow dokumentasi](workflow-dokumentasi.md) untuk pemeriksaan yang dijalankan sebelum situs terbit.

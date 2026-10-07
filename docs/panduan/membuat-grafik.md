@@ -1,8 +1,8 @@
 # Membuat grafik perbandingan
 
-Halaman ini menunjukkan cara membandingkan dua dataset atau lebih, misalnya latency pencarian di Milvus dan Redis, dengan `ChartGenerator`. Satu pemanggilan menghasilkan grafik perbandingan dan ringkasan statistik beserta uji signifikansinya.
+`ChartGenerator` membandingkan dua dataset atau lebih, misalnya latency pencarian di Milvus dan Redis. Satu pemanggilan menghasilkan grafik perbandingan dan ringkasan statistik beserta uji signifikansinya.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang (lihat [Memasang Zul](memasang-zul.md)) dan data berupa daftar angka untuk setiap hal yang dibandingkan.
+**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)) dan data berupa daftar angka untuk setiap hal yang dibandingkan.
 
 ## Membuat grafik pertama
 
@@ -200,7 +200,7 @@ True
 
 Buka `latency.png` untuk melihat grafiknya.
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi ChartGenerator](../referensi/grafik.md) untuk semua kunci konfigurasi, tipe grafik, dan kunci statistik.
 - [Memakai helper kecil](memakai-helper.md) untuk `TimerDecorator`, yang mengumpulkan durasi untuk dibandingkan, dan `save_latency_to_csv`.

@@ -1,6 +1,6 @@
 # Panduan
 
-Panduan adalah resep untuk satu tugas. Setiap halaman menganggap kamu sudah mengenal dasar-dasar Zul dan langsung menunjukkan langkah menuju hasilnya. Jika kamu belum pernah membuat proyek dengan Zul, mulai dari [Tutorial](../tutorial/index.md).
+Setiap panduan berisi langkah untuk menyelesaikan satu tugas dengan Zul.
 
 ## Memulai
 

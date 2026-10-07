@@ -53,9 +53,9 @@ Menggambar satu grafik perbandingan dan menghitung statistik setiap dataset.
 
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
-| `chart_config` | `dict` | Wajib | Konfigurasi grafik. Lihat [Kunci konfigurasi grafik](#kunci-konfigurasi-grafik). |
+| `chart_config` | `dict` | Wajib | Konfigurasi grafik. Rinciannya ada di [Kunci konfigurasi grafik](#kunci-konfigurasi-grafik). |
 
-**Mengembalikan:** `dict` statistik. Lihat [Hasil statistik](#hasil-statistik).
+**Mengembalikan:** `dict` statistik. Rinciannya ada di [Hasil statistik](#hasil-statistik).
 
 **Melempar:**
 
@@ -208,7 +208,7 @@ Kunci tambahan di setiap konfigurasi:
 
 **Mengembalikan:** `list[dict]` berisi statistik setiap grafik, dalam urutan `configs`.
 
-## Lihat juga
+## Halaman terkait
 
 - [Membuat grafik perbandingan](../panduan/membuat-grafik.md) untuk langkah pemakaian.
 - [Helper kecil](helper.md) untuk `TimerDecorator` dan `save_latency_to_csv`, yang menyiapkan data untuk grafik.

@@ -2,7 +2,7 @@
 
 Tanpa memory, agent melupakan semuanya setelah satu jawaban. Template memakai *short-term memory* dari LangGraph: state percakapan disimpan selama agent berjalan dan dimuat lagi saat percakapan dilanjutkan.
 
-Halaman ini menjelaskan dua bagian yang membentuk memory itu, apa saja yang tersimpan, kenapa penyimpan bawaan template hanya cocok untuk development, dan kenapa agent human-in-the-loop tidak bisa bekerja tanpanya. Kodenya ada di `src/infrastructure/AI/memory/checkpointer.py`.
+Kodenya ada di `src/infrastructure/AI/memory/checkpointer.py`.
 
 ## Checkpointer dan thread
 
@@ -57,7 +57,7 @@ Beberapa hal yang mungkin kamu kira tersimpan ternyata tidak ada di sana:
 - **Sisa langkah tidak diwariskan.** `remaining_steps` dihitung dari `recursion_limit` pemanggilan yang sedang berjalan. Setiap pesan mendapat jatah langkahnya sendiri.
 - **Konteks subagent tidak tersimpan.** Subagent dirakit tanpa checkpointer. Riwayat supervisor hanya memuat query yang ia kirim dan jawaban akhir yang ia terima.
 
-Satu hal lagi ikut tersimpan, dan ini penting untuk bagian akhir halaman ini: graph yang sedang berhenti di `interrupt()`.
+Satu hal lagi ikut tersimpan: graph yang sedang berhenti di `interrupt()`.
 
 Karena seluruh `messages` dikirim ke LLM pada setiap giliran, riwayat yang tumbuh membuat percakapan panjang makin mahal dan pada akhirnya melewati batas konteks model. Template belum memangkas atau merangkum riwayat.
 
@@ -155,7 +155,7 @@ def _pending_review(self, config: dict[str, Any]) -> dict[str, Any] | None:
 
 Jadi di agent ini checkpointer mengerjakan dua hal: mengingat percakapan dan menahan pekerjaan yang sedang menunggu. Kehilangan yang kedua lebih terasa. Dengan `InMemorySaver`, aksi yang menunggu keputusan ikut hilang saat server dimulai ulang. Manusia yang kemudian mengirim keputusannya menerima HTTP 400 karena tidak ada lagi aksi yang menunggu di thread itu. Ini alasan tambahan untuk memakai penyimpan berbasis database sebelum agent human-in-the-loop dipakai sungguhan.
 
-## Lihat juga
+## Halaman terkait
 
 - [Konsep: Cara kerja agent ReAct](agent-react.md)
 - [Konsep: Cara kerja human-in-the-loop](human-in-the-loop.md)

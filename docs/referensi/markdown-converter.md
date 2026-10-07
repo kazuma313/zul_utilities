@@ -162,7 +162,7 @@ Menyiapkan presentasi untuk diisi dari Markdown atau dari pemanggilan method.
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
 | `template_path` | `str` atau `None` | `None` | Path ke file template `.pptx`. Jika `None` atau file tidak ada, presentasi kosong berukuran 16:9 dibuat. |
-| `style_config` | `dict` atau `None` | `None` | Gaya yang menimpa gaya bawaan. Lihat [Kunci gaya](#kunci-gaya). |
+| `style_config` | `dict` atau `None` | `None` | Gaya yang menimpa gaya bawaan. Rinciannya ada di [Kunci gaya](#kunci-gaya). |
 
 Saat dibuat, service mencetak mode yang dipakai: memakai template atau membuat dari awal. Jika `template_path` diisi tetapi filenya tidak ada, peringatan ikut dicetak.
 
@@ -366,7 +366,7 @@ Menambah satu slide untuk setiap bagian Markdown yang dipisahkan `SLIDE_SEPARATO
 
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
-| `md_content` | `str` | Wajib | Teks Markdown. Lihat [Sintaks slide](#sintaks-slide). |
+| `md_content` | `str` | Wajib | Teks Markdown. Rinciannya ada di [Sintaks slide](#sintaks-slide). |
 | `output_path` | `str` | Wajib | Path file `.pptx` tujuan. |
 
 **Mengembalikan:** `None`.
@@ -408,7 +408,7 @@ Dua modul lama tetap bisa dipakai dan meneruskan ke lokasi sekarang:
 | `zul.utilities.md_to_pdf` | `zul.utilities.markdown_converter.md_to_pdf` | `MarkdownToPDFConverter` |
 | `zul.utilities.md_to_ppt` | `zul.utilities.markdown_converter.md_to_ppt` | `DynamicMarkdownToPPTXService` |
 
-## Lihat juga
+## Halaman terkait
 
 - [Mengubah Markdown menjadi PDF dan PPTX](../panduan/mengonversi-markdown.md) untuk langkah pemakaian.
 - [Helper kecil](helper.md) untuk `save_text_to_md`, yang menyimpan Markdown ke file.

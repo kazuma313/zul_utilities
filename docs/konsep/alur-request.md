@@ -1,8 +1,8 @@
 # Perjalanan sebuah request
 
-Halaman ini menjawab tiga pertanyaan. Apa yang terjadi di antara request HTTP masuk dan jawaban keluar? Kenapa kode dipisah menjadi empat layer dengan arah impor yang ketat? Dan kenapa objek-objek aplikasi dirakit di controller, bukan di tempat lain?
+Sebuah request HTTP melewati empat layer kode sebelum jawaban agent keluar. Arah impor antar-layer diatur ketat, dan semua objek yang dibutuhkan request itu dirakit di controller.
 
-Contoh yang diikuti adalah satu request `POST /chat` ke proyek hasil `zul build hexa`. Endpoint lain menempuh jalur yang sama dengan perakit dan use case yang berbeda.
+Contohnya satu request `POST /chat` ke proyek hasil `zul build hexa`. Endpoint lain menempuh jalur yang sama dengan perakit dan use case yang berbeda.
 
 ## Gambaran umum
 
@@ -60,7 +60,7 @@ def chat(
     return chat_controller.chat(request, usecase)
 ```
 
-Perhatikan `Depends(chat_controller.get_chat_usecase)`. Router tidak membuat use case sendiri; ia memintanya. Dari sinilah perakitan dependensi dimulai.
+`Depends(chat_controller.get_chat_usecase)` berarti router tidak membuat use case sendiri; ia memintanya. Dari sinilah perakitan dependensi dimulai.
 
 ## Dependensi dirakit satu kali
 
@@ -195,13 +195,13 @@ Untuk mengganti model, tool, atau penyimpanan percakapan, kamu mengubah fungsi p
 
 Pemisahan ini punya tiga akibat praktis.
 
-- **Test tidak butuh LLM asli.** Agent menerima chat model lewat parameter, sehingga test memberinya model palsu yang menjawab sesuai naskah. Lihat [Menguji tanpa LLM asli](pengujian.md).
+- **Test tidak butuh LLM asli.** Agent menerima chat model lewat parameter, sehingga test memberinya model palsu yang menjawab sesuai naskah. Penjelasannya ada di [Menguji tanpa LLM asli](pengujian.md).
 - **Mengganti teknologi mengubah sedikit file.** Pindah dari OpenAI ke provider lain, atau dari memory proses ke database, hanya menyentuh `infrastructure` dan composition root.
 - **Pintu masuk bisa bertambah.** Bot Discord atau perintah CLI memanggil use case yang sama dengan REST API, tanpa menyalin logika validasi dan batas langkah.
 
 Harganya adalah lebih banyak file dan satu lapis pemanggilan tambahan. Untuk fitur kecil, jalur router, controller, use case, lalu agent terasa panjang. Template memilih membayar harga itu sejak awal, karena memisahkan layer belakangan, setelah kode provider tersebar di mana-mana, jauh lebih mahal.
 
-## Lihat juga
+## Halaman terkait
 
 - [Konsep: Arsitektur hexagonal](arsitektur-hexagonal.md)
 - [Konsep: Cara kerja agent ReAct](agent-react.md)

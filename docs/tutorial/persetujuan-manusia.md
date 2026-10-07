@@ -1,10 +1,8 @@
 # Meminta persetujuan manusia
 
-Di tutorial ini kita memakai agent yang berhenti sebelum mengirim email dan menunggu keputusan kita. Kita mencoba ketiga keputusan yang tersedia, lalu mewajibkan persetujuan untuk tool lain.
+Agent di tutorial ini berhenti sebelum mengirim email dan menunggu keputusan manusia. Ketiga keputusan yang tersedia dicoba satu per satu, lalu persetujuan diwajibkan untuk tool lain. Hasil akhirnya agent yang tidak menjalankan aksi berisiko tanpa dilihat manusia.
 
-Di akhir tutorial kamu tahu cara membuat agent yang tidak menjalankan aksi berisiko tanpa dilihat manusia.
-
-**Sebelum mulai:** selesaikan [Membuat agent pertamamu](agent-pertama.md). Server dari tutorial itu harus masih berjalan.
+**Sebelum mulai:** tutorial [Membuat agent pertamamu](agent-pertama.md) sudah selesai, dan server dari tutorial itu masih berjalan.
 
 ## Melihat agent berhenti
 

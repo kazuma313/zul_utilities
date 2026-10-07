@@ -1,8 +1,8 @@
 # Memanggil LLM dan embedding
 
-Halaman ini menunjukkan cara memanggil chat model dan model embedding yang kompatibel dengan OpenAI lewat `AIService`. Kamu menulis pengaturannya sekali, di file config atau environment variable, lalu memanggil `chat()` dan `embed()` dari script, notebook, atau pipeline data.
+`AIService` memanggil chat model dan model embedding yang kompatibel dengan OpenAI. Pengaturannya ditulis sekali, di file config atau environment variable, lalu `chat()` dan `embed()` dipanggil dari script, notebook, atau pipeline data.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang (lihat [Memasang Zul](memasang-zul.md)), alamat endpoint yang kompatibel dengan OpenAI, dan API key-nya. `AIService` terpasang bersama Zul dan tidak membutuhkan extra.
+**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)), alamat endpoint yang kompatibel dengan OpenAI, dan API key-nya. `AIService` terpasang bersama Zul dan tidak membutuhkan extra.
 
 ## Membuat service dari file config
 
@@ -184,7 +184,7 @@ Untuk `config.yaml` di halaman ini, tanpa variabel penimpa seperti `LLM_MODEL`, 
 
 Lalu kirim satu prompt pendek dengan `service.chat("Halo")` dan pastikan `response.content` berisi jawaban.
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi AI Service](../referensi/ai-service.md) untuk semua kunci config, environment variable, dan error.
 - [Mengatur model dan API key](mengatur-llm.md) jika kamu ingin mengatur LLM untuk agent di proyek hasil `zul build hexa`, bukan untuk script.

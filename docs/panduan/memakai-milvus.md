@@ -1,8 +1,8 @@
 # Menyimpan dan mencari vektor di Milvus
 
-Halaman ini menunjukkan cara membuat collection [Milvus](https://milvus.io/) dari satu file config, lalu menyimpan, mencari, mengambil, dan menghapus data dengan `MilvusHelper`. Skema collection tercatat di file YAML atau JSON, dan helper membuatnya saat pertama kali dijalankan.
+`MilvusHelper` membuat collection [Milvus](https://milvus.io/) dari satu file config, lalu menyimpan, mencari, mengambil, dan menghapus data. Skema collection tercatat di file YAML atau JSON, dan helper membuatnya saat pertama kali dijalankan.
 
-**Sebelum mulai:** kamu butuh Zul yang sudah terpasang (lihat [Memasang Zul](memasang-zul.md)) dan server Milvus yang bisa dihubungi dari komputermu.
+**Sebelum mulai:** kamu butuh Zul yang sudah terpasang ([Memasang Zul](memasang-zul.md)) dan server Milvus yang bisa dihubungi dari komputermu.
 
 ## Menyiapkan helper dan file config
 
@@ -284,7 +284,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 ```
 
-## Lihat juga
+## Halaman terkait
 
 - [Referensi MilvusHelper](../referensi/milvus.md) untuk semua method dan setiap kunci config.
 - [Referensi perintah zul](../referensi/cli.md) untuk opsi `zul install milvus-helper`.

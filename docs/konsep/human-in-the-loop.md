@@ -2,7 +2,7 @@
 
 Sebagian aksi terlalu berisiko untuk dijalankan hanya atas keputusan model: mengirim email, menghapus data, melakukan pembayaran. Agent human-in-the-loop adalah agent ReAct yang berhenti sebelum menjalankan tool seperti itu dan menunggu manusia menyetujui, mengubah, atau menolaknya.
 
-Halaman ini menjelaskan bagaimana agent bisa berhenti di tengah jalan lalu melanjutkan, dan kenapa template memasang beberapa penjagaan di sekitarnya. Kodenya ada di `src/application/AI/agents/human_in_the_loop/` dan `src/application/usecases/reviewed_chat.py`. Mekanisme berhentinya memakai [interrupt dari LangGraph](https://docs.langchain.com/oss/python/langgraph/interrupts).
+Kodenya ada di `src/application/AI/agents/human_in_the_loop/` dan `src/application/usecases/reviewed_chat.py`. Mekanisme berhentinya memakai [interrupt dari LangGraph](https://docs.langchain.com/oss/python/langgraph/interrupts).
 
 ## Bentuk graph
 
@@ -95,7 +95,7 @@ if not calls_to_review:
 Membaca dan menyaring boleh diulang berapa kali pun dengan hasil yang sama. Pertahankan sifat itu saat kamu mengubah node ini. Payload yang diberikan ke `interrupt()` juga harus bisa diubah menjadi JSON, karena ia dikirim ke client sebagai `pending_review`.
 
 > [!WARNING]
-> Jangan membungkus `interrupt()` dengan `try/except Exception`. Fungsi itu menghentikan graph dengan melempar exception khusus. Jika exception itu tertangkap, graph tidak berhenti dan tool berjalan tanpa persetujuan.
+> `interrupt()` menghentikan graph dengan melempar exception khusus. Jika `interrupt()` dibungkus `try/except Exception`, exception itu tertangkap, graph tidak berhenti, dan tool berjalan tanpa persetujuan.
 
 ## Kenapa keputusan divalidasi sebelum resume
 
@@ -195,7 +195,7 @@ Agent ini memakai penjagaan langkah yang sama dengan agent ReAct, dengan satu pe
 
 Template ini adalah titik awal, dan beberapa hal sengaja tidak diselesaikannya:
 
-- Review yang menunggu disimpan oleh checkpointer. Dengan `InMemorySaver` bawaan, review itu hilang saat server dimulai ulang. Lihat [Memory dan thread](memory.md).
+- Review yang menunggu disimpan oleh checkpointer. Dengan `InMemorySaver` bawaan, review itu hilang saat server dimulai ulang. Penjelasannya ada di [Memory dan thread](memory.md).
 - Template tidak memeriksa siapa yang mengirim keputusan. Siapa pun yang mengetahui `thread_id` bisa menyetujui aksinya.
 - Review tidak punya batas waktu. Aksi menunggu sampai ada keputusan.
 - Persetujuan ditentukan per nama tool, bukan per isi argumen. Aturan seperti "hanya email ke luar perusahaan yang direview" berarti mengubah penyaringan `calls_to_review` di `make_human_review`.
@@ -203,7 +203,7 @@ Template ini adalah titik awal, dan beberapa hal sengaja tidak diselesaikannya:
 
 Jika agent dirakit dengan `langchain.agents.create_agent`, perilaku serupa tersedia lewat `HumanInTheLoopMiddleware`. Template menulis node-nya sendiri dengan alasan yang sama seperti graph ReAct: supaya setiap langkahnya terlihat dan bisa kamu ubah.
 
-## Lihat juga
+## Halaman terkait
 
 - [Konsep: Cara kerja agent ReAct](agent-react.md)
 - [Konsep: Memory dan thread](memory.md)
