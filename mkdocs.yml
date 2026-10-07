@@ -187,6 +187,9 @@ nav:
           - Markdown converter: referensi/markdown-converter.md
           - ChartGenerator: referensi/grafik.md
           - Helper kecil: referensi/helper.md
+      - Situs dokumentasi:
+          - Workflow dokumentasi: referensi/workflow-dokumentasi.md
+          - Format tulisan blog: referensi/blog.md
   - Konsep:
       - konsep/index.md
       - Arsitektur hexagonal: konsep/arsitektur-hexagonal.md
@@ -196,6 +199,7 @@ nav:
       - Cara kerja subagents: konsep/subagents.md
       - Memory dan thread: konsep/memory.md
       - Menguji tanpa LLM asli: konsep/pengujian.md
+      - Cara situs dokumentasi diterbitkan: konsep/penerbitan-dokumentasi.md
       - Hexagonal dari nol: hexagonal.md
   - Playground: playground.md
   - Blog:

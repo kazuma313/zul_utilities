@@ -111,6 +111,9 @@ Sebelum menjalankan lebih dari satu worker, pindahkan penyimpan percakapan ke da
 
 ## Lihat juga
 
+- [Workflow dokumentasi](../referensi/workflow-dokumentasi.md) untuk setiap langkah, pemeriksaan, dan versi yang dikunci di workflow.
+- [Cara situs dokumentasi diterbitkan](../konsep/penerbitan-dokumentasi.md) untuk alasan di balik pengaturan workflow itu.
+- [Menulis tulisan blog](menulis-blog.md) untuk menambah tulisan ke blog.
 - [Mencoba fitur di playground](mencoba-di-playground.md) untuk mendaftarkan fiturmu sendiri ke panel.
 - [Environment variable](../referensi/konfigurasi.md) untuk `PLAYGROUND_ENABLED` dan `PLAYGROUND_ORIGINS`.
 - [Berkontribusi](berkontribusi.md) untuk aturan menulis halaman dokumentasi.

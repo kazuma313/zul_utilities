@@ -11,6 +11,7 @@ Halaman di bagian ini menjelaskan cara kerja dan alasan di balik rancangan Zul. 
 | [Cara kerja subagents](subagents.md) | Bagaimana supervisor mendelegasikan pekerjaan, dan kapan pola ini cocok? |
 | [Memory dan thread](memory.md) | Apa yang disimpan checkpointer, dan apa arti `thread_id`? |
 | [Menguji tanpa LLM asli](pengujian.md) | Apa yang dibuktikan test dengan model palsu, dan apa yang tetap harus diuji dengan model sungguhan? |
+| [Cara situs dokumentasi diterbitkan](penerbitan-dokumentasi.md) | Kenapa workflow penerbitan mengunci semua versi dan memeriksa hasilnya berlapis, dan apa yang tetap tidak dijamin? |
 | [Hexagonal dari nol](../hexagonal.md) | Seperti apa arsitektur hexagonal dijelaskan dari awal, dengan contoh aplikasi toko online? |
 
 ## Lihat juga

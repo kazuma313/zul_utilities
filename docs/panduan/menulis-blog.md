@@ -111,5 +111,6 @@ Untuk menyimpan tulisan yang belum selesai tanpa menerbitkannya, tambahkan `draf
 
 ## Lihat juga
 
+- [Format tulisan blog](../referensi/blog.md) untuk semua kunci header, alamat halaman, dan opsi `scripts/new_post.py`.
 - [Menerbitkan dokumentasi](menerbitkan-dokumentasi.md) untuk cara kerja workflow penerbitan.
 - [Berkontribusi](berkontribusi.md) untuk gaya penulisan di situs ini.

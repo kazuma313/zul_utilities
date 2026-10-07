@@ -30,3 +30,10 @@ Referensi adalah tempat mencari fakta saat kamu sedang bekerja: opsi sebuah peri
 | [Markdown converter](markdown-converter.md) | Konverter Markdown ke PDF dan PPTX. |
 | [ChartGenerator](grafik.md) | Bentuk konfigurasi grafik dan hasil statistiknya. |
 | [Helper kecil](helper.md) | Logger, embedding palsu, pengukur waktu, dan pembaca PDF. |
+
+## Situs dokumentasi
+
+| Halaman | Isi |
+|---|---|
+| [Workflow dokumentasi](workflow-dokumentasi.md) | Pemicu, job, langkah, pemeriksaan, dan versi yang dikunci di workflow penerbitan. |
+| [Format tulisan blog](blog.md) | Header tulisan, alamat halaman, pengaturan plugin blog, dan opsi `scripts/new_post.py`. |
