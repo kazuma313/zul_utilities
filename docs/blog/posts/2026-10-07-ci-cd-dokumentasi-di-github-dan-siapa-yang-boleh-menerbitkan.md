@@ -1,6 +1,7 @@
 ---
 date:
   created: 2026-10-07
+  updated: 2026-10-08
 categories:
   - "CI/CD"
   - "GitHub"
@@ -27,7 +28,7 @@ flowchart TB
     C -->|ya| D["Selesai, situs tidak berubah"]
     C -->|tidak| E["Job deploy ke environment github-pages"]
     E --> F["Periksa halaman utama dan blog dengan curl"]
-    F --> G["Situs terbit di kazuma313.github.io/zul_utilities"]
+    F --> G["Situs terbit di zulkit.my.id"]
 ```
 
 Workflow hanya berjalan jika push atau pull request mengubah salah satu path berikut: `docs/**`, `mkdocs.yml`, `pyproject.toml`, `uv.lock`, `.python-version`, dan `.github/workflows/docs.yml`. Perubahan yang hanya menyentuh `src/` tidak menerbitkan ulang situs.
@@ -71,11 +72,13 @@ Penerbitan berjalan satu per satu dalam grup concurrency `pages` dan tidak perna
 
 ## Pengaturan di GitHub yang tidak ada di file
 
-Sebagian pengaturan hanya ada di halaman **Settings** repository, jadi tidak terlihat di riwayat git. Nilainya per 7 Oktober 2026:
+Sebagian pengaturan hanya ada di halaman **Settings** repository, jadi tidak terlihat di riwayat git. Nilainya per 8 Oktober 2026:
 
 | Pengaturan | Letak | Nilai |
 |---|---|---|
 | Sumber GitHub Pages | Settings → Pages | GitHub Actions |
+| Domain sendiri | Settings → Pages | `zulkit.my.id`. Alamat `kazuma313.github.io/zul_utilities/` dialihkan ke domain ini |
+| Domain terverifikasi | Settings akun → Pages | `zulkit.my.id`, sehingga akun lain tidak bisa memakainya untuk GitHub Pages |
 | Branch yang boleh deploy | Settings → Environments → `github-pages` | Hanya `main` |
 | Required reviewers untuk deploy | Settings → Environments → `github-pages` | Tidak dipakai |
 | Persetujuan workflow dari fork | Settings → Actions → General | Wajib untuk kontributor pertama kali (bawaan GitHub) |

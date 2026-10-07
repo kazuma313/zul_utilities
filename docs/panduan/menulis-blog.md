@@ -122,7 +122,7 @@ Untuk menyimpan tulisan yang belum selesai tanpa menerbitkannya, tambahkan `draf
     git push origin main
     ```
 
-3. Buka tab **Actions** di repository dan tunggu workflow **Dokumentasi** selesai. Tulisanmu lalu ada di `https://kazuma313.github.io/zul_utilities/blog/`.
+3. Buka tab **Actions** di repository dan tunggu workflow **Dokumentasi** selesai. Tulisanmu lalu ada di `https://zulkit.my.id/blog/`.
 
 ## Halaman terkait
 

@@ -1,6 +1,6 @@
 # Workflow dokumentasi
 
-Situs ini dibangun dan diterbitkan ke GitHub Pages oleh workflow GitHub Actions bernama **Dokumentasi**, di `.github/workflows/docs.yml`. Versi action-nya diperbarui oleh Dependabot, yang diatur di `.github/dependabot.yml`. Langkah menerbitkan situs ada di [Menerbitkan dokumentasi](../panduan/menerbitkan-dokumentasi.md).
+Situs ini dibangun dan diterbitkan ke GitHub Pages, di domain `zulkit.my.id`, oleh workflow GitHub Actions bernama **Dokumentasi**, di `.github/workflows/docs.yml`. Versi action-nya diperbarui oleh Dependabot, yang diatur di `.github/dependabot.yml`. Langkah menerbitkan situs ada di [Menerbitkan dokumentasi](../panduan/menerbitkan-dokumentasi.md).
 
 ## Pemicu
 

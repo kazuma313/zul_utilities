@@ -12,10 +12,10 @@ Repository ini membawa workflow di `.github/workflows/docs.yml`. Workflow itu me
 
 1. Di halaman repository, buka **Settings**, lalu **Pages**. Pada **Source**, pilih **GitHub Actions**.
 
-2. Di `mkdocs.yml`, pastikan `site_url` berisi alamat situsmu. Untuk GitHub Pages bentuknya `https://NAMA_AKUN.github.io/NAMA_REPOSITORY/`:
+2. Di `mkdocs.yml`, pastikan `site_url` berisi alamat situsmu. Tanpa domain sendiri, bentuknya `https://NAMA_AKUN.github.io/NAMA_REPOSITORY/`. Situs ini memakai domain sendiri:
 
     ```yaml title="mkdocs.yml"
-    site_url: https://kazuma313.github.io/zul_utilities/
+    site_url: https://zulkit.my.id/
     ```
 
 3. Commit perubahanmu, lalu push ke branch `main`:
@@ -27,6 +27,39 @@ Repository ini membawa workflow di `.github/workflows/docs.yml`. Workflow itu me
 4. Buka tab **Actions** di repository. Tunggu workflow **Dokumentasi** selesai. Alamat situsnya tampil di langkah `deploy`.
 
 Setelah itu, setiap push ke `main` yang mengubah `docs/`, `mkdocs.yml`, `pyproject.toml`, atau `uv.lock` menerbitkan ulang situsnya. Pull request yang mengubah file-file itu hanya dibangun, tidak diterbitkan, jadi kesalahannya ketahuan sebelum digabung. Untuk menerbitkan tanpa push baru, buka workflow **Dokumentasi** di tab **Actions**, lalu klik **Run workflow**.
+
+## Memakai domain sendiri
+
+Situs ini terbit di `zulkit.my.id`. Alamat bawaannya, `kazuma313.github.io/zul_utilities/`, tetap bisa dibuka dan dialihkan GitHub ke domain itu. Domain dipasang di pengaturan GitHub, bukan di file. Karena situs diterbitkan lewat workflow GitHub Actions, file `CNAME` tidak diperlukan, dan diabaikan jika ada.
+
+**Sebelum mulai:** domainnya sudah terdaftar atas namamu, dan kamu bisa mengubah DNS-nya di panel tempat membeli domain.
+
+1. Buka **Settings** akun GitHub-mu, bukan Settings repository, lalu **Pages**. Klik **Add a domain**, isi domainnya, lalu klik **Add domain**. GitHub menampilkan satu record TXT untuk verifikasi.
+
+2. Di halaman repository, buka **Settings**, lalu **Pages**. Isi **Custom domain** dengan domainnya, lalu klik **Save**. Langkah ini dikerjakan sebelum DNS diarahkan ke GitHub, supaya tidak ada orang lain yang sempat memakai domainmu untuk situs GitHub Pages mereka.
+
+3. Di panel DNS tempat membeli domain, tambahkan record berikut:
+
+    | Tipe | Nama | Nilai |
+    |---|---|---|
+    | TXT | `_github-pages-challenge-NAMA_AKUN` | Nilai dari langkah 1 |
+    | A | `@` | `185.199.108.153` |
+    | A | `@` | `185.199.109.153` |
+    | A | `@` | `185.199.110.153` |
+    | A | `@` | `185.199.111.153` |
+    | AAAA | `@` | `2606:50c0:8000::153` |
+    | AAAA | `@` | `2606:50c0:8001::153` |
+    | AAAA | `@` | `2606:50c0:8002::153` |
+    | AAAA | `@` | `2606:50c0:8003::153` |
+    | CNAME | `www` | `NAMA_AKUN.github.io` |
+
+    Ganti `NAMA_AKUN` dengan nama akun GitHub-mu. Record `www` membuat `www.` di depan domainmu dialihkan ke domain utamanya. Jangan menambah record wildcard seperti `*`, karena subdomain mana pun lalu bisa diambil alih orang lain, walaupun domainnya sudah diverifikasi.
+
+4. Tunggu perubahan DNS tersebar, paling lama 24 jam. Setelah itu kembali ke **Settings** akun, **Pages**, lalu klik **Verify** pada domainnya.
+
+5. Di **Settings** repository, **Pages**, centang **Enforce HTTPS** setelah opsinya bisa dipilih. GitHub membuat sertifikat HTTPS-nya, paling lama 24 jam setelah DNS-nya benar.
+
+6. Ganti `site_url` di `mkdocs.yml` dengan domainnya, lalu push ke `main`.
 
 ## Memeriksa situs sebelum diterbitkan
 
@@ -89,7 +122,7 @@ Aplikasimu hanya menerima panggilan browser dari alamat yang kamu izinkan. Supay
     PLAYGROUND_ORIGINS=http://127.0.0.1:8001,https://NAMA_AKUN.github.io
     ```
 
-    Ganti `NAMA_AKUN` dengan nama akun GitHub-mu.
+    Ganti `NAMA_AKUN` dengan nama akun GitHub-mu. Jika situsnya memakai domain sendiri, tulis domain itu, misalnya `https://zulkit.my.id`.
 
 2. Mulai ulang aplikasinya.
 

@@ -97,7 +97,7 @@ Tulisan juga boleh memuat HTML. Contohnya, video YouTube disematkan dengan `<ifr
 
 ## Alamat halaman
 
-Plugin membuat halaman-halaman berikut. Alamatnya relatif terhadap alamat situs, `https://kazuma313.github.io/zul_utilities/`:
+Plugin membuat halaman-halaman berikut. Alamatnya relatif terhadap alamat situs, `https://zulkit.my.id/`:
 
 | Halaman | Alamat | Contoh |
 |---|---|---|

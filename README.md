@@ -30,7 +30,7 @@ Buat struktur proyek AI production-ready dalam satu perintah, lalu pakai kembali
 
 ## 📚 Dokumentasi
 
-Dokumentasi lengkap terbit di **https://kazuma313.github.io/zul_utilities/**, dan sumbernya ada di folder [`docs/`](docs/index.md). Untuk membukanya di komputermu sebagai situs dengan menu, pencarian, dan **playground** interaktif, jalankan:
+Dokumentasi lengkap terbit di **https://zulkit.my.id/**, dan sumbernya ada di folder [`docs/`](docs/index.md). Untuk membukanya di komputermu sebagai situs dengan menu, pencarian, dan **playground** interaktif, jalankan:
 
 ```bash
 uv sync
