@@ -31,8 +31,8 @@ zul build hexa --name my-agent
 <svg class="zul-stack" viewBox="0 0 470 466" role="img" aria-labelledby="zul-stack-title zul-stack-desc">
   <title id="zul-stack-title">Empat lapisan proyek hasil zul build hexa</title>
   <desc id="zul-stack-desc">Lapisan interface, application, domain, dan infrastructure bertumpuk. Request POST /chat masuk lewat interface, dan infrastructure memanggil LLM.</desc>
-  <path class="zs-wire" id="zs-wire-in" d="M 102 125 H 112 Q 124 125 134 131 L 216.0 185.2"/>
-  <path class="zs-wire" id="zs-wire-out" d="M 380.5 343.8 L 430 418 V 432"/>
+  <path class="zs-wire" d="M 102 125 H 112 Q 124 125 134 131 L 216.0 185.2"/>
+  <path class="zs-wire" d="M 380.5 343.8 L 430 418 V 432"/>
   <g class="zs-pill">
     <rect x="6" y="112" width="96" height="26" rx="13"/>
     <text x="54" y="129">POST /chat</text>
@@ -41,11 +41,12 @@ zul build hexa --name my-agent
     <rect x="400" y="432" width="60" height="26" rx="13"/>
     <text x="430" y="449">LLM</text>
   </g>
+  <!-- Jalur titik ditulis di atribut path milik animateMotion, bukan lewat <mpath>. Navigasi instan Material menulis ulang setiap atribut href di halaman baru, dan href pada <mpath> tidak bisa ditulis ulang, sehingga pindah ke beranda gagal. -->
   <circle class="zs-dot" r="4.5">
-    <animateMotion dur="2.6s" repeatCount="indefinite" begin="1.2s" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#zs-wire-in"/></animateMotion>
+    <animateMotion dur="2.6s" repeatCount="indefinite" begin="1.2s" keyPoints="0;1" keyTimes="0;1" calcMode="linear" path="M 102 125 H 112 Q 124 125 134 131 L 216.0 185.2"/>
   </circle>
   <circle class="zs-dot zs-dot--out" r="4.5">
-    <animateMotion dur="2.6s" repeatCount="indefinite" begin="2.5s" keyPoints="0;1" keyTimes="0;1" calcMode="linear"><mpath href="#zs-wire-out"/></animateMotion>
+    <animateMotion dur="2.6s" repeatCount="indefinite" begin="2.5s" keyPoints="0;1" keyTimes="0;1" calcMode="linear" path="M 380.5 343.8 L 430 418 V 432"/>
   </circle>
   <g class="zs-drop" style="--zs-delay:0.00s">
     <g class="zs-float zs-float--3">
