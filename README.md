@@ -30,7 +30,7 @@ Buat struktur proyek AI production-ready dalam satu perintah, lalu pakai kembali
 
 ## 📚 Dokumentasi
 
-Dokumentasi lengkap ada di folder [`docs/`](docs/index.md) dan bisa dibaca langsung di GitHub. Untuk membukanya sebagai situs dengan menu, pencarian, dan **playground** interaktif, jalankan:
+Dokumentasi lengkap terbit di **https://kazuma313.github.io/zul_utilities/**, dan sumbernya ada di folder [`docs/`](docs/index.md). Untuk membukanya di komputermu sebagai situs dengan menu, pencarian, dan **playground** interaktif, jalankan:
 
 ```bash
 uv sync
@@ -45,6 +45,7 @@ Dokumentasi mengikuti [Diátaxis](https://diataxis.fr): satu halaman hanya beris
 | [Panduan](docs/panduan/index.md) | Mengerjakan satu tugas tertentu | [Menambah tool](docs/panduan/menambah-tool.md), [Milvus](docs/panduan/memakai-milvus.md) |
 | [Referensi](docs/referensi/index.md) | Mencari fakta saat bekerja | [Perintah zul](docs/referensi/cli.md), [HTTP API](docs/referensi/http-api.md) |
 | [Konsep](docs/konsep/index.md) | Memahami alasannya | [Arsitektur hexagonal](docs/konsep/arsitektur-hexagonal.md) |
+| [Blog](docs/blog/index.md) | Catatan bertanggal tentang apa yang dipelajari | [Menulis tulisan blog](docs/panduan/menulis-blog.md) |
 
 Halaman tutorial dan panduan punya panel **Playground**: kirim pesan ke agent di proyekmu, lalu lihat setiap langkahnya dan setujui aksi yang menunggu. Lihat [Mencoba fitur di playground](docs/panduan/mencoba-di-playground.md).
 

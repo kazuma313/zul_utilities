@@ -34,8 +34,10 @@ Halaman ini untuk kamu yang ingin mengubah Zul sendiri: menambah perintah, mempe
 | `tests/` | Test untuk CLI, utilities, dan template. |
 | `research/agentic/algorithms/skills/` | Kumpulan skill untuk agent AI. Lihat [Membuat mind map](membuat-mindmap.md). |
 | `scripts/comment_style.py` | Pemeriksa bentuk komentar. |
-| `docs/` | Sumber dokumentasi ini. |
-| `mkdocs.yml` | Susunan menu dan tema situs dokumentasi. |
+| `scripts/new_post.py` | Pembuat tulisan blog baru dari template. Lihat [Menulis tulisan blog](menulis-blog.md). |
+| `docs/` | Sumber dokumentasi ini. Blog ada di `docs/blog/`. |
+| `mkdocs.yml` | Susunan menu, tema, dan plugin situs dokumentasi. |
+| `.github/workflows/docs.yml` | Workflow yang membangun dan menerbitkan situs dokumentasi. |
 | `tutorial/` | Notebook contoh pemakaian utilities. |
 | `research/` | Latihan dan eksperimen; bukan bagian dari package. |
 
@@ -155,6 +157,8 @@ Dokumentasi ini mengikuti [Diátaxis](https://diataxis.fr). Setiap halaman hanya
 | Konsep | `docs/konsep/` | Ingin mengerti alasannya | Penjelasan, alasan desain, dan akibat tiap pilihan. |
 
 Jika sebuah panduan butuh menjelaskan alasan, tulis satu kalimat lalu tautkan ke halaman Konsep. Jika butuh daftar parameter, tautkan ke halaman Referensi. Setelah menambah halaman, daftarkan di bagian `nav` pada `mkdocs.yml`.
+
+Blog di `docs/blog/` berada di luar keempat jenis itu: isinya catatan bertanggal tentang apa yang dipelajari. Tulisan blog tidak perlu didaftarkan di `nav`. Cara menulisnya ada di [Menulis tulisan blog](menulis-blog.md).
 
 ### Mengikuti gaya penulisan
 

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 428 354" width="428" height="354" role="img" aria-labelledby="t d">
+<title id="t">Kecepatan dan nilai judge tiga model lokal</title>
+<desc id="d">Detik per chunk: qwen3:8b 12,7; gemma3:4b 4,9; qwen3:4b 7,2. Nilai judge dari 5: qwen3:8b 4,49; gemma3:4b 4,22; qwen3:4b 4,32.</desc>
+<g transform="translate(14,14)">
+<text x="0" y="16" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#eef2ff">Detik per chunk (median)</text>
+<text x="82" y="53.0" text-anchor="end" font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-size="12" fill="#c2cbe3">qwen3:8b</text>
+<text x="82" y="87.0" text-anchor="end" font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-size="12" fill="#c2cbe3">gemma3:4b</text>
+<text x="82" y="121.0" text-anchor="end" font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-size="12" fill="#c2cbe3">qwen3:4b</text>
+<line x1="92.0" y1="26" x2="92.0" y2="134" stroke="#253468" stroke-width="1"/>
+<text x="92.0" y="152" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">0</text>
+<line x1="181.3" y1="26" x2="181.3" y2="134" stroke="#253468" stroke-width="1"/>
+<text x="181.3" y="152" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">5</text>
+<line x1="270.6" y1="26" x2="270.6" y2="134" stroke="#253468" stroke-width="1"/>
+<text x="270.6" y="152" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">10</text>
+<path d="M92.0,40.0 h222.8 a4,4 0 0 1 4,4 v10.0 a4,4 0 0 1 -4,4 h-222.8 z" fill="#1f9cc9"/>
+<text x="324.8" y="53.0" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#c2cbe3">12,7 s</text>
+<path d="M92.0,74.0 h83.5 a4,4 0 0 1 4,4 v10.0 a4,4 0 0 1 -4,4 h-83.5 z" fill="#1f9cc9"/>
+<text x="185.5" y="87.0" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#c2cbe3">4,9 s</text>
+<path d="M92.0,108.0 h124.6 a4,4 0 0 1 4,4 v10.0 a4,4 0 0 1 -4,4 h-124.6 z" fill="#1f9cc9"/>
+<text x="226.6" y="121.0" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#c2cbe3">7,2 s</text>
+<text x="0" y="190" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#eef2ff">Nilai judge, rata-rata (skala 1–5)</text>
+<text x="82" y="227.0" text-anchor="end" font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-size="12" fill="#c2cbe3">qwen3:8b</text>
+<text x="82" y="261.0" text-anchor="end" font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-size="12" fill="#c2cbe3">gemma3:4b</text>
+<text x="82" y="295.0" text-anchor="end" font-family="'IBM Plex Mono', Consolas, 'Courier New', monospace" font-size="12" fill="#c2cbe3">qwen3:4b</text>
+<line x1="92.0" y1="200" x2="92.0" y2="308" stroke="#253468" stroke-width="1"/>
+<text x="92.0" y="326" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">0</text>
+<line x1="142.0" y1="200" x2="142.0" y2="308" stroke="#253468" stroke-width="1"/>
+<text x="142.0" y="326" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">1</text>
+<line x1="192.0" y1="200" x2="192.0" y2="308" stroke="#253468" stroke-width="1"/>
+<text x="192.0" y="326" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">2</text>
+<line x1="242.0" y1="200" x2="242.0" y2="308" stroke="#253468" stroke-width="1"/>
+<text x="242.0" y="326" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">3</text>
+<line x1="292.0" y1="200" x2="292.0" y2="308" stroke="#253468" stroke-width="1"/>
+<text x="292.0" y="326" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">4</text>
+<line x1="342.0" y1="200" x2="342.0" y2="308" stroke="#253468" stroke-width="1"/>
+<text x="342.0" y="326" text-anchor="middle" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" fill="#8f9bbd">5</text>
+<path d="M92.0,214.0 h220.5 a4,4 0 0 1 4,4 v10.0 a4,4 0 0 1 -4,4 h-220.5 z" fill="#1f9cc9"/>
+<text x="322.5" y="227.0" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#c2cbe3">4,49</text>
+<path d="M92.0,248.0 h207.0 a4,4 0 0 1 4,4 v10.0 a4,4 0 0 1 -4,4 h-207.0 z" fill="#1f9cc9"/>
+<text x="309.0" y="261.0" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#c2cbe3">4,22</text>
+<path d="M92.0,282.0 h212.0 a4,4 0 0 1 4,4 v10.0 a4,4 0 0 1 -4,4 h-212.0 z" fill="#1f9cc9"/>
+<text x="314.0" y="295.0" font-family="'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" fill="#c2cbe3">4,32</text>
+</g>
+</svg>

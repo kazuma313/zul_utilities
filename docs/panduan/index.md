@@ -51,4 +51,5 @@ Panduan adalah resep untuk satu tugas. Setiap halaman menganggap kamu sudah meng
 | Tugas | Panduan |
 |---|---|
 | Menerbitkan situs dokumentasi dan menyambungkan playground-nya | [Menerbitkan dokumentasi](menerbitkan-dokumentasi.md) |
+| Menambah tulisan bertanggal ke blog, beserta gambar dan file-nya | [Menulis tulisan blog](menulis-blog.md) |
 | Mengubah Zul sendiri: kode, test, atau dokumentasi | [Berkontribusi](berkontribusi.md) |
