@@ -46,7 +46,7 @@ Setiap panduan berisi langkah untuk menyelesaikan satu tugas dengan Zul.
 | Mengambil transcript dan metadata video YouTube, tanpa model AI | [Mengambil transcript YouTube](mengambil-transcript-youtube.md) |
 | Mengambil harga token crypto beserta EMA, Stochastic, dan volume, tanpa model AI | [Mengambil snapshot harga crypto](mengambil-snapshot-crypto.md) |
 | Menggambar candlestick chart token crypto beserta indikatornya, tanpa model AI | [Membuat candlestick chart crypto](membuat-chart-crypto.md) |
-| Membuat silabus dan materi belajar yang bisa dibuka di browser, dengan model lokal | [Membuat silabus dan materi belajar](membuat-silabus-dan-materi.md) |
+| Membuat silabus dan materi belajar dari topik, PDF, gambar, atau dokumen, dengan model lokal | [Membuat silabus dan materi belajar](membuat-silabus-dan-materi.md) |
 | Memotong dokumen menjadi chunk berkonteks untuk vector database, dengan model lokal | [Menyiapkan dokumen untuk RAG](menyiapkan-dokumen-untuk-rag.md) |
 
 ## Proyek Zul

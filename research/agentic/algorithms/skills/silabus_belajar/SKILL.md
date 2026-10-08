@@ -19,20 +19,21 @@ The model only writes the content as one JSON object. Code does the rest, so a 4
 | Remove links that are not in the sources you gave | a local model has no web search and invents URLs |
 | Drop a leading "Bisa" from outcomes, write a result that is only a verb from the first objective, remove Markdown | the page already writes "Anda bisa:"; the map needs what the reader can do |
 
-What code cannot check: whether the facts are right, and whether the core concepts of the topic are in a module. In the comparison, NAB was in 2 of 5 gemma3:4b syllabi on mutual funds. Without `--context` or `--sources` the page says that the content comes from the model's general knowledge.
+What code cannot check: whether the facts are right, and whether the core concepts of the topic are in a module. In the comparison, NAB was in 2 of 5 gemma3:4b syllabi on mutual funds. Without `--file` or `--sources` the page says that the content comes from the model's general knowledge.
 
 ## With a local model (Ollama): the script
 
 ```
 python scripts/generate_silabus.py "Python untuk analisis data" -o silabus-python.html
 python scripts/generate_silabus.py "Reksa dana" --level Pemula --goal "bisa memilih reksa dana sendiri" \
-    --hours-per-week 3 --sources sumber.txt --context catatan.md
+    --hours-per-week 3 --sources sumber.txt --file catatan.pdf --file foto-papan-tulis.jpg
+python scripts/generate_silabus.py --file buku-bab-1.pdf                     # topic taken from the material
 python scripts/generate_silabus.py "Reksa dana" --from-json jawaban.json       # rebuild without the model
 ```
 
 `--model auto` (default) takes the first of `RECOMMENDED` in `scripts/generate_silabus.py` that the server has; `--model NAME` or `SKILL_MODEL` chooses another. `--api openai --base-url http://localhost:1234/v1` uses LM Studio or another OpenAI-compatible server. The answer is constrained by `assets/silabus.schema.json`; an answer that cannot be used is sent back with the reason once (`--retries`).
 
-`sumber.txt` holds lines `Judul | URL | dipakai untuk`. `--context` is source text: the model is told to use only its facts.
+`sumber.txt` holds lines `Judul | URL | dipakai untuk`. `--file` (repeatable) is the learner's own material: PDF, images, docx, pptx, xlsx, html, text files, a folder or a link, read by `scripts/read_material.py`. Office files and text PDFs need only the standard library (`pdftotext` or `pypdf` for PDF); images and scanned pages go to a local vision model through Ollama (gemma3:4b, or `VISION_MODEL_ID`), and every file read that way is reported, because a vision model misreads. The model gets the first 12,000 characters and is told to use only their facts. `python scripts/read_material.py FILE` prints what was read.
 
 Output: `silabus-<topic>.html` and `silabus-<topic>.json` (the normalised spec with numbered module cards). The last lines list every repair and every rule the checks found broken; read them before sending the page.
 
@@ -51,6 +52,7 @@ A strong model with web search and an Artifact tool can instead follow `referenc
 ```python
 from skills.silabus_belajar.silabus_belajar_skill import generate_silabus, build_silabus
 result = generate_silabus("Python untuk analisis data", hours_per_week=4)    # local model
+result = generate_silabus(files=["catatan.pdf"], hours_per_week=3)           # from the learner's material
 result = build_silabus(spec, "silabus-python.html")                           # JSON written elsewhere
 result["path"], result["json"], result["warnings"]
 ```

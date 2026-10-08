@@ -1,12 +1,13 @@
-"""Topic -> silabus page with a LOCAL model (Ollama, LM Studio, llama.cpp server, vLLM ...).
+"""Topic or the learner's own material -> silabus page with a LOCAL model (Ollama, LM Studio, vLLM ...).
 
 The model only writes the content as JSON, constrained by assets/silabus.schema.json; build_silabus.py
 checks it against the skill's rules, repairs what code can repair, computes hours and the schedule,
-draws the module map and writes the HTML page.  Standard library only.
+draws the module map and writes the HTML page.  Standard library only; read_material.py reads --file.
 
     python scripts/generate_silabus.py "Python untuk analisis data" -o silabus-python.html
     python scripts/generate_silabus.py "Reksa dana" --level Pemula --goal "bisa memilih reksa dana" \
-        --hours-per-week 3 --sources sumber.txt --context catatan.md
+        --hours-per-week 3 --sources sumber.txt --file catatan.pdf --file foto-papan-tulis.jpg
+    python scripts/generate_silabus.py --file buku.pdf                       # topic taken from the material
     python scripts/generate_silabus.py "..." --from-json jawaban.json        # build again without the model
 
 --model auto (default) takes the first of RECOMMENDED that the server has; SKILL_MODEL overrides it.
@@ -23,6 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_silabus import SKILL_DIR, build_silabus, format_result, is_money_topic, read_sources, slugify  # noqa: E402
 from local_model import Settings, ask_model, choose_model, cut_fields, parse_json, server_error_hint  # noqa: E402
+from read_material import MaterialError, VisionReader, read_material  # noqa: E402
 
 SCHEMA = SKILL_DIR / "assets" / "silabus.schema.json"
 PROMPT = SKILL_DIR / "assets" / "prompts" / "system_prompt.txt"
@@ -35,7 +37,7 @@ CONTEXT_LIMIT = 12000
 
 
 def request_text(topic: str, level: str, goal: str, hours_per_week: int, sources: list, context: str) -> str:
-    lines = [f"Topik: {topic}", f"Level awal pelajar: {level}",
+    lines = [f"Topik: {topic or 'tentukan dari bahan di bawah'}", f"Level awal pelajar: {level}",
              f"Tujuan pelajar: {goal or 'paham cara kerjanya dan bisa memakainya'}",
              f"Waktu belajar: sekitar {hours_per_week} jam per minggu",
              "Bahasa: Bahasa Indonesia. Semua teks di JSON ditulis dalam Bahasa Indonesia."]
@@ -54,11 +56,23 @@ def request_text(topic: str, level: str, goal: str, hours_per_week: int, sources
 
 def generate(topic: str, output: str | None = None, level: str = "Pemula", goal: str = "", hours_per_week: int = 4,
              sources: list | None = None, context: str = "", settings: Settings | None = None, retries: int = 1,
-             from_json: str | None = None, save_json: str | None = None) -> dict:
-    """Write the silabus page; returns build_silabus's result plus "model", "attempts" and "stats"."""
-    sources = sources or []
+             from_json: str | None = None, save_json: str | None = None, files: list | None = None) -> dict:
+    """Write the silabus page; returns build_silabus's result plus "model", "attempts" and "stats".
+
+    `files` are the learner's material (files, folders or links, see read_material.py); their text is
+    added to `context`, and without a topic the model takes it from the material.
+    """
+    if not topic and not files and not from_json:
+        return {"ok": False, "error": "give a topic, or --file with the material to learn from"}
+    sources, notes = sources or [], []
     settings = settings or Settings(model=choose_model("ollama", None, RECOMMENDED))
-    output = output or f"silabus-{slugify(topic)}.html"
+    if files and not from_json:
+        try:
+            text, notes = read_material(files, VisionReader(settings.api, settings.base_url))
+        except MaterialError as error:
+            return {"ok": False, "error": str(error)}
+        context = (context + "\n\n" + text).strip()
+    output = output or f"silabus-{slugify(topic or (Path(str(files[0])).stem if files else ''))}.html"
     system = PROMPT.read_text(encoding="utf-8")
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     user = request_text(topic, level, goal, hours_per_week, sources, context)
@@ -91,19 +105,24 @@ def generate(topic: str, output: str | None = None, level: str = "Pemula", goal:
         if res.get("ok") or from_json:
             break
         user += f"\n\nJawaban sebelumnya tidak bisa dipakai ({res.get('error')}). Kembalikan JSON yang lengkap."
+    if res.get("ok"):
+        if len(context) > CONTEXT_LIMIT:
+            notes.append(f"the material has {len(context):,} characters; the model got the first {CONTEXT_LIMIT:,}")
+        res["warnings"] = notes + res["warnings"]
     res.update({"model": settings.model, "attempts": attempt, "stats": stats_all})
     return res
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0], formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("topic", help="what the learner wants to learn")
+    ap.add_argument("topic", nargs="?", default="", help="what the learner wants to learn (or taken from --file)")
     ap.add_argument("-o", "--output", help="HTML file (default: silabus-<topic>.html)")
     ap.add_argument("--level", default="Pemula")
     ap.add_argument("--goal", default="", help="what the learner wants to be able to do")
     ap.add_argument("--hours-per-week", type=int, default=4)
     ap.add_argument("--sources", help='file with lines "Judul | URL | dipakai untuk"')
-    ap.add_argument("--context", help="text file with source material; the model uses only its facts")
+    ap.add_argument("--file", "--context", dest="files", action="append", default=[],
+                    help="material to learn from, repeatable: PDF, image, docx, pptx, xlsx, html, text, folder or link")
     ap.add_argument("--api", choices=["ollama", "openai"], default="ollama")
     ap.add_argument("--base-url")
     ap.add_argument("--model", default="auto", help=f"auto (default): the first of {', '.join(RECOMMENDED)} on the server")
@@ -125,9 +144,8 @@ def main() -> int:
     settings = Settings(model=model, api=args.api, base_url=args.base_url, api_key=args.api_key,
                         temperature=args.temperature, num_ctx=args.num_ctx, max_tokens=args.max_tokens,
                         think=args.think, timeout=args.timeout)
-    context = Path(args.context).read_text(encoding="utf-8", errors="replace") if args.context else ""
     res = generate(args.topic, args.output, args.level, args.goal, args.hours_per_week, read_sources(args.sources),
-                   context, settings, args.retries, args.from_json, args.save_json)
+                   "", settings, args.retries, args.from_json, args.save_json, args.files)
     try:
         sys.stdout.reconfigure(encoding="utf-8")
     except Exception:  # noqa: BLE001

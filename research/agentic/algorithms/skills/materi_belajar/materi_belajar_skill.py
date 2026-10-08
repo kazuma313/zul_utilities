@@ -59,22 +59,28 @@ def build_materi(spec, filename: str, silabus_json: str = None, module: int = No
 
 
 def generate_materi(topic: str = "", silabus_json: str = None, module: int = None, output: str = None,
-                    model: str = None, sources_file: str = None, context: str = "", base_url: str = None) -> dict:
-    """A local model writes the lesson, code builds the page.  `model` None: the first of RECOMMENDED on the server."""
+                    model: str = None, sources_file: str = None, context: str = "", base_url: str = None,
+                    files: list = None) -> dict:
+    """A local model writes the lesson, code builds the page.  `model` None: the first of RECOMMENDED on the server.
+
+    `files`: the learner's material (PDF, images, docx, pptx, xlsx, html, text, folders or links); the lesson
+    uses only its facts.
+    """
     contract = _build.load_contract(silabus_json, module) if silabus_json else None
     model = model or _llm.choose_model("ollama", base_url, RECOMMENDED)
     settings = _llm.Settings(model=model, base_url=base_url, max_tokens=_gen.MAX_TOKENS)
-    return _gen.generate(topic, output, contract, _build.read_sources(sources_file), context, settings)
+    return _gen.generate(topic, output, contract, _build.read_sources(sources_file), context, settings, files=files)
 
 
-def materi_text(topic: str = "", silabus_json: str = "", module: int = 0) -> str:
+def materi_text(topic: str = "", silabus_json: str = "", module: int = 0, files: list = None) -> str:
     """The tool's reply: where the page is, what is in it, and what the checks found."""
     folder = Path(os.environ.get(OUTPUT_DIR_ENV) or "belajar")
     try:
         contract = _build.load_contract(silabus_json, module) if silabus_json else None
+        stem = topic or (Path(str(files[0])).stem if files else "")
         name = (f"{_build.slugify(contract['topic'])}-modul-{module}.html" if contract
-                else f"materi-{_build.slugify(topic)}.html")
-        res = generate_materi(topic, silabus_json or None, module or None, str(folder / name))
+                else f"materi-{_build.slugify(stem)}.html")
+        res = generate_materi(topic, silabus_json or None, module or None, str(folder / name), files=files)
     except Exception as error:  # noqa: BLE001 - the reason goes back to the caller as text
         return f"No lesson: {error}"
     if not res.get("ok"):
@@ -87,19 +93,21 @@ def materi_text(topic: str = "", silabus_json: str = "", module: int = 0) -> str
     return "\n".join(lines)
 
 
-def _create_materi(topic: str = "", silabus_json: str = "", module: int = 0) -> str:
+def _create_materi(topic: str = "", silabus_json: str = "", module: int = 0, files: list[str] | None = None) -> str:
     """Write the lesson page of one module: objectives, chapters (what / how / why) with term boxes and diagrams,
     an interactive demo, summary, multiple-choice quiz, exercises and glossary.
 
     Use it whenever the user wants the material to study: "buatkan materi modul 2", "lanjut modul berikutnya",
-    "bahan ajar", "pelajaran tentang X", "ajari saya X lengkap dengan kuis".
+    "bahan ajar", "pelajaran tentang X", "ajari saya X lengkap dengan kuis", "jadikan PDF/foto ini materi".
 
     Args:
         topic: Topic of a lesson without a syllabus. Leave empty when silabus_json is given.
         silabus_json: Path of the syllabus JSON written by create_silabus; its module card is the contract.
         module: Module number in that syllabus, starting at 1.
+        files: Paths or links of the user's material: PDF, images, docx, pptx, xlsx, html or text files. The
+            lesson uses only facts from it.
     """
-    return materi_text(topic, silabus_json, module)
+    return materi_text(topic, silabus_json, module, files)
 
 
 try:

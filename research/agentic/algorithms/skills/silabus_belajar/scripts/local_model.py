@@ -14,6 +14,7 @@ otherwise spends its whole token budget reasoning and returns nothing (see the p
 
 from __future__ import annotations
 
+import base64
 import json
 import os
 import re
@@ -88,11 +89,18 @@ def _post(url: str, payload: dict, api_key: str, timeout: int) -> dict:
         return json.loads(resp.read().decode("utf-8"))
 
 
-def ask_model(s: Settings, system: str, user: str, schema: dict | None) -> tuple[str, dict]:
-    """(answer text, stats) for one request; stats has seconds, and tokens/eval_seconds when the server says."""
+def ask_model(s: Settings, system: str, user: str, schema: dict | None,
+              images: list | None = None) -> tuple[str, dict]:
+    """(answer text, stats) for one request; stats has seconds, and tokens/eval_seconds when the server says.
+
+    `images` are PNG or JPEG bytes sent with the user message, for a vision model.
+    """
     started = time.perf_counter()
-    messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
+    messages = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": user}]
+    encoded = [base64.b64encode(image).decode("ascii") for image in images or []]
     if s.api == "ollama":
+        if encoded:
+            messages[-1]["images"] = encoded
         payload = {"model": s.model, "stream": False, "messages": messages,
                    "options": {"temperature": s.temperature, "num_ctx": context_size(s, system, user),
                                "num_predict": s.max_tokens}}
@@ -122,6 +130,10 @@ def ask_model(s: Settings, system: str, user: str, schema: dict | None) -> tuple
                  "prompt_tokens": data.get("prompt_eval_count"), "num_ctx": payload["options"]["num_ctx"]}
         return content, stats
 
+    if encoded:
+        kinds = ["image/jpeg" if image[:3] == bytes([0xFF, 0xD8, 0xFF]) else "image/png" for image in images]
+        messages[-1]["content"] = [{"type": "text", "text": user}] + [
+            {"type": "image_url", "image_url": {"url": f"data:{kind};base64,{data}"}} for kind, data in zip(kinds, encoded)]
     payload = {"model": s.model, "temperature": s.temperature, "max_tokens": s.max_tokens, "messages": messages}
     if schema:
         payload["response_format"] = {"type": "json_schema",

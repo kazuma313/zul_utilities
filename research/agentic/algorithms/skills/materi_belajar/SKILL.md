@@ -28,10 +28,13 @@ What code cannot check: whether the facts are right, concepts that are mixed up,
 ```
 python scripts/generate_materi.py --silabus silabus-reksa-dana.json --module 2 -o reksa-dana-modul-2.html
 python scripts/generate_materi.py "Cara kerja bunga majemuk" -o materi-bunga-majemuk.html
+python scripts/generate_materi.py --file bab-3.pdf --file foto-catatan.jpg                 # from the learner's material
 python scripts/generate_materi.py --silabus s.json --module 2 --from-json jawaban.json      # rebuild without the model
 ```
 
-`--model auto` (default) takes the first of `RECOMMENDED` in `scripts/generate_materi.py` that the server has; `--model` or `SKILL_MODEL` chooses another; `--api openai --base-url ...` uses an OpenAI-compatible server. `--context` (source text) and `--sources` (lines `Judul | URL`) work as in silabus_belajar.
+`--model auto` (default) takes the first of `RECOMMENDED` in `scripts/generate_materi.py` that the server has; `--model` or `SKILL_MODEL` chooses another; `--api openai --base-url ...` uses an OpenAI-compatible server. `--sources` (lines `Judul | URL`) works as in silabus_belajar.
+
+`--file` (repeatable) is the learner's own material: PDF, images, docx, pptx, xlsx, html, text files, a folder or a link, read by `scripts/read_material.py`. Office files and text PDFs need only the standard library (`pdftotext` or `pypdf` for PDF); images and scanned pages go to a local vision model through Ollama (gemma3:4b, or `VISION_MODEL_ID`), and every file read that way is reported, because a vision model misreads. The model gets the first 12,000 characters and is told to use only their facts. `python scripts/read_material.py FILE` prints what was read.
 
 The last lines list every repair and every rule the checks found broken.
 
@@ -50,6 +53,7 @@ A strong model with web search and an Artifact tool can instead follow `referenc
 ```python
 from skills.materi_belajar.materi_belajar_skill import generate_materi, build_materi
 result = generate_materi(silabus_json="silabus-python.json", module=1)     # local model
+result = generate_materi(files=["bab-3.pdf"])                              # from the learner's material
 result = build_materi(spec, "python-modul-1.html", "silabus-python.json", 1)
 result["path"], result["warnings"]
 ```

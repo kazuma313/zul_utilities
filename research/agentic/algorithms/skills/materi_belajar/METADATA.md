@@ -11,12 +11,13 @@ requires:
   network: the model server only (localhost:11434 by default)
 entry: materi_belajar_skill.py
 functions:
-  - generate_materi(topic, silabus_json, module, output, model) -> {ok, path, warnings, chapters, questions, exercises, model, stats}
+  - generate_materi(topic, silabus_json, module, output, model, files) -> {ok, path, warnings, chapters, questions, exercises, model, stats}
   - build_materi(spec, filename, silabus_json, module, sources) -> {ok, path, warnings, ...}
 tools:
   - create_materi (materi_belajar_skill.py; None without langchain-core)
 scripts:
-  - scripts/generate_materi.py (module card or topic -> local model JSON -> page)
+  - scripts/generate_materi.py (module card, topic or material -> local model JSON -> page)
+  - scripts/read_material.py (PDF, images, docx, pptx, xlsx, html, text, folders, links -> text; images and scans by a vision model)
   - scripts/build_materi.py (JSON -> page, with repairs, rule checks and an arithmetic check)
 assets: [template-materi.html, materi.schema.json, prompts/system_prompt.txt]
 references: [SKILL-claude.md (the original claude.ai workflow), contoh-materi.html, diagram-recipes.md]

@@ -11,12 +11,13 @@ requires:
   network: the model server only (localhost:11434 by default)
 entry: silabus_belajar_skill.py
 functions:
-  - generate_silabus(topic, output, level, goal, hours_per_week, model) -> {ok, path, json, warnings, modules, hours, weeks, model, stats}
+  - generate_silabus(topic, output, level, goal, hours_per_week, model, files) -> {ok, path, json, warnings, modules, hours, weeks, model, stats}
   - build_silabus(spec, filename, sources, hours_per_week) -> {ok, path, json, warnings, ...}
 tools:
   - create_silabus (silabus_belajar_skill.py; None without langchain-core)
 scripts:
-  - scripts/generate_silabus.py (topic -> local model JSON -> page)
+  - scripts/generate_silabus.py (topic or material -> local model JSON -> page)
+  - scripts/read_material.py (PDF, images, docx, pptx, xlsx, html, text, folders, links -> text; images and scans by a vision model)
   - scripts/build_silabus.py (JSON -> page, with repairs and rule checks)
 assets: [template-silabus.html, silabus.schema.json, prompts/system_prompt.txt]
 references: [SKILL-claude.md (the original claude.ai workflow), contoh-silabus.html, diagram-recipes.md]

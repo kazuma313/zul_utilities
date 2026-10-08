@@ -57,20 +57,27 @@ def build_silabus(spec, filename: str, sources=None, hours_per_week: int = 4, mo
     return _build.build_silabus(spec, filename, sources, hours_per_week, model)
 
 
-def generate_silabus(topic: str, output: str = None, level: str = "Pemula", goal: str = "", hours_per_week: int = 4,
-                     model: str = None, sources_file: str = None, context: str = "", base_url: str = None) -> dict:
-    """A local model writes the content, code builds the page.  `model` None: the first of RECOMMENDED on the server."""
+def generate_silabus(topic: str = "", output: str = None, level: str = "Pemula", goal: str = "",
+                     hours_per_week: int = 4, model: str = None, sources_file: str = None, context: str = "",
+                     base_url: str = None, files: list = None) -> dict:
+    """A local model writes the content, code builds the page.  `model` None: the first of RECOMMENDED on the server.
+
+    `files`: the learner's material (PDF, images, docx, pptx, xlsx, html, text, folders or links); without a
+    topic the model takes it from the material.
+    """
     model = model or _llm.choose_model("ollama", base_url, RECOMMENDED)
     settings = _llm.Settings(model=model, base_url=base_url)
-    return _gen.generate(topic, output, level, goal, hours_per_week, _build.read_sources(sources_file), context, settings)
+    return _gen.generate(topic, output, level, goal, hours_per_week, _build.read_sources(sources_file), context, settings,
+                         files=files)
 
 
-def silabus_text(topic: str, level: str = "Pemula", goal: str = "", hours_per_week: int = 4) -> str:
+def silabus_text(topic: str = "", level: str = "Pemula", goal: str = "", hours_per_week: int = 4,
+                 files: list = None) -> str:
     """The tool's reply: where the page is, what is in it, and what the checks found."""
     folder = Path(os.environ.get(OUTPUT_DIR_ENV) or "belajar")
-    output = folder / f"silabus-{_build.slugify(topic)}.html"
+    output = folder / f"silabus-{_build.slugify(topic or (Path(str(files[0])).stem if files else ''))}.html"
     try:
-        res = generate_silabus(topic, str(output), level, goal, hours_per_week)
+        res = generate_silabus(topic, str(output), level, goal, hours_per_week, files=files)
     except Exception as error:  # noqa: BLE001 - the reason goes back to the caller as text
         return f"No syllabus for {topic!r}: {error}"
     if not res.get("ok"):
@@ -83,20 +90,24 @@ def silabus_text(topic: str, level: str = "Pemula", goal: str = "", hours_per_we
     return "\n".join(lines)
 
 
-def _create_silabus(topic: str, level: str = "Pemula", goal: str = "", hours_per_week: int = 4) -> str:
-    """Create a syllabus (learning path) page for a topic: final skills, a module map, module cards with a main
-    question and objectives, a weekly schedule and a final project.
+def _create_silabus(topic: str = "", level: str = "Pemula", goal: str = "", hours_per_week: int = 4,
+                    files: list[str] | None = None) -> str:
+    """Create a syllabus (learning path) page for a topic or for the user's own material: final skills, a module
+    map, module cards with a main question and objectives, a weekly schedule and a final project.
 
     Use it whenever the user wants to learn something step by step: "buatkan silabus", "roadmap belajar",
-    "rencana belajar", "saya mau belajar X dari nol", "kurikulum", "learning path".
+    "rencana belajar", "saya mau belajar X dari nol", "kurikulum", "learning path", or "jadikan PDF/dokumen
+    ini rencana belajar".
 
     Args:
-        topic: What the user wants to learn, for example "Python untuk analisis data".
+        topic: What the user wants to learn, for example "Python untuk analisis data". May be empty when files
+            are given; the topic is then taken from the material.
         level: The learner's starting level, for example "Pemula".
         goal: What the learner wants to be able to do at the end, in the user's words.
         hours_per_week: Hours per week the learner has; 4 when the user did not say.
+        files: Paths or links of the user's material: PDF, images, docx, pptx, xlsx, html or text files.
     """
-    return silabus_text(topic, level, goal, hours_per_week)
+    return silabus_text(topic, level, goal, hours_per_week, files)
 
 
 try:

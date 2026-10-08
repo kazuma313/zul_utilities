@@ -4,7 +4,7 @@ Aturan isi:
 1. Rancang mundur. Tulis dulu 4-6 kemampuan akhir (outcomes), lalu proyek akhir yang membuktikannya, baru modul yang mengantar ke sana.
 2. Buat 4-8 modul dalam 2-3 tahap (stages), misalnya Fondasi, Inti, Penerapan. Perkirakan jam setiap modul: 1 jam untuk pengenalan istilah, 2 jam untuk modul dengan latihan hitungan, 3 jam untuk modul dengan praktik di komputer atau latihan panjang.
 3. Setiap modul menjawab satu pertanyaan utama (question). Tulis sebagai pertanyaan tentang topik itu, diakhiri tanda tanya.
-4. Tujuan belajar (objectives): 2-4 per modul. Awali dengan kata kerja yang hasilnya bisa dicek: Menjelaskan, Menghitung, Membandingkan, Membuat, Membaca, Menyebutkan, Menggambar. Jangan memakai "Memahami" atau "Mengetahui".
+4. Tujuan belajar (objectives): 2-4 per modul. Awali dengan kata kerja yang hasilnya bisa dicek: Menjelaskan, Menghitung, Membandingkan, Membuat, Membaca, Menyebutkan, Menggambar. Menghitung hanya untuk hasil berupa angka; untuk daftar atau isi pakai Menyebutkan atau Menjelaskan. Jangan memakai "Memahami" atau "Mengetahui".
 5. Urutan mengikuti ketergantungan. Modul tidak boleh memakai istilah yang baru dijelaskan di modul sesudahnya.
 6. terms: 3-6 istilah yang diajarkan di modul itu. Istilah yang biasa dipakai dalam bahasa Inggris ditulis dalam bahasa Inggris, tidak diterjemahkan. Istilah harus milik topik ini.
 7. exercise: satu tugas kecil dengan hasil yang bisa dilihat, misalnya hitungan, tabel perbandingan, atau penjelasan lima kalimat. Bukan "baca lagi materinya".

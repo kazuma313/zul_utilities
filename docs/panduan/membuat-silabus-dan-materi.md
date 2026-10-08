@@ -2,12 +2,12 @@
 
 Skill `silabus_belajar` menyusun rencana belajar satu topik: kemampuan akhir, peta modul, kartu modul, jadwal mingguan, dan proyek akhir. Skill `materi_belajar` menulis materi satu modul: bab dengan kotak istilah dan diagram, demo yang bisa diklik, kuis, latihan, dan kamus istilah. Hasil keduanya berupa halaman HTML yang bisa dibuka di browser, juga di HP.
 
-Kedua skill bisa dijalankan dengan model lokal lewat Ollama. Model hanya menulis isinya dalam bentuk JSON; kode yang menghitung jam dan jadwal, menggambar diagram, menyusun kuis, memeriksa aturan skill, lalu membangun halamannya.
+Keduanya bisa dibuat dari sebuah topik, atau dari bahan milikmu sendiri: PDF, foto catatan, slide, dokumen, atau link. Kedua skill bisa dijalankan dengan model lokal lewat Ollama. Model hanya menulis isinya dalam bentuk JSON; kode yang menghitung jam dan jadwal, menggambar diagram, menyusun kuis, memeriksa aturan skill, lalu membangun halamannya.
 
 > [!WARNING]
 > Kode tidak bisa memeriksa apakah fakta di dalam materi benar, dan hanya bisa memeriksa hitungan yang ditulis lengkap. Dalam perbandingan model, kesalahan paling sering ada di angka dan di konsep yang tertukar. Baca angka di bab, kuis, dan latihan sebelum materi dipakai belajar. Rinciannya ada di [Model lokal untuk skill belajar](../konsep/model-lokal-untuk-skill-belajar.md).
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan Ollama berjalan dengan minimal satu model chat, misalnya `gemma3:4b` atau `qwen3:8b`. Kedua skill ada di `research/agentic/algorithms/skills/silabus_belajar/` dan `research/agentic/algorithms/skills/materi_belajar/`. Tidak ada package yang perlu di-install.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan Ollama berjalan dengan minimal satu model chat, misalnya `gemma3:4b` atau `qwen3:8b`. Kedua skill ada di `research/agentic/algorithms/skills/silabus_belajar/` dan `research/agentic/algorithms/skills/materi_belajar/`. Tidak ada package yang perlu di-install. Untuk membaca gambar dan PDF hasil scan, Ollama juga perlu `gemma3:4b` atau model vision lain.
 
 ## Membuat silabus dari terminal
 
@@ -127,6 +127,75 @@ Materi juga bisa dibuat tanpa silabus. Tulis topiknya saja:
 uv run python scripts/generate_materi.py "Cara kerja bunga majemuk" -o materi-bunga-majemuk.html
 ```
 
+## Memakai bahan sendiri
+
+Silabus dan materi bisa dibuat dari bahan milikmu: PDF, foto catatan, slide, dokumen, atau link. Tambahkan `--file` untuk setiap bahan. Model diminta hanya memakai fakta dari bahan itu, dan topiknya boleh dikosongkan; model menentukannya dari bahan.
+
+Cara setiap bahan dibaca:
+
+| Bahan | Cara dibaca |
+|---|---|
+| PDF berteks | Teksnya diambil dengan `pdftotext` jika ter-install, atau dengan `pypdf`. Cepat, dan teksnya persis. |
+| PDF hasil scan | Halaman tanpa teks diubah menjadi gambar dengan `pypdfium2`, lalu dibaca model vision. Paling banyak 10 halaman. |
+| Gambar: png, jpg, jpeg, webp, gif, bmp | Dibaca model vision lewat Ollama, bawaannya `gemma3:4b`. Format webp, gif, dan bmp butuh Pillow. |
+| docx, pptx, xlsx | Teks diambil langsung dari isi file, tanpa package tambahan. File lama .doc dan .ppt harus disimpan ulang sebagai .docx atau .pptx. |
+| html, txt, md, csv, json | Dibaca sebagai teks. |
+| Folder | Semua file di atas yang ada di folder itu. |
+| Link http atau https | Diunduh, lalu dibaca sesuai jenisnya: halaman web, PDF, atau gambar. |
+
+Contoh silabus dari PDF 11 halaman tentang `[build-system]` di `pyproject.toml`, tanpa topik:
+
+```shell
+uv run python scripts/generate_silabus.py --file catatan-build-system.pdf --hours-per-week 3 -o silabus-build-system.html --save-json jawaban-build-system.json
+```
+
+Contoh keluaran pada 8 Oktober 2026:
+
+```text
+model: gemma3:4b (--model or SKILL_MODEL chooses another)
+OK: silabus-build-system.html (4 modul, 2 tahap, ± 17 jam, 6 minggu)
+     kontrak modul untuk materi_belajar: silabus-build-system.json
+     peringatan: module 3: objective changed to a checkable verb: 'Menjelaskan peran dari build-backend dalam pyproject.toml.'
+     peringatan: module 4: objective changed to a checkable verb: 'Menjelaskan peran dari pip dan UV dalam proses build.'
+     model gemma3:4b: 1222 token, 30.3 detik, percobaan ke-1
+```
+
+[Buka halaman silabus dari PDF ini](../assets/skill-belajar/silabus-build-system.html){ target="_blank" }. Modul-modulnya mengikuti isi PDF, termasuk Hatchling, Setuptools, Flit, dan contoh proyek `my-agent`. Isinya tetap perlu dibaca: modul 2 hanya membahas analogi rumah dari PDF, dan beberapa tujuan belajar memakai "Menghitung" untuk hal yang bukan angka, seperti "Menghitung perbedaan antara setup.py dan pyproject.toml".
+
+### Melihat teks yang dibaca dari bahan
+
+Sebelum membuat silabus, periksa apa yang dibaca skill dari bahanmu dengan `read_material.py`. Skrip ini tidak memanggil model teks, hanya model vision untuk gambar:
+
+```shell
+uv run python scripts/read_material.py contoh-slide.png
+```
+
+Untuk gambar slide ini:
+
+![Slide berjudul "Survei dalam angka" dengan empat angka: 350 responden, 72%, Rp 310.000, dan 64%](../assets/skill-belajar/contoh-slide.png)
+
+Keluarannya pada 8 Oktober 2026, 19 detik termasuk memuat model:
+
+```text
+catatan: contoh-slide.png: read by gemma3:4b from the image; check names and numbers
+# contoh-slide.png
+Survei dalam angka |
+|
+350 | 72% | Rp 310.000 | 64% |
+|
+Responden dari 500 yang diundang | Belanja online minimal sebulan sekali | Rata-rata belanja per bulan | Membayar dengan e-wallet |
+
+**Deskripsi Grafik/Diagram:**
+
+Grafik ini menampilkan hasil survei dalam angka. Ada empat kotak yang masing-masing berisi data statistik berbeda terkait perilaku belanja online. Kotak pertama menunjukkan jumlah responden, kotak kedua persentase responden yang melakukan belanja online minimal sebulan sekali, kotak ketiga rata-rata belanja per bulan dalam Rupiah (Rp), dan kotak terakhir persentase responden yang membayar dengan e-wallet.
+```
+
+Hasil baca gambar bisa salah. Pada run lain, gambar yang sama terbaca "minimal sebunyi sekali", dan model menyebut grafik batang yang tidak ada di slide. Karena itu setiap bahan yang dibaca model vision diberi baris `catatan` atau `peringatan`.
+
+Model vision bisa diganti dengan environment variable `VISION_MODEL_ID`, misalnya `VISION_MODEL_ID=qwen2.5vl:7b`. Model teks seperti `qwen3` tidak bisa membaca gambar, jadi skill tidak pernah memilihnya untuk gambar.
+
+Bahan yang panjang dipotong: model hanya menerima 12.000 karakter pertama, kira-kira 4 sampai 5 halaman buku. Jika bahan lebih panjang, log menampilkan `the material has ... characters; the model got the first 12,000`. Untuk buku, buat silabus dari daftar isi atau ringkasannya, lalu buat materi per bab dengan bab itu sebagai `--file`.
+
 ## Membaca peringatan
 
 Setiap baris `peringatan` di log adalah aturan skill yang dilanggar jawaban model. Sebagian sudah diperbaiki kode, sebagian harus kamu periksa sendiri:
@@ -139,6 +208,9 @@ Setiap baris `peringatan` di log adalah aturan skill yang dilanggar jawaban mode
 | `terms from the module card without a term box: ...` | Istilah dari kartu modul tidak dijelaskan di kotak istilah. | Tambahkan istilah itu di JSON jika pembaca butuh. |
 | `term 'X' is taught in module N but already used in module M` | Sebuah istilah dipakai sebelum modul yang menjelaskannya. | Abaikan jika istilahnya umum, seperti "risiko". Jika tidak, pindahkan istilahnya. |
 | `money topic without a module ...` | Topik uang tanpa modul risiko atau modul model bisnis. | Jalankan ulang, atau tambahkan modulnya di JSON. |
+| `... read by gemma3:4b from the image; check names and numbers` | Bahan itu dibaca model vision, yang bisa salah baca. | Bandingkan nama dan angka di halaman dengan gambarnya. |
+| `... page(s) without text (a scan?) skipped; install pypdfium2 ...` | PDF hasil scan, tetapi `pypdfium2` belum ter-install, jadi halaman itu dilewati. | Install `pypdfium2`, atau ubah PDF-nya menjadi gambar. |
+| `the material has ... characters; the model got the first 12,000` | Bahan lebih panjang dari yang diterima model. | Pakai bagian bahan yang dibutuhkan saja, misalnya satu bab. |
 | `objective changed to a checkable verb`, `result too short`, `prior was empty`, `... hours -> ...` | Kode sudah memperbaikinya, misalnya "Memahami" menjadi "Menjelaskan". | Tidak perlu apa-apa. |
 
 ## Memilih model
@@ -164,7 +236,7 @@ Opsi yang sama berlaku untuk `generate_silabus.py` dan `generate_materi.py`, kec
 | `--goal "..."` | Kemampuan yang ingin dicapai pelajar. Hanya silabus. |
 | `--hours-per-week 4` | Jam belajar per minggu untuk jadwal. Bawaannya 4. Hanya silabus. |
 | `--silabus FILE --module N` | Kartu modul dari silabus sebagai kontrak. Hanya materi. |
-| `--context catatan.md` | File teks berisi bahan. Model hanya boleh memakai fakta dari file ini. |
+| `--file FILE` | Bahan belajar: PDF, gambar, docx, pptx, xlsx, html, file teks, folder, atau link. Boleh diulang. Model hanya boleh memakai fakta dari bahan ini. `--context` adalah nama lamanya. |
 | `--sources sumber.txt` | Daftar sumber, satu per baris: `Judul | URL`. Link lain yang ditulis model dihapus. |
 | `--save-json FILE`, `--from-json FILE` | Simpan jawaban model, atau bangun dari jawaban yang disimpan tanpa memanggil model. |
 | `--model NAMA` | Model yang dipakai. Bawaannya `auto`. |
@@ -184,9 +256,11 @@ from skills.materi_belajar.materi_belajar_skill import generate_materi
 silabus = generate_silabus("Reksa dana", "silabus-reksa-dana.html", hours_per_week=3)
 materi = generate_materi(silabus_json=silabus["json"], module=2, output="reksa-dana-modul-2.html")
 print(materi["path"], materi["warnings"])
+
+dari_pdf = generate_silabus(files=["catatan-build-system.pdf", "foto-papan-tulis.jpg"], hours_per_week=3)
 ```
 
-Hasil silabus berisi `ok`, `path`, `json`, `warnings`, `modules`, `stages`, `hours`, `weeks`, `model`, dan `stats`. Hasil materi berisi `ok`, `path`, `warnings`, `chapters`, `diagrams`, `demo`, `questions`, `exercises`, `terms`, `model`, dan `stats`. Jika gagal, `ok` bernilai `False` dan alasannya ada di `error`. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `skills` bisa diimpor.
+Parameter `files` berisi bahan sendiri, sama dengan `--file`. Hasil silabus berisi `ok`, `path`, `json`, `warnings`, `modules`, `stages`, `hours`, `weeks`, `model`, dan `stats`. Hasil materi berisi `ok`, `path`, `warnings`, `chapters`, `diagrams`, `demo`, `questions`, `exercises`, `terms`, `model`, dan `stats`. Jika gagal, `ok` bernilai `False` dan alasannya ada di `error`. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `skills` bisa diimpor.
 
 Jika JSON-nya ditulis oleh model lain, misalnya Claude, pakai `build_silabus(spec, "silabus.html")` dan `build_materi(spec, "materi.html", silabus_json, module)`. Bentuk JSON-nya ada di `assets/silabus.schema.json` dan `assets/materi.schema.json` di folder setiap skill.
 
@@ -201,7 +275,7 @@ from skills.materi_belajar.materi_belajar_skill import create_materi
 tools = [create_silabus, create_materi]
 ```
 
-Halaman disimpan di folder dari environment variable `LEARNING_OUTPUT_DIR`, atau di `./belajar`. Tool membalas dengan lokasi halaman, isinya, dan semua peringatan. Jika gagal, tool membalas dengan satu kalimat berisi alasannya, supaya model agent tidak menulis silabus sendiri.
+Kedua tool juga menerima `files`: path atau link bahan dari pengguna, misalnya PDF yang diunggah ke aplikasi agent. Halaman disimpan di folder dari environment variable `LEARNING_OUTPUT_DIR`, atau di `./belajar`. Tool membalas dengan lokasi halaman, isinya, dan semua peringatan. Jika gagal, tool membalas dengan satu kalimat berisi alasannya, supaya model agent tidak menulis silabus sendiri.
 
 ## Jika skrip gagal
 
@@ -214,6 +288,10 @@ Kode keluar `0` berarti halaman dibuat. Jika gagal, skrip menulis satu baris `GA
 | `the answer stopped at the token limit` | Jawaban model lebih panjang dari `--max-tokens`. | Naikkan `--max-tokens`, atau pakai model lain. |
 | `the syllabus needs 4-8 modules`, `the lesson needs 3-6 chapters`, `the quiz needs 4-6 questions` | Jawaban model terlalu sedikit, juga setelah percobaan ulang. | Jalankan ulang, atau pakai model lain. |
 | `module N is not in ...` | Nomor modul tidak ada di silabus. | Lihat jumlah modul di halaman silabus. |
+| `...: file not found` | Path bahan di `--file` salah. | Periksa path-nya; path relatif dihitung dari folder tempat skrip dijalankan. |
+| `...: .doc is not read; use PDF, an image, docx, ...` | Jenis file tidak dikenal. | Simpan ulang sebagai PDF, .docx, atau .pptx. |
+| `...: the vision model ... could not read it` | Model vision tidak ada di server, atau Ollama tidak berjalan. | Jalankan `ollama pull gemma3:4b`, atau isi `VISION_MODEL_ID`. |
+| `...: cannot open the link` | Link tidak bisa dibuka dari komputer ini. | Unduh file-nya, lalu pakai sebagai `--file`. |
 
 Test kedua skill berjalan tanpa model:
 

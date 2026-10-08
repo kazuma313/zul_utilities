@@ -259,6 +259,30 @@ def test_generator_needs_a_topic_or_a_card():
     assert gm.generate()["error"].startswith("give a topic")
 
 
+def test_generator_writes_a_lesson_from_the_material_alone(tmp_path, monkeypatch):
+    material = tmp_path / "bab-nab.md"
+    material.write_text("NAB per unit adalah harga satu unit reksa dana.", encoding="utf-8")
+    sent = []
+
+    def fake_ask(settings, system, user, schema):
+        sent.append(user)
+        return json.dumps(REFERENCE), {"seconds": 1.0, "tokens": 100}
+
+    monkeypatch.setattr(gm, "ask_model", fake_ask)
+    monkeypatch.chdir(tmp_path)
+    res = gm.generate(settings=gm.Settings(model="fake"), files=[str(material)])
+
+    assert res["ok"] and Path(res["path"]).name == "materi-bab-nab.html"
+    assert "Topik materi lepas: tentukan dari bahan di bawah" in sent[0]
+    assert "Pakai HANYA fakta dari bahan berikut" in sent[0] and "NAB per unit adalah harga" in sent[0]
+
+
+@pytest.mark.parametrize("name", ["read_material.py", "local_model.py"])
+def test_the_shared_scripts_are_the_same_in_both_skills(name):
+    other = SKILL.parent / "silabus_belajar" / "scripts" / name
+    assert (SKILL / "scripts" / name).read_text(encoding="utf-8") == other.read_text(encoding="utf-8")
+
+
 def test_tool_reports_an_unreachable_server_as_a_sentence(tmp_path, monkeypatch):
     monkeypatch.setenv(skill.OUTPUT_DIR_ENV, str(tmp_path))
     monkeypatch.setattr(skill._llm, "choose_model", lambda *a, **k: "nothing")
