@@ -226,3 +226,6 @@ node_modules/
 
 # Downloaded model weights (too large for GitHub)
 weights/
+
+# Local Claude Code settings (preview servers, permissions); each machine keeps its own
+.claude/
