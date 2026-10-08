@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NAB dan cara nilai investasi berubah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Warna aksen: ganti --accent / --accent-line / --accent-bg (light dan dark) sesuai identitas topik.
+     Bitcoin = oranye #F7931A. Topik tanpa warna identitas: biarkan oranye ini atau pilih satu warna yang bermakna. -->
+<style>
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#16213A; --muted:#5B6478; --rule:#DDE1E8; --rule-strong:#B9C0CC;
+  --accent:#E2830E; --accent-line:#F7931A; --accent-bg:#FEF1DE;
+  --teal:#0F7A64; --teal-bg:#E1F3EE; --red:#B8392A; --red-bg:#FBE7E3;
+  --sans:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1522; --surface:#172033; --ink:#E8EBF1; --muted:#9AA3B5; --rule:#263149; --rule-strong:#3A4766;
+    --accent:#F7A23C; --accent-line:#F7A23C; --accent-bg:#3A2A12;
+    --teal:#42C7A3; --teal-bg:#11322B; --red:#F07B66; --red-bg:#3B1E1A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1522; --surface:#172033; --ink:#E8EBF1; --muted:#9AA3B5; --rule:#263149; --rule-strong:#3A4766;
+  --accent:#F7A23C; --accent-line:#F7A23C; --accent-bg:#3A2A12;
+  --teal:#42C7A3; --teal-bg:#11322B; --red:#F07B66; --red-bg:#3B1E1A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.7;-webkit-text-size-adjust:100%}
+main{max-width:700px;margin:0 auto;padding:0 20px 64px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent-line);outline-offset:2px}
+h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.08;letter-spacing:-0.025em;font-weight:800;margin:0 0 18px}
+h2{font-size:1.6rem;line-height:1.2;letter-spacing:-0.015em;font-weight:800;margin:0 0 6px}
+h3{font-size:1.02rem;font-weight:700;margin:26px 0 6px;color:var(--ink)}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+code,.mono{font-family:var(--mono);font-size:.88em}
+.hero{padding:56px 0 28px}
+.hero .lead{font-size:1.12rem;color:var(--muted);max-width:60ch}
+.paper{display:flex;gap:14px;align-items:center;margin:24px 0 0;padding:14px 16px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;font-size:.92rem}
+.paper .coin{flex:none;width:42px;height:42px;border-radius:50%;background:var(--accent-line);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.3rem}
+.howto{margin:28px 0 0;padding:16px 18px;border-left:3px solid var(--accent-line);background:var(--surface);font-size:.95rem}
+.toc{margin:36px 0 8px;padding:0;list-style:none;counter-reset:t;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 20px}
+.toc li{counter-increment:t;margin:0}
+.toc a{display:flex;gap:10px;color:var(--ink);text-decoration:none;padding:6px 0;border-bottom:1px solid var(--rule);font-size:.93rem}
+.toc a::before{content:counter(t);font-family:var(--mono);color:var(--accent);min-width:1.4em}
+.toc a:hover{color:var(--accent)}
+section{padding:52px 0 8px;border-top:1px solid var(--rule);margin-top:40px}
+.chapter{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.chapter .num{font-family:var(--mono);font-size:.85rem;color:var(--accent);font-weight:500}
+.src{font-size:.86rem;color:var(--muted);margin-bottom:18px}
+.term{border-left:3px solid var(--rule-strong);padding:4px 0 4px 14px;margin:12px 0;font-size:.96rem}
+.term b{display:block;font-weight:700}
+.note{background:var(--accent-bg);border-radius:10px;padding:14px 16px;font-size:.95rem;margin:18px 0}
+.fig{margin:22px 0;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px}
+.fig svg{display:block;width:100%;max-width:440px;height:auto;margin:0 auto}
+.fig figcaption{font-size:.85rem;color:var(--muted);margin-top:10px;text-align:center}
+.bx{fill:var(--surface);stroke:var(--rule-strong);stroke-width:1}
+.bo{fill:var(--accent-bg);stroke:var(--accent-line);stroke-width:1}
+.bt{fill:var(--teal-bg);stroke:var(--teal);stroke-width:1}
+.br{fill:var(--red-bg);stroke:var(--red);stroke-width:1}
+.dash{fill:none;stroke:var(--rule-strong);stroke-width:1;stroke-dasharray:5 4}
+.tx{fill:var(--ink);font-family:var(--sans);font-size:13px;font-weight:700}
+.ts{fill:var(--muted);font-family:var(--sans);font-size:11.5px}
+.tm{fill:var(--ink);font-family:var(--mono);font-size:11px}
+.to{fill:var(--accent);font-family:var(--mono);font-size:11px;font-weight:500}
+.tr{fill:var(--red);font-family:var(--sans);font-size:12.5px;font-weight:700}
+.ln{stroke:var(--muted);stroke-width:1.4;fill:none}
+.lo{stroke:var(--accent-line);stroke-width:1.8;fill:none}
+.lt{stroke:var(--teal);stroke-width:1.6;fill:none}
+.lr{stroke:var(--red);stroke-width:1.6;fill:none;stroke-dasharray:4 3}
+.mk{fill:var(--muted)} .mko{fill:var(--accent-line)}
+.lab{display:block;font-size:.85rem;color:var(--muted);margin:0 0 4px}
+input[type=text]{width:100%;font:inherit;font-size:1rem;padding:10px 12px;border:1px solid var(--rule-strong);border-radius:8px;background:var(--bg);color:var(--ink)}
+.hashout{font-family:var(--mono);font-size:.88rem;word-break:break-all;background:var(--bg);border-radius:8px;padding:10px 12px;margin:8px 0 0;line-height:1.5}
+.hashout .hit{color:var(--accent);font-weight:500}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.stat{background:var(--bg);border-radius:8px;padding:10px 12px}
+.stat span{display:block;font-size:.8rem;color:var(--muted)}
+.stat strong{font-size:1.4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.status{display:inline-block;font-size:.88rem;font-weight:600;padding:6px 12px;border-radius:8px;margin-top:10px}
+.status.ok{background:var(--teal-bg);color:var(--teal)}
+.status.no{background:var(--accent-bg);color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+button{font:inherit;font-size:.92rem;font-weight:600;padding:9px 14px;border-radius:8px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent-line);border-color:var(--accent-line);color:#fff}
+button:active{transform:scale(.98)}
+.bars{display:grid;gap:8px;margin-top:6px}
+.bar{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:10px;font-size:.88rem}
+.bar .track{display:flex;align-items:center;gap:8px}
+.bar .fill{height:18px;background:var(--red);border-radius:4px;min-width:3px}
+.bar .v{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.tablewrap{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:700;background:var(--surface)}
+.gloss dt{font-weight:700;margin-top:14px}
+.gloss dd{margin:2px 0 0;color:var(--muted)}
+footer{max-width:700px;margin:0 auto;padding:24px 20px 48px;font-size:.85rem;color:var(--muted);border-top:1px solid var(--rule)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* ---- Komponen belajar ---- */
+.eyebrow{font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500;margin:0 0 10px}
+.eyebrow a{text-decoration:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips li{margin:0;font-size:.85rem;font-weight:600;padding:5px 11px;border:1px solid var(--rule-strong);border-radius:999px;background:var(--surface)}
+.goals{margin:24px 0 0;padding:16px 18px;background:var(--teal-bg);border-radius:10px;font-size:.96rem}
+.goals strong{display:block;margin-bottom:6px}
+.goals ul{margin:0;padding-left:20px}
+.stage{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:30px 0 0}
+.progress{margin:18px 0 6px}
+.progress .track{height:10px;background:var(--rule);border-radius:999px;overflow:hidden}
+.progress .fill{height:100%;width:0;background:var(--teal);border-radius:999px;transition:width .25s}
+.progress .lab{margin:6px 0 0}
+.mod{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px;margin:14px 0}
+.mod.done{border-color:var(--teal)}
+.mod .top{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.mod .num{font-family:var(--mono);color:var(--accent);font-size:.85rem;font-weight:500;white-space:nowrap}
+.mod h3{margin:0;font-size:1.15rem;line-height:1.3}
+.mod .ask{color:var(--muted);font-size:.95rem;margin:6px 0 0}
+.mod .sub{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 4px}
+.mod ul,.mod p{font-size:.95rem}
+.mod ul{margin-bottom:0}
+.mod .chips{margin:0}
+.mod .chips li{font-family:var(--mono);font-weight:500;font-size:.8rem;background:var(--bg)}
+.mod .foot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--rule);font-size:.9rem}
+.mod .open{font-weight:700;text-decoration:none}
+.mod .soon{color:var(--muted)}
+.check{display:inline-flex;gap:8px;align-items:center;cursor:pointer;margin-left:auto;font-weight:600}
+.check input{width:18px;height:18px;accent-color:var(--teal)}
+.quiz .q{margin:16px 0 0;padding:16px;background:var(--surface);border:1px solid var(--rule);border-radius:14px}
+.quiz .q p{font-weight:700;margin-bottom:10px}
+.quiz .opts{display:grid;gap:8px}
+.quiz .opts button{text-align:left;font-weight:500;width:100%}
+.quiz .opts button:disabled{cursor:default;opacity:1}
+.quiz .opts button.right{background:var(--teal-bg);border-color:var(--teal);color:var(--teal);font-weight:700}
+.quiz .opts button.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.quiz .why{font-size:.92rem;color:var(--muted);margin:10px 0 0}
+.task{border:1px dashed var(--rule-strong);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:.96rem}
+.task b{display:block}
+.task .out{color:var(--muted);font-size:.9rem;margin:6px 0 0}
+.next{margin:22px 0 0;padding:16px 18px;background:var(--accent-bg);border-radius:10px;font-size:.96rem}
+.next strong{display:block}
+.status.bad{background:var(--red-bg);color:var(--red)}
+.blk{padding:14px 0;border-bottom:1px solid var(--rule)}
+.blk:first-child{padding-top:0}
+</style>
+</head>
+<body>
+<svg class="sr" aria-hidden="true"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M1 1L9 5L1 9z"/></marker>
+<marker id="aho" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mko" d="M1 1L9 5L1 9z"/></marker>
+</defs></svg>
+
+<main>
+<header class="hero">
+<p class="eyebrow"><a href="silabus-reksa-dana.html">Silabus Reksa dana</a> · Modul 2 dari 6</p>
+<h1>NAB dan cara nilai investasi berubah</h1>
+<p class="lead">Kenapa saldo Sari bisa naik atau turun padahal ia tidak menambah uang? Ini terjadi karena perubahan NAB per unit yang memengaruhi jumlah unit yang Anda miliki. Pahami cara menghitungnya untuk menghindari kehilangan uang.</p>
+<ul class="chips"><li>± 2 jam</li><li>3 bab</li><li>4 soal kuis</li></ul>
+<div class="goals"><strong>Setelah modul ini, Anda bisa:</strong><ul><li>Menghitung jumlah unit yang didapat dari nominal pembelian</li><li>Menghitung untung atau rugi dari perubahan NAB per unit</li></ul></div>
+<div class="howto"><strong>Bekal dari modul sebelumnya:</strong> Modul sebelumnya, Apa yang Anda beli saat membeli reksa dana, mengajarkan reksa dana, manajer investasi, bank kustodian, portofolio.</div>
+<div class="howto">Setiap bab dibagi menjadi tiga bagian: <strong>apa</strong> (pengertiannya), <strong>bagaimana</strong> (cara kerjanya), dan <strong>mengapa penting</strong>. Istilah seperti NAB, NAB per unit, subscription, redemption sengaja tidak diterjemahkan karena memang itu yang dipakai sehari-hari. Artinya dijelaskan di kotak istilah saat pertama muncul. Di akhir ada kuis dan latihan.</div>
+<ol class="toc"><li><a href="#bab1">Apa itu NAB dan cara menghitung unit</a></li><li><a href="#bab2">Menghitung untung atau rugi dari perubahan NAB</a></li><li><a href="#bab3">Mengapa NAB berubah dan dampaknya</a></li><li><a href="#demo-sec">Coba sendiri</a></li><li><a href="#rangkuman">Rangkuman</a></li><li><a href="#kuis">Cek pemahaman</a></li><li><a href="#latihan">Latihan</a></li><li><a href="#kamus">Kamus istilah</a></li></ol>
+</header>
+<section id="bab1"><div class="chapter"><span class="num">1</span><h2>Apa itu NAB dan cara menghitung unit</h2></div><p class="src">Ditulis oleh qwen3:4b dari pengetahuan umum; periksa angka penting ke sumber resmi</p><h3>Apa</h3><p>NAB adalah nilai per unit reksa dana yang menentukan berapa banyak unit yang bisa dibeli dengan uang. NAB berubah tergantung pada kinerja investasi reksa dana. Untuk menghitung jumlah unit, Anda perlu membagi nominal pembelian dengan NAB per unit.</p><div class="term"><b>NAB</b>Nilai per unit reksa dana yang menentukan berapa banyak unit bisa dibeli dengan uang.</div><div class="term"><b>NAB per unit</b>Nilai yang diperoleh dari pembagian total nilai reksa dana dengan jumlah unit yang ada.</div><h3>Bagaimana</h3><p>Sari membeli Rp500.000 dengan NAB per unit Rp1.250. Berikut langkah-langkahnya: 1. Cari jumlah unit dengan membagi Rp500.000 dengan Rp1.250. 2. Hasilnya adalah 400 unit. 3. Jika NAB naik menjadi Rp1.300, jumlah unit berkurang menjadi 384.48. 4. Jika NAB turun menjadi Rp1.200, jumlah unit bertambah menjadi 416.67.</p><figure class="fig"><svg viewBox="0 0 360 308" role="img" aria-label="Langkah: Apa itu NAB dan cara menghitung unit"><rect class="bx" x="20" y="20" width="320" height="56" rx="8"/><text class="tx" x="36" y="44"><tspan x="36" dy="0">1. Cari jumlah unit dengan membagi</tspan><tspan x="36" dy="16">nominal pembelian (Rp500.000</tspan></text><line class="ln" x1="180" y1="76" x2="180" y2="92" marker-end="url(#ah)"/><rect class="bx" x="20" y="96" width="320" height="40" rx="8"/><text class="tx" x="36" y="121"><tspan x="36" dy="0">2. Hasilnya adalah 400 unit</tspan></text><line class="ln" x1="180" y1="136" x2="180" y2="152" marker-end="url(#ah)"/><rect class="bx" x="20" y="156" width="320" height="56" rx="8"/><text class="tx" x="36" y="180"><tspan x="36" dy="0">3. Jika NAB naik ke Rp1.300, jumlah unit</tspan><tspan x="36" dy="16">berkurang menjadi 384.</tspan></text><line class="ln" x1="180" y1="212" x2="180" y2="228" marker-end="url(#ah)"/><rect class="bt" x="20" y="232" width="320" height="56" rx="8"/><text class="tx" x="36" y="256"><tspan x="36" dy="0">4. Jika NAB turun ke Rp1.200, jumlah unit</tspan><tspan x="36" dy="16">bertambah menjadi 416</tspan></text></svg><figcaption>Urutan dari atas ke bawah; kotak teal adalah hasil akhirnya.</figcaption></figure><h3>Mengapa penting</h3><p>Perubahan NAB per unit mengubah jumlah unit yang Anda miliki tanpa tambahan uang. Ini berarti nilai investasi Sari bisa naik atau turun karena kinerja reksa dana yang berbeda. Selanjutnya, kita akan belajar cara menghitung untung atau rugi dari perubahan NAB per unit untuk menghindari kehilangan uang yang tidak perlu.</p></section>
+<section id="bab2"><div class="chapter"><span class="num">2</span><h2>Menghitung untung atau rugi dari perubahan NAB</h2></div><p class="src">Ditulis oleh qwen3:4b dari pengetahuan umum; periksa angka penting ke sumber resmi</p><h3>Apa</h3><p>Untung atau rugi dari perubahan NAB per unit tergantung pada perbedaan harga unit yang dihasilkan. Jika NAB naik, Anda mendapat lebih banyak unit, tetapi jika turun, Anda kehilangan unit. Perhitungan ini membantu Anda mengetahui dampaknya pada nilai investasi.</p><div class="term"><b>subscription</b>Proses membeli unit reksa dana dengan uang yang dibayarkan ke reksa dana.</div><div class="term"><b>redemption</b>Proses menjual kembali unit reksa dana untuk mendapatkan uang kembali.</div><h3>Bagaimana</h3><p>Sari memiliki 400 unit dengan NAB per unit Rp1.250. Jika NAB naik ke Rp1.300, Sari mendapat untung sebesar Rp30.000. Jika NAB turun ke Rp1.200, Sari mengalami kerugian sebesar Rp20.000. Perhitungan ini membantu Sari memahami dampak perubahan NAB pada investasinya.</p><figure class="fig"><svg viewBox="0 0 360 324" role="img" aria-label="Langkah: Menghitung untung atau rugi dari perubahan NAB"><rect class="bx" x="20" y="20" width="320" height="56" rx="8"/><text class="tx" x="36" y="44"><tspan x="36" dy="0">1. Hitung perbedaan NAB per unit (Rp1.300</tspan><tspan x="36" dy="16">- Rp1.250 = Rp50)</tspan></text><line class="ln" x1="180" y1="76" x2="180" y2="92" marker-end="url(#ah)"/><rect class="bx" x="20" y="96" width="320" height="56" rx="8"/><text class="tx" x="36" y="120"><tspan x="36" dy="0">2. Kalikan perbedaan dengan jumlah unit</tspan><tspan x="36" dy="16">(400 x Rp50 = Rp20.000)</tspan></text><line class="ln" x1="180" y1="152" x2="180" y2="168" marker-end="url(#ah)"/><rect class="bx" x="20" y="172" width="320" height="56" rx="8"/><text class="tx" x="36" y="196"><tspan x="36" dy="0">3. Jika NAB naik, hasilnya untung</tspan><tspan x="36" dy="16">Rp20.000</tspan></text><line class="ln" x1="180" y1="228" x2="180" y2="244" marker-end="url(#ah)"/><rect class="bt" x="20" y="248" width="320" height="56" rx="8"/><text class="tx" x="36" y="272"><tspan x="36" dy="0">4. Jika NAB turun, hasilnya kerugian</tspan><tspan x="36" dy="16">Rp20.000</tspan></text></svg><figcaption>Urutan dari atas ke bawah; kotak teal adalah hasil akhirnya.</figcaption></figure><h3>Mengapa penting</h3><p>Perubahan NAB per unit memengaruhi nilai investasi Sari. Untung atau rugi tergantung pada arah perubahan NAB. Selanjutnya, kita akan belajar cara menghitung untung atau rugi dari perubahan NAB per unit untuk menghindari kehilangan uang yang tidak perlu.</p></section>
+<section id="bab3"><div class="chapter"><span class="num">3</span><h2>Mengapa NAB berubah dan dampaknya</h2></div><p class="src">Ditulis oleh qwen3:4b dari pengetahuan umum; periksa angka penting ke sumber resmi</p><h3>Apa</h3><p>NAB berubah karena kinerja investasi reksa dana yang berbeda. Perubahan NAB memengaruhi jumlah unit yang Anda miliki dan nilai investasi Anda. Ini penting untuk memahami bagaimana investasi reksa dana berjalan.</p><div class="term"><b>unit penyertaan</b>Unit yang diperoleh dari pembelian reksa dana, yang bisa dijual kembali untuk mendapatkan uang.</div><h3>Bagaimana</h3><p>Sari membeli Rp500.000 dengan NAB Rp1.250. Jika NAB naik ke Rp1.300, Sari mendapat 384.48 unit. Jika NAB turun ke Rp1.200, Sari kehilangan 416.67 unit. Perubahan ini terjadi karena kinerja investasi reksa dana yang berbeda.</p><figure class="fig"><svg viewBox="0 0 360 232" role="img" aria-label="Langkah: Mengapa NAB berubah dan dampaknya"><rect class="bx" x="20" y="20" width="320" height="40" rx="8"/><text class="tx" x="36" y="45"><tspan x="36" dy="0">1. NAB awal Rp1.250, jumlah unit 400</tspan></text><line class="ln" x1="180" y1="60" x2="180" y2="76" marker-end="url(#ah)"/><rect class="bx" x="20" y="80" width="320" height="56" rx="8"/><text class="tx" x="36" y="104"><tspan x="36" dy="0">2. NAB naik ke Rp1.300, jumlah unit</tspan><tspan x="36" dy="16">berkurang menjadi 384.48</tspan></text><line class="ln" x1="180" y1="136" x2="180" y2="152" marker-end="url(#ah)"/><rect class="bt" x="20" y="156" width="320" height="56" rx="8"/><text class="tx" x="36" y="180"><tspan x="36" dy="0">3. NAB turun ke Rp1.200, jumlah unit</tspan><tspan x="36" dy="16">bertambah menjadi 416.67</tspan></text></svg><figcaption>Urutan dari atas ke bawah; kotak teal adalah hasil akhirnya.</figcaption></figure><h3>Mengapa penting</h3><p>Perubahan NAB berdampak pada jumlah unit yang Anda miliki. Ini berarti nilai investasi Sari bisa naik atau turun tanpa tambahan uang. Selanjutnya, kita akan belajar cara menghitung untung atau rugi dari perubahan NAB per unit untuk menghindari kerugian.</p></section>
+<section id="demo-sec"><div class="chapter"><span class="num">▶</span><h2>Menghitung perubahan NAB untuk Sari</h2></div><div class="fig" id="demo"><svg viewBox="0 0 360 232" role="img" aria-label="Menghitung perubahan NAB untuk Sari"><rect class="bx" x="20" y="20" width="320" height="40" rx="8"/><text class="tx" x="36" y="45"><tspan x="36" dy="0">1. Langkah 1: Hitung jumlah unit awal</tspan></text><line class="ln" x1="180" y1="60" x2="180" y2="76" marker-end="url(#ah)"/><rect class="bx" x="20" y="80" width="320" height="56" rx="8"/><text class="tx" x="36" y="104"><tspan x="36" dy="0">2. Langkah 2: Perubahan NAB naik ke</tspan><tspan x="36" dy="16">Rp1.300</tspan></text><line class="ln" x1="180" y1="136" x2="180" y2="152" marker-end="url(#ah)"/><rect class="bx" x="20" y="156" width="320" height="56" rx="8"/><text class="tx" x="36" y="180"><tspan x="36" dy="0">3. Langkah 3: Perubahan NAB turun ke</tspan><tspan x="36" dy="16">Rp1.200</tspan></text></svg><p class="lab" id="demostep"></p><div id="demotext" class="status no" style="display:block"></div><div class="btns"><button type="button" id="demoprev">Sebelumnya</button><button type="button" class="primary" id="demonext">Berikutnya</button><button type="button" id="demoreset">Ulangi</button></div><p class="lab">Perhatikan bagaimana perubahan NAB memengaruhi jumlah unit Sari</p></div></section>
+<section id="rangkuman"><div class="chapter"><span class="num">4</span><h2>Rangkuman</h2></div><p>Kalau modul ini diringkas menjadi satu cerita:</p><ol><li>Sari membeli Rp500.000 dengan NAB Rp1.250, mendapat 400 unit</li><li>Jika NAB naik ke Rp1.300, Sari mendapat untung Rp20.000</li><li>Jika NAB turun ke Rp1.200, Sari mengalami kerugian Rp20.000</li><li>Perubahan NAB per unit memengaruhi jumlah unit yang Sari miliki tanpa tambahan uang</li><li>Sari perlu memahami perubahan NAB untuk menghindari kerugian</li></ol></section>
+<section id="kuis"><div class="chapter"><span class="num">5</span><h2>Cek pemahaman</h2></div><p>Jawab tanpa melihat ke atas dulu. Kalau salah, penjelasannya menunjukkan bab mana yang perlu dibaca ulang.</p><div class="quiz" id="quiz"></div><div id="quizscore" class="status no"></div><div class="btns"><button type="button" id="quizretry" hidden>Ulangi kuis</button></div></section>
+<section id="latihan"><div class="chapter"><span class="num">6</span><h2>Latihan</h2></div><div class="task"><b>Latihan dari silabus</b>Sari membeli Rp500.000 saat NAB per unit Rp1.250. Hitung jumlah unitnya, lalu nilai investasinya jika NAB per unit naik menjadi Rp1.300 dan turun menjadi Rp1.200.<p class="out">Hasil yang diharapkan: Jumlah unit awal: 400 unit; Jika NAB naik ke Rp1.300, jumlah unit: 384.48 unit; Jika NAB turun ke Rp1.200, jumlah unit: 416.67 unit</p></div><div class="next"><strong>Berikutnya: Modul 3, Empat jenis reksa dana</strong>Perubahan NAB per unit bisa berdampak pada keuntungan atau kerugian. Modul berikutnya akan membahas empat jenis reksa dana yang berbeda untuk memilih yang sesuai dengan kebutuhan Anda. Lihat modul berikutnya untuk lebih jelasnya.</div></section>
+<section id="kamus"><div class="chapter"><span class="num">7</span><h2>Kamus istilah</h2></div><dl class="gloss"><dt>NAB</dt><dd>Nilai per unit reksa dana yang menentukan berapa banyak unit bisa dibeli dengan uang.</dd><dt>NAB per unit</dt><dd>Nilai yang diperoleh dari pembagian total nilai reksa dana dengan jumlah unit yang ada.</dd><dt>subscription</dt><dd>Proses membeli unit reksa dana dengan uang yang dibayarkan ke reksa dana.</dd><dt>redemption</dt><dd>Proses menjual kembali unit reksa dana untuk mendapatkan uang kembali.</dd><dt>unit penyertaan</dt><dd>Unit yang diperoleh dari pembelian reksa dana, yang bisa dijual kembali untuk mendapatkan uang.</dd></dl><div class="note">Modul ini membahas cara kerja, bukan saran investasi. Halaman ini bukan saran keuangan.</div></section>
+</main>
+<footer>Penjelasan ini disederhanakan untuk pembaca umum. Isi ditulis oleh qwen3:4b tanpa sumber tertulis; periksa angka dan nama penting.</footer>
+<script>
+(function(){
+  /* Kuis: 4-6 soal. a = indeks jawaban benar (mulai dari 0). why = alasan + bab yang perlu dibaca ulang.
+     Teks biasa saja, tanpa tag HTML. Acak posisi jawaban benar, jangan selalu di indeks yang sama. */
+  var QUIZ = [{"q": "Sari membeli Rp600.000 dengan NAB Rp1.500. Berapa jumlah unit yang diperoleh?", "opts": ["300 unit", "400 unit", "450 unit"], "a": 1, "why": "Jumlah unit = nominal pembelian / NAB per unit = Rp600.000 / Rp1.500 = 400 unit. Lihat bab 1."}, {"q": "Jika NAB per unit naik dari Rp1.250 ke Rp1.300, berapa untung Sari?", "opts": ["Rp20.000", "Rp10.000", "Rp30.000"], "a": 0, "why": "Untung = jumlah unit x perbedaan NAB = 400 x (Rp1.300 - Rp1.250) = 400 x Rp50 = Rp20.000. Lihat bab 2."}, {"q": "Jika NAB per unit turun dari Rp1.250 ke Rp1.200, berapa kerugian Sari?", "opts": ["Rp10.000", "Rp30.000", "Rp20.000"], "a": 2, "why": "Kerugian = jumlah unit x perbedaan NAB = 400 x (Rp1.250 - Rp1.200) = 400 x Rp50 = Rp20.000. Lihat bab 2."}, {"q": "Sari memiliki 400 unit dengan NAB Rp1.250. Jika NAB naik ke Rp1.300, berapa jumlah unit yang diperoleh?", "opts": ["400 unit", "350 unit", "384.48 unit"], "a": 2, "why": "Jumlah unit = nominal pembelian / NAB per unit = Rp500.000 / Rp1.300 = 384.48 unit. Lihat bab 1."}];
+  var root = document.getElementById('quiz'), score = document.getElementById('quizscore'), retry = document.getElementById('quizretry');
+  var answered = 0, correct = 0;
+  function showScore(){
+    var done = answered === QUIZ.length;
+    score.textContent = !done
+      ? answered + ' dari ' + QUIZ.length + ' soal dijawab'
+      : 'Benar ' + correct + ' dari ' + QUIZ.length + (correct === QUIZ.length ? '. Modul ini selesai.' : '. Baca ulang bab yang disebut di penjelasan, lalu ulangi kuis.');
+    score.className = 'status ' + (done && correct === QUIZ.length ? 'ok' : 'no');
+    retry.hidden = !done || correct === QUIZ.length;
+  }
+  function build(){
+    answered = 0; correct = 0; root.textContent = '';
+    QUIZ.forEach(function(item, i){
+      var box = document.createElement('div'); box.className = 'q';
+      var p = document.createElement('p'); p.textContent = (i + 1) + '. ' + item.q; box.appendChild(p);
+      var opts = document.createElement('div'); opts.className = 'opts'; box.appendChild(opts);
+      var why = document.createElement('p'); why.className = 'why'; why.hidden = true; box.appendChild(why);
+      item.opts.forEach(function(label, j){
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+        b.addEventListener('click', function(){
+          Array.prototype.forEach.call(opts.children, function(x, k){ x.disabled = true; if (k === item.a) x.classList.add('right'); });
+          if (j === item.a) { correct++; } else { b.classList.add('wrong'); }
+          why.textContent = (j === item.a ? 'Benar. ' : 'Belum tepat. ') + item.why; why.hidden = false;
+          answered++; showScore();
+        });
+        opts.appendChild(b);
+      });
+      root.appendChild(box);
+    });
+    showScore();
+  }
+  if (root) { retry.addEventListener('click', build); build(); }
+
+  /* Bars: [label, nilai 0-100, teks tampil]. Hapus jika tidak dipakai. */
+  var BARS = [];
+  var el = document.getElementById('bars');
+  if (el) BARS.forEach(function(d){
+    var row = document.createElement('div'); row.className = 'bar';
+    row.innerHTML = '<span>' + d[0] + '</span><span class="track"><span class="fill" style="width:' + Math.max(d[1]*0.7, 0.6) + '%"></span><span class="v">' + d[2] + '</span></span>';
+    el.appendChild(row);
+  });
+  /* SHA-256 helper bila demo butuh hash:
+  function sha(s){ return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(function(b){ return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join(''); }); } */
+})();
+</script>
+<script>
+(function(){
+  /* Demo langkah demi langkah: kotak yang sedang dibahas disorot, yang sudah lewat jadi teal. */
+  var STEPS = [{"label": "Langkah 1: Hitung jumlah unit awal", "detail": "Sari membeli Rp500.000 dengan NAB Rp1.250, hasilnya 400 unit"}, {"label": "Langkah 2: Perubahan NAB naik ke Rp1.300", "detail": "Jumlah unit berkurang menjadi 384.48 unit"}, {"label": "Langkah 3: Perubahan NAB turun ke Rp1.200", "detail": "Jumlah unit bertambah menjadi 416.67 unit"}];
+  var boxes = document.querySelectorAll('#demo rect'), text = document.getElementById('demotext');
+  var label = document.getElementById('demostep'), current = 0;
+  function show(){
+    Array.prototype.forEach.call(boxes, function(box, i){
+      box.setAttribute('class', i < current ? 'bt' : (i === current ? 'bo' : 'bx'));
+    });
+    label.textContent = 'Langkah ' + (current + 1) + ' dari ' + STEPS.length;
+    text.textContent = STEPS[current].detail || STEPS[current].label;
+    document.getElementById('demoprev').disabled = current === 0;
+    document.getElementById('demonext').disabled = current === STEPS.length - 1;
+  }
+  document.getElementById('demoprev').addEventListener('click', function(){ if (current > 0) { current--; show(); } });
+  document.getElementById('demonext').addEventListener('click', function(){ if (current < STEPS.length - 1) { current++; show(); } });
+  document.getElementById('demoreset').addEventListener('click', function(){ current = 0; show(); });
+  show();
+})();
+</script>
+</body>
+</html>

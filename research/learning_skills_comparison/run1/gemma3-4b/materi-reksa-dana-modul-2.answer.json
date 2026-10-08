@@ -1,0 +1,143 @@
+{
+  "title": "NAB dan Cara Nilai Investasi Berubah",
+  "lead": "Anda pernah bertanya, kenapa saldo investasi Anda bisa naik atau turun tanpa Anda menambah atau mengurangi uang? Ini karena nilai setiap unit reksa dana (NAB per unit) terus berubah. Memahami bagaimana perubahan ini terjadi adalah kunci untuk mengelola investasi reksa dana dengan benar.",
+  "objectives": [
+    "Menghitung jumlah unit yang didapat dari nominal pembelian",
+    "Menghitung untung atau rugi dari perubahan NAB per unit"
+  ],
+  "prior": "",
+  "chapters": [
+    {
+      "title": "Memahami NAB (Net Asset Value)",
+      "what": "NAB, atau Net Asset Value, adalah nilai total aset reksa dana dibagi dengan jumlah unit yang beredar. Ini seperti harga per unit reksa dana saat ini.",
+      "terms": [
+        {
+          "term": "NAB",
+          "meaning": "Net Asset Value; nilai total aset reksa dana dibagi dengan jumlah unit yang beredar."
+        },
+        {
+          "term": "NAB per unit",
+          "meaning": "Nilai setiap unit reksa dana, dihitung berdasarkan NAB."
+        },
+        {
+          "term": "subscription",
+          "meaning": "Proses pembelian unit reksa dana baru."
+        }
+      ],
+      "how": "Saat Anda membeli reksa dana (subscription), Anda membayar sejumlah uang. Uang ini digunakan untuk membeli unit reksa dana. Jumlah unit yang Anda dapatkan akan tergantung pada NAB per unit saat Anda membeli. Misalnya, jika Anda membeli dengan Rp500.000 dan NAB per unit Rp1.250, Anda akan mendapatkan 400 unit (Rp500.000 / Rp1.250 = 400).",
+      "steps": [
+        "Tentukan nominal pembelian reksa dana.",
+        "Bagi nominal pembelian dengan NAB per unit saat itu.",
+        "Hasilnya adalah jumlah unit yang Anda dapatkan."
+      ],
+      "why": "Perubahan NAB terjadi karena nilai aset reksa dana (misalnya saham atau obligasi) berubah. Semakin tinggi nilai aset, semakin tinggi NAB per unit. Sebaliknya, jika nilai aset turun, NAB per unit juga akan turun.",
+      "objective": 1
+    },
+    {
+      "title": "Menghitung Untung dan Rugi",
+      "what": "Setelah Anda memiliki unit reksa dana, NAB per unit bisa naik atau turun. Perubahan ini akan mempengaruhi nilai investasi Anda.",
+      "terms": [],
+      "how": "Misalkan Anda memiliki 400 unit reksa dana dengan NAB per unit Rp1.250, total investasi Anda adalah Rp500.000. Jika NAB per unit naik menjadi Rp1.300, setiap unit sekarang bernilai Rp1.300. Total investasi Anda akan menjadi 400 x Rp1.300 = Rp520.000, untung Rp20.000. Sebaliknya, jika NAB per unit turun menjadi Rp1.200, setiap unit sekarang bernilai Rp1.200. Total investasi Anda menjadi 400 x Rp1.200 = Rp480.000, rugi Rp20.000.",
+      "steps": [
+        "Hitung total nilai investasi saat ini dengan mengalikan jumlah unit dengan NAB per unit.",
+        "Bandingkan total nilai investasi saat ini dengan total nilai investasi awal Anda.",
+        "Selisihnya adalah untung atau rugi."
+      ],
+      "why": "Perubahan NAB per unit secara langsung mempengaruhi nilai total investasi Anda. Ini penting untuk memahami bagaimana kinerja reksa dana Anda berubah dari waktu ke waktu.",
+      "objective": 2
+    },
+    {
+      "title": "Redemption: Menjual Kembali Unit",
+      "what": "Redemption adalah proses menjual kembali unit reksa dana yang Anda miliki kepada manajer investasi. Ini akan mempengaruhi NAB per unit.",
+      "terms": [
+        {
+          "term": "redemption",
+          "meaning": "Proses penjualan kembali unit reksa dana."
+        }
+      ],
+      "how": "Jika Anda ingin menjual kembali 200 unit reksa dana dengan NAB per unit Rp1.300, Anda akan menerima Rp260.000 (200 x Rp1.300). Ini akan menurunkan jumlah unit yang beredar dan secara otomatis menurunkan NAB per unit untuk semua investor yang tersisa.",
+      "steps": [
+        "Tentukan jumlah unit yang ingin dijual kembali.",
+        "Kalikan jumlah unit dengan NAB per unit saat itu.",
+        "Ini adalah uang yang Anda terima dari redemption."
+      ],
+      "why": "Redemption mengurangi jumlah unit yang beredar, sehingga meningkatkan NAB per unit untuk investor yang tersisa. Ini karena nilai aset reksa dana harus dinilai lebih tinggi untuk menutupi pengurangan unit.",
+      "objective": 2
+    }
+  ],
+  "demo": {
+    "title": "Simulasi Perubahan NAB",
+    "instruction": "Ikuti langkah-langkah berikut untuk melihat bagaimana perubahan NAB mempengaruhi nilai investasi Anda.",
+    "steps": [
+      {
+        "label": "Langkah 1: Pembelian Awal",
+        "detail": "Anda membeli reksa dana dengan Rp500.000 saat NAB per unit Rp1.250, mendapatkan 400 unit."
+      },
+      {
+        "label": "Langkah 2: NAB Naik ke Rp1.300",
+        "detail": "NAB per unit naik menjadi Rp1.300. Nilai investasi Anda meningkat."
+      },
+      {
+        "label": "Langkah 3: Menghitung Total Investasi Baru",
+        "detail": "Total investasi Anda sekarang adalah 400 x Rp1.300 = Rp520.000."
+      },
+      {
+        "label": "Langkah 4: NAB Turun ke Rp1.200",
+        "detail": "NAB per unit turun menjadi Rp1.200. Nilai investasi Anda menurun."
+      },
+      {
+        "label": "Langkah 5: Menghitung Total Investasi Baru Lagi",
+        "detail": "Total investasi Anda sekarang adalah 400 x Rp1.200 = Rp480.000."
+      }
+    ]
+  },
+  "summary": [
+    "NAB (Net Asset Value) adalah nilai total aset reksa dana dibagi dengan jumlah unit yang beredar.",
+    "Perubahan NAB per unit mempengaruhi nilai investasi Anda secara langsung.",
+    "Anda dapat menghitung untung atau rugi dari perubahan NAB dengan membandingkan total nilai investasi saat ini dengan total nilai investasi awal.",
+    "Redemption (penjualan kembali unit) juga mempengaruhi NAB per unit."
+  ],
+  "quiz": [
+    {
+      "question": "Sari membeli reksa dana dengan nominal Rp500.000 saat NAB per unit Rp1.250. Berapa banyak unit yang ia dapatkan?",
+      "right": "400",
+      "wrong": ["300", "500"],
+      "why": "Anda menghitung jumlah unit dengan membagi nominal pembelian dengan NAB per unit. Lihat bab 1.",
+      "objective": 1
+    },
+    {
+      "question": "Jika NAB per unit reksa dana naik dari Rp1.200 menjadi Rp1.300, dan Anda memiliki 500 unit, berapa keuntungan yang Anda dapatkan?",
+      "right": "Rp25.000",
+      "wrong": ["Rp50.000", "Rp10.000"],
+      "why": "Keuntungan dihitung dengan mengalikan jumlah unit dengan selisih antara NAB per unit baru dan NAB per unit lama. Lihat bab 1.",
+      "objective": 1
+    },
+    {
+      "question": "Apa yang dimaksud dengan istilah 'subscription' dalam konteks investasi reksa dana?",
+      "right": "Proses pembelian unit reksa dana baru",
+      "wrong": ["Proses penjualan kembali unit reksa dana", "Manajer investasi"],
+      "why": "Subscription adalah istilah khusus untuk membeli unit reksa dana. Lihat bab 1.",
+      "objective": 1
+    },
+    {
+      "question": "Anda memiliki 300 unit reksa dana dengan NAB per unit Rp1.500. Jika NAB per unit turun menjadi Rp1.400, berapa kerugian Anda?",
+      "right": "Rp90.000",
+      "wrong": ["Rp60.000", "Rp120.000"],
+      "why": "Kerugian dihitung dengan mengalikan jumlah unit dengan selisih antara NAB per unit lama dan NAB per unit baru. Lihat bab 1.",
+      "objective": 2
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Hitung Untung Rugi",
+      "task": "Anda memiliki 600 unit reksa dana dengan NAB per unit Rp1.100. NAB per unit naik menjadi Rp1.150. Hitung untung atau rugi Anda dan jumlahnya.",
+      "expected": "Untung Rp75.000 (600 x (Rp1.150 - Rp1.100))","objective": 2
+    },
+    {
+      "title": "Simulasi Redemption",
+      "task": "Anda memiliki 800 unit reksa dana dengan NAB per unit Rp1.350. Anda ingin menjual kembali 300 unit. Hitung uang yang akan Anda terima dan nilai investasi Anda setelah redemption.",
+      "expected": "Menerima Rp405.000 (300 x Rp1.350), nilai investasi setelah redemption adalah Rp1.050.000 (800 - 300) x Rp1.350", "objective": 2
+    }
+  ],
+  "next": "Setelah memahami NAB dan cara perubahan NAB mempengaruhi nilai investasi, kita akan membahas bagaimana manajer investasi mengelola reksa dana untuk mencapai tujuan investasi mereka. Modul berikutnya akan membahas empat jenis reksa dana yang berbeda."
+}

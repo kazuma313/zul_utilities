@@ -1,0 +1,159 @@
+{
+  "title": "NAB dan cara nilai investasi berubah",
+  "lead": "Kenapa saldo Sari bisa naik atau turun padahal ia tidak menambah uang? Karena nilai investasinya tergantung pada NAB. Belajar cara menghitung perubahan nilai investasi akan membantu Anda mengelola dana dengan lebih baik.",
+  "objectives": [
+    "Menghitung jumlah unit yang didapat dari nominal pembelian",
+    "Menghitung untung atau rugi dari perubahan NAB per unit"
+  ],
+  "prior": "Di modul sebelumnya, Anda belajar bahwa saat membeli reksa dana, Anda membeli unit penyertaan. Unit penyertaan adalah bagian dari portofolio yang dikelola manajer investasi. Bank kustodian bertugas menyimpan dana Anda.",
+  "chapters": [
+    {
+      "title": "1. Menghitung jumlah unit yang didapat dari nominal pembelian",
+      "what": "NAB adalah nilai setiap unit reksa dana. Semakin tinggi NAB, semakin sedikit unit yang didapat dari uang yang dibelikan.",
+      "terms": [
+        {
+          "term": "NAB",
+          "meaning": "Nilai setiap unit reksa dana. Semakin tinggi NAB, semakin sedikit unit yang didapat."
+        },
+        {
+          "term": "NAB per unit",
+          "meaning": "Nilai satu unit reksa dana. Jika NAB per unit naik, nilai investasi Anda juga naik."
+        },
+        {
+          "term": "subscription",
+          "meaning": "Proses membeli unit reksa dana dengan uang. Semakin tinggi NAB, semakin sedikit unit yang didapat."
+        }
+      ],
+      "how": "Sari membeli Rp500.000 saat NAB per unit Rp1.250. Langkah 1: Bagi nominal pembelian dengan NAB per unit. Langkah 2: Hasilnya adalah jumlah unit yang didapat. Langkah 3: Kalikan jumlah unit dengan NAB baru untuk tahu nilai investasi sekarang.",
+      "steps": [
+        "Bagi nominal pembelian dengan NAB per unit",
+        "Hasilnya adalah jumlah unit yang didapat",
+        "Kalikan jumlah unit dengan NAB baru untuk tahu nilai investasi sekarang"
+      ],
+      "why": "Dengan menghitung jumlah unit, Anda bisa tahu berapa banyak dana yang Anda miliki. Namun, Anda belum tahu bagaimana nilai investasi berubah jika NAB naik atau turun. Itu akan dibahas di bab berikutnya.",
+      "objective": 1
+    },
+    {
+      "title": "2. Menghitung untung atau rugi dari perubahan NAB per unit",
+      "what": "NAB per unit bisa naik atau turun. Jika NAB naik, nilai investasi Anda juga naik. Jika NAB turun, nilai investasi Anda juga turun.",
+      "terms": [
+        {
+          "term": "redemption",
+          "meaning": "Proses menjual unit reksa dana. Jika NAB turun, nilai investasi Anda juga turun."
+        }
+      ],
+      "how": "Sari memiliki 400 unit reksa dana. NAB per unit naik dari Rp1.250 menjadi Rp1.300. Langkah 1: Hitung nilai investasi awal dengan 400 x Rp1.250. Langkah 2: Hitung nilai investasi baru dengan 400 x Rp1.300. Langkah 3: Kurangkan nilai baru dengan nilai lama untuk tahu untung atau rugi.",
+      "steps": [
+        "Hitung nilai investasi awal dengan 400 x Rp1.250",
+        "Hitung nilai investasi baru dengan 400 x Rp1.300",
+        "Kurangkan nilai baru dengan nilai lama untuk tahu untung atau rugi"
+      ],
+      "why": "Dengan menghitung untung atau rugi, Anda bisa tahu apakah investasi Anda menguntungkan atau tidak. Namun, Anda belum tahu bagaimana membandingkan dengan biaya transaksi. Itu akan dibahas di modul berikutnya.",
+      "objective": 2
+    },
+    {
+      "title": "3. Menghitung total nilai investasi",
+      "what": "Total nilai investasi adalah jumlah unit dikalikan dengan NAB per unit. Jika NAB naik, total nilai investasi juga naik.",
+      "terms": [],
+      "how": "Sari memiliki 400 unit reksa dana. NAB per unit naik dari Rp1.250 menjadi Rp1.300. Langkah 1: Hitung total nilai investasi awal dengan 400 x Rp1.250. Langkah 2: Hitung total nilai investasi baru dengan 400 x Rp1.300. Langkah 3: Bandingkan kedua nilai untuk tahu perubahan total investasi.",
+      "steps": [
+        "Hitung total nilai investasi awal dengan 400 x Rp1.250",
+        "Hitung total nilai investasi baru dengan 400 x Rp1.300",
+        "Bandingkan kedua nilai untuk tahu perubahan total investasi"
+      ],
+      "why": "Dengan menghitung total nilai investasi, Anda bisa tahu berapa banyak uang yang Anda miliki. Namun, Anda belum tahu bagaimana membandingkan dengan biaya transaksi. Itu akan dibahas di modul berikutnya.",
+      "objective": 2
+    }
+  ],
+  "demo": {
+    "title": "Menghitung perubahan nilai investasi",
+    "instruction": "Ikuti langkah-langkah berikut untuk menghitung perubahan nilai investasi Sari.",
+    "steps": [
+      {
+        "label": "Hitung jumlah unit",
+        "detail": "Sari membeli Rp500.000 saat NAB per unit Rp1.250. Bagi Rp500.000 dengan Rp1.250 untuk tahu berapa unit yang didapat."
+      },
+      {
+        "label": "Hitung nilai investasi awal",
+        "detail": "Kalikan jumlah unit dengan NAB per unit awal untuk tahu nilai investasi awal."
+      },
+      {
+        "label": "Hitung nilai investasi baru",
+        "detail": "Kalikan jumlah unit dengan NAB per unit baru untuk tahu nilai investasi baru."
+      },
+      {
+        "label": "Hitung perubahan nilai investasi",
+        "detail": "Kurangkan nilai investasi baru dengan nilai investasi awal untuk tahu apakah untung atau rugi."
+      }
+    ]
+  },
+  "summary": [
+    "Sari membeli Rp500.000 saat NAB per unit Rp1.250. Ia mendapat 400 unit.",
+    "Jika NAB per unit naik menjadi Rp1.300, nilai investasinya menjadi Rp520.000.",
+    "Jika NAB per unit turun menjadi Rp1.200, nilai investasinya menjadi Rp480.000.",
+    "Perubahan nilai investasi tergantung pada NAB per unit. Masih belum dihitung biaya transaksi."
+  ],
+  "quiz": [
+    {
+      "question": "Sari membeli Rp500.000 saat NAB per unit Rp1.250. Berapa unit yang didapat?",
+      "right": "400 unit",
+      "wrong": [
+        "500 unit",
+        "300 unit"
+      ],
+      "why": "NAB per unit adalah nilai satu unit. Jumlah unit = nominal pembelian ÷ NAB per unit. Lihat bab 1.",
+      "objective": 1
+    },
+    {
+      "question": "Jika NAB per unit naik dari Rp1.250 menjadi Rp1.300, berapa perubahan nilai investasi Sari?",
+      "right": "Naik Rp20.000",
+      "wrong": [
+        "Turun Rp20.000",
+        "Tidak berubah"
+      ],
+      "why": "Nilai investasi awal = 400 x Rp1.250 = Rp500.000. Nilai investasi baru = 400 x Rp1.300 = Rp520.000. Perubahan = Rp520.000 - Rp500.000 = Rp20.000. Lihat bab 2.",
+      "objective": 2
+    },
+    {
+      "question": "Jika NAB per unit turun dari Rp1.250 menjadi Rp1.200, berapa perubahan nilai investasi Sari?",
+      "right": "Turun Rp20.000",
+      "wrong": [
+        "Naik Rp20.000",
+        "Tidak berubah"
+      ],
+      "why": "Nilai investasi awal = 400 x Rp1.250 = Rp500.000. Nilai investasi baru = 400 x Rp1.200 = Rp480.000. Perubahan = Rp480.000 - Rp500.000 = -Rp20.000. Lihat bab 2.",
+      "objective": 2
+    },
+    {
+      "question": "Apa yang dimaksud dengan NAB per unit?",
+      "right": "Nilai satu unit reksa dana",
+      "wrong": [
+        "Jumlah unit yang didapat",
+        "Biaya transaksi"
+      ],
+      "why": "NAB per unit adalah nilai satu unit reksa dana. Jika NAB per unit naik, nilai investasi Anda juga naik. Lihat bab 1.",
+      "objective": 1
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Hitung jumlah unit dan nilai investasi Sari",
+      "task": "Sari membeli Rp500.000 saat NAB per unit Rp1.250. Hitung jumlah unitnya, lalu nilai investasinya jika NAB per unit naik menjadi Rp1.300 dan turun menjadi Rp1.200.",
+      "expected": "Jumlah unit = 400 unit. Nilai investasi naik menjadi Rp520.000, turun menjadi Rp480.000.",
+      "objective": 1
+    },
+    {
+      "title": "Hitung perubahan nilai investasi",
+      "task": "Jika NAB per unit naik dari Rp1.250 menjadi Rp1.300, berapa perubahan nilai investasi Sari?",
+      "expected": "Naik Rp20.000.",
+      "objective": 2
+    },
+    {
+      "title": "Hitung perubahan nilai investasi",
+      "task": "Jika NAB per unit turun dari Rp1.250 menjadi Rp1.200, berapa perubahan nilai investasi Sari?",
+      "expected": "Turun Rp20.000.",
+      "objective": 2
+    }
+  ],
+  "next": "Masih ada biaya transaksi yang belum dihitung. Biaya transaksi bisa mengurangi keuntungan atau meningkatkan kerugian. Ini akan dibahas di modul berikutnya."
+}

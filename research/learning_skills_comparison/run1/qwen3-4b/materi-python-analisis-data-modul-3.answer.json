@@ -1,0 +1,144 @@
+{
+  "title": "Membaca data dengan pandas",
+  "lead": "Bagaimana membuka file penjualan Budi dan melihat isinya? Ini penting karena kita perlu mulai analisis data dari file yang sudah ada.",
+  "objectives": [
+    "Membaca file CSV menjadi DataFrame dengan read_csv",
+    "Menampilkan baris pertama, nama kolom, dan ringkasan data"
+  ],
+  "prior": "",
+  "chapters": [
+    {
+      "title": "Membaca file CSV dengan pandas",
+      "what": "Pandas adalah library Python yang membantu kita mengelola data. Dengan pandas, kita bisa baca file CSV dan ubah menjadi DataFrame yang mudah diproses. File CSV adalah format teks sederhana yang bisa dibuka di Excel atau Notepad.",
+      "terms": [
+        {
+          "term": "pandas",
+          "meaning": "Library Python untuk analisis data yang bisa baca file CSV dan buat DataFrame."
+        },
+        {
+          "term": "DataFrame",
+          "meaning": "Struktur data dalam pandas yang seperti tabel dengan baris dan kolom. Bisa dihitung dan diolah seperti spreadsheet."
+        }
+      ],
+      "how": "Budi punya file penjualan CSV dengan 412 baris. Untuk membacanya, kita gunakan fungsi read_csv dari pandas. Langkahnya: 1. Import pandas. 2. Gunakan read_csv dengan nama file. 3. Simpan hasilnya ke variabel. Contoh: import pandas as pd; data = pd.read_csv('penjualan.csv').",
+      "steps": [
+        "Import pandas dengan 'import pandas as pd'",
+        "Gunakan read_csv('penjualan.csv') untuk baca file",
+        "Simpan hasil ke variabel seperti data = pd.read_csv('penjualan.csv')"
+      ],
+      "why": "Dengan membaca file CSV, kita bisa mulai analisis penjualan Budi. Tapi kita belum tahu berapa banyak kolom dan apa yang ada di dalamnya, jadi kita perlu lihat baris pertama dan nama kolom terlebih dahulu sebelum lanjut ke analisis lebih detail seperti jumlah transaksi atau rata-rata harga menu.",
+      "objective": 1
+    },
+    {
+      "title": "Menampilkan informasi dasar data",
+      "what": "Setelah data baca, kita bisa lihat baris pertama, nama kolom, dan ringk: jumlah baris, tipe data kolom. Ini membantu kita pahami struktur data dan pastikan tidak ada kesalahan.",
+      "terms": [
+        {
+          "term": "kolom",
+          "meaning": "Kolom dalam tabel adalah bagian yang berisi data spesifik seperti tanggal atau harga. Seperti kolom di warung kopi yang berisi menu yang dijual."
+        }
+      ],
+      "how": "Budi ingin tahu 5 baris pertama, nama kolom, dan jumlah baris. Dengan pandas, kita gunakan head() untuk baris pertama, columns untuk nama kolom, dan shape untuk jumlah baris. Contoh: print(data.head()) untuk 5 baris pertama, print(data.columns) untuk nama kolom, dan print(data.shape) untuk jumlah baris dan kolom.",
+      "steps": [
+        "Gunakan data.head() untuk lihat 5 baris pertama",
+        "Gunakan data.columns untuk lihat nama kolom",
+        "Gunakan data.shape untuk lihat jumlah baris dan kolom"
+      ],
+      "why": "Dengan informasi dasar ini, kita bisa pastikan data sudah baca dengan benar dan siap diolah. Tapi kita belum tahu bagaimana menghitung total penjualan atau rata-rata harga, jadi kita perlu lanjut ke analisis lebih mendalam di bab berikutnya.",
+      "objective": 2
+    },
+    {
+      "title": "Menghitung ringkasan data",
+      "what": "Ringkasan data membantu kita lihat statistik dasar seperti jumlah baris, rata-rata harga, atau jumlah transaksi. Ini penting untuk analisis cepat tanpa harus menghitung manual.",
+      "terms": [
+        {
+          "term": "read_csv",
+          "meaning": "Fungsi pandas untuk membaca file CSV dan mengubahnya menjadi DataFrame. Seperti cara kita baca buku dengan membuka halaman pertama."
+        }
+      ],
+      "how": "Budi ingin tahu total penjualan. Dengan pandas, kita bisa gunakan describe() untuk lihat ringkasan statistik. Contoh: print(data.describe()) akan menampilkan rata-rata, standar deviasi, dll. Tapi untuk kasus ini, kita fokus pada jumlah baris dan tipe data kolom saja.",
+      "steps": [
+        "Gunakan data.describe() untuk lihat ringkasan statistik",
+        "Fokus pada jumlah baris dan tipe data kolom dari hasilnya",
+        "Pastikan tidak ada kolom yang tidak sesuai dengan penjualan"
+      ],
+      "why": "Ringkasan data membantu kita pahami pola penjualan Budi. Tapi kita belum tahu bagaimana menghitung total penjualan atau menemukan menu yang paling laku, jadi kita perlu lanjut ke analisis lebih spesifik di modul berikutnya.",
+      "objective": 2
+    }
+  ],
+  "demo": {
+    "title": "Membaca file penjualan dengan pandas",
+    "instruction": "Pilih langkah yang ingin Anda lihat",
+    "steps": [
+      {
+        "label": "Buka file penjualan",
+        "detail": "Budi membuka file penjualan.csv dengan pandas. Ini seperti membuka buku catatan untuk lihat data penjualan."
+      },
+      {
+        "label": "Tampilkan 5 baris pertama",
+        "detail": "Dengan data.head(), Budi melihat 5 baris pertama penjualan. Ini membantu lihat format data dan kolom yang ada."
+      },
+      {
+        "label": "Cari jumlah baris",
+        "detail": "Dengan data.shape, Budi menemukan ada 412 baris penjualan dalam file."
+      }
+    ]
+  },
+  "summary": [
+    "Budi membuka file penjualan CSV dengan pandas untuk analisis data.",
+    "Dia melihat 5 baris pertama, nama kolom, dan jumlah baris (412).",
+    "Dengan informasi dasar ini, Budi bisa pastikan data sudah baca dengan benar.",
+    "Masih belum tahu bagaimana menghitung total penjualan atau rata-rata harga menu."
+  ],
+  "quiz": [
+    {
+      "question": "Budi ingin lihat 3 baris pertama penjualan. Bagaimana kode yang benar?",
+      "right": "print(data.head(3))",
+      "wrong": [
+        "print(data.head())",
+        "data.show(3)"
+      ],
+      "why": "data.head() menampilkan 5 baris pertama, bukan 3. Untuk 3 baris, gunakan head(3). Lihat bab 2 untuk cara menampilkan baris spesifik.",
+      "objective": 2
+    },
+    {
+      "question": "Apa yang terjadi jika Budi lupa import pandas?",
+      "right": "Kode akan error karena pandas tidak diimpor",
+      "wrong": [
+        "Data akan baca dengan benar",
+        "Pandas akan otomatis baca file CSV"
+      ],
+      "why": "Pandas harus diimpor terlebih dahulu agar bisa digunakan. Tanpa import, kode tidak bisa berjalan. Lihat bab 1 untuk cara mengimpor library.",
+      "objective": 1
+    },
+    {
+      "question": "Budi punya file penjualan dengan 100 baris. Berapa hasil data.shape?",
+      "right": "(100, 4)",
+      "wrong": [
+        "(4, 100)",
+        "(100, 0)"
+      ],
+      "why": "data.shape menampilkan jumlah baris dan kolom. Jika ada 100 baris dan 4 kolom, hasilnya (100, 4). Lihat bab 2 untuk cara membaca jumlah baris dan kolom.",
+      "objective": 2
+    },
+    {
+      "question": "Apa fungsi yang digunakan untuk lihat tipe data kolom dalam DataFrame?",
+      "right": "data.dtypes",
+      "wrong": [
+        "data.columns",
+        "data.head()"
+      ],
+      "why": "data.dtypes menampilkan tipe data setiap kolom, seperti integer atau string. data.columns hanya menampilkan nama kolom. Lihat bab 2 untuk cara lihat tipe data kolom.",
+      "objective": 2
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Lihat 3 baris pertama penjualan",
+      "task": "Baca file penjualan.csv, tampilkan 3 baris pertama, lalu tulis dua hal yang Anda temukan.",
+      "expected": "3 baris pertama penjualan dan dua hal yang ditemukan, seperti 'tanggal 15 Januari, menu kopi, harga 5000' dan 'ada kolom harga yang berupa angka'.",
+      "objective": 2
+    }
+  ],
+  "next": "Kita belum bisa hitung total penjualan atau rata-rata harga menu. Ini akan dibahas di modul berikutnya tentang analisis penjualan lebih lanjut."
+  }

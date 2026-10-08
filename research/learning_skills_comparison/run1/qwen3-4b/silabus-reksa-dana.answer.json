@@ -1,0 +1,138 @@
+{
+  "topic": "Reksa dana",
+  "title": "Belajar Reksa Dana dari Nol",
+  "lead": "Anda belajar cara memilih reksa dana yang tepat. Untuk pemula, ini membantu Anda menghindari rekomendasi yang tidak sesuai. Akhirnya, Anda bisa memilih reksa dana sendiri dengan mempertimbangkan risiko dan keuntungan.",
+  "level": "Pemula",
+  "assumptions": "Anda pemula yang punya waktu 3 jam per minggu. Tujuan: memilih reksa dana sendiri tanpa ikut-ikutan rekomendasi.",
+  "outcomes": [
+    "Bisa memilih reksa dana berdasarkan risiko yang diinginkan",
+    "Bisa menghitung potongan biaya reksa dana",
+    "Bisa membandingkan return reksa dana dengan investasi lain",
+    "Bisa menjelaskan perbedaan reksa dana dan deposito"
+  ],
+  "map_note": "Mulai dari fondasi konsep, lalu inti cara kerja, akhirnya penerapan pemilihan. Urutan ini pastikan Anda tidak bingung tentang istilah seperti fee atau model bisnis sebelum memilih reksa dana.",
+  "running_example": "Budi, seorang wirausaha muda, ingin memilih reksa dana untuk modal usahanya. Ia membandingkan dua pilihan: reksa dana A dengan fee 1,5% dan reksa dana B dengan fee 0,8%.",
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "title": "Apa itu reksa dana?",
+          "question": "Apa yang dimaksud dengan reksa dana?",
+          "objectives": [
+            "Menjelaskan reksa dana dalam bahasa sederhana",
+            "Menyebutkan dua contoh reksa dana yang umum"
+          ],
+          "terms": [
+            "reksa dana",
+            "investasi",
+            "dana"
+          ],
+          "exercise": "Buat tabel dua kolom: reksa dana dan deposito. Isi dengan perbedaan utama.",
+          "result": "Bisa menjelaskan reksa dana dengan 5 kata",
+          "hours": 1
+        },
+        {
+          "title": "Bagaimana reksa dana bekerja?",
+          "question": "Bagaimana reksa dana mengumpulkan dana dari investor?",
+          "objectives": [
+            "Menghitung jumlah dana yang dikumpulkan dari 10 investor",
+            "Membuat skema alur dana sederhana"
+          ],
+          "terms": [
+            "investor",
+            "dana",
+            "alur dana"
+          ],
+          "exercise": "Hitung berapa dana yang dikumpulkan jika 10 orang masing-masing menyumbang Rp 500.000.",
+          "result": "Bisa menghitung dana dari 10 investor",
+          "hours": 1
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "title": "Apa itu fee reksa dana?",
+          "question": "Apa yang dimaksud dengan fee reksa dana?",
+          "objectives": [
+            "Menghitung fee reksa dana dari total investasi",
+            "Membaca jenis fee yang umum"
+          ],
+          "terms": [
+            "fee",
+            "biaya",
+            "investasi"
+          ],
+          "exercise": "Hitung fee jika investasi Rp 10.000.000 dengan fee 1,5%.",
+          "result": "Bisa menghitung fee reksa dana",
+          "hours": 1
+        },
+        {
+          "title": "Model bisnis reksa dana",
+          "question": "Siapa yang memberi apa dan siapa yang mendapat apa dalam reksa dana?",
+          "objectives": [
+            "Membuat tabel model bisnis reksa dana",
+            "Membaca perbedaan keuntungan dan risiko"
+          ],
+          "terms": [
+            "model bisnis",
+            "investor",
+            "manajer"
+          ],
+          "exercise": "Buat tabel: siapa memberi dana, siapa mengelola, siapa mendapat keuntungan.",
+          "result": "Bisa menjelaskan model bisnis reksa dana",
+          "hours": 1
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "title": "Bagaimana memilih reksa dana?",
+          "question": "Bagaimana memilih reksa dana berdasarkan risiko yang diinginkan?",
+          "objectives": [
+            "Membandingkan dua reksa dana berdasarkan fee dan risiko",
+            "Membuat rekomendasi untuk Budi"
+          ],
+          "terms": [
+            "risiko",
+            "fee",
+            "return"
+          ],
+          "exercise": "Bandingkan reksa dana A (fee 1,5%, risiko tinggi) dan B (fee 0,8%, risiko rendah).",
+          "result": "Bisa memilih reksa dana berdasarkan risiko",
+          "hours": 1
+        },
+        {
+          "title": "Menghitung keuntungan reksa dana",
+          "question": "Bagaimana menghitung keuntungan reksa dana setelah fee?",
+          "objectives": [
+            "Menghitung keuntungan reksa dana setelah fee",
+            "Membuat tabel perbandingan keuntungan"
+          ],
+          "terms": [
+            "keuntungan",
+            "fee",
+            "return"
+          ],
+          "exercise": "Hitung keuntungan jika investasi Rp 10.000.000 dengan return 10% dan fee 1,5%.",
+          "result": "Bisa menghitung keuntungan reksa dana",
+          "hours": 1
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Pilih Reksa Dana untuk Budi",
+    "task": "Bantu Budi memilih reksa dana yang tepat untuk modal usahanya dengan mempertimbangkan fee dan risiko.",
+    "criteria": [
+      "Bisa menghitung fee reksa dana",
+      "Bisa membandingkan risiko dua reksa dana",
+      "Bisa membuat rekomendasi berdasarkan hasil perhitungan"
+    ],
+    "hours": 2
+  }
+}

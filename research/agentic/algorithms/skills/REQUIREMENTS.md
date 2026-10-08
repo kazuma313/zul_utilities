@@ -160,6 +160,8 @@ Skrip yang memanggil model lokal memilih modelnya sendiri, jadi `--model` tidak 
 | `mind_map` (`generate_mindmap.py`) | `gemma3:4b`, `qwen3:8b`, `qwen3:4b` | `gemma3:4b` menggambar 16 dari 16 peta uji dan menjaga rincian dokumen; `qwen3:8b` menghilangkan rincian. |
 | `pptx_claude`, `pptx_research` (`generate_deck.py`) | `qwen3:8b`, `gemma3:4b`, `qwen3:4b` | `qwen3:8b` menulis slide paling lengkap dengan angka benar; `gemma3:4b` beberapa kali lebih cepat dan muat di GPU yang lebih kecil. |
 | `resaerch_poster` (`generate_poster.py`) | `qwen3:8b`, `gemma3:4b`, `qwen3:4b` | Sama dengan slide. |
+| `silabus_belajar` (`generate_silabus.py`) | `gemma3:4b`, `qwen3:8b`, `qwen3:4b` | Tidak ada model yang selalu memuat konsep inti topik (NAB ada di 2 dari 5 silabus `gemma3:4b`, 0 dari 2 `qwen3:8b`); `gemma3:4b` selesai dalam 30-40 detik, `qwen3:8b` 140-250 detik. |
+| `materi_belajar` (`generate_materi.py`) | `qwen3:8b`, `gemma3:4b`, `qwen3:4b` | `qwen3:8b` menulis semua angka dengan benar di keempat materi uji; `gemma3:4b` lima kali lebih cepat tetapi salah 5 angka dalam dua putaran. Perbandingannya ada di `docs/konsep/model-lokal-untuk-skill-belajar.md`. |
 
 Jika tidak ada satu pun model di daftar, skrip memakai model chat pertama yang terpasang. `--model NAMA_MODEL` memilih model untuk satu perintah, dan variabel lingkungan `SKILL_MODEL` memilih satu model untuk semua skill.
 

@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "required": ["topic", "title", "lead", "level", "assumptions", "outcomes", "map_note", "running_example", "stages", "project"],
+  "properties": {
+    "topic": {"type": "string", "maxLength": 60},
+    "title": {"type": "string", "maxLength": 90},
+    "lead": {"type": "string", "maxLength": 400},
+    "level": {"type": "string", "maxLength": 40},
+    "assumptions": {"type": "string", "maxLength": 300},
+    "outcomes": {"type": "array", "items": {"type": "string", "maxLength": 160}, "minItems": 4, "maxItems": 6},
+    "map_note": {"type": "string", "maxLength": 300},
+    "running_example": {"type": "string", "maxLength": 300},
+    "stages": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["name", "modules"],
+        "properties": {
+          "name": {"type": "string", "maxLength": 40},
+          "modules": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["title", "question", "objectives", "terms", "exercise", "result", "hours"],
+              "properties": {
+                "title": {"type": "string", "maxLength": 80},
+                "question": {"type": "string", "maxLength": 160},
+                "objectives": {"type": "array", "items": {"type": "string", "maxLength": 160}, "minItems": 2, "maxItems": 4},
+                "terms": {"type": "array", "items": {"type": "string", "maxLength": 50}, "minItems": 3, "maxItems": 6},
+                "exercise": {"type": "string", "maxLength": 300},
+                "result": {"type": "string", "maxLength": 80},
+                "hours": {"type": "integer", "minimum": 1, "maximum": 3}
+              }
+            }
+          }
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "required": ["title", "task", "criteria", "hours"],
+      "properties": {
+        "title": {"type": "string", "maxLength": 80},
+        "task": {"type": "string", "maxLength": 400},
+        "criteria": {"type": "array", "items": {"type": "string", "maxLength": 160}, "minItems": 3, "maxItems": 5},
+        "hours": {"type": "integer", "minimum": 1, "maximum": 8}
+      }
+    }
+  }
+}

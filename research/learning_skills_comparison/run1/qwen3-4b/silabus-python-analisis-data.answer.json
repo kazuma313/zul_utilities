@@ -1,0 +1,139 @@
+{
+  "topic": "Python untuk analisis data",
+  "title": "Belajar Python untuk Analisis Data dari Nol",
+  "lead": "Anda belajar analisis data penjualan dengan Python. Untuk pemula, ini bisa dilakukan dalam 4 jam per minggu. Akhirnya, Anda bisa menganalisis data penjualan sendiri tanpa rumus manual.",
+  "level": "Pemula",
+  "assumptions": "Anda memiliki akses ke komputer dan internet. Waktu 4 jam per minggu untuk latihan. Tujuan: menganalisis data penjualan sendiri tanpa rumus manual.",
+  "outcomes": [
+    "Bisa menjelaskan langkah-langkah dasar analisis data penjualan dengan Python",
+    "Bisa menghitung total penjualan dari data Excel menggunakan Python",
+    "Bisa membuat tabel perbandingan penjualan bulanan",
+    "Bisa mengidentifikasi pola penjualan dengan visualisasi sederhana"
+  ],
+  "map_note": "Mulai dari fondasi Python, lalu inti analisis data, akhirnya penerapan pada data penjualan. Urutan ini memastikan Anda tidak kebingungan dengan konsep baru.",
+  "running_example": "Budi, seorang penjual kopi di kota Cirebon, ingin menganalisis penjualan kopi bulanan dengan Python. Data penjualan Budi ada di Excel.",
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "title": "Apa itu Python untuk Analisis Data?",
+          "question": "Bagaimana Python bisa digunakan untuk menganalisis data penjualan?",
+          "objectives": [
+            "Menjelaskan perbedaan Python dan Excel untuk analisis data",
+            "Membuat contoh sederhana menghitung total penjualan"
+          ],
+          "terms": [
+            "Python",
+            "Analisis data",
+            "Excel"
+          ],
+          "exercise": "Hitung total penjualan kopi Budi bulan lalu dengan Python (gunakan data Excel Budi).",
+          "result": "Bisa menjelaskan perbedaan Python dan Excel untuk analisis data penjualan",
+          "hours": 1
+        },
+        {
+          "title": "Menghitung Total Penjualan",
+          "question": "Bagaimana menghitung total penjualan dari data Excel?",
+          "objectives": [
+            "Menghitung total penjualan dengan fungsi Python",
+            "Membuat tabel sederhana hasil perhitungan"
+          ],
+          "terms": [
+            "Fungsi",
+            "Tabel",
+            "Data"
+          ],
+          "exercise": "Buat tabel total penjualan bulanan Budi dengan Python.",
+          "result": "Bisa menghitung total penjualan dari data Excel menggunakan Python",
+          "hours": 1
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "title": "Membuat Tabel Perbandingan",
+          "question": "Bagaimana membuat tabel perbandingan penjualan bulanan?",
+          "objectives": [
+            "Membandingkan penjualan bulanan dengan tabel Python",
+            "Membuat visualisasi sederhana untuk pola penjualan"
+          ],
+          "terms": [
+            "Tabel perbandingan",
+            "Visualisasi",
+            "Pola"
+          ],
+          "exercise": "Buat tabel perbandingan penjualan bulan Januari hingga April untuk Budi.",
+          "result": "Bisa membuat tabel perbandingan penjualan bulanan",
+          "hours": 1
+        },
+        {
+          "title": "Mengidentifikasi Pola Penjualan",
+          "question": "Bagaimana mengidentifikasi pola penjualan dengan visualisasi?",
+          "objectives": [
+            "Membuat grafik sederhana untuk melihat pola penjualan",
+            "Membaca pola dari grafik"
+          ],
+          "terms": [
+            "Grafik",
+            "Pola",
+            "Visualisasi"
+          ],
+          "exercise": "Buat grafik penjualan bulanan Budi dari Januari hingga April.",
+          "result": "Bisa mengidentifikasi pola penjualan dengan visualisasi sederhana",
+          "hours": 1
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "title": "Analisis Data Penjualan Sendiri",
+          "question": "Bagaimana menganalisis data penjualan sendiri tanpa rumus manual?",
+          "objectives": [
+            "Membuat alur analisis data penjualan",
+            "Menggunakan Python untuk menganalisis data penjualan"
+          ],
+          "terms": [
+            "Analisis data",
+            "Data penjualan",
+            "Alur"
+          ],
+          "exercise": "Analisis data penjualan Budi bulan ini dengan Python dan lakukan laporan sederhana.",
+          "result": "Bisa menganalisis data penjualan sendiri tanpa rumus manual",
+          "hours": 1
+        },
+        {
+          "title": "Mengatasi Masalah Penjualan",
+          "question": "Bagaimana mengatasi masalah penjualan dengan analisis data?",
+          "objectives": [
+            "Membuat rekomendasi berdasarkan analisis data",
+            "Menghitung risiko penjualan berdasarkan pola"
+          ],
+          "terms": [
+            "Risiko",
+            "Rekomendasi",
+            "Penjualan"
+          ],
+          "exercise": "Analisis risiko penjualan Budi berdasarkan pola yang ditemukan.",
+          "result": "Bisa mengidentifikasi risiko penjualan berdasarkan analisis data",
+          "hours": 1
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Analisis Data Penjualan Budi",
+    "task": "Menganalisis data penjualan Budi bulan ini dengan Python dan membuat laporan sederhana",
+    "criteria": [
+      "Laporan berisi total penjualan bulanan",
+      "Tabel perbandingan penjualan bulanan",
+      "Grafik pola penjualan",
+      "Rekomendasi berdasarkan analisis"
+    ],
+    "hours": 2
+  }
+}

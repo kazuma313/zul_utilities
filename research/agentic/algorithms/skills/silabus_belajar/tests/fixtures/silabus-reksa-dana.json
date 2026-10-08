@@ -1,0 +1,117 @@
+{
+  "topic": "Reksa dana",
+  "title": "Belajar reksa dana dari nol",
+  "lead": "Silabus ini untuk Anda yang punya tabungan tapi belum pernah berinvestasi. Anda belajar cara kerja reksa dana, biaya dan risikonya, sampai bisa membandingkan beberapa produk sendiri sebelum membeli.",
+  "level": "Pemula",
+  "assumptions": "Anda belum pernah membeli produk investasi, punya sekitar 3 jam per minggu, dan ingin bisa memilih reksa dana sendiri tanpa ikut-ikutan rekomendasi.",
+  "outcomes": [
+    "Menjelaskan cara kerja reksa dana dari uang masuk sampai nilai unit berubah",
+    "Membandingkan reksa dana pasar uang, pendapatan tetap, campuran, dan saham dari sisi risiko dan potensi hasil",
+    "Menghitung untung atau rugi dari perubahan NAB per unit",
+    "Membaca fund fact sheet dan menemukan biaya, isi portofolio, dan kinerja",
+    "Menyebutkan pihak yang terlibat dan apa yang didapat tiap pihak dari biaya yang Anda bayar",
+    "Membuat rencana investasi bulanan sesuai tujuan dan profil risiko"
+  ],
+  "map_note": "Fondasi menjelaskan apa yang Anda beli dan cara nilainya berubah. Inti membahas jenis, biaya, dan risiko. Penerapan menggabungkan semuanya menjadi rencana yang Anda buat sendiri.",
+  "running_example": "Sari menyisihkan Rp500.000 per bulan dari gajinya dan ingin dana darurat Rp6 juta dalam satu tahun.",
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "title": "Apa yang Anda beli saat membeli reksa dana",
+          "question": "Ke mana uang Sari pergi setelah ia membeli reksa dana?",
+          "objectives": [
+            "Menjelaskan peran manajer investasi dan bank kustodian",
+            "Menggambar alur uang dari investor ke portofolio dan kembali lagi"
+          ],
+          "terms": ["reksa dana", "manajer investasi", "bank kustodian", "portofolio", "unit penyertaan"],
+          "exercise": "Gambar alur uang Rp500.000 milik Sari dari aplikasi sampai masuk ke portofolio, lalu tulis siapa yang memegang uangnya di tiap langkah.",
+          "result": "Bisa menggambar alur uang investor",
+          "hours": 2
+        },
+        {
+          "title": "NAB dan cara nilai investasi berubah",
+          "question": "Kenapa saldo Sari bisa naik atau turun padahal ia tidak menambah uang?",
+          "objectives": [
+            "Menghitung jumlah unit yang didapat dari nominal pembelian",
+            "Menghitung untung atau rugi dari perubahan NAB per unit"
+          ],
+          "terms": ["NAB", "NAB per unit", "subscription", "redemption"],
+          "exercise": "Sari membeli Rp500.000 saat NAB per unit Rp1.250. Hitung jumlah unitnya, lalu nilai investasinya jika NAB per unit naik menjadi Rp1.300 dan turun menjadi Rp1.200.",
+          "result": "Bisa menghitung untung rugi dari NAB",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "title": "Empat jenis reksa dana",
+          "question": "Reksa dana mana yang cocok untuk dana darurat Sari?",
+          "objectives": [
+            "Membandingkan empat jenis reksa dana dari isi portofolio, risiko, dan jangka waktu",
+            "Memilih jenis yang sesuai untuk tiga tujuan keuangan yang berbeda"
+          ],
+          "terms": ["reksa dana pasar uang", "reksa dana pendapatan tetap", "reksa dana campuran", "reksa dana saham", "obligasi"],
+          "exercise": "Buat tabel empat jenis reksa dana dengan kolom isi portofolio, risiko, dan jangka waktu yang cocok, lalu pilih satu jenis untuk dana darurat Sari beserta alasannya.",
+          "result": "Bisa memilih jenis sesuai tujuan",
+          "hours": 2
+        },
+        {
+          "title": "Biaya dan siapa yang mendapatkannya",
+          "question": "Dari biaya yang Sari bayar, siapa mendapat apa?",
+          "objectives": [
+            "Menyebutkan biaya pembelian, penjualan, pengalihan, dan biaya pengelolaan",
+            "Menjelaskan model bisnis manajer investasi, bank kustodian, dan agen penjual"
+          ],
+          "terms": ["biaya pengelolaan", "agen penjual", "expense ratio"],
+          "exercise": "Isi tabel Pihak | Memberi | Mendapat untuk Sari, manajer investasi, bank kustodian, dan aplikasi agen penjual.",
+          "result": "Bisa memetakan siapa mendapat biaya",
+          "hours": 2
+        },
+        {
+          "title": "Risiko dan profil risiko",
+          "question": "Apa yang bisa membuat uang Sari berkurang?",
+          "objectives": [
+            "Menyebutkan risiko pasar, risiko likuiditas, dan risiko gagal bayar",
+            "Menentukan profil risiko dari tujuan dan jangka waktu"
+          ],
+          "terms": ["risiko pasar", "risiko likuiditas", "risiko gagal bayar", "profil risiko"],
+          "exercise": "Tulis tiga kejadian yang bisa menurunkan nilai investasi Sari, satu untuk setiap jenis risiko, lalu tentukan profil risikonya untuk tujuan dana darurat.",
+          "result": "Bisa menentukan profil risiko",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "title": "Membaca fund fact sheet",
+          "question": "Bagaimana membandingkan dua produk tanpa percaya iklan?",
+          "objectives": [
+            "Membaca fund fact sheet dan menemukan biaya, isi portofolio, dan kinerja",
+            "Membandingkan dua produk sejenis dengan tabel"
+          ],
+          "terms": ["fund fact sheet", "prospektus", "benchmark"],
+          "exercise": "Ambil fund fact sheet dua reksa dana pasar uang, lalu bandingkan biaya, isi portofolio, dan kinerja satu tahun dalam satu tabel.",
+          "result": "Bisa membandingkan dua produk",
+          "hours": 3
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Rencana investasi pertama",
+    "task": "Buat rencana investasi bulanan untuk satu tujuan Anda sendiri: tujuan, jangka waktu, profil risiko, jenis reksa dana, dua produk yang dibandingkan, dan alasan memilih salah satunya.",
+    "criteria": [
+      "Tujuan, jumlah, dan jangka waktu tertulis dengan angka",
+      "Jenis reksa dana sesuai profil risiko dan jangka waktu",
+      "Dua produk dibandingkan dengan data dari fund fact sheet",
+      "Biaya dan risiko produk yang dipilih disebutkan"
+    ],
+    "hours": 3
+  }
+}

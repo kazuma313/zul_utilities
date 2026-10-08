@@ -1,0 +1,138 @@
+{
+  "topic": "Python untuk analisis data",
+  "title": "Belajar Python untuk analisis data dari nol",
+  "lead": "Anda belajar analisis data penjualan dengan Python. Untuk pemula, ini bisa dilakukan dalam 4 jam per minggu. Akhirnya, Anda bisa menganalisis data penjualan sendiri tanpa rumus manual.",
+  "level": "Pemula",
+  "assumptions": "Anda memiliki akses ke komputer dan internet. Waktu belajar 4 jam per minggu untuk praktik langsung.",
+  "outcomes": [
+    "Membuat grafik penjualan",
+    "Menghitung total penjualan",
+    "Membaca data dari file Excel",
+    "Membuat laporan sederhana"
+  ],
+  "map_note": "Mulai dari fondasi dasar Python, lalu inti analisis data, akhirnya penerapan pada data penjualan nyata. Urutan ini memastikan Anda tidak kehilangan konsep dasar sebelum mempraktikkan.",
+  "running_example": "Budi, seorang penjual di toko online, ingin tahu berapa total penjualan bulan lalu. Ia punya data penjualan di Excel.",
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "title": "Pengenalan Python",
+          "question": "Apa itu Python dan mengapa dipakai untuk analisis data?",
+          "objectives": [
+            "Menjelaskan perbedaan Python dengan bahasa lain",
+            "Membuat program sederhana yang menampilkan teks"
+          ],
+          "terms": [
+            "Python",
+            "Bahasa pemrograman",
+            "Program"
+          ],
+          "exercise": "Buat program yang menampilkan 'Halo, saya Python!'",
+          "result": "Bisa membuat program sederhana dengan Python",
+          "hours": 1
+        },
+        {
+          "title": "Membaca data dari Excel",
+          "question": "Bagaimana membaca data penjualan dari file Excel?",
+          "objectives": [
+            "Membaca data Excel dengan library pandas",
+            "Menghitung jumlah baris data"
+          ],
+          "terms": [
+            "Excel",
+            "Pandas",
+            "Data"
+          ],
+          "exercise": "Buka file penjualan Budi dan hitung berapa banyak data",
+          "result": "Bisa membaca data Excel dan menghitung jumlah baris",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "title": "Menghitung total penjualan",
+          "question": "Bagaimana menghitung total penjualan dari data?",
+          "objectives": [
+            "Menghitung total penjualan dengan sum()",
+            "Membuat tabel perbandingan penjualan bulan ini dan lalu"
+          ],
+          "terms": [
+            "Sum",
+            "Tabel",
+            "Penjualan"
+          ],
+          "exercise": "Hitung total penjualan bulan lalu dan bulan ini",
+          "result": "Bisa menghitung total penjualan dan membuat tabel perbandingan",
+          "hours": 3
+        },
+        {
+          "title": "Membuat grafik penjualan",
+          "question": "Bagaimana membuat grafik penjualan?",
+          "objectives": [
+            "Membuat grafik bar dengan matplotlib",
+            "Menginterpretasi grafik untuk melihat tren"
+          ],
+          "terms": [
+            "Matplotlib",
+            "Grafik",
+            "Tren"
+          ],
+          "exercise": "Buat grafik bar untuk penjualan bulan lalu",
+          "result": "Bisa membuat grafik bar penjualan",
+          "hours": 3
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "title": "Membuat laporan sederhana",
+          "question": "Bagaimana membuat laporan analisis data?",
+          "objectives": [
+            "Membuat laporan dengan format teks",
+            "Menyertakan grafik dan angka kunci"
+          ],
+          "terms": [
+            "Laporan",
+            "Format teks",
+            "Angka kunci"
+          ],
+          "exercise": "Buat laporan sederhana untuk Budi",
+          "result": "Bisa membuat laporan sederhana dengan grafik dan angka kunci",
+          "hours": 2
+        },
+        {
+          "title": "Analisis data penjualan",
+          "question": "Bagaimana menganalisis data penjualan sendiri?",
+          "objectives": [
+            "Membaca data penjualan dari file Excel",
+            "Menghitung total penjualan dan tren"
+          ],
+          "terms": [
+            "Analisis data",
+            "Tren",
+            "Penjualan"
+          ],
+          "exercise": "Analisis data penjualan Budi dan buat laporan",
+          "result": "Bisa menganalisis data penjualan sendiri tanpa rumus manual",
+          "hours": 3
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Analisis data penjualan Budi",
+    "task": "Analisis data penjualan Budi dari file Excel dan buat laporan lengkap",
+    "criteria": [
+      "Bisa menghitung total penjualan",
+      "Bisa membuat grafik bar",
+      "Bisa membuat laporan sederhana"
+    ],
+    "hours": 4
+  }
+}

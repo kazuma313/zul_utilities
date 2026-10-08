@@ -1,0 +1,87 @@
+{
+  "type": "object",
+  "required": ["title", "lead", "objectives", "prior", "chapters", "demo", "summary", "quiz", "exercises", "next"],
+  "properties": {
+    "title": {"type": "string", "maxLength": 90},
+    "lead": {"type": "string", "maxLength": 400},
+    "objectives": {"type": "array", "items": {"type": "string", "maxLength": 160}, "minItems": 2, "maxItems": 4},
+    "prior": {"type": "string", "maxLength": 350},
+    "chapters": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["title", "what", "terms", "how", "steps", "why", "objective"],
+        "properties": {
+          "title": {"type": "string", "maxLength": 80},
+          "what": {"type": "string", "maxLength": 400},
+          "terms": {
+            "type": "array",
+            "maxItems": 3,
+            "items": {
+              "type": "object",
+              "required": ["term", "meaning"],
+              "properties": {"term": {"type": "string", "maxLength": 40}, "meaning": {"type": "string", "maxLength": 250}}
+            }
+          },
+          "how": {"type": "string", "maxLength": 700},
+          "steps": {"type": "array", "items": {"type": "string", "maxLength": 120}, "minItems": 3, "maxItems": 5},
+          "why": {"type": "string", "maxLength": 400},
+          "objective": {"type": "integer", "minimum": 1, "maximum": 4}
+        }
+      }
+    },
+    "demo": {
+      "type": "object",
+      "required": ["title", "instruction", "steps"],
+      "properties": {
+        "title": {"type": "string", "maxLength": 90},
+        "instruction": {"type": "string", "maxLength": 200},
+        "steps": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "required": ["label", "detail"],
+            "properties": {"label": {"type": "string", "maxLength": 70}, "detail": {"type": "string", "maxLength": 200}}
+          }
+        }
+      }
+    },
+    "summary": {"type": "array", "items": {"type": "string", "maxLength": 220}, "minItems": 4, "maxItems": 6},
+    "quiz": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["question", "right", "wrong", "why", "objective"],
+        "properties": {
+          "question": {"type": "string", "maxLength": 220},
+          "right": {"type": "string", "maxLength": 120},
+          "wrong": {"type": "array", "items": {"type": "string", "maxLength": 120}, "minItems": 2, "maxItems": 2},
+          "why": {"type": "string", "maxLength": 300},
+          "objective": {"type": "integer", "minimum": 1, "maximum": 4}
+        }
+      }
+    },
+    "exercises": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["title", "task", "expected", "objective"],
+        "properties": {
+          "title": {"type": "string", "maxLength": 80},
+          "task": {"type": "string", "maxLength": 350},
+          "expected": {"type": "string", "maxLength": 250},
+          "objective": {"type": "integer", "minimum": 1, "maximum": 4}
+        }
+      }
+    },
+    "next": {"type": "string", "maxLength": 350}
+  }
+}

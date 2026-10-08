@@ -1,0 +1,348 @@
+{
+  "gemma3:4b/silabus-reksa-dana": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\gemma3-4b\\silabus-reksa-dana.html",
+    "json": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\gemma3-4b\\silabus-reksa-dana.json",
+    "warnings": [
+      "module 1: result too short; written from the first objective",
+      "module 2: result too short; written from the first objective",
+      "module 3: objective changed to a checkable verb: 'Menjelaskan struktur biaya pengelolaan reksa dana.'",
+      "module 3: result too short; written from the first objective",
+      "module 4: objective changed to a checkable verb: 'Menjelaskan konsep volatilitas dan standar deviasi.'",
+      "module 4: objective changed to a checkable verb: 'Menjelaskan strategi mitigasi risiko.'",
+      "module 4: result too short; written from the first objective",
+      "module 5: result too short; written from the first objective",
+      "module 6: result too short; written from the first objective",
+      "term 'Profil Risiko' is taught in module 5 but already used in module 2"
+    ],
+    "modules": 6,
+    "stages": 3,
+    "hours": 21,
+    "weeks": 8,
+    "model": "gemma3:4b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 37.8,
+        "tokens": 1588,
+        "eval_seconds": 25.4,
+        "prompt_tokens": 851,
+        "num_ctx": 6144
+      }
+    ],
+    "wall_seconds": 37.9,
+    "indonesian_share": 1.0,
+    "task": "silabus-reksa-dana",
+    "skill": "silabus"
+  },
+  "gemma3:4b/silabus-python-analisis-data": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\gemma3-4b\\silabus-python-analisis-data.html",
+    "json": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\gemma3-4b\\silabus-python-analisis-data.json",
+    "warnings": [],
+    "modules": 6,
+    "stages": 3,
+    "hours": 21,
+    "weeks": 7,
+    "model": "gemma3:4b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 29.3,
+        "tokens": 1378,
+        "eval_seconds": 26.1,
+        "prompt_tokens": 808,
+        "num_ctx": 6144
+      }
+    ],
+    "wall_seconds": 29.3,
+    "indonesian_share": 1.0,
+    "task": "silabus-python-analisis-data",
+    "skill": "silabus"
+  },
+  "gemma3:4b/materi-reksa-dana-modul-2": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\gemma3-4b\\materi-reksa-dana-modul-2.html",
+    "warnings": [
+      "terms from the module card without a term box: redemption",
+      "prior was empty; written from the previous module card",
+      "arithmetic in soal 2 does not add up: Rp39.000 = 300 x (Rp1.300 - Rp1.250) (hasilnya 15,000)"
+    ],
+    "chapters": 3,
+    "questions": 4,
+    "exercises": 1,
+    "terms": 3,
+    "diagrams": 3,
+    "demo": true,
+    "model": "gemma3:4b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 60.8,
+        "tokens": 2341,
+        "eval_seconds": 51.8,
+        "prompt_tokens": 1217,
+        "num_ctx": 7168
+      }
+    ],
+    "wall_seconds": 60.8,
+    "indonesian_share": 1.0,
+    "task": "materi-reksa-dana-modul-2",
+    "skill": "materi"
+  },
+  "gemma3:4b/materi-python-analisis-data-modul-3": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\gemma3-4b\\materi-python-analisis-data-modul-3.html",
+    "warnings": [
+      "exercise 'Latihan dari silabus' has no expected result",
+      "terms from the module card without a term box: read_csv",
+      "prior was empty; written from the previous module card"
+    ],
+    "chapters": 3,
+    "questions": 4,
+    "exercises": 3,
+    "terms": 3,
+    "diagrams": 3,
+    "demo": true,
+    "model": "gemma3:4b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 55.9,
+        "tokens": 2120,
+        "eval_seconds": 52.7,
+        "prompt_tokens": 1186,
+        "num_ctx": 7168
+      }
+    ],
+    "wall_seconds": 55.9,
+    "indonesian_share": 1.0,
+    "task": "materi-python-analisis-data-modul-3",
+    "skill": "materi"
+  },
+  "qwen3:4b/silabus-reksa-dana": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-4b\\silabus-reksa-dana.html",
+    "json": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-4b\\silabus-reksa-dana.json",
+    "warnings": [
+      "term 'Reksa dana' is taught in module 5 but already used in module 2"
+    ],
+    "modules": 6,
+    "stages": 3,
+    "hours": 12,
+    "weeks": 4,
+    "model": "qwen3:4b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 48.8,
+        "tokens": 1484,
+        "eval_seconds": 38.2,
+        "prompt_tokens": 1067,
+        "num_ctx": 6144
+      }
+    ],
+    "wall_seconds": 48.9,
+    "indonesian_share": 1.0,
+    "task": "silabus-reksa-dana",
+    "skill": "silabus"
+  },
+  "qwen3:4b/silabus-python-analisis-data": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-4b\\silabus-python-analisis-data.html",
+    "json": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-4b\\silabus-python-analisis-data.json",
+    "warnings": [
+      "term 'Data' is taught in module 2 but already used in module 1",
+      "term 'Penjualan' is taught in module 3 but already used in module 2",
+      "term 'Analisis data' is taught in module 6 but already used in module 1",
+      "term 'Penjualan' is taught in module 6 but already used in module 2"
+    ],
+    "modules": 6,
+    "stages": 3,
+    "hours": 18,
+    "weeks": 6,
+    "model": "qwen3:4b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 45.5,
+        "tokens": 1237,
+        "eval_seconds": 43.0,
+        "prompt_tokens": 1002,
+        "num_ctx": 6144
+      }
+    ],
+    "wall_seconds": 45.6,
+    "indonesian_share": 1.0,
+    "task": "silabus-python-analisis-data",
+    "skill": "silabus"
+  },
+  "qwen3:4b/materi-reksa-dana-modul-2": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-4b\\materi-reksa-dana-modul-2.html",
+    "warnings": [
+      "prior was empty; written from the previous module card"
+    ],
+    "chapters": 3,
+    "questions": 4,
+    "exercises": 1,
+    "terms": 5,
+    "diagrams": 3,
+    "demo": true,
+    "model": "qwen3:4b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 132.0,
+        "tokens": 2770,
+        "eval_seconds": 123.1,
+        "prompt_tokens": 1575,
+        "num_ctx": 7168
+      }
+    ],
+    "wall_seconds": 132.0,
+    "indonesian_share": 1.0,
+    "task": "materi-reksa-dana-modul-2",
+    "skill": "materi"
+  },
+  "qwen3:4b/materi-python-analisis-data-modul-3": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-4b\\materi-python-analisis-data-modul-3.html",
+    "warnings": [
+      "terms from the module card without a term box: read_csv"
+    ],
+    "chapters": 3,
+    "questions": 4,
+    "exercises": 1,
+    "terms": 3,
+    "diagrams": 3,
+    "demo": true,
+    "model": "qwen3:4b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 93.3,
+        "tokens": 1923,
+        "eval_seconds": 90.6,
+        "prompt_tokens": 1521,
+        "num_ctx": 7168
+      }
+    ],
+    "wall_seconds": 93.4,
+    "indonesian_share": 1.0,
+    "task": "materi-python-analisis-data-modul-3",
+    "skill": "materi"
+  },
+  "qwen3:8b/silabus-reksa-dana": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-8b\\silabus-reksa-dana.html",
+    "json": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-8b\\silabus-reksa-dana.json",
+    "warnings": [
+      "term 'manajer' is taught in module 2 but already used in module 1",
+      "term 'laporan' is taught in module 5 but already used in module 3",
+      "term 'keuntungan' is taught in module 6 but already used in module 2",
+      "term 'kerugian' is taught in module 6 but already used in module 2"
+    ],
+    "modules": 6,
+    "stages": 3,
+    "hours": 19,
+    "weeks": 7,
+    "model": "qwen3:8b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 245.8,
+        "tokens": 1702,
+        "eval_seconds": 225.8,
+        "prompt_tokens": 1073,
+        "num_ctx": 6144
+      }
+    ],
+    "wall_seconds": 245.8,
+    "indonesian_share": 1.0,
+    "task": "silabus-reksa-dana",
+    "skill": "silabus"
+  },
+  "qwen3:8b/silabus-python-analisis-data": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-8b\\silabus-python-analisis-data.html",
+    "json": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-8b\\silabus-python-analisis-data.json",
+    "warnings": [
+      "term 'total' is taught in module 5 but already used in module 4",
+      "term 'otomatis' is taught in module 6 but already used in module 5"
+    ],
+    "modules": 6,
+    "stages": 3,
+    "hours": 20,
+    "weeks": 7,
+    "model": "qwen3:8b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 140.0,
+        "tokens": 1369,
+        "eval_seconds": 137.1,
+        "prompt_tokens": 1008,
+        "num_ctx": 6144
+      }
+    ],
+    "wall_seconds": 140.1,
+    "indonesian_share": 1.0,
+    "task": "silabus-python-analisis-data",
+    "skill": "silabus"
+  },
+  "qwen3:8b/materi-reksa-dana-modul-2": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-8b\\materi-reksa-dana-modul-2.html",
+    "warnings": [],
+    "chapters": 3,
+    "questions": 4,
+    "exercises": 2,
+    "terms": 4,
+    "diagrams": 3,
+    "demo": true,
+    "model": "qwen3:8b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 329.0,
+        "tokens": 2800,
+        "eval_seconds": 310.4,
+        "prompt_tokens": 1581,
+        "num_ctx": 7168
+      }
+    ],
+    "wall_seconds": 329.1,
+    "indonesian_share": 1.0,
+    "task": "materi-reksa-dana-modul-2",
+    "skill": "materi"
+  },
+  "qwen3:8b/materi-python-analisis-data-modul-3": {
+    "ok": true,
+    "path": "C:\\Users\\kurni\\zulda\\projek\\zul_utilites\\research\\learning_skills_comparison\\qwen3-8b\\materi-python-analisis-data-modul-3.html",
+    "warnings": [
+      "exercises[1].title reached its length limit and may be cut off"
+    ],
+    "chapters": 3,
+    "questions": 4,
+    "exercises": 2,
+    "terms": 4,
+    "diagrams": 3,
+    "demo": true,
+    "model": "qwen3:8b",
+    "attempts": 1,
+    "stats": [
+      {
+        "seconds": 222.4,
+        "tokens": 1961,
+        "eval_seconds": 219.2,
+        "prompt_tokens": 1527,
+        "num_ctx": 7168
+      }
+    ],
+    "wall_seconds": 222.4,
+    "indonesian_share": 1.0,
+    "task": "materi-python-analisis-data-modul-3",
+    "skill": "materi"
+  }
+}

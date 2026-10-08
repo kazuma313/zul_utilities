@@ -1,0 +1,154 @@
+{
+  "topic": "Reksa dana",
+  "title": "Belajar Reksa Dana dari Nol",
+  "lead": "Anda belajar memilih reksa dana dengan benar. Untuk pemula, ini bisa dilakukan dalam 3 jam per minggu. Akhirnya, Anda bisa memilih reksa dana sendiri tanpa ikut-ikutan rekomendasi.",
+  "level": "Pemula",
+  "assumptions": "Anda pemula dalam keuangan. Memiliki waktu 3 jam per minggu untuk belajar. Tujuan: memilih reksa dana sendiri. Tidak perlu pengetahuan sebelumnya tentang reksa dana.",
+  "map_note": "Modul awal menjelaskan dasar reksa dana. Modul berikutnya membahas model bisnis dan risiko. Urutan ini pastikan Anda tidak salah memahami konsep sebelumnya.",
+  "running_example": "Budi ingin berinvestasi Rp 1 juta. Dia memilih reksa dana dengan biaya 1,5% dan imbal hasil 8% per tahun.",
+  "outcomes": [
+    "Membuat daftar reksa dana yang cocok",
+    "Menghitung biaya reksa dana",
+    "Membandingkan risiko dan imbal hasil",
+    "Membaca kinerja reksa dana"
+  ],
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "number": 1,
+          "title": "Apa itu reksa dana?",
+          "question": "Apa yang dimaksud dengan reksa dana?",
+          "objectives": [
+            "Menjelaskan reksa dana dalam satu kalimat",
+            "Membaca definisi reksa dana dari sumber resmi"
+          ],
+          "terms": [
+            "Reksa dana",
+            "Investasi",
+            "Kepemilikan"
+          ],
+          "exercise": "Tulis definisi reksa dana dalam 1 kalimat.",
+          "result": "Bisa menjelaskan reksa dana dalam satu kalimat",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 2,
+          "title": "Model Bisnis Reksa Dana",
+          "question": "Siapa yang memberi dana dan siapa yang mendapat keuntungan?",
+          "objectives": [
+            "Membuat tabel model bisnis reksa dana",
+            "Menjelaskan peran manajer investasi"
+          ],
+          "terms": [
+            "Model bisnis",
+            "Manajer investasi",
+            "Biaya manajemen"
+          ],
+          "exercise": "Buat tabel dengan kolom: Pihak yang memberi dana, Pihak yang mendapat keuntungan, Alasan mengikuti.",
+          "result": "Bisa membuat tabel model bisnis reksa dana",
+          "hours": 2,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "number": 3,
+          "title": "Risiko Reksa Dana",
+          "question": "Apa risiko yang mungkin terjadi dalam reksa dana?",
+          "objectives": [
+            "Membandingkan risiko pasar dan risiko keuangan",
+            "Membaca kinerja reksa dana untuk menilai risiko"
+          ],
+          "terms": [
+            "Risiko pasar",
+            "Risiko keuangan",
+            "Kinerja"
+          ],
+          "exercise": "Buat tabel perbandingan risiko pasar dan keuangan.",
+          "result": "Bisa membandingkan risiko dalam reksa dana",
+          "hours": 2,
+          "source": ""
+        },
+        {
+          "number": 4,
+          "title": "Biaya Reksa Dana",
+          "question": "Bagaimana biaya reksa dana dihitung?",
+          "objectives": [
+            "Menghitung biaya reksa dana dari jumlah investasi",
+            "Menjelaskan perbedaan biaya transaksi dan biaya manajemen"
+          ],
+          "terms": [
+            "Biaya transaksi",
+            "Biaya manajemen",
+            "Fee"
+          ],
+          "exercise": "Hitung biaya reksa dana untuk Rp 1 juta dengan biaya 1,5%.",
+          "result": "Bisa menghitung biaya reksa dana",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "number": 5,
+          "title": "Memilih Reksa Dana Sendiri",
+          "question": "Bagaimana memilih reksa dana yang cocok untuk kebutuhan Anda?",
+          "objectives": [
+            "Membuat daftar reksa dana yang cocok",
+            "Menghitung imbal hasil dan biaya untuk memilih reksa dana"
+          ],
+          "terms": [
+            "Imbal hasil",
+            "Kriteria investasi",
+            "Reksa dana"
+          ],
+          "exercise": "Buat daftar 3 reksa dana dengan imbal hasil dan biaya terendah.",
+          "result": "Bisa membuat daftar reksa dana yang cocok",
+          "hours": 2,
+          "source": ""
+        },
+        {
+          "number": 6,
+          "title": "Menghitung Kinerja",
+          "question": "Bagaimana menilai kinerja reksa dana dalam waktu 1 tahun?",
+          "objectives": [
+            "Membaca kinerja reksa dana dari laporan",
+            "Menghitung imbal hasil bersih"
+          ],
+          "terms": [
+            "Kinerja",
+            "Imbal hasil bersih",
+            "Laporan"
+          ],
+          "exercise": "Hitung imbal hasil bersih dari reksa dana dengan imbal hasil 8% dan biaya 1,5%.",
+          "result": "Bisa menghitung imbal hasil bersih",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Proyek Pemilihan Reksa Dana",
+    "task": "Pilih reksa dana yang cocok untuk Rp 1 juta dengan imbal hasil minimal 8% dan biaya maksimal 1,5%.",
+    "criteria": [
+      "Bisa membuat daftar reksa dana yang memenuhi kriteria",
+      "Bisa menghitung biaya dan imbal hasil",
+      "Bisa membandingkan risiko dan imbal hasil"
+    ],
+    "hours": 3
+  },
+  "money_topic": true,
+  "sources": [],
+  "hours_per_week": 3,
+  "model": "qwen3:4b"
+}

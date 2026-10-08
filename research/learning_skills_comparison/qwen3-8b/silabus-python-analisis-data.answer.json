@@ -1,0 +1,129 @@
+{
+  "topic": "Python untuk analisis data",
+  "title": "Belajar Python untuk analisis data dari nol",
+  "lead": "Anda akan belajar dasar-dasar Python untuk menganalisis data penjualan. Cocok untuk pemula yang ingin mengotomatisasi laporan. Di akhir, Anda bisa membuat laporan penjualan sendiri.",
+  "level": "Pemula",
+  "assumptions": "Anda tidak punya pengalaman dengan Python. Anda punya waktu 4 jam per minggu. Tujuan Anda adalah mengotomatisasi analisis data penjualan. Anda sudah mengenal spreadsheet dasar.",
+  "outcomes": [
+    "Membaca data penjualan dari file Excel",
+    "Menghitung total penjualan per bulan",
+    "Membuat grafik penjualan",
+    "Mengidentifikasi tren penjualan",
+    "Menyusun laporan penjualan otomatis"
+  ],
+  "map_note": "Mulai dari dasar Python, lalu ke analisis data, akhirnya ke pembuatan laporan. Setiap modul membangun kemampuan sebelumnya.",
+  "running_example": "Budi punya toko online. Ia ingin tahu penjualan bulan Mei. Data ada di file Excel. Anda akan bantu Budi hitung total penjualan Mei dan buat grafiknya.",
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "title": "Memulai dengan Python",
+          "question": "Bagaimana cara memulai dan menjalankan Python?",
+          "objectives": [
+            "Menjalankan Python di komputer",
+            "Membuat file Python baru",
+            "Menjalankan kode Python",
+            "Menutup program Python"
+          ],
+          "terms": ["Python", "file", "kode", "program"],
+          "exercise": "Buat file Python baru dan tulis 'Hello, World!' lalu jalankan.",
+          "result": "Bisa menjalankan kode Python",
+          "hours": 1
+        },
+        {
+          "title": "Membaca data dari Excel",
+          "question": "Bagaimana cara membaca data dari file Excel dengan Python?",
+          "objectives": [
+            "Membaca data Excel ke Python",
+            "Melihat struktur data",
+            "Mengidentifikasi kolom penjualan",
+            "Menyimpan data ke variabel"
+          ],
+          "terms": ["Excel", "data", "kolom", "variabel"],
+          "exercise": "Baca file Excel Budi dan tulis nama kolom penjualan.",
+          "result": "Bisa membaca data Excel",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "title": "Menghitung penjualan",
+          "question": "Bagaimana cara menghitung total penjualan bulan Mei?",
+          "objectives": [
+            "Menghitung total penjualan",
+            "Menggunakan fungsi SUM",
+            "Mengelompokkan data per bulan",
+            "Menyimpan hasil ke variabel"
+          ],
+          "terms": ["SUM", "total", "bulan", "variabel"],
+          "exercise": "Hitung total penjualan Mei dan tulis hasilnya.",
+          "result": "Bisa menghitung total penjualan",
+          "hours": 3
+        },
+        {
+          "title": "Membuat grafik penjualan",
+          "question": "Bagaimana cara membuat grafik penjualan bulan Mei?",
+          "objectives": [
+            "Membuat grafik batang",
+            "Menyusun data ke grafik",
+            "Menyebutkan nama bulan di sumbu X",
+            "Menyebutkan total penjualan di sumbu Y"
+          ],
+          "terms": ["grafik", "batang", "sumbu X", "sumbu Y"],
+          "exercise": "Buat grafik batang penjualan Mei dan tulis nama bulan di sumbu X.",
+          "result": "Bisa membuat grafik penjualan",
+          "hours": 3
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "title": "Menyusun laporan otomatis",
+          "question": "Bagaimana cara menyusun laporan penjualan otomatis?",
+          "objectives": [
+            "Menggabungkan data dan grafik",
+            "Menyusun laporan dalam format teks",
+            "Menyebutkan total penjualan",
+            "Menyebutkan tren penjualan"
+          ],
+          "terms": ["laporan", "teks", "tren", "total"],
+          "exercise": "Susun laporan penjualan Mei dalam format teks.",
+          "result": "Bisa menyusun laporan otomatis",
+          "hours": 3
+        },
+        {
+          "title": "Mengotomatisasi laporan",
+          "question": "Bagaimana cara mengotomatisasi laporan penjualan?",
+          "objectives": [
+            "Menyimpan laporan ke file teks",
+            "Menjalankan kode otomatis",
+            "Mengedit file teks hasil",
+            "Menyebutkan waktu pembuatan laporan"
+          ],
+          "terms": ["file teks", "otomatis", "waktu", "edit"],
+          "exercise": "Simpan laporan ke file teks dan tulis waktu pembuatan.",
+          "result": "Bisa mengotomatisasi laporan",
+          "hours": 3
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Laporan penjualan otomatis Budi",
+    "task": "Bantu Budi membuat laporan penjualan bulan Mei secara otomatis.",
+    "criteria": [
+      "Bisa membaca data Excel",
+      "Bisa menghitung total penjualan",
+      "Bisa membuat grafik penjualan",
+      "Bisa menyusun laporan otomatis",
+      "Bisa menyimpan laporan ke file teks"
+    ],
+    "hours": 5
+  }
+}

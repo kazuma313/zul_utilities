@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Modul 3: Hash dan blockchain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#16213A; --muted:#5B6478; --rule:#DDE1E8; --rule-strong:#B9C0CC;
+  --accent:#E2830E; --accent-line:#F7931A; --accent-bg:#FEF1DE;
+  --teal:#0F7A64; --teal-bg:#E1F3EE; --red:#B8392A; --red-bg:#FBE7E3;
+  --sans:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1522; --surface:#172033; --ink:#E8EBF1; --muted:#9AA3B5; --rule:#263149; --rule-strong:#3A4766;
+    --accent:#F7A23C; --accent-line:#F7A23C; --accent-bg:#3A2A12;
+    --teal:#42C7A3; --teal-bg:#11322B; --red:#F07B66; --red-bg:#3B1E1A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1522; --surface:#172033; --ink:#E8EBF1; --muted:#9AA3B5; --rule:#263149; --rule-strong:#3A4766;
+  --accent:#F7A23C; --accent-line:#F7A23C; --accent-bg:#3A2A12;
+  --teal:#42C7A3; --teal-bg:#11322B; --red:#F07B66; --red-bg:#3B1E1A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.7;-webkit-text-size-adjust:100%}
+main{max-width:700px;margin:0 auto;padding:0 20px 64px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent-line);outline-offset:2px}
+h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.08;letter-spacing:-0.025em;font-weight:800;margin:0 0 18px}
+h2{font-size:1.6rem;line-height:1.2;letter-spacing:-0.015em;font-weight:800;margin:0 0 6px}
+h3{font-size:1.02rem;font-weight:700;margin:26px 0 6px;color:var(--ink)}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+code,.mono{font-family:var(--mono);font-size:.88em}
+.hero{padding:56px 0 28px}
+.hero .lead{font-size:1.12rem;color:var(--muted);max-width:60ch}
+.paper{display:flex;gap:14px;align-items:center;margin:24px 0 0;padding:14px 16px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;font-size:.92rem}
+.paper .coin{flex:none;width:42px;height:42px;border-radius:50%;background:var(--accent-line);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.3rem}
+.howto{margin:28px 0 0;padding:16px 18px;border-left:3px solid var(--accent-line);background:var(--surface);font-size:.95rem}
+.toc{margin:36px 0 8px;padding:0;list-style:none;counter-reset:t;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 20px}
+.toc li{counter-increment:t;margin:0}
+.toc a{display:flex;gap:10px;color:var(--ink);text-decoration:none;padding:6px 0;border-bottom:1px solid var(--rule);font-size:.93rem}
+.toc a::before{content:counter(t);font-family:var(--mono);color:var(--accent);min-width:1.4em}
+.toc a:hover{color:var(--accent)}
+section{padding:52px 0 8px;border-top:1px solid var(--rule);margin-top:40px}
+.chapter{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.chapter .num{font-family:var(--mono);font-size:.85rem;color:var(--accent);font-weight:500}
+.src{font-size:.86rem;color:var(--muted);margin-bottom:18px}
+.term{border-left:3px solid var(--rule-strong);padding:4px 0 4px 14px;margin:12px 0;font-size:.96rem}
+.term b{display:block;font-weight:700}
+.note{background:var(--accent-bg);border-radius:10px;padding:14px 16px;font-size:.95rem;margin:18px 0}
+.fig{margin:22px 0;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px}
+.fig svg{display:block;width:100%;max-width:440px;height:auto;margin:0 auto}
+.fig figcaption{font-size:.85rem;color:var(--muted);margin-top:10px;text-align:center}
+.bx{fill:var(--surface);stroke:var(--rule-strong);stroke-width:1}
+.bo{fill:var(--accent-bg);stroke:var(--accent-line);stroke-width:1}
+.bt{fill:var(--teal-bg);stroke:var(--teal);stroke-width:1}
+.br{fill:var(--red-bg);stroke:var(--red);stroke-width:1}
+.dash{fill:none;stroke:var(--rule-strong);stroke-width:1;stroke-dasharray:5 4}
+.tx{fill:var(--ink);font-family:var(--sans);font-size:13px;font-weight:700}
+.ts{fill:var(--muted);font-family:var(--sans);font-size:11.5px}
+.tm{fill:var(--ink);font-family:var(--mono);font-size:11px}
+.to{fill:var(--accent);font-family:var(--mono);font-size:11px;font-weight:500}
+.tr{fill:var(--red);font-family:var(--sans);font-size:12.5px;font-weight:700}
+.ln{stroke:var(--muted);stroke-width:1.4;fill:none}
+.lo{stroke:var(--accent-line);stroke-width:1.8;fill:none}
+.lt{stroke:var(--teal);stroke-width:1.6;fill:none}
+.lr{stroke:var(--red);stroke-width:1.6;fill:none;stroke-dasharray:4 3}
+.mk{fill:var(--muted)} .mko{fill:var(--accent-line)}
+.lab{display:block;font-size:.85rem;color:var(--muted);margin:0 0 4px}
+input[type=text]{width:100%;font:inherit;font-size:1rem;padding:10px 12px;border:1px solid var(--rule-strong);border-radius:8px;background:var(--bg);color:var(--ink)}
+.hashout{font-family:var(--mono);font-size:.88rem;word-break:break-all;background:var(--bg);border-radius:8px;padding:10px 12px;margin:8px 0 0;line-height:1.5}
+.hashout .hit{color:var(--accent);font-weight:500}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.stat{background:var(--bg);border-radius:8px;padding:10px 12px}
+.stat span{display:block;font-size:.8rem;color:var(--muted)}
+.stat strong{font-size:1.4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.status{display:inline-block;font-size:.88rem;font-weight:600;padding:6px 12px;border-radius:8px;margin-top:10px}
+.status.ok{background:var(--teal-bg);color:var(--teal)}
+.status.no{background:var(--accent-bg);color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+button{font:inherit;font-size:.92rem;font-weight:600;padding:9px 14px;border-radius:8px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent-line);border-color:var(--accent-line);color:#fff}
+button:active{transform:scale(.98)}
+.bars{display:grid;gap:8px;margin-top:6px}
+.bar{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:10px;font-size:.88rem}
+.bar .track{display:flex;align-items:center;gap:8px}
+.bar .fill{height:18px;background:var(--red);border-radius:4px;min-width:3px}
+.bar .v{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.tablewrap{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:700;background:var(--surface)}
+.gloss dt{font-weight:700;margin-top:14px}
+.gloss dd{margin:2px 0 0;color:var(--muted)}
+footer{max-width:700px;margin:0 auto;padding:24px 20px 48px;font-size:.85rem;color:var(--muted);border-top:1px solid var(--rule)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* ---- Komponen belajar ---- */
+.eyebrow{font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500;margin:0 0 10px}
+.eyebrow a{text-decoration:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips li{margin:0;font-size:.85rem;font-weight:600;padding:5px 11px;border:1px solid var(--rule-strong);border-radius:999px;background:var(--surface)}
+.goals{margin:24px 0 0;padding:16px 18px;background:var(--teal-bg);border-radius:10px;font-size:.96rem}
+.goals strong{display:block;margin-bottom:6px}
+.goals ul{margin:0;padding-left:20px}
+.stage{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:30px 0 0}
+.progress{margin:18px 0 6px}
+.progress .track{height:10px;background:var(--rule);border-radius:999px;overflow:hidden}
+.progress .fill{height:100%;width:0;background:var(--teal);border-radius:999px;transition:width .25s}
+.progress .lab{margin:6px 0 0}
+.mod{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px;margin:14px 0}
+.mod.done{border-color:var(--teal)}
+.mod .top{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.mod .num{font-family:var(--mono);color:var(--accent);font-size:.85rem;font-weight:500;white-space:nowrap}
+.mod h3{margin:0;font-size:1.15rem;line-height:1.3}
+.mod .ask{color:var(--muted);font-size:.95rem;margin:6px 0 0}
+.mod .sub{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 4px}
+.mod ul,.mod p{font-size:.95rem}
+.mod ul{margin-bottom:0}
+.mod .chips{margin:0}
+.mod .chips li{font-family:var(--mono);font-weight:500;font-size:.8rem;background:var(--bg)}
+.mod .foot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--rule);font-size:.9rem}
+.mod .open{font-weight:700;text-decoration:none}
+.mod .soon{color:var(--muted)}
+.check{display:inline-flex;gap:8px;align-items:center;cursor:pointer;margin-left:auto;font-weight:600}
+.check input{width:18px;height:18px;accent-color:var(--teal)}
+.quiz .q{margin:16px 0 0;padding:16px;background:var(--surface);border:1px solid var(--rule);border-radius:14px}
+.quiz .q p{font-weight:700;margin-bottom:10px}
+.quiz .opts{display:grid;gap:8px}
+.quiz .opts button{text-align:left;font-weight:500;width:100%}
+.quiz .opts button:disabled{cursor:default;opacity:1}
+.quiz .opts button.right{background:var(--teal-bg);border-color:var(--teal);color:var(--teal);font-weight:700}
+.quiz .opts button.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.quiz .why{font-size:.92rem;color:var(--muted);margin:10px 0 0}
+.task{border:1px dashed var(--rule-strong);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:.96rem}
+.task b{display:block}
+.task .out{color:var(--muted);font-size:.9rem;margin:6px 0 0}
+.next{margin:22px 0 0;padding:16px 18px;background:var(--accent-bg);border-radius:10px;font-size:.96rem}
+.next strong{display:block}
+.status.bad{background:var(--red-bg);color:var(--red)}
+.blk{padding:14px 0;border-bottom:1px solid var(--rule)}
+.blk:first-child{padding-top:0}
+</style>
+</head>
+<body>
+<svg class="sr" aria-hidden="true"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M1 1L9 5L1 9z"/></marker>
+<marker id="aho" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mko" d="M1 1L9 5L1 9z"/></marker>
+</defs></svg>
+<main>
+
+<header class="hero">
+<p class="eyebrow"><a href="silabus-bitcoin.html" target="_blank" rel="noopener">Silabus Bitcoin</a> · Modul 3 dari 6</p>
+<h1>Hash dan blockchain</h1>
+<p class="lead">Bagaimana semua orang bisa sepakat soal urutan transaksi, dan tahu kalau ada catatan yang diubah? Modul ini menjawabnya dengan dua alat: hash dan blockchain.</p>
+<ul class="chips"><li>± 2 jam</li><li>4 bab</li><li>5 soal kuis</li></ul>
+
+<div class="goals"><strong>Setelah modul ini, Anda bisa:</strong>
+<ul>
+<li>Menunjukkan lewat demo bahwa mengubah satu huruf mengubah seluruh hash</li>
+<li>Menyebutkan isi sebuah block dan bagaimana block saling tersambung</li>
+<li>Menjelaskan kenapa mengubah satu block merusak semua block setelahnya</li>
+</ul></div>
+
+<div class="howto"><strong>Bekal dari modul sebelumnya:</strong> double spending adalah memakai koin yang sama dua kali (Modul 1). Setiap transaksi ditandatangani dengan private key pemiliknya, dan digital signature itu membuktikan siapa yang menyetujui transaksi (Modul 2).</div>
+<div class="howto">Setiap bab dibagi menjadi tiga bagian: <strong>apa</strong> (pengertiannya), <strong>bagaimana</strong> (cara kerjanya), dan <strong>mengapa penting</strong>. Istilah seperti hash, timestamp, block, dan blockchain sengaja tidak diterjemahkan karena memang itu yang dipakai sehari-hari. Artinya dijelaskan di kotak istilah saat pertama muncul. Di akhir ada kuis dan latihan.</div>
+
+<ol class="toc">
+<li><a href="#bab1">Masalah yang tersisa: urutan</a></li>
+<li><a href="#bab2">Hash</a></li>
+<li><a href="#bab3">Timestamp</a></li>
+<li><a href="#bab4">Block dan blockchain</a></li>
+<li><a href="#rangkuman">Rangkuman</a></li>
+<li><a href="#kuis">Cek pemahaman</a></li>
+<li><a href="#latihan">Latihan</a></li>
+<li><a href="#kamus">Kamus istilah</a></li>
+</ol>
+</header>
+
+<section id="bab1">
+<div class="chapter"><span class="num">1</span><h2>Masalah yang tersisa: urutan</h2></div>
+<p class="src">Whitepaper bab 2, Transactions (bagian akhir)</p>
+
+<h3>Apa</h3>
+<p>Di Modul 2, Budi bisa membuktikan bahwa ia pemilik koin dengan digital signature. Tapi signature tidak mencegah Budi menandatangani dua transaksi untuk koin yang sama: satu ke Sari, satu ke Andi. Dua-duanya punya signature yang sah.</p>
+<p>Yang berlaku hanya transaksi yang lebih dulu. Jadi pertanyaannya bergeser dari "siapa pemiliknya" menjadi "mana yang lebih dulu".</p>
+
+<h3>Bagaimana</h3>
+<figure class="fig">
+<svg viewBox="0 0 360 206" role="img" aria-label="Budi membuat dua transaksi dari koin yang sama, satu ke Sari dan satu ke Andi, dan belum ada yang tahu mana yang lebih dulu">
+<rect class="bx" x="20" y="20" width="320" height="40" rx="8"/><text class="tx" x="180" y="45" text-anchor="middle">Budi punya 1 koin</text>
+<line class="ln" x1="150" y1="60" x2="97" y2="96" marker-end="url(#ah)"/>
+<line class="ln" x1="210" y1="60" x2="263" y2="96" marker-end="url(#ah)"/>
+<rect class="bo" x="20" y="100" width="150" height="56" rx="8"/>
+<text class="tx" x="95" y="124" text-anchor="middle">Transaksi A</text>
+<text class="ts" x="95" y="143" text-anchor="middle">ke Sari, sah</text>
+<rect class="bo" x="190" y="100" width="150" height="56" rx="8"/>
+<text class="tx" x="265" y="124" text-anchor="middle">Transaksi B</text>
+<text class="ts" x="265" y="143" text-anchor="middle">ke Andi, sah</text>
+<text class="tr" x="180" y="186" text-anchor="middle">Mana yang lebih dulu? Belum ada yang tahu.</text>
+</svg>
+<figcaption>Dua transaksi sama-sama sah kalau dilihat sendiri-sendiri. Masalahnya baru terlihat kalau keduanya dibandingkan.</figcaption>
+</figure>
+<p>Bank menyelesaikan ini dengan mudah: semua transaksi lewat bank, jadi bank tahu urutannya. Tanpa bank, whitepaper mengusulkan cara lain: semua transaksi diumumkan terbuka, dan semua peserta menyepakati satu riwayat urutan yang sama.</p>
+
+<h3>Mengapa penting</h3>
+<p>Sari hanya berani menerima koin kalau ia yakin transaksinya yang pertama. Untuk itu dibutuhkan catatan urutan yang dipegang banyak orang dan tidak bisa diubah diam-diam. Bahan pertama untuk membuat catatan seperti itu adalah hash.</p>
+</section>
+
+<section id="bab2">
+<div class="chapter"><span class="num">2</span><h2>Hash</h2></div>
+<p class="src">Whitepaper bab 3 dan 4 (SHA-256)</p>
+
+<h3>Apa</h3>
+<p><strong>Hash</strong> adalah kode unik dengan panjang tetap yang dihasilkan dari sebuah data lewat rumus matematika.</p>
+<div class="term"><b>Hash</b>Kode hasil hitungan dari sebuah data. Mirip nomor rangka di BPKB: pendek, tapi menunjuk tepat ke satu kendaraan.</div>
+<div class="term"><b>SHA-256</b>Nama rumus hash yang dipakai Bitcoin. Hasilnya selalu 64 karakter.</div>
+<p>Hash punya tiga sifat:</p>
+<ul>
+<li>Data yang sama selalu menghasilkan hash yang sama.</li>
+<li>Ubah satu karakter saja, hash-nya berubah total.</li>
+<li>Dari hash, data aslinya tidak bisa ditebak balik.</li>
+</ul>
+
+<h3>Bagaimana: coba sendiri</h3>
+<div class="fig" id="hashbox">
+<label class="lab" for="hin">Ketik apa saja</label>
+<input id="hin" type="text" value="Budi kirim 1 BTC ke Sari" autocomplete="off">
+<span class="lab" style="margin-top:12px">Hash SHA-256 dari teks di atas</span>
+<div class="hashout" id="hout" aria-live="polite">…</div>
+<div class="stats"><div class="stat"><span>Panjang teks</span><strong id="hlen">0</strong></div><div class="stat"><span>Panjang hash</span><strong id="hhlen">0</strong></div></div>
+<p class="lab" style="margin:0">Ganti angka 1 menjadi 2: seluruh hash berubah. Lalu ketik kalimat yang panjang: hash-nya tetap 64 karakter.</p>
+</div>
+
+<h3>Mengapa penting</h3>
+<p>Hash membuat perubahan sekecil apa pun langsung kelihatan. Anda tidak perlu membandingkan dua dokumen kata demi kata, cukup bandingkan hash-nya. Kalau hash-nya beda, isinya pasti beda.</p>
+<p>Tapi hash hanya menjawab "apakah datanya berubah". Hash belum menjawab "kapan data ini ada". Itu tugas timestamp.</p>
+</section>
+
+<section id="bab3">
+<div class="chapter"><span class="num">3</span><h2>Timestamp</h2></div>
+<p class="src">Whitepaper bab 3, Timestamp Server</p>
+
+<h3>Apa</h3>
+<div class="term"><b>Timestamp</b>Bukti bahwa sebuah data sudah ada pada waktu tertentu.</div>
+<p>Whitepaper memberi contoh cara lamanya: hash sebuah data diterbitkan di koran. Koran punya tanggal dan dibaca banyak orang, jadi tidak ada yang bisa menyangkal bahwa data itu sudah ada pada tanggal tersebut.</p>
+
+<h3>Bagaimana</h3>
+<figure class="fig">
+<svg viewBox="0 0 360 260" role="img" aria-label="Timestamp: sekelompok data dihitung hash-nya, lalu hash itu diumumkan ke banyak orang">
+<rect class="bx" x="20" y="20" width="320" height="56" rx="8"/>
+<text class="tx" x="180" y="44" text-anchor="middle">Sekelompok data</text>
+<text class="ts" x="180" y="63" text-anchor="middle">Misalnya daftar transaksi terbaru</text>
+<line class="ln" x1="180" y1="76" x2="180" y2="98" marker-end="url(#ah)"/>
+<rect class="bo" x="20" y="102" width="320" height="56" rx="8"/>
+<text class="tx" x="180" y="126" text-anchor="middle">Hash dari data itu</text>
+<text class="tm" x="180" y="145" text-anchor="middle">9f2c41ab…</text>
+<line class="ln" x1="180" y1="158" x2="180" y2="180" marker-end="url(#ah)"/>
+<rect class="bt" x="20" y="184" width="320" height="56" rx="8"/>
+<text class="tx" x="180" y="208" text-anchor="middle">Diumumkan ke banyak orang</text>
+<text class="ts" x="180" y="227" text-anchor="middle">Bukti: data ini sudah ada saat diumumkan</text>
+</svg>
+<figcaption>Yang diumumkan cukup hash-nya. Isi datanya tidak perlu dibuka.</figcaption>
+</figure>
+<p>Logikanya sederhana: hash hanya bisa dihitung kalau datanya sudah ada. Jadi kalau hash-nya sudah beredar hari ini, datanya pasti sudah ada paling lambat hari ini.</p>
+
+<h3>Mengapa penting</h3>
+<p>Dengan timestamp, transaksi Budi ke Sari bisa dibuktikan sudah ada pada waktu tertentu. Tapi timestamp yang berdiri sendiri-sendiri masih punya celah: tidak ada yang mengikat satu timestamp dengan timestamp sebelumnya, sehingga urutannya masih bisa diperdebatkan. Whitepaper menutup celah ini dengan satu aturan tambahan, yang dibahas di bab berikutnya.</p>
+</section>
+
+<section id="bab4">
+<div class="chapter"><span class="num">4</span><h2>Block dan blockchain</h2></div>
+<p class="src">Whitepaper bab 3, Timestamp Server</p>
+
+<h3>Apa</h3>
+<div class="term"><b>Block</b>Sekelompok transaksi yang dicatat bersama, seperti satu halaman di buku kas.</div>
+<p>Aturan tambahannya: setiap block ikut menyimpan <strong>hash block sebelumnya</strong>. Hash itu biasa ditulis "prev hash". Akibatnya block-block saling terkunci menjadi rantai.</p>
+<div class="term"><b>Blockchain</b>Rantai block, di mana setiap block menyimpan hash block sebelumnya.</div>
+
+<h3>Bagaimana</h3>
+<figure class="fig">
+<svg viewBox="0 0 360 372" role="img" aria-label="Tiga block yang tersambung: hash setiap block dicatat di block berikutnya sebagai prev hash">
+<rect class="bx" x="20" y="20" width="320" height="92" rx="8"/>
+<text class="tx" x="36" y="42">Block 1</text>
+<text class="ts" x="36" y="64">Prev hash: tidak ada (block pertama)</text>
+<text class="ts" x="36" y="82">Isi: 12 transaksi dan timestamp</text>
+<text class="ts" x="36" y="100">Hash block ini: <tspan class="to">a91f03c2…</tspan></text>
+<line class="lo" x1="180" y1="112" x2="180" y2="136" marker-end="url(#aho)"/>
+<rect class="bx" x="20" y="140" width="320" height="92" rx="8"/>
+<text class="tx" x="36" y="162">Block 2</text>
+<text class="ts" x="36" y="184">Prev hash: <tspan class="to">a91f03c2…</tspan></text>
+<text class="ts" x="36" y="202">Isi: 9 transaksi dan timestamp</text>
+<text class="ts" x="36" y="220">Hash block ini: <tspan class="to">3c7e88d1…</tspan></text>
+<line class="lo" x1="180" y1="232" x2="180" y2="256" marker-end="url(#aho)"/>
+<rect class="bx" x="20" y="260" width="320" height="92" rx="8"/>
+<text class="tx" x="36" y="282">Block 3</text>
+<text class="ts" x="36" y="304">Prev hash: <tspan class="to">3c7e88d1…</tspan></text>
+<text class="ts" x="36" y="322">Isi: 15 transaksi dan timestamp</text>
+<text class="ts" x="36" y="340">Hash block ini: <tspan class="to">f2d0b46a…</tspan></text>
+</svg>
+<figcaption>Kode oranye: hash sebuah block dicatat ulang di block berikutnya sebagai prev hash.</figcaption>
+</figure>
+<p>Karena prev hash ikut dihitung, hash Block 2 bergantung pada Block 1, dan hash Block 3 bergantung pada Block 2. Urutan block tidak bisa ditukar tanpa mengubah semua hash.</p>
+
+<h3>Bagaimana: coba rusak rantainya</h3>
+<p>Di bawah ada blockchain kecil berisi tiga block. Anggap Anda Andi yang ingin mengubah catatan lama.</p>
+<div class="fig" id="chain">
+<div class="blk">
+<label class="lab" for="c0">Block 1 · prev hash: tidak ada</label>
+<input id="c0" type="text" autocomplete="off">
+<div class="hashout">Hash: <span id="h0">…</span></div>
+<div class="status ok" id="s0">…</div>
+</div>
+<div class="blk">
+<label class="lab" for="c1">Block 2 · prev hash tercatat: <span class="mono" id="p1">…</span></label>
+<input id="c1" type="text" autocomplete="off">
+<div class="hashout">Hash: <span id="h1">…</span></div>
+<div class="status ok" id="s1">…</div>
+</div>
+<div class="blk">
+<label class="lab" for="c2">Block 3 · prev hash tercatat: <span class="mono" id="p2">…</span></label>
+<input id="c2" type="text" autocomplete="off">
+<div class="hashout">Hash: <span id="h2">…</span></div>
+<div class="status ok" id="s2">…</div>
+</div>
+<div class="btns"><button type="button" class="primary" id="crehash">Hitung ulang semua hash</button><button type="button" id="creset">Reset</button></div>
+<p class="lab" style="margin:12px 0 0">Ubah angka 0,5 di Block 1 menjadi 5. Lihat status Block 2 dan Block 3. Setelah itu tekan "Hitung ulang semua hash".</p>
+</div>
+<p>Yang terjadi: hash Block 1 berubah, sehingga tidak cocok lagi dengan prev hash yang tercatat di Block 2. Block 2 tidak sah, dan Block 3 yang berdiri di atasnya ikut tidak sah.</p>
+
+<h3>Mengapa penting, dan apa yang masih kurang</h3>
+<p>Blockchain membuat perubahan di catatan lama langsung ketahuan, karena merusak semua block sesudahnya. Inilah catatan urutan yang dibutuhkan Sari di bab 1.</p>
+<p>Tapi tombol "Hitung ulang semua hash" menunjukkan celahnya. Menghitung hash itu cepat. Pemalsu bisa mengubah Block 1 lalu menghitung ulang semua hash sesudahnya, dan rantainya terlihat sah lagi. Supaya blockchain benar-benar sulit dipalsukan, menghitung ulang harus dibuat mahal. Itulah tugas Proof of Work di Modul 4.</p>
+<div class="note">Kata "blockchain" tidak muncul di whitepaper. Satoshi hanya menulis tentang block yang dirangkai menjadi chain. Istilah blockchain baru populer belakangan.</div>
+</section>
+
+<section id="rangkuman">
+<div class="chapter"><span class="num">5</span><h2>Rangkuman</h2></div>
+<p>Kalau modul ini diringkas menjadi satu cerita:</p>
+<ol>
+<li>Digital signature membuktikan pemilik, tapi tidak menjawab transaksi mana yang lebih dulu.</li>
+<li>Hash mengubah data apa pun menjadi kode 64 karakter. Ubah satu karakter, hash-nya berubah total.</li>
+<li>Timestamp membuktikan data sudah ada pada waktu tertentu, cukup dengan mengumumkan hash-nya.</li>
+<li>Transaksi dikumpulkan dalam block, dan setiap block menyimpan hash block sebelumnya. Hasilnya blockchain.</li>
+<li>Mengubah satu block lama merusak semua block sesudahnya, jadi kecurangan ketahuan.</li>
+<li>Celah yang tersisa: hash bisa dihitung ulang dengan cepat. Modul 4 menutupnya.</li>
+</ol>
+</section>
+
+<section id="kuis">
+<div class="chapter"><span class="num">6</span><h2>Cek pemahaman</h2></div>
+<p>Jawab tanpa melihat ke atas dulu. Kalau salah, penjelasannya menunjukkan bab mana yang perlu dibaca ulang.</p>
+<div class="quiz" id="quiz"></div>
+<div id="quizscore" class="status no"></div>
+<div class="btns"><button type="button" id="quizretry" hidden>Ulangi kuis</button></div>
+</section>
+
+<section id="latihan">
+<div class="chapter"><span class="num">7</span><h2>Latihan</h2></div>
+<div class="task"><b>1. Percobaan hash</b>Di demo hash (bab 2), ketik nama Anda dan catat 8 karakter pertama hash-nya. Ubah satu huruf, lalu catat lagi.<p class="out">Hasil yang diharapkan: dua baris catatan hash dan dua kalimat kesimpulan tentang apa yang berubah dan apa yang tetap.</p></div>
+<div class="task"><b>2. Percobaan merusak rantai</b>Di demo blockchain (bab 4), ubah isi Block 2. Catat block mana yang tetap sah dan mana yang tidak. Lalu tekan "Hitung ulang semua hash" dan catat lagi.<p class="out">Hasil yang diharapkan: tabel status tiga block sebelum dan sesudah hitung ulang, dan satu kalimat tentang kenapa tombol hitung ulang itu berbahaya.</p></div>
+<div class="next"><strong>Berikutnya: Modul 4, Proof of Work dan mining</strong>Hash terlalu cepat dihitung ulang, jadi pemalsu masih bisa memperbaiki rantai yang ia rusak. Modul 4 menjelaskan cara membuat setiap block mahal untuk dibuat.</div>
+</section>
+
+<section id="kamus">
+<div class="chapter"><span class="num">8</span><h2>Kamus istilah</h2></div>
+<dl class="gloss">
+<dt>Hash</dt><dd>Kode unik dengan panjang tetap yang dihasilkan dari sebuah data.</dd>
+<dt>SHA-256</dt><dd>Rumus hash yang dipakai Bitcoin. Hasilnya selalu 64 karakter.</dd>
+<dt>Timestamp</dt><dd>Bukti bahwa sebuah data sudah ada pada waktu tertentu.</dd>
+<dt>Block</dt><dd>Sekelompok transaksi yang dicatat bersama.</dd>
+<dt>Prev hash</dt><dd>Hash block sebelumnya, yang disimpan di dalam sebuah block.</dd>
+<dt>Blockchain</dt><dd>Rantai block, di mana setiap block menyimpan hash block sebelumnya.</dd>
+</dl>
+<div class="note">Modul ini membahas cara kerja Bitcoin, bukan saran untuk membeli atau menjualnya. Halaman ini bukan saran keuangan.</div>
+</section>
+</main>
+<footer>Sumber: <a href="https://bitcoin.org/bitcoin.pdf">Bitcoin: A Peer-to-Peer Electronic Cash System</a> (Satoshi Nakamoto), bab 2 sampai 4. Penjelasan ini disederhanakan untuk pembaca umum.</footer>
+
+<script>
+(function(){
+  var QUIZ = [
+    { q: 'Digital signature pada sebuah transaksi membuktikan apa?', opts: ['Bahwa koinnya belum pernah dipakai sebelumnya', 'Bahwa pemilik private key menyetujui transaksi itu', 'Bahwa transaksi itu dibuat paling dulu'], a: 1, why: 'Signature hanya membuktikan siapa yang menyetujui. Soal urutan belum terjawab, dan itu yang dibahas modul ini. Lihat bab 1.' },
+    { q: 'Sari menghitung hash dari "Budi kirim 1 BTC", lalu dari "Budi kirim 2 BTC". Bagaimana kedua hash itu?', opts: ['Sama persis, karena kalimatnya hampir sama', 'Hanya beda satu karakter', 'Berbeda total'], a: 2, why: 'Ubah satu karakter saja, seluruh hash berubah. Lihat bab 2.' },
+    { q: 'Hash sebuah data diumumkan ke banyak orang hari ini. Apa yang terbukti?', opts: ['Data itu sudah ada paling lambat hari ini', 'Isi data itu benar', 'Semua orang sudah membaca isi data itu'], a: 0, why: 'Timestamp hanya membuktikan data sudah ada saat hash-nya diumumkan. Isinya tidak dibuka dan tidak dinilai benar atau salah. Lihat bab 3.' },
+    { q: 'Apa yang membuat block-block tersambung menjadi blockchain?', opts: ['Setiap block menyimpan salinan semua block sebelumnya', 'Setiap block menyimpan hash block sebelumnya', 'Setiap block ditandatangani oleh orang yang sama'], a: 1, why: 'Yang disimpan cukup hash block sebelumnya (prev hash), bukan seluruh isinya. Lihat bab 4.' },
+    { q: 'Andi diam-diam mengubah satu transaksi di Block 1 dari rantai berisi tiga block. Apa akibatnya?', opts: ['Tidak ada, karena block lama tidak diperiksa lagi', 'Block 1 terhapus sendiri', 'Hash Block 1 berubah, prev hash di Block 2 tidak cocok, dan rantai rusak dari situ'], a: 2, why: 'Perubahan di satu block merusak semua block sesudahnya. Coba lagi di demo bab 4.' }
+  ];
+  var root = document.getElementById('quiz'), score = document.getElementById('quizscore'), retry = document.getElementById('quizretry');
+  var answered = 0, correct = 0;
+  function showScore(){
+    var done = answered === QUIZ.length;
+    score.textContent = !done
+      ? answered + ' dari ' + QUIZ.length + ' soal dijawab'
+      : 'Benar ' + correct + ' dari ' + QUIZ.length + (correct === QUIZ.length ? '. Modul ini selesai.' : '. Baca ulang bab yang disebut di penjelasan, lalu ulangi kuis.');
+    score.className = 'status ' + (done && correct === QUIZ.length ? 'ok' : 'no');
+    retry.hidden = !done || correct === QUIZ.length;
+  }
+  function build(){
+    answered = 0; correct = 0; root.textContent = '';
+    QUIZ.forEach(function(item, i){
+      var box = document.createElement('div'); box.className = 'q';
+      var p = document.createElement('p'); p.textContent = (i + 1) + '. ' + item.q; box.appendChild(p);
+      var opts = document.createElement('div'); opts.className = 'opts'; box.appendChild(opts);
+      var why = document.createElement('p'); why.className = 'why'; why.hidden = true; box.appendChild(why);
+      item.opts.forEach(function(label, j){
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+        b.addEventListener('click', function(){
+          Array.prototype.forEach.call(opts.children, function(x, k){ x.disabled = true; if (k === item.a) x.classList.add('right'); });
+          if (j === item.a) { correct++; } else { b.classList.add('wrong'); }
+          why.textContent = (j === item.a ? 'Benar. ' : 'Belum tepat. ') + item.why; why.hidden = false;
+          answered++; showScore();
+        });
+        opts.appendChild(b);
+      });
+      root.appendChild(box);
+    });
+    showScore();
+  }
+  if (root) { retry.addEventListener('click', build); build(); }
+
+  /* ---- Demo ---- */
+  var enc = new TextEncoder();
+  function sha(s){ return crypto.subtle.digest('SHA-256', enc.encode(s)).then(function(b){ return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join(''); }); }
+
+  var hin = document.getElementById('hin'), hout = document.getElementById('hout');
+  function hupd(){
+    var v = hin.value;
+    sha(v).then(function(h){ if (hin.value !== v) return; hout.textContent = h; document.getElementById('hlen').textContent = v.length; document.getElementById('hhlen').textContent = h.length; });
+  }
+  hin.addEventListener('input', hupd); hupd();
+
+  var START = ['Budi kirim 0,5 BTC ke Sari', 'Sari kirim 0,2 BTC ke Andi', 'Andi kirim 0,1 BTC ke Budi'];
+  var ins = [0, 1, 2].map(function(i){ return document.getElementById('c' + i); });
+  var rec = ['', '', ''], seq = 0;
+  function hashes(){
+    return sha('|' + ins[0].value).then(function(h0){
+      return sha(rec[1] + '|' + ins[1].value).then(function(h1){
+        return sha(rec[2] + '|' + ins[2].value).then(function(h2){ return [h0, h1, h2]; });
+      });
+    });
+  }
+  function draw(){
+    var my = ++seq;
+    hashes().then(function(h){
+      if (my !== seq) return;
+      var broken = false;
+      for (var i = 0; i < 3; i++) {
+        document.getElementById('h' + i).textContent = h[i].slice(0, 16) + '…';
+        if (i > 0) document.getElementById('p' + i).textContent = rec[i].slice(0, 8) + '…';
+        var s = document.getElementById('s' + i);
+        if (i > 0 && rec[i] !== h[i - 1]) { broken = true; s.className = 'status bad'; s.textContent = 'Tidak sah: prev hash tidak cocok dengan hash Block ' + i; }
+        else if (broken) { s.className = 'status bad'; s.textContent = 'Tidak sah: block sebelumnya sudah rusak'; }
+        else { s.className = 'status ok'; s.textContent = 'Sah'; }
+      }
+    });
+  }
+  function seal(){
+    return sha('|' + ins[0].value).then(function(h0){
+      rec[1] = h0;
+      return sha(rec[1] + '|' + ins[1].value);
+    }).then(function(h1){ rec[2] = h1; draw(); });
+  }
+  ins.forEach(function(el, i){ el.value = START[i]; el.addEventListener('input', draw); });
+  document.getElementById('crehash').addEventListener('click', seal);
+  document.getElementById('creset').addEventListener('click', function(){ ins.forEach(function(el, i){ el.value = START[i]; }); seal(); });
+  seal();
+})();
+</script>
+</body>
+</html>

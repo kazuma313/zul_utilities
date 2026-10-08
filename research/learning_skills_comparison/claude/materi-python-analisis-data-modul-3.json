@@ -1,0 +1,118 @@
+{
+  "title": "Membaca data dengan pandas",
+  "lead": "Bagaimana membuka file penjualan Budi dan melihat isinya? Di modul sebelumnya data ditulis sendiri di dalam list. Data nyata ada di file, dan pandas membacanya dalam satu baris kode.",
+  "objectives": [
+    "Membaca file CSV menjadi DataFrame dengan read_csv",
+    "Menampilkan baris pertama, nama kolom, dan ringkasan data"
+  ],
+  "prior": "Di modul 2 Anda menulis perulangan dan fungsi untuk menghitung pendapatan dari list. Modul ini memakai cara yang lebih singkat untuk data yang tersimpan di file.",
+  "chapters": [
+    {
+      "title": "Dari file CSV ke pandas",
+      "what": "CSV adalah file teks berisi tabel: setiap baris satu data, setiap nilai dipisah koma. pandas adalah library Python untuk mengolah tabel seperti ini.",
+      "terms": [
+        {"term": "pandas", "meaning": "Library Python untuk membaca, membersihkan, dan merangkum data berbentuk tabel. Biasanya diimpor dengan nama pendek pd."}
+      ],
+      "how": "File penjualan.csv milik Budi dimulai dengan baris tanggal,menu,jumlah,harga, lalu 412 baris transaksi seperti 2026-09-01,Kopi susu,3,15000. Sebelum dipakai, pandas diimpor sekali di awal program dengan import pandas as pd.",
+      "steps": ["Buka penjualan.csv", "Baris pertama berisi nama kolom", "Impor pandas sebagai pd"],
+      "why": "Dengan list, Budi harus mengetik 412 angka sendiri. pandas bisa membaca file itu langsung, tapi hasilnya bukan list. Bentuk hasilnya dibahas di bab berikutnya.",
+      "objective": 1
+    },
+    {
+      "title": "read_csv dan DataFrame",
+      "what": "read_csv adalah fungsi pandas yang membaca file CSV. Hasilnya sebuah DataFrame, yaitu tabel di dalam Python dengan baris dan kolom.",
+      "terms": [
+        {"term": "read_csv", "meaning": "Fungsi pandas untuk membaca file CSV. Contoh: pd.read_csv(\"penjualan.csv\")."},
+        {"term": "DataFrame", "meaning": "Tabel di dalam Python: setiap kolom punya nama dan tipe data, setiap baris punya nomor indeks. Mirip satu sheet di Excel."}
+      ],
+      "how": "Budi menulis df = pd.read_csv(\"penjualan.csv\"). Variabel df sekarang berisi 412 baris dan 4 kolom. Kalau file ada di folder lain, tulis path lengkapnya, misalnya \"data/penjualan.csv\".",
+      "steps": ["Tulis pd.read_csv(\"penjualan.csv\")", "Simpan hasilnya di variabel df", "df berisi 412 baris, 4 kolom"],
+      "why": "Semua pekerjaan analisis berikutnya memakai df. Tapi 412 baris terlalu banyak untuk dilihat sekaligus, jadi Budi perlu cara mengintip isinya.",
+      "objective": 1
+    },
+    {
+      "title": "Melihat isi dengan head, shape, dan columns",
+      "what": "Tiga perintah dipakai setiap kali data baru dibaca: head menampilkan beberapa baris pertama, shape menyebut jumlah baris dan kolom, columns menyebut nama kolom.",
+      "terms": [
+        {"term": "kolom", "meaning": "Satu jenis data di tabel, misalnya kolom harga. Di pandas, kolom diambil dengan df[\"harga\"]."}
+      ],
+      "how": "df.head() menampilkan 5 baris pertama, df.head(10) menampilkan 10 baris. df.shape menghasilkan (412, 4). df.columns menghasilkan nama kolom tanggal, menu, jumlah, dan harga.",
+      "steps": ["df.head() untuk 5 baris awal", "df.shape untuk ukuran tabel", "df.columns untuk nama kolom"],
+      "why": "Ketiganya memastikan file terbaca dengan benar: jumlah barisnya cocok dan nama kolomnya tidak salah. Yang belum terlihat adalah tipe data dan isi tiap kolom.",
+      "objective": 2
+    },
+    {
+      "title": "Ringkasan dengan info dan describe",
+      "what": "info menampilkan tipe data dan jumlah nilai terisi di setiap kolom. describe menghitung ringkasan angka: jumlah data, rata-rata, nilai terkecil, dan nilai terbesar.",
+      "terms": [],
+      "how": "df.info() memperlihatkan kolom jumlah dan harga bertipe angka, sedangkan tanggal masih teks. df.describe() memperlihatkan rata-rata jumlah per transaksi dan harga termahal di menu.",
+      "steps": ["df.info() untuk tipe data", "df.describe() untuk ringkasan angka", "Catat kolom yang perlu dibereskan"],
+      "why": "Dari info, Budi tahu kolom tanggal masih teks dan perlu diubah. Membersihkan data seperti itu adalah isi modul berikutnya.",
+      "objective": 2
+    }
+  ],
+  "demo": {
+    "title": "Coba sendiri: lima perintah pertama untuk data baru",
+    "instruction": "Klik Berikutnya dan perhatikan apa yang diketahui Budi setelah setiap perintah.",
+    "steps": [
+      {"label": "import pandas as pd", "detail": "pandas siap dipakai dengan nama pendek pd."},
+      {"label": "df = pd.read_csv(\"penjualan.csv\")", "detail": "File terbaca menjadi DataFrame df."},
+      {"label": "df.head()", "detail": "Lima baris pertama tampil: tanggal, menu, jumlah, harga."},
+      {"label": "df.shape", "detail": "Hasilnya (412, 4): 412 transaksi dan 4 kolom, sama dengan isi file."},
+      {"label": "df.info()", "detail": "Kolom tanggal masih bertipe teks. Ini dibereskan di modul berikutnya."}
+    ]
+  },
+  "summary": [
+    "Data penjualan Budi tersimpan di file CSV, satu baris per transaksi.",
+    "pandas membaca file itu dengan pd.read_csv dan hasilnya sebuah DataFrame.",
+    "head, shape, dan columns memastikan file terbaca lengkap dan nama kolomnya benar.",
+    "info dan describe memperlihatkan tipe data dan ringkasan angka setiap kolom.",
+    "Kolom yang tipenya salah atau isinya kosong belum dibereskan. Itu isi modul berikutnya."
+  ],
+  "quiz": [
+    {
+      "question": "Di modul 2, Budi membuat fungsi pendapatan(jumlah, harga). Apa hasil pendapatan(3, 15000)?",
+      "right": "45000",
+      "wrong": ["15003", "18000"],
+      "why": "Fungsi itu mengalikan jumlah dengan harga: 3 x 15000 = 45000. Lihat bab 2 di modul 2.",
+      "objective": 1
+    },
+    {
+      "question": "Sari punya file stok.csv di folder data. Perintah mana yang membacanya menjadi DataFrame?",
+      "right": "pd.read_csv(\"data/stok.csv\")",
+      "wrong": ["pd.DataFrame(\"data/stok.csv\")", "open(\"data/stok.csv\").read()"],
+      "why": "read_csv membaca file CSV dan menghasilkan DataFrame; path ditulis lengkap dengan foldernya. Lihat bab 2.",
+      "objective": 1
+    },
+    {
+      "question": "df.shape milik Budi menghasilkan (412, 4). Apa artinya?",
+      "right": "412 baris dan 4 kolom",
+      "wrong": ["412 kolom dan 4 baris", "Total penjualan 412 dan 4 menu"],
+      "why": "shape menyebut jumlah baris dulu, lalu jumlah kolom. Lihat bab 3.",
+      "objective": 2
+    },
+    {
+      "question": "Budi ingin melihat 10 transaksi pertama. Perintah mana yang tepat?",
+      "right": "df.head(10)",
+      "wrong": ["df.shape(10)", "df.columns(10)"],
+      "why": "head menampilkan baris pertama; angkanya menentukan berapa baris. Lihat bab 3.",
+      "objective": 2
+    },
+    {
+      "question": "Andi ingin tahu kolom mana yang masih bertipe teks dan berapa nilai yang terisi. Perintah mana yang dipakai?",
+      "right": "df.info()",
+      "wrong": ["df.describe()", "df.head()"],
+      "why": "info menampilkan tipe data dan jumlah nilai terisi; describe hanya merangkum kolom angka. Lihat bab 4.",
+      "objective": 2
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Kenali data Anda",
+      "task": "Pakai file CSV apa saja yang Anda punya, atau buat penjualan.csv berisi 10 baris. Jalankan read_csv, head, shape, columns, dan info, lalu tulis jumlah baris, nama kolom, dan satu kolom yang tipenya perlu diubah.",
+      "expected": "Lima output perintah, jumlah baris dan kolom yang cocok dengan file, dan satu kolom yang disebut beserta alasannya.",
+      "objective": 2
+    }
+  ],
+  "next": "Data sudah terbaca, tapi kolom tanggal masih teks dan mungkin ada nilai kosong. Modul berikutnya membersihkan data itu."
+}

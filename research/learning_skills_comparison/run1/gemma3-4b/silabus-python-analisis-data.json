@@ -1,0 +1,163 @@
+{
+  "topic": "Python untuk analisis data",
+  "title": "Belajar Python untuk Analisis Data dari Nol",
+  "lead": "Dalam modul ini, Anda akan mempelajari dasar-dasar Python yang relevan untuk analisis data. Anda akan belajar cara membaca data, melakukan perhitungan sederhana, dan memvisualisasikan hasil analisis. Setelah menyelesaikan modul ini, Anda akan mampu menganalisis data penjualan sederhana tanpa perlu menggunakan rumus manual.",
+  "level": "Pemula",
+  "assumptions": "Anda memiliki pengetahuan dasar tentang komputer dan internet. Anda bersedia meluangkan waktu sekitar 4 jam per minggu untuk belajar. Anda ingin mengembangkan kemampuan analisis data secara mandiri.",
+  "map_note": "Kita mulai dari dasar-dasar Python, lalu belajar cara membaca dan memanipulasi data. Akhirnya, kita akan membuat visualisasi untuk memahami data lebih baik.",
+  "running_example": "Budi adalah pemilik toko online yang ingin menganalisis data penjualan bulanan. Anda akan membantu Budi dengan menggunakan Python untuk melihat tren penjualan, produk terlaris, dan lain-lain.",
+  "outcomes": [
+    "Menulis program Python sederhana untuk membaca file CSV.",
+    "Melakukan perhitungan dasar pada data menggunakan Python.",
+    "Memvisualisasikan data dengan grafik sederhana.",
+    "Membersihkan dan memformat data untuk analisis.",
+    "Mengidentifikasi potensi masalah dalam dataset."
+  ],
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "number": 1,
+          "title": "Pengenalan Python dan Lingkungan Pengembangan",
+          "question": "Apa itu Python dan bagaimana cara menjalankannya?",
+          "objectives": [
+            "Menjelaskan apa itu bahasa pemrograman Python.",
+            "Menginstal dan mengkonfigurasi lingkungan pengembangan Python (misalnya, VS Code).",
+            "Menulis program 'Hello, World!' pertama Anda."
+          ],
+          "terms": [
+            "Interpreter",
+            "IDE",
+            "Syntax"
+          ],
+          "exercise": "Tulis program Python yang mencetak pesan 'Halo, Dunia!' ke layar.",
+          "result": "Bisa Menjalankan Program Python",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 2,
+          "title": "Tipe Data dan Variabel di Python",
+          "question": "Bagaimana cara menyimpan data dalam variabel?",
+          "objectives": [
+            "Menjelaskan tipe data dasar di Python (integer, float, string, boolean).",
+            "Membuat dan menggunakan variabel untuk menyimpan nilai.",
+            "Melakukan operasi matematika sederhana pada variabel."
+          ],
+          "terms": [
+            "Tipe Data",
+            "Variabel",
+            "Operator"
+          ],
+          "exercise": "Buat program yang menghitung luas persegi panjang dengan input panjang dan lebar.",
+          "result": "Bisa Menyimpan Nilai dalam Variabel",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "number": 3,
+          "title": "Membaca dan Menulis File CSV",
+          "question": "Bagaimana cara membaca data dari file CSV?",
+          "objectives": [
+            "Menjelaskan format file CSV.",
+            "Menggunakan library `csv` untuk membaca data dari file CSV.",
+            "Menulis data ke file CSV."
+          ],
+          "terms": [
+            "CSV",
+            "Library",
+            "File"
+          ],
+          "exercise": "Baca data penjualan dari file CSV bernama 'penjualan.csv' dan tampilkan hasilnya.",
+          "result": "Bisa Membaca Data dari File CSV",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 4,
+          "title": "Operasi Dasar pada Data",
+          "question": "Bagaimana cara melakukan perhitungan pada data?",
+          "objectives": [
+            "Melakukan operasi matematika (penjumlahan, pengurangan, perkalian, pembagian) pada data.",
+            "Menggunakan fungsi `sum()`, `mean()`, `median()` untuk menghitung statistik dasar.",
+            "Memanipulasi string."
+          ],
+          "terms": [
+            "Statistik",
+            "Fungsi",
+            "String"
+          ],
+          "exercise": "Hitung rata-rata, median, dan jumlah penjualan dari file 'penjualan.csv'.",
+          "result": "Bisa Melakukan Perhitungan pada Data",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "number": 5,
+          "title": "Visualisasi Data dengan Matplotlib",
+          "question": "Bagaimana cara membuat grafik dari data?",
+          "objectives": [
+            "Menjelaskan konsep visualisasi data.",
+            "Menggunakan library `matplotlib` untuk membuat grafik garis, batang, dan pie chart.",
+            "Memformat tampilan grafik."
+          ],
+          "terms": [
+            "Grafik",
+            "Matplotlib",
+            "Visualisasi"
+          ],
+          "exercise": "Buat grafik batang yang menunjukkan penjualan produk terlaris dari file 'penjualan.csv'.",
+          "result": "Bisa Membuat Grafik Data",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 6,
+          "title": "Membersihkan dan Memformat Data",
+          "question": "Bagaimana cara menangani data yang tidak lengkap atau salah?",
+          "objectives": [
+            "Mengidentifikasi masalah umum dalam data (missing values, outliers).",
+            "Menangani missing values dengan metode sederhana.",
+            "Memformat data ke format yang sesuai."
+          ],
+          "terms": [
+            "Missing Values",
+            "Outliers",
+            "Format"
+          ],
+          "exercise": "Identifikasi dan tangani nilai-nilai yang hilang dalam file 'penjualan.csv'.",
+          "result": "Bisa Membersihkan Data",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Analisis Penjualan Toko Online Budi",
+    "task": "Anda akan menganalisis data penjualan bulanan toko online Budi selama setahun. Buat laporan yang menunjukkan tren penjualan, produk terlaris, dan bulan dengan penjualan tertinggi.",
+    "criteria": [
+      "Membaca data penjualan dari file CSV bernama 'penjualan_budi.csv'.",
+      "Menghitung total penjualan per bulan.",
+      "Mengidentifikasi produk terlaris berdasarkan jumlah penjualan.",
+      "Membuat grafik batang yang menunjukkan tren penjualan bulanan.",
+      "Menyajikan hasil analisis dalam bentuk laporan singkat."
+    ],
+    "hours": 8
+  },
+  "money_topic": false,
+  "sources": [],
+  "hours_per_week": 4,
+  "model": "gemma3:4b"
+}

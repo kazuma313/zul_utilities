@@ -55,6 +55,8 @@ SKILLS = {
     "contextual_retrieval": ("contextual_retrieval.contextual_retrieval_skill", "Siapkan catatan kuliah.md ini untuk dimasukkan ke vector database supaya bisa dicari AI."),
     "crypto_snapshot": ("crypto_snapshot.crypto_snapshot_skill", "Cek harga BTC sekarang, sama EMA dan stochastic-nya."),
     "crypto_chart": ("crypto_chart.crypto_chart_skill", "Kirimin gambar candlestick chart SOL 4 jam dong."),
+    "silabus_belajar": ("silabus_belajar.silabus_belajar_skill", "Saya mau belajar fotografi dari nol, buatkan rencana belajarnya."),
+    "materi_belajar": ("materi_belajar.materi_belajar_skill", "Buatkan materi pelajaran tentang bunga majemuk lengkap dengan kuis."),
 }
 
 # tool name -> (skill folder, user request, how to judge the call)
@@ -71,12 +73,16 @@ INVOCATIONS = {
     "contextualize_document": ("contextual_retrieval", "Pecah file catatan/fotosintesis.md jadi chunk untuk vector database.", "args:path"),
     "get_crypto_snapshot": ("crypto_snapshot", "Update market ETH timeframe 4 jam dong.", "args:token"),
     "get_crypto_chart": ("crypto_chart", "Lihat chart BTC harian, candle saja tanpa indikator.", "args:token"),
+    "create_silabus": ("silabus_belajar", "Buatkan silabus belajar Excel untuk pemula, 3 jam per minggu.", "args:topic"),
+    "create_materi": ("materi_belajar", "Buatkan materi belajar tentang cara kerja bunga majemuk.", "args:topic"),
 }
 
 RUNNERS = {
     "pptx_research": ["scripts/generate_deck.py", "Pengaruh literasi digital terhadap prestasi belajar siswa SMA", "-o", "{out}/deck.pptx"],
     "pptx_claude": ["scripts/generate_deck.py", "Pitch deck startup kopi langganan untuk kantor, 8 slide", "-o", "{out}/pitch.pptx"],
     "resaerch_poster": ["scripts/generate_poster.py", "Survei kebiasaan belanja online mahasiswa di Indonesia", "-o", "{out}/poster.html"],
+    "silabus_belajar": ["scripts/generate_silabus.py", "Dasar-dasar fotografi", "-o", "{out}/silabus.html"],
+    "materi_belajar": ["scripts/generate_materi.py", "Cara kerja bunga majemuk", "-o", "{out}/materi.html"],
 }
 
 

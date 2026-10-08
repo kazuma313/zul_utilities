@@ -1,0 +1,130 @@
+{
+  "topic": "Reksa dana",
+  "title": "Belajar Reksa Dana dari Nol",
+  "lead": "Anda akan belajar cara memilih reksa dana sendiri. Pelajaran cocok untuk pemula yang ingin berinvestasi tanpa ikut-ikutan. Di akhir, Anda bisa memilih reksa dana sesuai kebutuhan dan risiko.",
+  "level": "Pemula",
+  "assumptions": "Anda belum pernah berinvestasi. Anda punya waktu 3 jam per minggu. Tujuan Anda adalah memilih reksa dana sendiri, bukan mengikuti rekomendasi orang lain.",
+  "outcomes": [
+    "Menganalisis risiko reksa dana",
+    "Membandingkan biaya reksa dana",
+    "Menjelaskan model bisnis reksa dana",
+    "Membuat daftar reksa dana sesuai kebutuhan",
+    "Menghitung imbal hasil reksa dana",
+    "Membaca laporan keuangan reksa dana"
+  ],
+  "map_note": "Modul dimulai dari dasar, lalu ke model bisnis, risiko, dan akhirnya ke pemilihan reksa dana. Urutan ini membantu Anda memahami alur keuntungan dan kerugian sebelum memutuskan investasi.",
+  "running_example": "Budi ingin menabung untuk liburan. Ia memilih reksa dana dengan risiko rendah dan biaya rendah. Ia membandingkan dua reksa dana dan memilih yang paling cocok.",
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "title": "Apa itu Reksa Dana?",
+          "question": "Apa itu reksa dana dan siapa yang mengelolanya?",
+          "objectives": [
+            "Menjelaskan reksa dana sebagai wadah investasi",
+            "Menghitung jumlah dana yang dikelola",
+            "Menyebutkan peran manajer investasi",
+            "Membaca struktur reksa dana"
+          ],
+          "terms": ["reksa dana", "manajer investasi", "dana kelola", "unit penyerta"],
+          "exercise": "Hitung jumlah dana yang dikelola jika 100 orang menyumbang 1 juta rupiah.",
+          "result": "Bisa menjelaskan reksa dana",
+          "hours": 1
+        },
+        {
+          "title": "Model Bisnis Reksa Dana",
+          "question": "Siapa yang memberi uang, siapa yang mengelola, dan siapa yang mendapat keuntungan?",
+          "objectives": [
+            "Menjelaskan model bisnis reksa dana",
+            "Membandingkan keuntungan dan kerugian pihak terkait",
+            "Membaca kontrak reksa dana",
+            "Menyebutkan pihak yang terlibat"
+          ],
+          "terms": ["investor", "manajer", "bank", "fee", "komisi"],
+          "exercise": "Tuliskan siapa yang memberi uang, siapa yang mengelola, dan siapa yang mendapat keuntungan.",
+          "result": "Bisa menjelaskan model bisnis reksa dana",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "title": "Risiko Reksa Dana",
+          "question": "Apa risiko reksa dana dan bagaimana menghitungnya?",
+          "objectives": [
+            "Menghitung risiko reksa dana",
+            "Membandingkan risiko berdasarkan jenis aset",
+            "Menjelaskan risiko pasar",
+            "Membaca laporan risiko"
+          ],
+          "terms": ["risiko", "pasar", "volatilitas", "aset", "diversifikasi"],
+          "exercise": "Bandingkan risiko reksa dana saham dan reksa dana obligasi.",
+          "result": "Bisa menghitung risiko reksa dana",
+          "hours": 3
+        },
+        {
+          "title": "Biaya Reksa Dana",
+          "question": "Apa biaya reksa dana dan bagaimana menghitungnya?",
+          "objectives": [
+            "Menghitung biaya reksa dana",
+            "Membandingkan biaya berdasarkan jenis reksa dana",
+            "Menjelaskan biaya transaksi",
+            "Membaca laporan biaya"
+          ],
+          "terms": ["biaya", "fee", "komisi", "transaksi", "administrasi"],
+          "exercise": "Hitung biaya reksa dana jika biaya transaksi 1% dari 1 juta rupiah.",
+          "result": "Bisa menghitung biaya reksa dana",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "title": "Pemilihan Reksa Dana",
+          "question": "Bagaimana memilih reksa dana sesuai kebutuhan?",
+          "objectives": [
+            "Membuat daftar reksa dana sesuai kebutuhan",
+            "Membandingkan reksa dana berdasarkan risiko dan biaya",
+            "Menjelaskan cara memilih reksa dana",
+            "Membaca laporan keuangan"
+          ],
+          "terms": ["pemilihan", "kebutuhan", "risiko", "biaya", "laporan"],
+          "exercise": "Buat daftar 3 reksa dana yang cocok untuk tabungan liburan.",
+          "result": "Bisa membuat daftar reksa dana",
+          "hours": 3
+        },
+        {
+          "title": "Contoh Pemilihan Reksa Dana",
+          "question": "Bagaimana memilih reksa dana untuk Budi yang ingin menabung untuk liburan?",
+          "objectives": [
+            "Membuat rekomendasi reksa dana",
+            "Menghitung keuntungan dan kerugian",
+            "Menjelaskan alasan pemilihan",
+            "Membandingkan reksa dana berdasarkan risiko dan biaya"
+          ],
+          "terms": ["rekomendasi", "keuntungan", "kerugian", "risiko", "biaya"],
+          "exercise": "Tuliskan rekomendasi reksa dana untuk Budi dan alasan pemilihannya.",
+          "result": "Bisa memilih reksa dana sendiri",
+          "hours": 3
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Pemilihan Reksa Dana untuk Sari",
+    "task": "Bantu Sari memilih reksa dana untuk tabungan liburan. Gunakan kriteria risiko, biaya, dan kebutuhan.",
+    "criteria": [
+      "Memilih reksa dana dengan risiko rendah",
+      "Biaya transaksi tidak lebih dari 1%",
+      "Membuat daftar 3 pilihan",
+      "Menjelaskan alasan pemilihan",
+      "Menghitung keuntungan dan kerugian"
+    ],
+    "hours": 5
+  }
+}

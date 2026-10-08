@@ -1,0 +1,181 @@
+{
+  "topic": "Reksa Dana",
+  "title": "Belajar Reksa Dana dari Nol",
+  "lead": "Anda akan belajar cara memilih reksa dana yang tepat untuk kebutuhan investasi. Cocok untuk pemula yang ingin mulai berinvestasi tanpa ikut-ikutan. Di akhir, Anda bisa memilih reksa dana sendiri.",
+  "level": "Pemula",
+  "assumptions": "Anda belum pernah berinvestasi sebelumnya. Anda punya waktu 3 jam per minggu untuk belajar. Tujuan Anda adalah memilih reksa dana yang sesuai dengan kebutuhan dan risiko Anda.",
+  "map_note": "Mulai dari dasar, lalu ke jenis-jenis, kemudian ke cara memilih. Setiap tahap memperkuat pemahaman sebelumnya.",
+  "running_example": "Budi ingin menabung untuk liburan ke Bali. Ia memilih reksa dana saham dengan risiko sedang.",
+  "outcomes": [
+    "Bisa memilih reksa dana sesuai tujuan investasi",
+    "Bisa membandingkan risiko dan imbal hasil reksa dana",
+    "Bisa menghitung biaya investasi reksa dana",
+    "Bisa memahami jenis-jenis reksa dana",
+    "Bisa menilai kinerja manajer reksa dana",
+    "Bisa membuat rencana investasi reks, dana"
+  ],
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "number": 1,
+          "title": "Apa itu Reksa Dana?",
+          "question": "Apa itu reksa dana dan mengapa orang memilihnya?",
+          "objectives": [
+            "Menjelaskan pengertian reksa dana",
+            "Membaca manfaat dan kekurangan reksa dana",
+            "Menghitung biaya investasi reksa dana",
+            "Menyebutkan jenis-jenis reksa dana"
+          ],
+          "terms": [
+            "reksa dana",
+            "manajer investasi",
+            "biaya admin",
+            "fee",
+            "portofolio"
+          ],
+          "exercise": "Hitung biaya investasi reksa dana jika Budi menabung Rp1 juta dengan fee 1,5%.",
+          "result": "Bisa menjelaskan reksa dana",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 2,
+          "title": "Risiko dan Imbal Hasil",
+          "question": "Mengapa reksa dana bisa rugi atau untung?",
+          "objectives": [
+            "Membandingkan risiko dan imbal hasil reksa dana",
+            "Menjelaskan risiko pasar saham dan obligasi",
+            "Membaca risiko investasi reksa dana",
+            "Menghitung imbal hasil tahunan"
+          ],
+          "terms": [
+            "risiko",
+            "imbal hasil",
+            "volatilitas",
+            "market risk",
+            "return"
+          ],
+          "exercise": "Hitung imbal hasil tahunan reksa dana jika Budi mendapat Rp1,2 juta dari Rp1 juta investasi.",
+          "result": "Bisa membandingkan risiko dan imbal hasil",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "number": 3,
+          "title": "Jenis-Jenis Reksa Dana",
+          "question": "Apa perbedaan reksa dana saham, obligasi, dan campuran?",
+          "objectives": [
+            "Menjelaskan jenis-jenis reksa dana",
+            "Membandingkan risiko dan imbal hasil tiap jenis",
+            "Menghitung imbal hasil tiap jenis",
+            "Menyebutkan keunggulan dan kelemahan tiap jenis"
+          ],
+          "terms": [
+            "reksa dana saham",
+            "reksa dana obligasi",
+            "reksa dana campuran",
+            "dividend",
+            "yield"
+          ],
+          "exercise": "Bandingkan risiko dan imbal hasil reksa dana saham dan obligasi.",
+          "result": "Bisa menjelaskan jenis-jenis reksa dana",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 4,
+          "title": "Manajer dan Kinerja",
+          "question": "Bagaimana cara menilai kinerja manajer reksa dana?",
+          "objectives": [
+            "Menjelaskan cara menilai kinerja manajer",
+            "Membandingkan kinerja manajer reksa dana",
+            "Menghitung kinerja tahunan manajer",
+            "Menyebutkan indikator kinerja yang relevan"
+          ],
+          "terms": [
+            "manajer investasi",
+            "kinerja",
+            "return",
+            "volatilitas",
+            "benchmark"
+          ],
+          "exercise": "Bandingkan kinerja dua manajer reksa dana dengan return 12% dan 10%.",
+          "result": "Bisa menilai kinerja manajer",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "number": 5,
+          "title": "Pilih Reksa Dana Sendiri",
+          "question": "Bagaimana memilih reksa dana yang sesuai dengan kebutuhan?",
+          "objectives": [
+            "Membuat rencana investasi reksa dana",
+            "Membandingkan pilihan reksa dana",
+            "Menghitung biaya dan imbal hasil",
+            "Menyebutkan kriteria pilihan reksa dana"
+          ],
+          "terms": [
+            "rencana investasi",
+            "kriteria pilihan",
+            "biaya",
+            "imbal hasil",
+            "risiko"
+          ],
+          "exercise": "Buat daftar 3 reksa dana yang cocok untuk Budi dengan risiko sedang.",
+          "result": "Bisa memilih reksa dana sendiri",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 6,
+          "title": "Model Bisnis Reksa Dana",
+          "question": "Bagaimana model bisnis reksa dana bekerja?",
+          "objectives": [
+            "Menjelaskan model bisnis reksa dana",
+            "Membandingkan insentif dan risiko pihak terkait",
+            "Menghitung kontribusi tiap pihak",
+            "Menyebutkan risiko investasi reksa dana"
+          ],
+          "terms": [
+            "model bisnis",
+            "insentif",
+            "investor",
+            "manajer",
+            "risiko"
+          ],
+          "exercise": "Jelaskan siapa yang mendapat keuntungan dari reksa dana dan mengapa.",
+          "result": "Bisa menjelaskan model bisnis reksa dana",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Buat Rencana Investasi Reksa Dana",
+    "task": "Buat rencana investasi reksa dana untuk Budi dengan anggaran Rp2 juta, jangka waktu 5 tahun, dan risiko sedang.",
+    "criteria": [
+      "Memilih 3 reksa dana yang sesuai",
+      "Menghitung biaya dan imbal hasil",
+      "Menjelaskan alasan pilihan",
+      "Menyebutkan risiko yang mungkin terjadi"
+    ],
+    "hours": 3
+  },
+  "money_topic": true,
+  "sources": [],
+  "hours_per_week": 3,
+  "model": "qwen3:8b"
+}

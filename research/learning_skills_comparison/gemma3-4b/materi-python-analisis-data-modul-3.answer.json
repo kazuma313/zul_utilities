@@ -1,0 +1,144 @@
+{
+  "title": "Membaca Data dengan Pandas",
+  "lead": "Anda ingin menganalisis data penjualan Budi? Kita akan belajar cara membaca file CSV ke dalam program Python menggunakan pandas. Ini adalah langkah penting untuk mulai memahami dan bekerja dengan data Anda.",
+  "objectives": [
+    "Membaca file CSV menjadi DataFrame dengan `read_csv`",
+    "Menampilkan baris pertama, nama kolom, dan ringkasan data"
+  ],
+  "prior": "",
+  "chapters": [
+    {
+      "title": "Membuka File CSV",
+      "what": "Pandas adalah library Python yang sangat populer untuk analisis data. DataFrame adalah struktur data dalam pandas yang mirip dengan spreadsheet atau tabel SQL. Kolom adalah bagian-bagian terpisah dari data dalam DataFrame, seperti tanggal, menu, jumlah, dan harga.",
+      "terms": [
+        {
+          "term": "pandas",
+          "meaning": "Library Python untuk analisis data."
+        },
+        {
+          "term": "DataFrame",
+          "meaning": "Struktur data dalam pandas yang mirip dengan spreadsheet atau tabel SQL."
+        },
+        {
+          "term": "kolom",
+          "meaning": "Bagian-bagian terpisah dari data dalam DataFrame, seperti tanggal, menu, jumlah, dan harga."
+        }
+      ],
+      "how": "Untuk membaca file CSV menjadi DataFrame, kita menggunakan fungsi `read_csv` dari pandas. Fungsi ini mengambil nama file CSV sebagai argumen. Hasilnya adalah objek DataFrame yang berisi semua data dari file CSV.",
+      "steps": [
+        "Impor library pandas: `import pandas as pd`",
+        "Gunakan `pd.read_csv()` untuk membaca file 'penjualan.csv' ke dalam DataFrame bernama `df`",
+        "Tampilkan 5 baris pertama DataFrame menggunakan `df.head()`",
+        "Cetak nama kolom DataFrame menggunakan `df.columns`",
+        "Lihat ringkasan data DataFrame menggunakan `df.info()`"
+      ],
+      "why": "Dengan membaca file CSV, kita dapat mengakses dan menganalisis data penjualan Budi secara digital. Ini memungkinkan kita untuk melakukan perhitungan, mencari pola, dan membuat keputusan berdasarkan data.",
+      "objective": 1
+    },
+    {
+      "title": "Menjelajahi Data",
+      "what": "DataFrame menyediakan cara mudah untuk melihat struktur data Anda. Fungsi `head()` menampilkan beberapa baris pertama, sementara fungsi `info()` memberikan ringkasan tentang tipe data dan jumlah nilai dalam setiap kolom.",
+      "terms": [],
+      "how": "Setelah membaca file CSV, kita dapat menggunakan fungsi `head()` untuk melihat 5 baris pertama data. Ini membantu kita memahami format dan isi data. Kemudian, kita gunakan fungsi `info()` untuk mendapatkan ringkasan tentang tipe data (misalnya, integer, float, string) dan jumlah nilai yang tidak kosong dalam setiap kolom.",
+      "steps": [
+        "Gunakan `df.head(5)` untuk menampilkan 5 baris pertama DataFrame",
+        "Cetak nama-nama kolom dengan `df.columns`",
+        "Gunakan `df.info()` untuk melihat ringkasan data"
+      ],
+      "why": "Memahami struktur data adalah langkah penting sebelum melakukan analisis lebih lanjut. Ini membantu kita memastikan bahwa data diinterpretasikan dengan benar dan menghindari kesalahan.",
+      "objective": 2
+    },
+    {
+      "title": "Latihan: Analisis Penjualan Awal",
+      "what": "Anda akan membaca file penjualan.csv, menampilkan 5 baris pertama, jumlah baris, tipe data setiap kolom, dan menulis dua hal yang Anda temukan.",
+      "terms": [],
+      "how": "Ikuti langkah-langkah berikut:\n1.  Impor pandas sebagai `pd`.\n2.  Gunakan `pd.read_csv('penjualan.csv')` untuk membaca file CSV ke dalam DataFrame bernama `df`.\n3.  Gunakan `df.head(5)` untuk menampilkan 5 baris pertama data penjualan.\n4.  Gunakan `df.shape` untuk mendapatkan jumlah total baris dalam DataFrame.\n5.  Gunakan `df.dtypes` untuk memeriksa tipe data setiap kolom.\n6.  Tulis dua hal yang Anda temukan dari analisis ini.",
+      "steps": [
+        "Impor pandas: `import pandas as pd`",
+        "Baca file CSV: `df = pd.read_csv('penjualan.csv')`",
+        "Tampilkan 5 baris pertama: `print(df.head(5))`",
+        "Hitung jumlah baris: `jumlah_baris = df.shape[0]`",
+        "Periksa tipe data kolom: `tipe_data = df.dtypes` dan cetak hasilnya"
+      ],
+      "why": "Latihan ini membantu Anda mempraktikkan cara membaca file CSV dan memahami struktur data yang dihasilkan.",
+      "objective": 1
+    }
+  ],
+  "demo": {
+    "title": "Membaca File Penjualan Budi",
+    "instruction": "Ikuti langkah-langkah berikut untuk membaca data penjualan Budi ke dalam DataFrame pandas.",
+    "steps": [
+      {
+        "label": "Impor Pandas",
+        "detail": "Kita mulai dengan mengimpor library pandas dan memberinya alias 'pd'. Ini memungkinkan kita menggunakan fungsi-fungsi pandas secara singkat."
+      },
+      {
+        "label": "Baca File CSV",
+        "detail": "Fungsi `read_csv()` membaca data dari file 'penjualan.csv' dan menyimpannya dalam variabel bernama 'df'."
+      },
+      {
+        "label": "Tampilkan 5 Baris Pertama",
+        "detail": "Kita menggunakan `df.head(5)` untuk menampilkan 5 baris pertama dari DataFrame, memberikan gambaran awal tentang data."
+      },
+      {
+        "label": "Periksa Tipe Data Kolom",
+        "detail": "Dengan `df.dtypes`, kita dapat melihat tipe data yang ditetapkan untuk setiap kolom (misalnya, integer, float, string)."
+      },
+      {
+        "label": "Ringkasan Data",
+        "detail": "Fungsi `df.info()` memberikan ringkasan tentang DataFrame, termasuk jumlah baris, nama kolom, dan tipe data setiap kolom."
+      }
+    ]
+  },
+  "summary": [
+    "Anda telah belajar cara membaca file CSV menjadi DataFrame menggunakan pandas.",
+    "Anda telah melihat 5 baris pertama data penjualan Budi.",
+    "Anda telah mengidentifikasi nama-nama kolom dalam DataFrame.",
+    "Anda telah memeriksa tipe data setiap kolom untuk memastikan analisis yang akurat."
+  ],
+  "quiz": [
+    {
+      "question": "Apa fungsi dari `read_csv()` di pandas?",
+      "right": "Membaca file CSV menjadi DataFrame",
+      "wrong": ["Mengimpor library pandas.", "Menghapus baris yang tidak valid dalam file CSV."],
+      "why": "Fungsi `read_csv()` digunakan untuk membaca data dari file CSV dan mengubahnya menjadi format DataFrame yang dapat dianalisis. Lihat bab 1.",
+      "objective": 1
+    },
+    {
+      "question": "Apa yang dimaksud dengan 'DataFrame' dalam pandas?",
+      "right": "Struktur data dalam pandas yang mirip dengan spreadsheet atau tabel SQL",
+      "wrong": ["Sebuah jenis file CSV.", "Sebuah program Python."],
+      "why": "'DataFrame' adalah struktur data inti dalam pandas, memungkinkan Anda untuk mengatur dan menganalisis data secara tabular. Lihat bab 1.",
+      "objective": 1
+    },
+    {
+      "question": "Bagaimana cara menampilkan nama kolom dari DataFrame?",
+      "right": "`df.columns`",
+      "wrong": ["`df.head()`", " `df.info()`"],
+      "why": "'df.columns' memberikan akses langsung ke objek yang berisi nama-nama kolom dalam DataFrame. Lihat bab 1.",
+      "objective": 2
+    },
+    {
+      "question": "Tipe data apa yang biasanya digunakan untuk menyimpan jumlah penjualan?",
+      "right": "float",
+      "wrong": ["integer", "string"],
+      "why": "Jumlah penjualan seringkali melibatkan pecahan, sehingga tipe data float (desimal) adalah pilihan yang tepat. Lihat bab 1.",
+      "objective": 2
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Hitung Total Penjualan",
+      "task": "Baca file 'penjualan.csv' ke dalam DataFrame bernama `df`. Hitung total penjualan untuk semua menu dan tampilkan hasilnya.",
+      "expected": "Total penjualan akan ditampilkan sebagai angka, misalnya: 12345.67 (hasilnya bergantung pada data di file penjualan.csv).",
+      "objective": 1
+    },
+    {
+      "title": "Buat Tabel Ringkasan",
+      "task": "Baca file 'penjualan.csv' ke dalam DataFrame bernama `df`. Buat tabel ringkasan yang menunjukkan jumlah penjualan untuk setiap menu.",
+      "expected": "Tabel dengan kolom 'Menu' dan 'Jumlah Penjualan', diisi dengan data dari file penjualan.csv.",
+      "objective": 1
+    }
+  ],
+  "next": "Dalam modul berikutnya, kita akan mempelajari cara membersihkan data, seperti menangani nilai yang hilang atau mengubah tipe data yang salah. Ini adalah langkah penting untuk memastikan analisis data Anda akurat dan andal."
+}

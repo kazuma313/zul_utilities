@@ -174,6 +174,7 @@ nav:
           - Mengambil transcript YouTube: panduan/mengambil-transcript-youtube.md
           - Mengambil snapshot harga crypto: panduan/mengambil-snapshot-crypto.md
           - Membuat candlestick chart crypto: panduan/membuat-chart-crypto.md
+          - Membuat silabus dan materi belajar: panduan/membuat-silabus-dan-materi.md
           - Menyiapkan dokumen untuk RAG: panduan/menyiapkan-dokumen-untuk-rag.md
       - Proyek Zul:
           - Menerbitkan dokumentasi: panduan/menerbitkan-dokumentasi.md
@@ -211,6 +212,7 @@ nav:
       - Memory dan thread: konsep/memory.md
       - Menguji tanpa LLM asli: konsep/pengujian.md
       - Cara situs dokumentasi diterbitkan: konsep/penerbitan-dokumentasi.md
+      - Model lokal untuk skill belajar: konsep/model-lokal-untuk-skill-belajar.md
       - Hexagonal dari nol: hexagonal.md
   - Playground: playground.md
   - Blog:

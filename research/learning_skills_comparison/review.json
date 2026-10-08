@@ -1,0 +1,165 @@
+{
+  "how": "Read by hand against the Claude reference of the same task. 'wrong_numbers' are written results that do not match their own numbers; 'wrong_facts' are statements that are false or invented; 'rules_broken' are the skill's rules the page still breaks after the builder's repairs; 'missing' is what a beginner needs and the answer leaves out; 'good' is what the answer does better than the others.",
+  "run1": {
+    "gemma3:4b/silabus-reksa-dana": {
+      "wrong_numbers": [],
+      "wrong_facts": ["invented term 'SHK (Sales and Service Charge)'"],
+      "rules_broken": ["every module 1 hour", "6 terms in each module, several in English (Expense Ratio, Turnover Rate)"],
+      "missing": ["NAB and unit penyertaan", "a module on the business model (the old check let it through because of the word 'keuntungan')"],
+      "good": []
+    },
+    "gemma3:4b/silabus-python-analisis-data": {
+      "wrong_numbers": [],
+      "wrong_facts": [],
+      "rules_broken": ["cleaning data comes after drawing charts", "every module 1 hour"],
+      "missing": ["pandas"],
+      "good": []
+    },
+    "gemma3:4b/materi-reksa-dana-modul-2": {
+      "wrong_numbers": ["quiz 2: Rp25.000, right is Rp50.000 (offered as a wrong answer)", "quiz 4: Rp90.000, right is Rp30.000",
+                        "exercise 'Hitung Untung Rugi': Rp75.000, right is Rp30.000", "exercise 'Simulasi Redemption': Rp1.050.000, right is Rp675.000"],
+      "wrong_facts": ["redemption is said to change the NAB per unit", "NAB and NAB per unit are the same thing"],
+      "rules_broken": ["1 question asks for a definition", "every 'Lihat bab' points to chapter 1", "prior left empty"],
+      "missing": [],
+      "good": []
+    },
+    "gemma3:4b/materi-python-analisis-data-modul-3": {
+      "wrong_numbers": [],
+      "wrong_facts": ["says read_csv shows the summary (rows, types) by itself"],
+      "rules_broken": ["2 questions ask for a definition", "exercise needs groupby, taught later", "every 'Lihat bab' points to chapter 1", "prior left empty"],
+      "missing": [],
+      "good": []
+    },
+    "qwen3:4b/silabus-reksa-dana": {
+      "wrong_numbers": [], "wrong_facts": [],
+      "rules_broken": ["every module 1 hour", "outcomes start with 'Bisa' (the page already writes it)", "generic terms: investasi, dana"],
+      "missing": ["NAB and unit penyertaan"],
+      "good": ["has a business model module"]
+    },
+    "qwen3:4b/silabus-python-analisis-data": {
+      "wrong_numbers": [], "wrong_facts": [],
+      "rules_broken": ["every module 1 hour", "6 module results longer than 45 characters", "outcomes start with 'Bisa'"],
+      "missing": ["pandas"],
+      "good": []
+    },
+    "qwen3:4b/materi-reksa-dana-modul-2": {
+      "failed": "repeated one sentence inside 'next' until the 7168-token limit, twice (656 s); no page",
+      "wrong_numbers": [], "wrong_facts": [], "rules_broken": [], "missing": [],
+      "good": ["the part written before the loop has correct arithmetic (Rp750.000 / Rp1.500 = 500 unit)"]
+    },
+    "qwen3:4b/materi-python-analisis-data-modul-3": {
+      "wrong_numbers": [], "wrong_facts": [],
+      "rules_broken": ["writes 'kita' instead of 'Anda'", "a question on dtypes, which no chapter teaches", "prior left empty"],
+      "missing": [],
+      "good": ["questions put the code in a situation (head(3), shape of a 100-row file)"]
+    },
+    "qwen3:8b/silabus-reksa-dana": {
+      "wrong_numbers": [],
+      "wrong_facts": ["running example: an equity fund ('reksa dana saham') called medium risk, for a short holiday goal"],
+      "rules_broken": ["every module 1 hour", "modules 1 and 3 share objectives (types of funds twice)"],
+      "missing": ["NAB and unit penyertaan"],
+      "good": ["has a business model module and a risk module"]
+    },
+    "qwen3:8b/silabus-python-analisis-data": {
+      "wrong_numbers": [], "wrong_facts": [],
+      "rules_broken": ["every module 1 hour", "a business model module in a Python course (the money rule was in the prompt for every topic)"],
+      "missing": ["a module on cleaning data"],
+      "good": ["pandas and DataFrame in module 2"]
+    },
+    "qwen3:8b/materi-reksa-dana-modul-2": {
+      "wrong_numbers": [],
+      "wrong_facts": ["NAB and NAB per unit are the same thing"],
+      "rules_broken": ["chapter 3 repeats chapter 2", "1 question asks for a definition", "quiz 2 and 3 only swap up and down", "exercises repeat the quiz", "chapter titles numbered by the model"],
+      "missing": [],
+      "good": ["every number right, with the calculation written out (400 x Rp1.300 = Rp520.000)"]
+    },
+    "qwen3:8b/materi-python-analisis-data-modul-3": {
+      "wrong_numbers": [],
+      "wrong_facts": ["df['jumlah'].sum() is called '412 transaksi', the number of rows"],
+      "rules_broken": ["chapter 3 teaches sum() and mean(), outside the module card", "all 4 questions ask what a function does"],
+      "missing": [],
+      "good": ["read_csv, head(), info() and columns used correctly"]
+    }
+  },
+  "run2": {
+    "gemma3:4b/silabus-reksa-dana": {
+      "wrong_numbers": [],
+      "wrong_facts": ["invented terms 'Fee Penyerap' and 'Fee Barang Beredar'", "'reksa buka / reksa tutup' instead of reksa dana terbuka / tertutup"],
+      "rules_broken": ["3 module results are only a verb ('Bisa Menjelaskan'), now written from the first objective", "Sharpe ratio and alpha in a beginner course"],
+      "missing": [],
+      "good": ["NAB in module 1", "a business model module and a risk module", "hours 1-3 per module"]
+    },
+    "gemma3:4b/silabus-python-analisis-data": {
+      "wrong_numbers": [], "wrong_facts": [], "rules_broken": [],
+      "missing": [],
+      "good": ["pandas, CSV, missing values and matplotlib, cleaning before analysis", "hours 1-3 per module"]
+    },
+    "gemma3:4b/materi-reksa-dana-modul-2": {
+      "wrong_numbers": ["quiz 2: Rp39.000, right is Rp15.000 (300 x Rp50); no option is right"],
+      "wrong_facts": ["says profit from a mutual fund is taxed for the investor (in Indonesia it is not an income tax object)", "NAB described as the price per unit"],
+      "rules_broken": ["1 question asks for a definition", "writes 'kita'", "prior left empty", "no term box for redemption"],
+      "missing": [],
+      "good": ["every other number right; the exercise writes its calculation out"]
+    },
+    "gemma3:4b/materi-python-analisis-data-modul-3": {
+      "wrong_numbers": [],
+      "wrong_facts": ["quiz: 'jumlah penjualan' is stored as float, integer offered as wrong"],
+      "rules_broken": ["chapter 3 is an exercise, not a chapter", "2 questions ask for a definition", "both exercises need groupby or sums, taught later", "writes 'kita'", "prior left empty"],
+      "missing": [],
+      "good": ["read_csv, head(), info() explained correctly"]
+    },
+    "qwen3:4b/silabus-reksa-dana": {
+      "wrong_numbers": [], "wrong_facts": [],
+      "rules_broken": ["'Membaca definisi reksa dana dari sumber resmi' is a weak objective"],
+      "missing": ["NAB and unit penyertaan"],
+      "good": ["a business model module and a risk module", "hours 1-2 per module"]
+    },
+    "qwen3:4b/silabus-python-analisis-data": {
+      "wrong_numbers": [], "wrong_facts": [],
+      "rules_broken": ["generic terms (Data, Penjualan, Tabel, Laporan)", "module 6 repeats modules 2 and 3"],
+      "missing": ["a module on cleaning data", "variables and data types before pandas"],
+      "good": ["pandas and matplotlib", "hours 1-3 per module"]
+    },
+    "qwen3:4b/materi-reksa-dana-modul-2": {
+      "wrong_numbers": ["chapter 2: profit Rp30.000, right is Rp20.000 (written without its calculation, so not checked)",
+                        "Rp500.000 / Rp1.300 written as 384.48 unit, right is 384.62 (inside the checker's rounding margin)"],
+      "wrong_facts": ["teaches that the number of units changes when the NAB per unit changes; it stays 400 and the value changes (chapters 1-3, demo, quiz 4, exercise)",
+                      "NAB described as the value per unit"],
+      "rules_broken": ["writes 'kita'", "prior left empty", "chapter 3 repeats chapter 1"],
+      "missing": [],
+      "good": ["finished on the first attempt; it looped in run 1", "quiz 1-3 right with the calculation written out"]
+    },
+    "qwen3:4b/materi-python-analisis-data-modul-3": {
+      "wrong_numbers": [], "wrong_facts": [],
+      "rules_broken": ["writes 'kita'", "chapter 3 explains pandas after chapter 1 used it", "1 question asks which function reads a CSV"],
+      "missing": [],
+      "good": ["questions put the code in a situation, with wrong options that do not exist in pandas (df.show, df.first)", "prior written"]
+    },
+    "qwen3:8b/silabus-reksa-dana": {
+      "wrong_numbers": [], "wrong_facts": ["'unit penyerta' instead of unit penyertaan"],
+      "rules_broken": ["'Menghitung risiko reksa dana' cannot be checked", "modules 5 and 6 both choose a fund"],
+      "missing": ["NAB"],
+      "good": ["a business model module and a risk module", "hours 1-3 per module", "running example now low risk for a holiday"]
+    },
+    "qwen3:8b/silabus-python-analisis-data": {
+      "wrong_numbers": [], "wrong_facts": ["'fungsi SUM' is Excel, not Python"],
+      "rules_broken": ["'Menutup program Python' as an objective"],
+      "missing": ["pandas", "a module on cleaning data"],
+      "good": ["hours 1-3 per module", "no business model module any more"]
+    },
+    "qwen3:8b/materi-reksa-dana-modul-2": {
+      "wrong_numbers": [],
+      "wrong_facts": ["NAB described as the value of each unit"],
+      "rules_broken": ["chapter 3 copies chapter 2 word for word", "quiz 2 and 3 only swap up and down", "the same 'why' in every chapter"],
+      "missing": [],
+      "good": ["every number right, with the calculation written out", "the number of units stays 400 while the value changes", "prior and redemption explained correctly"]
+    },
+    "qwen3:8b/materi-python-analisis-data-modul-3": {
+      "wrong_numbers": [],
+      "wrong_facts": ["data['harga'].sum() called the total sales value; it adds unit prices", "exercise 2 expects the sum of 'jumlah' to be 412, the number of rows"],
+      "rules_broken": ["chapter 3 teaches sum(), outside the module card", "writes 'kita'"],
+      "missing": [],
+      "good": ["read_csv, head(), columns and info() used correctly", "questions with wrong options that do not exist in pandas"]
+    }
+  }
+}

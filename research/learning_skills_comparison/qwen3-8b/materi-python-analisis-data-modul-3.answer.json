@@ -1,0 +1,161 @@
+{
+  "title": "Membaca data dengan pandas",
+  "lead": "Bagaimana membuka file penjualan Budi dan melihat isinya? Membaca data adalah langkah pertama untuk menganalisis penjualan Budi, dan pandas adalah alat yang membantu proses ini.",
+  "objectives": [
+    "Membaca file CSV menjadi DataFrame dengan read_csv",
+    "Menampilkan baris pertama, nama kolom, dan ringkasan data"
+  ],
+  "prior": "Anda sudah mengenal perulangan dan fungsi, yang membantu mengotomatisasi tugas berulang. Sekarang, kita akan belajar membaca data dari file CSV menggunakan pandas.",
+  "chapters": [
+    {
+      "title": "Pandas dan DataFrame",
+      "what": "Pandas adalah library Python untuk mengolah data. DataFrame adalah struktur data seperti tabel yang menyimpan data dalam baris dan kolom.",
+      "terms": [
+        {
+          "term": "pandas",
+          "meaning": "Library Python untuk mengolah data dalam bentuk tabel."
+        },
+        {
+          "term": "DataFrame",
+          "meaning": "Struktur data seperti tabel yang menyimpan data dalam baris dan kolom."
+        },
+        {
+          "term": "kolom",
+          "meaning": "Bagian dalam tabel yang menyimpan data sejenis, seperti 'harga' atau 'jumlah'."
+        }
+      ],
+      "how": "Pertama, import pandas. Lalu, gunakan read_csv untuk membaca file CSV. Masukkan nama file, lalu simpan hasilnya ke variabel. Akhirnya, tampilkan data menggunakan head() atau info().",
+      "steps": [
+        "import pandas as pd",
+        "data = pd.read_csv('penjualan.csv')",
+        "print(data.head())",
+        "print(data.columns)",
+        "print(data.info())"
+      ],
+      "why": "Dengan mengetahui struktur data, kita bisa memahami apa yang perlu dianalisis. Tapi, data mungkin masih ada nilai yang tidak sesuai, yang akan dibahas di modul berikutnya.",
+      "objective": 1
+    },
+    {
+      "title": "Melihat isi data",
+      "what": "Menampilkan baris pertama dan ringkasan data membantu memahami apa yang ada dalam file CSV. Ini adalah langkah awal sebelum memproses data lebih lanjut.",
+      "terms": [
+        {
+          "term": "read_csv",
+          "meaning": "Fungsi pandas untuk membaca file CSV dan mengubahnya menjadi DataFrame."
+        }
+      ],
+      "how": "Gunakan head() untuk melihat baris pertama. Gunakan info() untuk melihat jumlah baris dan tipe data setiap kolom. Ini membantu memahami struktur data sebelum memprosesnya.",
+      "steps": [
+        "print(data.head())",
+        "print(data.columns)",
+        "print(data.info())",
+        "print(data.describe())"
+      ],
+      "why": "Melihat ringkasan data membantu memahami jenis data yang ada. Tapi, data mungkin masih ada nilai yang tidak sesuai, yang akan dibahas di modul berikutnya.",
+      "objective": 2
+    },
+    {
+      "title": "Menggunakan data",
+      "what": "Setelah melihat data, kita bisa mulai menggunakan informasi tersebut untuk menghitung total penjualan atau mencari tren tertentu.",
+      "terms": [],
+      "how": "Gunakan data yang sudah dibaca untuk menghitung total penjualan. Gunakan sum() pada kolom 'jumlah' atau 'harga'.",
+      "steps": [
+        "total_jumlah = data['jumlah'].sum()",
+        "total_harga = data['harga'].sum()",
+        "print('Total jumlah penjualan:', total_jumlah)",
+        "print('Total harga penjualan:', total_harga)"
+      ],
+      "why": "Menggunakan data membantu memahami bagaimana Budi mengelola penjualan. Tapi, data mungkin masih ada nilai yang tidak sesuai, yang akan dibahas di modul berikutnya.",
+      "objective": 2
+    }
+  ],
+  "demo": {
+    "title": "Membaca dan melihat data",
+    "instruction": "Pastikan file penjualan.csv sudah ada di folder yang sama.",
+    "steps": [
+      {
+        "label": "Import pandas",
+        "detail": "Import pandas sebagai pd untuk memudahkan penulisan."
+      },
+      {
+        "label": "Baca file CSV",
+        "detail": "Gunakan read_csv untuk membaca file CSV dan menyimpannya ke variabel data."
+      },
+      {
+        "label": "Tampilkan 5 baris pertama",
+        "detail": "Gunakan head() untuk melihat baris pertama data."
+      },
+      {
+        "label": "Tampilkan nama kolom",
+        "detail": "Gunakan columns untuk melihat nama kolom dalam DataFrame."
+      },
+      {
+        "label": "Tampilkan ringkasan data",
+        "detail": "Gunakan info() untuk melihat jumlah baris dan tipe data setiap kolom."
+      }
+    ]
+  },
+  "summary": [
+    "Anda belajar membaca file CSV menggunakan pandas dan read_csv.",
+    "Anda memahami struktur data dalam bentuk DataFrame dengan kolom dan baris.",
+    "Anda bisa melihat baris pertama dan ringkasan data untuk memahami isinya.",
+    "Masih ada nilai yang tidak sesuai dalam data, yang akan dibahas di modul berikutnya."
+  ],
+  "quiz": [
+    {
+      "question": "Budi punya file penjualan.csv. Bagaimana cara membacanya dengan pandas?",
+      "right": "data = pd.read_csv('penjualan.csv')",
+      "wrong": [
+        "data = pd.read('penjualan.csv')",
+        "data = pd.open('penjualan.csv')"
+      ],
+      "why": "read_csv adalah fungsi khusus untuk membaca file CSV. Fungsi lain tidak bisa digunakan untuk membaca file CSV. Lihat bab 1.",
+      "objective": 1
+    },
+    {
+      "question": "Apa yang ditampilkan oleh data.head()?",
+      "right": "5 baris pertama data",
+      "wrong": [
+        "Semua baris data",
+        "Nama kolom saja"
+      ],
+      "why": "head() hanya menampilkan 5 baris pertama. Untuk melihat semua baris, gunakan display() atau print(). Lihat bab 2.",
+      "objective": 2
+    },
+    {
+      "question": "Jika data memiliki 412 baris, berapa jumlah baris yang ditampilkan oleh data.head()?",
+      "right": "5",
+      "wrong": [
+        "412",
+        "10"
+      ],
+      "why": "head() hanya menampilkan 5 baris pertama. Lihat bab 2.",
+      "objective": 2
+    },
+    {
+      "question": "Jika data memiliki kolom 'jumlah' dan 'harga', bagaimana cara menghitung total penjualan?",
+      "right": "total = data['jumlah'].sum()",
+      "wrong": [
+        "total = data['jumlah'] + data['harga']",
+        "total = data['jumlah'].mean()"
+      ],
+      "why": "sum() digunakan untuk menjumlahkan semua nilai dalam kolom. Lihat bab 3.",
+      "objective": 2
+    }
+  ],
+  "exercises": [
+    {
+      "title": "Baca penjualan.csv, tampilkan 5 baris pertama, jumlah baris, dan tipe data setip",
+      "task": "Baca file penjualan.csv, tampilkan 5 baris pertama, jumlah baris, dan tipe data setiap kolom, lalu tulis dua hal yang Anda temukan.",
+      "expected": "5 baris pertama, jumlah baris = 412, tipe data setiap kolom (misalnya: tanggal = object, menu = object, jumlah = int64, harga = float64). Dua hal yang ditemukan: ada kolom 'jumlah' dan 'harga', dan tipe data 'jumlah' adalah bilangan bulat.",
+      "objective": 2
+    },
+    {
+      "title": "Hitung total penjualan berdasarkan 'jumlah' dan 'harga'",
+      "task": "Gunakan data yang sudah dibaca untuk menghitung total penjualan berdasarkan kolom 'jumlah' dan 'harga'.",
+      "expected": "total_jumlah = 412, total_harga = 123456.78",
+      "objective": 2
+    }
+  ],
+  "next": "Masih ada nilai yang tidak sesuai dalam data, seperti tanggal yang tidak konsisten, yang akan dibahas di modul berikutnya tentang membersihkan data."
+}

@@ -1,0 +1,176 @@
+{
+  "topic": "Python untuk analisis data",
+  "title": "Belajar Python untuk analisis data dari nol",
+  "lead": "Anda akan belajar dasar-dasar Python untuk menganalisis data penjualan. Cocok untuk pemula yang ingin mengotomatisasi pekerjaan manual. Di akhir, Anda bisa analisis data sendiri tanpa rumus manual.",
+  "level": "Pemula",
+  "assumptions": "Anda tidak punya pengalaman coding. Anda punya waktu 4 jam per minggu. Tujuan Anda adalah mengotomatisasi analisis data penjualan. Anda sudah mengenal Excel dasar.",
+  "map_note": "Mulai dari dasar Python, lalu ke data, lalu ke visualisasi. Setiap modul membangun kemampuan sebelumnya.",
+  "running_example": "Budi menjual 100 unit barang bulan lalu dengan harga Rp100.000, dan 120 unit bulan ini dengan harga Rp120.000.",
+  "outcomes": [
+    "Bisa membaca data penjualan dari file Excel",
+    "Bisa menghitung total penjualan per bulan",
+    "Bisa membuat grafik penjualan",
+    "Bisa menemukan penurunan penjualan terbesar",
+    "Bisa menyimpan hasil analisis ke file CSV",
+    "Bisa membandingkan penjualan antar bulan"
+  ],
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "number": 1,
+          "title": "Memulai dengan Python",
+          "question": "Bagaimana memulai coding dengan Python?",
+          "objectives": [
+            "Menjalankan kode Python di komputer",
+            "Membaca dan menulis variabel",
+            "Menghitung total penjualan dengan Python",
+            "Menyebutkan tipe data dasar"
+          ],
+          "terms": [
+            "variabel",
+            "tipe data",
+            "print",
+            "komentar"
+          ],
+          "exercise": "Hitung total penjualan Budi bulan lalu dengan Python.",
+          "result": "Bisa menjalankan kode Python",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 2,
+          "title": "Membaca data dari Excel",
+          "question": "Bagaimana membaca data dari file Excel dengan Python?",
+          "objectives": [
+            "Membaca file Excel dengan pandas",
+            "Membaca baris dan kolom data",
+            "Menghitung total penjualan per bulan",
+            "Membaca data dari file CSV"
+          ],
+          "terms": [
+            "pandas",
+            "DataFrame",
+            "file Excel",
+            "file CSV"
+          ],
+          "exercise": "Baca data penjualan Budi dari file Excel dan hitung total penjualan bulan lalu.",
+          "result": "Bisa membaca data dari file Excel",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "number": 3,
+          "title": "Menganalisis data",
+          "question": "Bagaimana menganalisis data penjualan?",
+          "objectives": [
+            "Menghitung rata-rata penjualan per bulan",
+            "Membandingkan penjualan antar bulan",
+            "Menemukan penurunan penjualan terbesar",
+            "Membuat tabel perbandingan"
+          ],
+          "terms": [
+            "mean",
+            "median",
+            "mode",
+            "perbandingan"
+          ],
+          "exercise": "Buat tabel perbandingan penjualan Budi antar bulan.",
+          "result": "Bisa menganalisis data penjualan",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 4,
+          "title": "Membuat grafik",
+          "question": "Bagaimana membuat grafik dari data penjualan?",
+          "objectives": [
+            "Membuat grafik garis penjualan",
+            "Membuat grafik batang penjualan",
+            "Menyebutkan jenis grafik yang cocok",
+            "Menyimpan grafik ke file"
+          ],
+          "terms": [
+            "grafik",
+            "matplotlib",
+            "garis",
+            "batang"
+          ],
+          "exercise": "Buat grafik garis penjualan Budi dan simpan ke file.",
+          "result": "Bisa membuat grafik dari data",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "number": 5,
+          "title": "Mengotomatisasi analisis",
+          "question": "Bagaimana mengotomatisasi analisis data?",
+          "objectives": [
+            "Membuat skrip analisis data",
+            "Menghitung total penjualan otomatis",
+            "Membuat grafik otomatis",
+            "Menyimpan hasil ke file"
+          ],
+          "terms": [
+            "skrip",
+            "fungsi",
+            "otomatisasi",
+            "modul"
+          ],
+          "exercise": "Buat skrip yang menghitung total penjualan dan membuat grafik.",
+          "result": "Bisa mengotomatisasi analisis data",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 6,
+          "title": "Model bisnis penjualan",
+          "question": "Bagaimana model bisnis penjualan bekerja?",
+          "objectives": [
+            "Menjelaskan siapa yang memberi apa",
+            "Menjelaskan siapa yang mendapat apa",
+            "Membandingkan risiko bisnis",
+            "Menyebutkan insentif penjualan"
+          ],
+          "terms": [
+            "model bisnis",
+            "insentif",
+            "risiko",
+            "pemasok"
+          ],
+          "exercise": "Jelaskan model bisnis penjualan Budi.",
+          "result": "Bisa menjelaskan model bisnis penjualan",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Analisis penjualan Budi",
+    "task": "Analisis data penjualan Budi selama 6 bulan dan buat laporan",
+    "criteria": [
+      "Bisa membaca data dari file Excel",
+      "Bisa menghitung total penjualan per bulan",
+      "Bisa membuat grafik penjualan",
+      "Bisa menemukan penurunan penjualan terbesar",
+      "Bisa menyimpan hasil ke file CSV"
+    ],
+    "hours": 3
+  },
+  "money_topic": false,
+  "sources": [],
+  "hours_per_week": 4,
+  "model": "qwen3:8b"
+}

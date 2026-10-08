@@ -1,0 +1,122 @@
+{
+  "topic": "Reksa Dana",
+  "title": "Belajar Reksa Dana dari Nol",
+  "lead": "Modul ini akan membimbing Anda memahami dasar-dasar reksa dana. Anda akan belajar tentang jenis-jenisnya, cara kerjanya, dan bagaimana memilih yang tepat untuk tujuan keuangan Anda. Setelah menyelesaikan modul ini, Anda siap untuk membuat keputusan investasi yang lebih cerdas.",
+  "level": "Pemula",
+  "assumptions": "Anda memiliki pengetahuan dasar tentang uang dan investasi. Anda meluangkan waktu sekitar 3 jam per minggu untuk belajar. Tujuan Anda adalah memahami reksa dana agar dapat memilih sendiri tanpa bergantung pada rekomendasi orang lain.",
+  "outcomes": [
+    "Menjelaskan berbagai jenis reksa dana yang tersedia di pasar.",
+    "Menghitung potensi keuntungan dan kerugian dari investasi reksa dana.",
+    "Membandingkan karakteristik risiko dari berbagai jenis reksa dana.",
+    "Membuat portofolio reksa dana sederhana berdasarkan tujuan keuangan.",
+    "Membaca dan menganalisis laporan kinerja reksa dana.",
+    "Menyebutkan faktor-faktor penting yang perlu dipertimbangkan saat memilih reksa dana."
+  ],
+  "map_note": "Modul ini disusun secara progresif, dimulai dari konsep dasar reksa dana hingga analisis risiko. Urutan ini penting karena pemahaman tentang risiko akan memengaruhi pilihan investasi Anda.",
+  "running_example": "Budi ingin berinvestasi untuk masa depan. Dia menggunakan reksa dana sebagai salah satu pilihannya. Sari membantu Budi memilih reksa dana yang sesuai dengan profil risikonya, dan Andi memberikan saran terkait fee yang dikenakan.",
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "title": "Apa Itu Reksa Dana?",
+          "question": "Apa saja komponen utama reksa dana?",
+          "objectives": [
+            "Menjelaskan definisi reksa dana.",
+            "Menghitung total aset bersih (NAB) reksa dana.",
+            "Membandingkan reksa buka dan reksa tutup."
+          ],
+          "terms": ["NAB", "Reksa Buka", "Reksa Tutup", "Manajer Investasi", "Dana Kelola"],
+          "exercise": "Buat tabel perbandingan NAB dari 3 reksa dana yang berbeda. Jelaskan dalam lima kalimat apa perbedaan utama antara reksa buka dan reksa tutup.",
+          "result": "Bisa Menjelaskan",
+          "hours": 1
+        },
+        {
+          "title": "Jenis-Jenis Reksa Dana",
+          "question": "Apa saja jenis reksa dana yang umum?",
+          "objectives": [
+            "Menyebutkan berbagai jenis reksa dana (pasar uang, pendapatan tetap, campuran, saham).",
+            "Membandingkan profil risiko dari masing-masing jenis reksa dana.",
+            "Mengidentifikasi instrumen investasi utama dalam setiap jenis reksa dana."
+          ],
+          "terms": ["Pasar Uang", "Pendapatan Tetap", "Campuran", "Saham", "Obligasi"],
+          "exercise": "Buat daftar 5 pertanyaan untuk menanyakan kepada perencana keuangan mengenai jenis reksa dana yang cocok.",
+          "result": "Bisa Menyebutkan",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "title": "Model Bisnis dan Insentif Reksa Dana",
+          "question": "Siapa saja yang terlibat dalam model bisnis reksa dana dan bagaimana mereka mendapatkan keuntungan?",
+          "objectives": [
+            "Menjelaskan peran manajer investasi.",
+            "Memahami struktur biaya pengelolaan reksa dana.",
+            "Menganalisis insentif yang diberikan kepada manajer investasi."
+          ],
+          "terms": ["Manajer Investasi", "Biaya Pengelolaan", "Fee Penyerap", "Fee Barang Beredar"],
+          "exercise": "Buat diagram alur sederhana yang menggambarkan bagaimana keuntungan reksa dana didistribusikan.",
+          "result": "Bisa Menjelaskan",
+          "hours": 3
+        },
+        {
+          "title": "Risiko dalam Investasi Reksa Dana",
+          "question": "Apa saja jenis risiko yang dihadapi investor reksa dana?",
+          "objectives": [
+            "Menyebutkan berbagai jenis risiko (risiko pasar, risiko kredit, risiko likuiditas).",
+            "Memahami konsep volatilitas dan standar deviasi.",
+            "Membahas strategi mitigasi risiko."
+          ],
+          "terms": ["Risiko Pasar", "Risiko Kredit", "Risiko Likuiditas", "Volatilitas"],
+          "exercise": "Buat tabel perbandingan tingkat risiko dari 3 jenis reksa dana yang berbeda.",
+          "result": "Bisa Membandingkan",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "title": "Memilih Reksa Dana Sesuai Tujuan Keuangan",
+          "question": "Bagaimana cara memilih reksa dana yang sesuai dengan tujuan keuangan Anda?",
+          "objectives": [
+            "Menentukan profil risiko investor.",
+            "Menganalisis tujuan investasi (pendapatan, pertumbuhan modal).",
+            "Memilih reksa dana berdasarkan kinerja historis dan prospektus."
+          ],
+          "terms": ["Profil Risiko", "Horizon Investasi", "Prospektus"],
+          "exercise": "Buat simulasi portofolio reksa dana dengan alokasi aset yang sesuai dengan profil risiko Anda.",
+          "result": "Bisa Membuat",
+          "hours": 3
+        },
+        {
+          "title": "Membaca Laporan Kinerja Reksa Dana",
+          "question": "Apa saja informasi penting yang harus diperhatikan dalam laporan kinerja reksa dana?",
+          "objectives": [
+            "Menjelaskan metrik-metrik utama (return, Sharpe ratio, Alpha).",
+            "Membandingkan kinerja reksa dana dengan benchmark.",
+            "Menganalisis faktor-faktor yang memengaruhi kinerja."
+          ],
+          "terms": ["Return", "Sharpe Ratio", "Alpha"],
+          "exercise": "Analisis laporan kinerja reksa dana contoh. Jelaskan dalam tiga kalimat apa yang Anda temukan.",
+          "result": "Bisa Membaca",
+          "hours": 2
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Rencanakan Investasi Reksa Dana Anda",
+    "task": "Buat rencana investasi reksa dana selama 5 tahun. Pilih minimal 3 reksa dana yang berbeda. Tentukan alokasi aset, dan jelaskan alasan di balik pilihan Anda.",
+    "criteria": [
+      "Memilih 3 reksa dana dengan karakteristik yang berbeda.",
+      "Menentukan alokasi aset berdasarkan profil risiko Anda.",
+      "Menjelaskan alasan pemilihan reksa dana dan alokasi aset dalam laporan tertulis."
+    ],
+    "hours": 8
+  }
+}

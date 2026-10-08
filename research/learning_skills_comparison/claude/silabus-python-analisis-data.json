@@ -1,0 +1,118 @@
+{
+  "topic": "Python untuk analisis data",
+  "title": "Belajar Python untuk analisis data dari nol",
+  "lead": "Silabus ini untuk Anda yang biasa memakai Excel dan ingin mengolah data dengan Python. Anda mulai dari dasar bahasa Python, lalu memakai pandas untuk membaca, membersihkan, merangkum, dan menggambar data penjualan sampai jadi laporan.",
+  "level": "Pemula",
+  "assumptions": "Anda belum pernah menulis kode, sudah biasa memakai spreadsheet, punya laptop dan sekitar 4 jam per minggu, dan ingin bisa menganalisis data sendiri tanpa rumus manual.",
+  "outcomes": [
+    "Menulis program Python pendek dengan variabel, list, perulangan, dan fungsi",
+    "Membaca file CSV menjadi DataFrame dan memeriksa isinya",
+    "Membersihkan data yang kosong, ganda, atau salah tipe",
+    "Menghitung ringkasan per kelompok dengan groupby",
+    "Membuat grafik garis dan grafik batang dari data",
+    "Menyusun laporan analisis singkat dari satu dataset"
+  ],
+  "map_note": "Fondasi mengajarkan bahasa Python yang dibutuhkan pandas. Inti memakai pandas untuk tiga pekerjaan analisis: membaca, membersihkan, dan merangkum. Penerapan menggambar hasilnya dan menyusunnya menjadi laporan.",
+  "running_example": "Budi punya warung kopi dan mencatat penjualan 30 hari di file CSV dengan kolom tanggal, menu, jumlah, dan harga. Total transaksinya 412 baris.",
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "title": "Variabel, tipe data, dan list",
+          "question": "Bagaimana Python menyimpan angka dan daftar penjualan Budi?",
+          "objectives": [
+            "Membuat variabel berisi angka, teks, dan nilai benar atau salah",
+            "Menghitung total dari sebuah list angka"
+          ],
+          "terms": ["variabel", "tipe data", "list", "string"],
+          "exercise": "Simpan penjualan kopi Budi selama 7 hari dalam satu list, lalu hitung total dan rata-ratanya dengan sum dan len.",
+          "result": "Bisa menghitung total dari list",
+          "hours": 2
+        },
+        {
+          "title": "Perulangan dan fungsi",
+          "question": "Bagaimana menghitung hal yang sama untuk setiap hari tanpa menulis ulang kode?",
+          "objectives": [
+            "Menulis perulangan for untuk memproses setiap isi list",
+            "Membuat fungsi yang menerima input dan mengembalikan hasil"
+          ],
+          "terms": ["perulangan", "fungsi", "argumen", "return"],
+          "exercise": "Buat fungsi pendapatan(jumlah, harga) lalu pakai perulangan untuk menghitung pendapatan 7 hari penjualan Budi.",
+          "result": "Bisa menulis fungsi dan perulangan",
+          "hours": 3
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "title": "Membaca data dengan pandas",
+          "question": "Bagaimana membuka file penjualan Budi dan melihat isinya?",
+          "objectives": [
+            "Membaca file CSV menjadi DataFrame dengan read_csv",
+            "Menampilkan baris pertama, nama kolom, dan ringkasan data"
+          ],
+          "terms": ["pandas", "DataFrame", "kolom", "read_csv"],
+          "exercise": "Baca penjualan.csv, tampilkan 5 baris pertama, jumlah baris, dan tipe data setiap kolom, lalu tulis dua hal yang Anda temukan.",
+          "result": "Bisa membaca CSV menjadi DataFrame",
+          "hours": 2
+        },
+        {
+          "title": "Membersihkan data",
+          "question": "Apa yang harus dibereskan sebelum data penjualan bisa dihitung?",
+          "objectives": [
+            "Menemukan dan menangani nilai kosong",
+            "Menghapus baris ganda dan mengubah tipe kolom"
+          ],
+          "terms": ["nilai kosong", "baris ganda", "dropna", "astype"],
+          "exercise": "Hitung berapa nilai kosong dan baris ganda di data Budi, bersihkan, lalu bandingkan jumlah baris sebelum dan sesudah.",
+          "result": "Bisa membersihkan data kotor",
+          "hours": 3
+        },
+        {
+          "title": "Merangkum data per kelompok",
+          "question": "Menu apa yang paling laku dan hari apa paling ramai?",
+          "objectives": [
+            "Menghitung total dan rata-rata per kelompok dengan groupby",
+            "Mengurutkan hasil untuk menemukan yang terbesar"
+          ],
+          "terms": ["groupby", "agregasi", "sort_values"],
+          "exercise": "Hitung total pendapatan per menu dan per hari, lalu tulis tiga menu terlaris beserta angkanya.",
+          "result": "Bisa merangkum data per kelompok",
+          "hours": 2
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "title": "Menggambar data",
+          "question": "Grafik apa yang paling jelas untuk menunjukkan tren penjualan Budi?",
+          "objectives": [
+            "Membuat grafik garis untuk data per hari",
+            "Membuat grafik batang untuk perbandingan antarmenu"
+          ],
+          "terms": ["matplotlib", "grafik garis", "grafik batang", "sumbu"],
+          "exercise": "Buat satu grafik garis pendapatan harian dan satu grafik batang pendapatan per menu, lengkap dengan judul dan label sumbu.",
+          "result": "Bisa membuat grafik garis dan batang",
+          "hours": 2
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Laporan penjualan satu bulan",
+    "task": "Pakai data penjualan Anda sendiri, atau data warung Budi, lalu buat laporan satu halaman: data yang dibersihkan, tiga angka ringkasan, dua grafik, dan tiga saran berdasarkan angkanya.",
+    "criteria": [
+      "Kode berjalan dari membaca CSV sampai membuat grafik tanpa error",
+      "Jumlah baris sebelum dan sesudah dibersihkan tertulis",
+      "Ada minimal tiga angka ringkasan dari groupby",
+      "Dua grafik punya judul dan label sumbu",
+      "Setiap saran merujuk ke angka di laporan"
+    ],
+    "hours": 4
+  }
+}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Belajar Python untuk Analisis Data dari Nol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Warna aksen: ganti --accent / --accent-line / --accent-bg (light dan dark) sesuai identitas topik.
+     Bitcoin = oranye #F7931A. Topik tanpa warna identitas: biarkan oranye ini atau pilih satu warna yang bermakna. -->
+<style>
+:root{
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#16213A; --muted:#5B6478; --rule:#DDE1E8; --rule-strong:#B9C0CC;
+  --accent:#E2830E; --accent-line:#F7931A; --accent-bg:#FEF1DE;
+  --teal:#0F7A64; --teal-bg:#E1F3EE; --red:#B8392A; --red-bg:#FBE7E3;
+  --sans:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1522; --surface:#172033; --ink:#E8EBF1; --muted:#9AA3B5; --rule:#263149; --rule-strong:#3A4766;
+    --accent:#F7A23C; --accent-line:#F7A23C; --accent-bg:#3A2A12;
+    --teal:#42C7A3; --teal-bg:#11322B; --red:#F07B66; --red-bg:#3B1E1A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1522; --surface:#172033; --ink:#E8EBF1; --muted:#9AA3B5; --rule:#263149; --rule-strong:#3A4766;
+  --accent:#F7A23C; --accent-line:#F7A23C; --accent-bg:#3A2A12;
+  --teal:#42C7A3; --teal-bg:#11322B; --red:#F07B66; --red-bg:#3B1E1A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.7;-webkit-text-size-adjust:100%}
+main{max-width:700px;margin:0 auto;padding:0 20px 64px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent-line);outline-offset:2px}
+h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.08;letter-spacing:-0.025em;font-weight:800;margin:0 0 18px}
+h2{font-size:1.6rem;line-height:1.2;letter-spacing:-0.015em;font-weight:800;margin:0 0 6px}
+h3{font-size:1.02rem;font-weight:700;margin:26px 0 6px;color:var(--ink)}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+code,.mono{font-family:var(--mono);font-size:.88em}
+.hero{padding:56px 0 28px}
+.hero .lead{font-size:1.12rem;color:var(--muted);max-width:60ch}
+.paper{display:flex;gap:14px;align-items:center;margin:24px 0 0;padding:14px 16px;background:var(--surface);border:1px solid var(--rule);border-radius:10px;font-size:.92rem}
+.paper .coin{flex:none;width:42px;height:42px;border-radius:50%;background:var(--accent-line);color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.3rem}
+.howto{margin:28px 0 0;padding:16px 18px;border-left:3px solid var(--accent-line);background:var(--surface);font-size:.95rem}
+.toc{margin:36px 0 8px;padding:0;list-style:none;counter-reset:t;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 20px}
+.toc li{counter-increment:t;margin:0}
+.toc a{display:flex;gap:10px;color:var(--ink);text-decoration:none;padding:6px 0;border-bottom:1px solid var(--rule);font-size:.93rem}
+.toc a::before{content:counter(t);font-family:var(--mono);color:var(--accent);min-width:1.4em}
+.toc a:hover{color:var(--accent)}
+section{padding:52px 0 8px;border-top:1px solid var(--rule);margin-top:40px}
+.chapter{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.chapter .num{font-family:var(--mono);font-size:.85rem;color:var(--accent);font-weight:500}
+.src{font-size:.86rem;color:var(--muted);margin-bottom:18px}
+.term{border-left:3px solid var(--rule-strong);padding:4px 0 4px 14px;margin:12px 0;font-size:.96rem}
+.term b{display:block;font-weight:700}
+.note{background:var(--accent-bg);border-radius:10px;padding:14px 16px;font-size:.95rem;margin:18px 0}
+.fig{margin:22px 0;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px}
+.fig svg{display:block;width:100%;max-width:440px;height:auto;margin:0 auto}
+.fig figcaption{font-size:.85rem;color:var(--muted);margin-top:10px;text-align:center}
+.bx{fill:var(--surface);stroke:var(--rule-strong);stroke-width:1}
+.bo{fill:var(--accent-bg);stroke:var(--accent-line);stroke-width:1}
+.bt{fill:var(--teal-bg);stroke:var(--teal);stroke-width:1}
+.br{fill:var(--red-bg);stroke:var(--red);stroke-width:1}
+.dash{fill:none;stroke:var(--rule-strong);stroke-width:1;stroke-dasharray:5 4}
+.tx{fill:var(--ink);font-family:var(--sans);font-size:13px;font-weight:700}
+.ts{fill:var(--muted);font-family:var(--sans);font-size:11.5px}
+.tm{fill:var(--ink);font-family:var(--mono);font-size:11px}
+.to{fill:var(--accent);font-family:var(--mono);font-size:11px;font-weight:500}
+.tr{fill:var(--red);font-family:var(--sans);font-size:12.5px;font-weight:700}
+.ln{stroke:var(--muted);stroke-width:1.4;fill:none}
+.lo{stroke:var(--accent-line);stroke-width:1.8;fill:none}
+.lt{stroke:var(--teal);stroke-width:1.6;fill:none}
+.lr{stroke:var(--red);stroke-width:1.6;fill:none;stroke-dasharray:4 3}
+.mk{fill:var(--muted)} .mko{fill:var(--accent-line)}
+.lab{display:block;font-size:.85rem;color:var(--muted);margin:0 0 4px}
+input[type=text]{width:100%;font:inherit;font-size:1rem;padding:10px 12px;border:1px solid var(--rule-strong);border-radius:8px;background:var(--bg);color:var(--ink)}
+.hashout{font-family:var(--mono);font-size:.88rem;word-break:break-all;background:var(--bg);border-radius:8px;padding:10px 12px;margin:8px 0 0;line-height:1.5}
+.hashout .hit{color:var(--accent);font-weight:500}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.stat{background:var(--bg);border-radius:8px;padding:10px 12px}
+.stat span{display:block;font-size:.8rem;color:var(--muted)}
+.stat strong{font-size:1.4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.status{display:inline-block;font-size:.88rem;font-weight:600;padding:6px 12px;border-radius:8px;margin-top:10px}
+.status.ok{background:var(--teal-bg);color:var(--teal)}
+.status.no{background:var(--accent-bg);color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+button{font:inherit;font-size:.92rem;font-weight:600;padding:9px 14px;border-radius:8px;border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink);cursor:pointer}
+button.primary{background:var(--accent-line);border-color:var(--accent-line);color:#fff}
+button:active{transform:scale(.98)}
+.bars{display:grid;gap:8px;margin-top:6px}
+.bar{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:10px;font-size:.88rem}
+.bar .track{display:flex;align-items:center;gap:8px}
+.bar .fill{height:18px;background:var(--red);border-radius:4px;min-width:3px}
+.bar .v{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.tablewrap{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:700;background:var(--surface)}
+.gloss dt{font-weight:700;margin-top:14px}
+.gloss dd{margin:2px 0 0;color:var(--muted)}
+footer{max-width:700px;margin:0 auto;padding:24px 20px 48px;font-size:.85rem;color:var(--muted);border-top:1px solid var(--rule)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* ---- Komponen belajar (tambahan silabus-belajar) ---- */
+.eyebrow{font-family:var(--mono);font-size:.82rem;color:var(--accent);font-weight:500;margin:0 0 10px}
+.eyebrow a{text-decoration:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+.chips li{margin:0;font-size:.85rem;font-weight:600;padding:5px 11px;border:1px solid var(--rule-strong);border-radius:999px;background:var(--surface)}
+.goals{margin:24px 0 0;padding:16px 18px;background:var(--teal-bg);border-radius:10px;font-size:.96rem}
+.goals strong{display:block;margin-bottom:6px}
+.goals ul{margin:0;padding-left:20px}
+.stage{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin:30px 0 0}
+.progress{margin:18px 0 6px}
+.progress .track{height:10px;background:var(--rule);border-radius:999px;overflow:hidden}
+.progress .fill{height:100%;width:0;background:var(--teal);border-radius:999px;transition:width .25s}
+.progress .lab{margin:6px 0 0}
+.mod{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:18px;margin:14px 0}
+.mod.done{border-color:var(--teal)}
+.mod .top{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.mod .num{font-family:var(--mono);color:var(--accent);font-size:.85rem;font-weight:500;white-space:nowrap}
+.mod h3{margin:0;font-size:1.15rem;line-height:1.3}
+.mod .ask{color:var(--muted);font-size:.95rem;margin:6px 0 0}
+.mod .sub{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 4px}
+.mod ul,.mod p{font-size:.95rem}
+.mod ul{margin-bottom:0}
+.mod .chips{margin:0}
+.mod .chips li{font-family:var(--mono);font-weight:500;font-size:.8rem;background:var(--bg)}
+.mod .foot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid var(--rule);font-size:.9rem}
+.mod .open{font-weight:700;text-decoration:none}
+.mod .soon{color:var(--muted)}
+.check{display:inline-flex;gap:8px;align-items:center;cursor:pointer;margin-left:auto;font-weight:600}
+.check input{width:18px;height:18px;accent-color:var(--teal)}
+.quiz .q{margin:16px 0 0;padding:16px;background:var(--surface);border:1px solid var(--rule);border-radius:14px}
+.quiz .q p{font-weight:700;margin-bottom:10px}
+.quiz .opts{display:grid;gap:8px}
+.quiz .opts button{text-align:left;font-weight:500;width:100%}
+.quiz .opts button:disabled{cursor:default;opacity:1}
+.quiz .opts button.right{background:var(--teal-bg);border-color:var(--teal);color:var(--teal);font-weight:700}
+.quiz .opts button.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.quiz .why{font-size:.92rem;color:var(--muted);margin:10px 0 0}
+.task{border:1px dashed var(--rule-strong);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:.96rem}
+.task b{display:block}
+.task .out{color:var(--muted);font-size:.9rem;margin:6px 0 0}
+.next{margin:22px 0 0;padding:16px 18px;background:var(--accent-bg);border-radius:10px;font-size:.96rem}
+.next strong{display:block}
+</style>
+</head>
+<body>
+<svg class="sr" aria-hidden="true"><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk" d="M1 1L9 5L1 9z"/></marker>
+<marker id="aho" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mko" d="M1 1L9 5L1 9z"/></marker>
+</defs></svg>
+
+<main>
+<header class="hero">
+<p class="eyebrow">Silabus belajar</p>
+<h1>Belajar Python untuk Analisis Data dari Nol</h1>
+<p class="lead">Dalam modul ini, Anda akan mempelajari dasar-dasar Python yang relevan untuk analisis data. Anda akan belajar cara membaca data, melakukan perhitungan sederhana, dan memvisualisasikan hasil analisis. Setelah menyelesaikan modul ini, Anda akan mampu menganalisis data penjualan sederhana tanpa perlu menggunakan rumus manual.</p>
+<ul class="chips"><li>Pemula</li><li>6 modul</li><li>± 14 jam total</li><li>4 minggu, 4 jam per minggu</li></ul>
+<div class="goals"><strong>Setelah selesai, Anda bisa:</strong><ul><li>Menulis program Python sederhana untuk membaca file CSV.</li><li>Melakukan perhitungan dasar pada data menggunakan Python.</li><li>Memvisualisasikan data dengan grafik sederhana.</li><li>Membersihkan dan memformat data untuk analisis.</li><li>Mengidentifikasi potensi masalah dalam dataset.</li></ul></div>
+<div class="howto"><strong>Silabus ini dibuat dengan asumsi:</strong> Anda memiliki pengetahuan dasar tentang komputer dan internet. Anda bersedia meluangkan waktu sekitar 4 jam per minggu untuk belajar. Anda ingin mengembangkan kemampuan analisis data secara mandiri. Kalau ada yang tidak cocok, minta disesuaikan.</div>
+<div class="howto">Cara memakai: kerjakan modul berurutan, karena setiap modul memakai istilah dari modul sebelumnya. Di setiap modul: baca materi, kerjakan latihan, lalu jawab kuis. Centang <strong>Selesai</strong> kalau kuisnya sudah benar semua.</div>
+<div class="howto"><strong>Contoh yang dipakai di semua modul:</strong> Budi adalah pemilik toko online yang ingin menganalisis data penjualan bulanan. Anda akan membantu Budi dengan menggunakan Python untuk melihat tren penjualan, produk terlaris, dan lain-lain.</div>
+<ol class="toc"><li><a href="#peta">Peta belajar</a></li><li><a href="#modul">Modul</a></li><li><a href="#jadwal">Jadwal</a></li><li><a href="#proyek">Proyek akhir</a></li><li><a href="#sumber">Sumber belajar</a></li></ol>
+</header>
+<section id="peta"><div class="chapter"><span class="num">1</span><h2>Peta belajar</h2></div><p>Kita mulai dari dasar-dasar Python, lalu belajar cara membaca dan memanipulasi data. Akhirnya, kita akan membuat visualisasi untuk memahami data lebih baik.</p><figure class="fig"><svg viewBox="0 0 360 546" role="img" aria-label="Peta belajar Python untuk analisis data: 6 modul dalam 3 tahap, lalu proyek akhir"><text class="to" x="20" y="22">FONDASI</text><rect class="bx" x="20" y="34" width="320" height="48" rx="8"/><text class="tx" x="36" y="54">1 · Pengenalan Python dan Lingkungan Pe…</text><text class="ts" x="36" y="71">Bisa Menjalankan Program Python</text><line class="ln" x1="180" y1="82" x2="180" y2="92" marker-end="url(#ah)"/><rect class="bx" x="20" y="96" width="320" height="48" rx="8"/><text class="tx" x="36" y="116">2 · Tipe Data dan Variabel di Python</text><text class="ts" x="36" y="133">Bisa Menyimpan Nilai dalam Variabel</text><text class="to" x="20" y="170">INTI</text><line class="ln" x1="180" y1="144" x2="180" y2="178" marker-end="url(#ah)"/><rect class="bx" x="20" y="182" width="320" height="48" rx="8"/><text class="tx" x="36" y="202">3 · Membaca dan Menulis File CSV</text><text class="ts" x="36" y="219">Bisa Membaca Data dari File CSV</text><line class="ln" x1="180" y1="230" x2="180" y2="240" marker-end="url(#ah)"/><rect class="bx" x="20" y="244" width="320" height="48" rx="8"/><text class="tx" x="36" y="264">4 · Operasi Dasar pada Data</text><text class="ts" x="36" y="281">Bisa Melakukan Perhitungan pada Data</text><text class="to" x="20" y="318">PENERAPAN</text><line class="ln" x1="180" y1="292" x2="180" y2="326" marker-end="url(#ah)"/><rect class="bx" x="20" y="330" width="320" height="48" rx="8"/><text class="tx" x="36" y="350">5 · Visualisasi Data dengan Matplotlib</text><text class="ts" x="36" y="367">Bisa Membuat Grafik Data</text><line class="ln" x1="180" y1="378" x2="180" y2="388" marker-end="url(#ah)"/><rect class="bx" x="20" y="392" width="320" height="48" rx="8"/><text class="tx" x="36" y="412">6 · Membersihkan dan Memformat Data</text><text class="ts" x="36" y="429">Bisa Membersihkan Data</text><text class="to" x="20" y="466">PROYEK AKHIR</text><line class="ln" x1="180" y1="440" x2="180" y2="474" marker-end="url(#ah)"/><rect class="bt" x="20" y="478" width="320" height="48" rx="8"/><text class="tx" x="36" y="498">Analisis Penjualan Toko Online Budi</text><text class="ts" x="36" y="515">Membaca data penjualan dari file CSV bernama…</text></svg><figcaption>Baca dari atas ke bawah: setiap kotak satu modul dengan hasilnya, kotak teal adalah proyek akhir.</figcaption></figure></section>
+<section id="modul"><div class="chapter"><span class="num">2</span><h2>Modul</h2></div><div class="progress"><div class="track"><div class="fill" id="pfill"></div></div><p class="lab" id="ptext"></p></div>
+<p class="stage">Fondasi</p>
+<article class="mod" id="m1"><div class="top"><span class="num">Modul 1</span><h3>Pengenalan Python dan Lingkungan Pengembangan</h3></div><p class="ask">Apa itu Python dan bagaimana cara menjalankannya?</p><p class="sub">Setelah modul ini, Anda bisa</p><ul><li>Menjelaskan apa itu bahasa pemrograman Python.</li><li>Menginstal dan mengkonfigurasi lingkungan pengembangan Python (misalnya, VS Code).</li><li>Menulis program &#x27;Hello, World!&#x27; pertama Anda.</li></ul><p class="sub">Istilah yang dipelajari</p><ul class="chips"><li>Interpreter</li><li>IDE</li><li>Syntax</li></ul><p class="sub">Latihan</p><p>Tulis program Python yang mencetak pesan &#x27;Halo, Dunia!&#x27; ke layar.</p><div class="foot"><span>± 1 jam</span><span>Sumber: belum ditentukan</span><span class="soon">Materi belum dibuat</span><label class="check"><input type="checkbox" data-mod="m1"> Selesai</label></div></article>
+<article class="mod" id="m2"><div class="top"><span class="num">Modul 2</span><h3>Tipe Data dan Variabel di Python</h3></div><p class="ask">Bagaimana cara menyimpan data dalam variabel?</p><p class="sub">Setelah modul ini, Anda bisa</p><ul><li>Menjelaskan tipe data dasar di Python (integer, float, string, boolean).</li><li>Membuat dan menggunakan variabel untuk menyimpan nilai.</li><li>Melakukan operasi matematika sederhana pada variabel.</li></ul><p class="sub">Istilah yang dipelajari</p><ul class="chips"><li>Tipe Data</li><li>Variabel</li><li>Operator</li></ul><p class="sub">Latihan</p><p>Buat program yang menghitung luas persegi panjang dengan input panjang dan lebar.</p><div class="foot"><span>± 1 jam</span><span>Sumber: belum ditentukan</span><span class="soon">Materi belum dibuat</span><label class="check"><input type="checkbox" data-mod="m2"> Selesai</label></div></article>
+<p class="stage">Inti</p>
+<article class="mod" id="m3"><div class="top"><span class="num">Modul 3</span><h3>Membaca dan Menulis File CSV</h3></div><p class="ask">Bagaimana cara membaca data dari file CSV?</p><p class="sub">Setelah modul ini, Anda bisa</p><ul><li>Menjelaskan format file CSV.</li><li>Menggunakan library `csv` untuk membaca data dari file CSV.</li><li>Menulis data ke file CSV.</li></ul><p class="sub">Istilah yang dipelajari</p><ul class="chips"><li>CSV</li><li>Library</li><li>File</li></ul><p class="sub">Latihan</p><p>Baca data penjualan dari file CSV bernama &#x27;penjualan.csv&#x27; dan tampilkan hasilnya.</p><div class="foot"><span>± 1 jam</span><span>Sumber: belum ditentukan</span><span class="soon">Materi belum dibuat</span><label class="check"><input type="checkbox" data-mod="m3"> Selesai</label></div></article>
+<article class="mod" id="m4"><div class="top"><span class="num">Modul 4</span><h3>Operasi Dasar pada Data</h3></div><p class="ask">Bagaimana cara melakukan perhitungan pada data?</p><p class="sub">Setelah modul ini, Anda bisa</p><ul><li>Melakukan operasi matematika (penjumlahan, pengurangan, perkalian, pembagian) pada data.</li><li>Menggunakan fungsi `sum()`, `mean()`, `median()` untuk menghitung statistik dasar.</li><li>Memanipulasi string.</li></ul><p class="sub">Istilah yang dipelajari</p><ul class="chips"><li>Statistik</li><li>Fungsi</li><li>String</li></ul><p class="sub">Latihan</p><p>Hitung rata-rata, median, dan jumlah penjualan dari file &#x27;penjualan.csv&#x27;.</p><div class="foot"><span>± 1 jam</span><span>Sumber: belum ditentukan</span><span class="soon">Materi belum dibuat</span><label class="check"><input type="checkbox" data-mod="m4"> Selesai</label></div></article>
+<p class="stage">Penerapan</p>
+<article class="mod" id="m5"><div class="top"><span class="num">Modul 5</span><h3>Visualisasi Data dengan Matplotlib</h3></div><p class="ask">Bagaimana cara membuat grafik dari data?</p><p class="sub">Setelah modul ini, Anda bisa</p><ul><li>Menjelaskan konsep visualisasi data.</li><li>Menggunakan library `matplotlib` untuk membuat grafik garis, batang, dan pie chart.</li><li>Memformat tampilan grafik.</li></ul><p class="sub">Istilah yang dipelajari</p><ul class="chips"><li>Grafik</li><li>Matplotlib</li><li>Visualisasi</li></ul><p class="sub">Latihan</p><p>Buat grafik batang yang menunjukkan penjualan produk terlaris dari file &#x27;penjualan.csv&#x27;.</p><div class="foot"><span>± 1 jam</span><span>Sumber: belum ditentukan</span><span class="soon">Materi belum dibuat</span><label class="check"><input type="checkbox" data-mod="m5"> Selesai</label></div></article>
+<article class="mod" id="m6"><div class="top"><span class="num">Modul 6</span><h3>Membersihkan dan Memformat Data</h3></div><p class="ask">Bagaimana cara menangani data yang tidak lengkap atau salah?</p><p class="sub">Setelah modul ini, Anda bisa</p><ul><li>Mengidentifikasi masalah umum dalam data (missing values, outliers).</li><li>Menangani missing values dengan metode sederhana.</li><li>Memformat data ke format yang sesuai.</li></ul><p class="sub">Istilah yang dipelajari</p><ul class="chips"><li>Missing Values</li><li>Outliers</li><li>Format</li></ul><p class="sub">Latihan</p><p>Identifikasi dan tangani nilai-nilai yang hilang dalam file &#x27;penjualan.csv&#x27;.</p><div class="foot"><span>± 1 jam</span><span>Sumber: belum ditentukan</span><span class="soon">Materi belum dibuat</span><label class="check"><input type="checkbox" data-mod="m6"> Selesai</label></div></article>
+</section>
+<section id="jadwal"><div class="chapter"><span class="num">3</span><h2>Jadwal</h2></div><p>Sekitar 4 jam per minggu, satu atau dua modul utuh per minggu, lalu proyek akhir. Kalau satu minggu terlewat, lanjutkan dari modul terakhir yang selesai.</p><div class="tablewrap"><table><thead><tr><th>Minggu</th><th>Modul</th><th>Waktu</th><th>Hasil nyata</th></tr></thead><tbody><tr><td>1</td><td>Modul 1-4</td><td>4 jam</td><td>Bisa Melakukan Perhitungan pada Data</td></tr><tr><td>2</td><td>Modul 5-6</td><td>2 jam</td><td>Bisa Membersihkan Data</td></tr><tr><td>3</td><td>Proyek akhir</td><td>4 jam</td><td>Analisis Penjualan Toko Online Budi dimulai</td></tr><tr><td>4</td><td>Proyek akhir</td><td>4 jam</td><td>Analisis Penjualan Toko Online Budi selesai</td></tr></tbody></table></div></section>
+<section id="proyek"><div class="chapter"><span class="num">4</span><h2>Proyek akhir</h2></div><p><strong>Analisis Penjualan Toko Online Budi.</strong> Anda akan menganalisis data penjualan bulanan toko online Budi selama setahun. Buat laporan yang menunjukkan tren penjualan, produk terlaris, dan bulan dengan penjualan tertinggi.</p><h3>Dianggap selesai kalau</h3><ul><li>Membaca data penjualan dari file CSV bernama &#x27;penjualan_budi.csv&#x27;.</li><li>Menghitung total penjualan per bulan.</li><li>Mengidentifikasi produk terlaris berdasarkan jumlah penjualan.</li><li>Membuat grafik batang yang menunjukkan tren penjualan bulanan.</li><li>Menyajikan hasil analisis dalam bentuk laporan singkat.</li></ul></section>
+<section id="sumber"><div class="chapter"><span class="num">5</span><h2>Sumber belajar</h2></div><div class="note">Belum ada sumber yang diberikan. Silabus ini disusun dari pengetahuan umum model gemma3:4b, jadi periksa angka dan nama penting ke sumber resmi sebelum materinya dibuat.</div></section>
+</main>
+<footer>Silabus ini disusun untuk belajar mandiri. Materi setiap modul dibuat terpisah dan ditautkan dari kartu modulnya. Isi silabus ditulis oleh gemma3:4b dan disusun oleh skill silabus_belajar.</footer>
+<script>
+(function(){
+  /* Progress modul, disimpan di browser pembaca. Ganti SLUG dengan nama topik tanpa spasi. */
+  var KEY = 'silabus:python-untuk-analisis-data';
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.mod input[type=checkbox]'));
+  var fill = document.getElementById('pfill'), text = document.getElementById('ptext');
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
+  function render(){
+    var done = 0;
+    boxes.forEach(function(b){
+      var card = b.closest('.mod');
+      if (b.checked) { done++; card.classList.add('done'); } else { card.classList.remove('done'); }
+    });
+    fill.style.width = (boxes.length ? done / boxes.length * 100 : 0) + '%';
+    text.textContent = done + ' dari ' + boxes.length + ' modul selesai';
+  }
+  boxes.forEach(function(b){
+    b.checked = !!saved[b.getAttribute('data-mod')];
+    b.addEventListener('change', function(){
+      saved[b.getAttribute('data-mod')] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+{
+  "topic": "Reksa Dana",
+  "title": "Belajar Reksa Dana dari Nol",
+  "lead": "Anda akan mempelajari dasar-dasar reksa dana, mulai dari jenisnya hingga cara memilih yang tepat. Dengan materi ini, Anda bisa membuat keputusan investasi yang lebih cerdas dan tidak mudah terpengaruh oleh rekomendasi orang lain. Di akhir pelajaran, Anda siap untuk memulai investasi reksa dana.",
+  "level": "Pemula",
+  "assumptions": "Anda memiliki pengetahuan dasar tentang keuangan. Anda bersedia meluangkan waktu sekitar 3 jam per minggu untuk belajar. Tujuan Anda adalah memahami dan memilih reksa dana sendiri.",
+  "map_note": "Kita mulai dari dasar, lalu memperdalam pemahaman tentang jenis-jenis reksa dana. Selanjutnya, kita akan membahas cara mengevaluasi dan memilih reksa dana yang paling sesuai dengan kebutuhan Anda.",
+  "running_example": "Budi adalah seorang karyawan muda yang ingin berinvestasi. Dia bertemu Sari, seorang penasihat keuangan, dan Andi, teman sekantornya yang juga investor berpengalaman. Mereka menggunakan contoh investasi reksa dana untuk memahami konsep dasar.",
+  "outcomes": [
+    "Menjelaskan berbagai jenis reksa dana.",
+    "Menghitung potensi return investasi reksa dana.",
+    "Membandingkan biaya-biaya yang terkait dengan reksa dana.",
+    "Membaca prospektus reksa dana dengan cermat.",
+    "Menyebutkan faktor-faktor penting dalam memilih reksa dana.",
+    "Membuat daftar kriteria reksa dana yang sesuai dengan tujuan investasi."
+  ],
+  "stages": [
+    {
+      "name": "Fondasi",
+      "modules": [
+        {
+          "number": 1,
+          "title": "Apa Itu Reksa Dana?",
+          "question": "Apa saja jenis-jenis reksa dana yang umum?",
+          "objectives": [
+            "Menyebutkan 3 jenis utama reksa dana: pasar uang, pendapatan tetap, dan campuran.",
+            "Menjelaskan perbedaan antara reksa dana pasar uang dan reksa dana pendapatan tetap.",
+            "Mengidentifikasi peran manajer investasi dalam pengelolaan reksa dana."
+          ],
+          "terms": [
+            "Reksa Dana",
+            "Pasar Uang",
+            "Pendapatan Tetap",
+            "Campuran",
+            "Manajer Investasi",
+            "Prospektus"
+          ],
+          "exercise": "Buat tabel perbandingan singkat antara reksa dana pasar uang dan reksa dana pendapatan tetap berdasarkan tujuan investasi dan tingkat risiko.",
+          "result": "Bisa Menyebutkan Jenis Reksa Dana",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 2,
+          "title": "Cara Kerja Reksa Dana",
+          "question": "Bagaimana cara reksa dana mendapatkan keuntungan?",
+          "objectives": [
+            "Menjelaskan bahwa reksa dana berinvestasi pada berbagai aset.",
+            "Menghitung potensi return investasi berdasarkan kinerja aset yang dipegang.",
+            "Menjelaskan peran likuiditas dalam pengelolaan reksa dana."
+          ],
+          "terms": [
+            "Aset",
+            "Return Investasi",
+            "Likuiditas",
+            "Saham",
+            "Obligasi",
+            "Deposito"
+          ],
+          "exercise": "Hitung potensi return investasi reksa dana campuran jika asetnya terdiri dari 60% saham dan 40% obligasi, dengan asumsi return saham sebesar 10% dan return obligasi sebesar 5% per tahun.",
+          "result": "Bisa Menghitung Potensi Return Investasi",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Inti",
+      "modules": [
+        {
+          "number": 3,
+          "title": "Biaya-biaya Reksa Dana",
+          "question": "Apa saja biaya yang terkait dengan investasi reksa dana?",
+          "objectives": [
+            "Menjelaskan biaya manajemen reksa dana.",
+            "Menjelaskan konsep expense ratio dan bagaimana pengaruhnya terhadap return investasi.",
+            "Menyebutkan biaya transaksi dan biaya lainnya."
+          ],
+          "terms": [
+            "Expense Ratio",
+            "Biaya Manajemen",
+            "Biaya Transaksi",
+            "SHK (Sales and Service Charge)",
+            "Turnover Rate",
+            "Custodian Fee"
+          ],
+          "exercise": "Buat daftar 5 kalimat yang menjelaskan pentingnya membandingkan expense ratio antar reksa dana.",
+          "result": "Bisa Membandingkan Biaya-biaya Reksa Dana",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 4,
+          "title": "Memahami Prospektus",
+          "question": "Apa saja informasi penting yang terdapat dalam prospektus reksa dana?",
+          "objectives": [
+            "Membaca dan menafsirkan informasi tentang tujuan investasi reksa dana.",
+            "Menghitung potensi risiko yang terkait dengan investasi reksa dana.",
+            "Menjelaskan strategi investasi yang digunakan oleh manajer investasi."
+          ],
+          "terms": [
+            "Prospektus",
+            "Risiko Investasi",
+            "Strategi Investasi",
+            "Alokasi Aset",
+            "Manajemen Risiko",
+            "Kinerja Masa Lalu"
+          ],
+          "exercise": "Baca contoh prospektus reksa dana dan identifikasi 3 faktor penting yang perlu Anda pertimbangkan sebelum berinvestasi.",
+          "result": "Bisa Membaca Prospektus Reksa Dana",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    },
+    {
+      "name": "Penerapan",
+      "modules": [
+        {
+          "number": 5,
+          "title": "Memilih Reksa Dana yang Tepat",
+          "question": "Bagaimana cara memilih reksa dana yang sesuai dengan tujuan investasi Anda?",
+          "objectives": [
+            "Menjelaskan pentingnya menentukan profil risiko investor.",
+            "Membandingkan kinerja reksa dana berdasarkan jangka waktu investasi.",
+            "Mengkaji strategi investasi dan track record manajer investasi."
+          ],
+          "terms": [
+            "Profil Risiko",
+            "Jangka Waktu Investasi",
+            "Track Record",
+            "Alokasi Aset",
+            "Diversifikasi",
+            "Volatilitas"
+          ],
+          "exercise": "Buat daftar kriteria reksa dana yang Anda cari, berdasarkan tujuan investasi jangka panjang Anda.",
+          "result": "Bisa Membuat Daftar Kriteria Reksa Dana",
+          "hours": 1,
+          "source": ""
+        },
+        {
+          "number": 6,
+          "title": "Risiko Investasi pada Reksa Dana",
+          "question": "Apa saja risiko yang terkait dengan investasi reksa dana?",
+          "objectives": [
+            "Menjelaskan berbagai jenis risiko: pasar, kredit, likuiditas.",
+            "Menjelaskan bagaimana risiko dapat mempengaruhi return investasi.",
+            "Menerapkan strategi mitigasi risiko."
+          ],
+          "terms": [
+            "Risiko Pasar",
+            "Risiko Kredit",
+            "Risiko Likuiditas",
+            "Diversifikasi",
+            "Manajemen Risiko",
+            "Volatilitas"
+          ],
+          "exercise": "Diskusikan dengan Andi (teman) tentang bagaimana risiko pasar dapat mempengaruhi investasi reksa dana Budi.",
+          "result": "Bisa Menyebutkan Faktor-faktor Penting dalam Memilih Reksa Dana",
+          "hours": 1,
+          "source": ""
+        }
+      ]
+    }
+  ],
+  "project": {
+    "title": "Membuat Portofolio Reksa Dana Pribadi",
+    "task": "Buat portofolio reksa dana yang terdiri dari 3 jenis reksa dana (pasar uang, pendapatan tetap, campuran) dengan alokasi aset yang sesuai dengan profil risiko Anda. Tinjau prospektus masing-masing reksa dana dan hitung potensi return investasi selama 5 tahun.",
+    "criteria": [
+      "Memilih 3 jenis reksa dana yang berbeda.",
+      "Menentukan alokasi aset untuk setiap reksa dana berdasarkan tujuan investasi.",
+      "Menghitung potensi return investasi selama 5 tahun menggunakan data historis dan asumsi yang masuk akal.",
+      "Menyertakan analisis risiko portofolio."
+    ],
+    "hours": 8
+  },
+  "money_topic": true,
+  "sources": [],
+  "hours_per_week": 3,
+  "model": "gemma3:4b"
+}
