@@ -278,5 +278,6 @@ uv run pytest research/agentic/algorithms/skills/crypto_snapshot/tests -q -p no:
 
 ## Halaman terkait
 
+- [Membuat candlestick chart crypto](membuat-chart-crypto.md) untuk melihat candle dan indikator yang sama dalam bentuk gambar.
 - [Mengambil transcript YouTube](mengambil-transcript-youtube.md), skill lain yang juga berjalan tanpa model AI.
 - [Menambah tool](menambah-tool.md) untuk memasukkan tool seperti `get_crypto_snapshot` ke agent di proyek hasil `zul build hexa`.

@@ -167,14 +167,14 @@ Skill lain tidak memanggil model sendiri; modelnya ditentukan aplikasi agent yan
 
 | Kebutuhan agent | Model yang disarankan | Catatan |
 |---|---|---|
-| Memilih skill dan memanggil tool (`docx`, `xlsx`, `chart`, `calculator`, `web_search`, `subagent_research`, `youtube_transcript`, `crypto_snapshot`) | `qwen3:8b` | Tool calling bawaan jalan dengan penalaran mati. `gemma3:4b` juga bisa, tetapi lewat JSON berskema karena Ollama tidak memberinya tool calling. |
+| Memilih skill dan memanggil tool (`docx`, `xlsx`, `chart`, `calculator`, `web_search`, `subagent_research`, `youtube_transcript`, `crypto_snapshot`, `crypto_chart`) | `qwen3:8b` | Tool calling bawaan jalan dengan penalaran mati. `gemma3:4b` juga bisa, tetapi lewat JSON berskema karena Ollama tidak memberinya tool calling. |
 | Membaca gambar (`image`) | `gemma3:4b` | Model teks seperti `qwen3` tidak bisa membaca gambar. Isi `VISION_MODEL_ID`; tanpa itu tool memakai `GENERAL_MODEL_ID`. |
 
-`youtube_transcript` dan `crypto_snapshot` tidak butuh model sama sekali. Skrip dan fungsi Python-nya bisa dipakai langsung dari terminal atau kode; model hanya dibutuhkan jika keduanya dipakai sebagai tool di agent.
+`youtube_transcript`, `crypto_snapshot`, dan `crypto_chart` tidak butuh model sama sekali. Skrip dan fungsi Python-nya bisa dipakai langsung dari terminal atau kode; model hanya dibutuhkan jika skill itu dipakai sebagai tool di agent.
 
 ## Ringkasnya
 
-Mesin: Python 3.9+ untuk semuanya, tambah `python-pptx` untuk satu skill, Node 18+ untuk satu skill lagi, browser Chromium-family untuk PNG/PDF. Tidak ada GPU yang dibutuhkan di sisi ini.
+Mesin: Python 3.9+ untuk semuanya, tambah `python-pptx` untuk satu skill, `matplotlib` untuk `crypto_chart`, Node 18+ untuk satu skill lagi, browser Chromium-family untuk PNG/PDF. Tidak ada GPU yang dibutuhkan di sisi ini.
 
 Model: menurut hasil uji di atas, `gemma3:4b` sudah menjalankan `mind_map`, `pptx_research`, `resaerch_poster`, pemilihan skill, dan pemanggilan tool, asalkan tool dipanggil lewat JSON berskema. Di perbandingan isi, `qwen3:8b` lebih lengkap dan lebih jarang salah daripada `gemma3:4b`; `qwen3:4b` menulis argumen tool lebih rapi daripada `gemma3:4b` tetapi butuh 3 sampai 16 menit per panggilan karena menalar, dan ketiganya masih bisa memasangkan angka dengan hal yang salah, jadi angka di hasil model lokal perlu dicek terhadap sumbernya. 8B tetap pilihan jika agent-mu bergantung pada tool calling bawaan model. 14B kalau mau isi poster lebih tajam, dan 0B tetap menghasilkan file lewat jalur `--no-llm` atau JSON yang ditulis tangan.
 

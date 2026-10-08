@@ -45,6 +45,7 @@ Setiap panduan berisi langkah untuk menyelesaikan satu tugas dengan Zul.
 | Mengubah topik, catatan, atau dokumen menjadi mind map, juga dengan model lokal | [Membuat mind map](membuat-mindmap.md) |
 | Mengambil transcript dan metadata video YouTube, tanpa model AI | [Mengambil transcript YouTube](mengambil-transcript-youtube.md) |
 | Mengambil harga token crypto beserta EMA, Stochastic, dan volume, tanpa model AI | [Mengambil snapshot harga crypto](mengambil-snapshot-crypto.md) |
+| Menggambar candlestick chart token crypto beserta indikatornya, tanpa model AI | [Membuat candlestick chart crypto](membuat-chart-crypto.md) |
 | Memotong dokumen menjadi chunk berkonteks untuk vector database, dengan model lokal | [Menyiapkan dokumen untuk RAG](menyiapkan-dokumen-untuk-rag.md) |
 
 ## Proyek Zul
