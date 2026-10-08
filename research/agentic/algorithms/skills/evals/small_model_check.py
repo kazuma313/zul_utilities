@@ -53,6 +53,7 @@ SKILLS = {
     "xlsx": ("xlsx.xlsx_skill", "Analisis file penjualan.xlsx yang saya unggah."),
     "youtube_transcript": ("youtube_transcript.youtube_transcript_skill", "Rangkum isi video ini: https://youtu.be/Pc3GWaOWHLk"),
     "contextual_retrieval": ("contextual_retrieval.contextual_retrieval_skill", "Siapkan catatan kuliah.md ini untuk dimasukkan ke vector database supaya bisa dicari AI."),
+    "crypto_snapshot": ("crypto_snapshot.crypto_snapshot_skill", "Cek harga BTC sekarang, sama EMA dan stochastic-nya."),
 }
 
 # tool name -> (skill folder, user request, how to judge the call)
@@ -67,6 +68,7 @@ INVOCATIONS = {
     "create_xlsx": ("xlsx", "Buat file Excel daftar belanja: beras 2 kg, telur 1 kg, minyak 2 liter.", "run:created successfully"),
     "get_youtube_transcript": ("youtube_transcript", "Ambil transcript video https://youtu.be/Pc3GWaOWHLk?si=Z4W_FHEmJlxeJZWU", "args:url"),
     "contextualize_document": ("contextual_retrieval", "Pecah file catatan/fotosintesis.md jadi chunk untuk vector database.", "args:path"),
+    "get_crypto_snapshot": ("crypto_snapshot", "Update market ETH timeframe 4 jam dong.", "args:token"),
 }
 
 RUNNERS = {

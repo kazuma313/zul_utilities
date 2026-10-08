@@ -167,8 +167,10 @@ Skill lain tidak memanggil model sendiri; modelnya ditentukan aplikasi agent yan
 
 | Kebutuhan agent | Model yang disarankan | Catatan |
 |---|---|---|
-| Memilih skill dan memanggil tool (`docx`, `xlsx`, `chart`, `calculator`, `web_search`, `subagent_research`, `youtube_transcript`) | `qwen3:8b` | Tool calling bawaan jalan dengan penalaran mati. `gemma3:4b` juga bisa, tetapi lewat JSON berskema karena Ollama tidak memberinya tool calling. |
+| Memilih skill dan memanggil tool (`docx`, `xlsx`, `chart`, `calculator`, `web_search`, `subagent_research`, `youtube_transcript`, `crypto_snapshot`) | `qwen3:8b` | Tool calling bawaan jalan dengan penalaran mati. `gemma3:4b` juga bisa, tetapi lewat JSON berskema karena Ollama tidak memberinya tool calling. |
 | Membaca gambar (`image`) | `gemma3:4b` | Model teks seperti `qwen3` tidak bisa membaca gambar. Isi `VISION_MODEL_ID`; tanpa itu tool memakai `GENERAL_MODEL_ID`. |
+
+`youtube_transcript` dan `crypto_snapshot` tidak butuh model sama sekali. Skrip dan fungsi Python-nya bisa dipakai langsung dari terminal atau kode; model hanya dibutuhkan jika keduanya dipakai sebagai tool di agent.
 
 ## Ringkasnya
 

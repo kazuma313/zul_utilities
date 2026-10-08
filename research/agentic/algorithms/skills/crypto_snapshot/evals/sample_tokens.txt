@@ -1,0 +1,7 @@
+# Input yang dipakai untuk verifikasi skill, satu per baris.
+# Nama token, pair, dan URL boleh dicampur.
+BTC
+ETH/USDT
+SOLUSDT
+https://www.tradingview.com/chart/?symbol=BINANCE%3ABNBUSDT
+https://api.binance.com/api/v3/klines?symbol=ETHBTC&interval=4h

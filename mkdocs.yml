@@ -172,6 +172,7 @@ nav:
       - Skill:
           - Membuat mind map: panduan/membuat-mindmap.md
           - Mengambil transcript YouTube: panduan/mengambil-transcript-youtube.md
+          - Mengambil snapshot harga crypto: panduan/mengambil-snapshot-crypto.md
           - Menyiapkan dokumen untuk RAG: panduan/menyiapkan-dokumen-untuk-rag.md
       - Proyek Zul:
           - Menerbitkan dokumentasi: panduan/menerbitkan-dokumentasi.md
