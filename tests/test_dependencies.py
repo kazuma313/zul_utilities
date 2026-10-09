@@ -1,4 +1,5 @@
 import json
+import re
 import subprocess
 import sys
 import tomllib
@@ -305,3 +306,30 @@ def test_no_dependency_uses_an_agpl_license():
             offending.append(name)
 
     assert not offending, f"dependency berlisensi AGPL: {offending}"
+
+
+# --------------------------------------------------------------------------
+# Halaman Library Yang Dipakai
+# --------------------------------------------------------------------------
+#
+# docs/referensi/library.md memuat setiap library yang di-install
+# bersama Zul. Dependency baru di pyproject.toml harus dicatat
+# juga di sana, beserta gunanya, adapter-nya, dan lisensinya.
+#
+
+LIBRARY_PAGE = ROOT / "docs" / "referensi" / "library.md"
+
+
+def test_every_dependency_is_listed_on_the_library_page():
+    listed = {
+        canonicalize_name(name)
+        for name in re.findall(r"`([A-Za-z0-9_.-]+)`", LIBRARY_PAGE.read_text("utf-8"))
+    }
+    required = {
+        canonicalize_name(requirement.name)
+        for extra in ["", *PROJECT["optional-dependencies"]]
+        for requirement in zul_requirements(extra)
+        if canonicalize_name(requirement.name) != "zul"
+    }
+
+    assert required <= listed, f"belum ada di {LIBRARY_PAGE.name}: {required - listed}"

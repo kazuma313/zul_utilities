@@ -2,6 +2,12 @@
 
 Fakta untuk dicari cepat: opsi sebuah perintah, bentuk request, parameter sebuah fungsi, nilai bawaan.
 
+## Paket Zul
+
+| Halaman | Isi |
+|---|---|
+| [Library yang dipakai](library.md) | Setiap library yang di-install bersama Zul: gunanya, adapter-nya, extra-nya, dan lisensinya. |
+
 ## Zul CLI
 
 | Halaman | Isi |

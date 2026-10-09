@@ -26,6 +26,14 @@ Buat struktur proyek AI production-ready dalam satu perintah, lalu pakai kembali
 
 > Tujuannya sederhana: **berhenti menyalin-tempel boilerplate**. Biarkan Zul yang menyiapkan strukturnya.
 
+### Zul adalah wrapper
+
+Zul **tidak membuat ulang** model deteksi, vector database, atau konverter dokumen. Zul adalah **wrapper** dari berbagai library Python, seperti LangChain, OpenCV, RF-DETR, Docling, pymilvus, dan redisvl, yang dirangkai menjadi alat siap pakai dengan cara pakai yang seragam.
+
+Setiap library hanya diimpor di satu file di [`src/zul/adapters/`](src/zul/adapters/), jadi mengganti, mengunci versi, atau mengubah perilaku sebuah library cukup di satu tempat. Beberapa bagian, seperti ByteTrack, garis dan poligon penghitung, serta timer di `zul.computer_vision`, ditulis sendiri dengan NumPy.
+
+Daftar lengkap library beserta lisensinya ada di [Library yang dipakai](docs/referensi/library.md). Tidak ada library berlisensi AGPL, dan test memeriksanya setiap kali dijalankan.
+
 ---
 
 ## 📚 Dokumentasi
@@ -70,16 +78,20 @@ Setiap modul di `src/zul/` dan di template juga diawali docstring **Gunanya / Ca
 
 ## 🧰 Tech Stack
 
-| Layer | Teknologi |
-|-------|-----------|
-| **CLI Framework** | [Typer](https://typer.tiangolo.com/) · [InquirerPy](https://inquirerpy.readthedocs.io/) |
-| **AI / LLM** | [LangChain](https://docs.langchain.com/) · [LangGraph](https://langchain-ai.github.io/langgraph/) · `langchain-openai` · `langchain-ollama` |
-| **Backend (template)** | [FastAPI](https://fastapi.tiangolo.com/) |
-| **Frontend (template)** | [Streamlit](https://streamlit.io/) |
-| **Vector DB** | [Milvus](https://milvus.io/) (`pymilvus`) · [Redis](https://redis.io/) (`redisvl`) |
-| **OCR / Dokumen** | [Docling](https://github.com/DS4SD/docling) · Google Gemini · `python-pptx` · `xhtml2pdf` |
-| **Validasi & Config** | [Pydantic](https://docs.pydantic.dev/) · `pydantic-settings` · Jinja2 |
-| **Tooling** | [uv](https://github.com/astral-sh/uv) · Black · Ruff · mypy · pytest |
+Library yang dibungkus paket `zul`, dikelompokkan per extra. Rinciannya ada di [Library yang dipakai](docs/referensi/library.md).
+
+| Bagian | Library | Extra |
+|--------|---------|-------|
+| **CLI & config** | [Typer](https://typer.tiangolo.com/) · [InquirerPy](https://inquirerpy.readthedocs.io/) · [Pydantic](https://docs.pydantic.dev/) · PyYAML · NumPy | *(dasar)* |
+| **Vector DB** | [pymilvus](https://milvus.io/) · [redis-py](https://redis.io/) · [redisvl](https://docs.redisvl.com/) | `milvus`, `redis` |
+| **LLM** | `langchain-openai` · [LangGraph](https://langchain-ai.github.io/langgraph/) | `llm` |
+| **OCR / Dokumen** | [Docling](https://github.com/docling-project/docling) · `google-genai` · `pypdf` · `langchain-text-splitters` · `markdown` · `xhtml2pdf` · `python-pptx` | `ocr`, `gemini`, `pdf`, `converter` |
+| **Analisis** | Matplotlib · pandas · SciPy | `analysis` |
+| **Computer Vision** | [OpenCV](https://opencv.org/) · [RF-DETR](https://github.com/roboflow/rf-detr) · `lap` | `vision`, `detection`, `tracking` |
+
+Proyek hasil `zul build hexa` memakai stack-nya sendiri: [FastAPI](https://fastapi.tiangolo.com/), Uvicorn, LangChain, LangGraph, OpenAI, python-dotenv, dan [Streamlit](https://streamlit.io/).
+
+Tooling pengembangan: [uv](https://github.com/astral-sh/uv) · Black · Ruff · mypy · pytest · MkDocs.
 
 ---
 

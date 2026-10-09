@@ -190,6 +190,7 @@ nav:
           - Mengubah perilaku library: panduan/mengubah-perilaku-library.md
   - Referensi:
       - referensi/index.md
+      - Library yang dipakai: referensi/library.md
       - Zul CLI:
           - Perintah zul: referensi/cli.md
       - Template hexa:

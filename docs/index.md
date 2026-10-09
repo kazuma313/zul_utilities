@@ -100,6 +100,8 @@ zul build hexa --name my-agent
 
 ## Yang ada di dalam Zul
 
+Zul adalah wrapper dari berbagai library Python, seperti LangChain, OpenCV, RF-DETR, Docling, pymilvus, dan redisvl. Zul tidak membuat ulang library itu, tetapi merangkainya menjadi alat yang siap dipakai dengan cara pakai yang seragam. Daftar lengkapnya, beserta lisensinya, ada di [Library yang dipakai](referensi/library.md).
+
 | Bagian | Isi | Halaman pertama |
 |---|---|---|
 | CLI | `zul build hexa`, `zul install milvus-helper`, `zul install redis-helper` | [Perintah zul](referensi/cli.md) |
