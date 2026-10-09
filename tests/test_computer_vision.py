@@ -734,35 +734,19 @@ def test_video_slice_divides_fps_by_stride():
 
 
 # --------------------------------------------------------------------------
-# Deteksi Dan Tracking (zul[yolo])
+# Deteksi (zul[detection])
 # --------------------------------------------------------------------------
 
 
-class FakeTensor:
-    """Pengganti tensor torch: cukup `.cpu().numpy()` dan `len`."""
-
-    def __init__(self, values):
-        self.values = np.asarray(values, dtype=np.float64)
-
-    def __len__(self):
-        return len(self.values)
-
-    def cpu(self):
-        return self
-
-    def numpy(self):
-        return self.values
-
-
-def detections_with_keypoints(boxes):
+def detections_with_keypoints(boxes, scores=None):
     """Deteksi dengan keypoint di tengah setiap kotak, untuk memeriksa urutan."""
     from zul.computer_vision.detection import Detections
 
-    boxes = np.asarray(boxes, dtype=np.float64)
+    boxes = np.asarray(boxes, dtype=np.float64).reshape(-1, 4)
     centres = geometry.box_anchors(boxes)
     return Detections(
         xyxy=boxes,
-        confidence=np.full(len(boxes), 0.9),
+        confidence=np.full(len(boxes), 0.9) if scores is None else np.array(scores),
         class_id=np.zeros(len(boxes), dtype=int),
         keypoints_xy=np.repeat(centres[:, None, :], 17, axis=1),
         keypoints_conf=np.ones((len(boxes), 17)),
@@ -771,6 +755,7 @@ def detections_with_keypoints(boxes):
 
 def test_detections_slice_and_rescale_every_column_together():
     pytest.importorskip("cv2")
+    pytest.importorskip("lap")
 
     people = detections_with_keypoints([[0, 0, 10, 20], [100, 0, 110, 20]])
     second = people[np.array([False, True])]
@@ -783,31 +768,102 @@ def test_detections_slice_and_rescale_every_column_together():
     assert people.rescale(1.0) is people
 
 
-def test_detections_from_an_ultralytics_result_without_torch():
-    pytest.importorskip("ultralytics")
-    from zul.computer_vision.detection import Detections
+class FakeRFDETR:
+    """Pengganti model RF-DETR: mencatat gambar masuk, mengembalikan hasil tetap."""
 
-    class Boxes:
-        xyxy = FakeTensor([[1, 2, 3, 4]])
-        conf = FakeTensor([0.8])
-        cls = FakeTensor([0])
+    def __init__(self, result):
+        self.result = result
+        self.images = []
 
-        def __len__(self):
-            return 1
+    def predict(self, image, threshold, include_source_image):
+        self.images.append(image)
+        return self.result
 
-    keypoints = SimpleNamespace(xy=FakeTensor(np.ones((1, 17, 2))), conf=None)
-    result = SimpleNamespace(boxes=Boxes(), keypoints=keypoints)
 
-    people = Detections.from_ultralytics(result)
+def test_rfdetr_keypoint_result_becomes_arrays_from_an_rgb_frame():
+    pytest.importorskip("rfdetr")
+    from zul.adapters import rfdetr as rfdetr_adapter
 
-    assert people.xyxy.tolist() == [[1.0, 2.0, 3.0, 4.0]]
-    assert people.keypoints_xy.shape == (1, 17, 2)
-    assert people.keypoints_conf is None
-    assert len(Detections.from_ultralytics(SimpleNamespace(boxes=None))) == 0
+    result = SimpleNamespace(
+        xy=np.ones((2, 17, 2)),
+        keypoint_confidence=np.full((2, 17), 0.8),
+        detection_confidence=np.array([0.9, 0.6]),
+        class_id=np.array([1, 1]),
+        data={"xyxy": np.array([[0, 0, 10, 20], [30, 0, 40, 20]])},
+    )
+    model = FakeRFDETR(result)
+    frame = np.zeros((4, 4, 3), dtype=np.uint8)
+    frame[..., 0] = 255
+
+    arrays = rfdetr_adapter.predict(model, frame, confidence=0.5)
+
+    assert model.images[0][0, 0].tolist() == [0, 0, 255]
+    assert arrays["xyxy"].shape == (2, 4)
+    assert arrays["keypoints_xy"].shape == (2, 17, 2)
+    assert arrays["confidence"].tolist() == [0.9, 0.6]
+
+
+def test_rfdetr_detection_result_has_no_keypoints():
+    pytest.importorskip("rfdetr")
+    from zul.adapters import rfdetr as rfdetr_adapter
+
+    result = SimpleNamespace(
+        xyxy=np.array([[0, 0, 10, 20]]), confidence=np.array([0.7]), class_id=[3]
+    )
+
+    arrays = rfdetr_adapter.predict(FakeRFDETR(result), np.zeros((4, 4, 3)), 0.5)
+
+    assert arrays["class_id"].tolist() == [3]
+    assert arrays["keypoints_xy"] is None
+
+
+def test_detect_keeps_wanted_classes_and_drops_duplicate_boxes(monkeypatch):
+    pytest.importorskip("rfdetr")
+    from zul.adapters import rfdetr as rfdetr_adapter
+    from zul.computer_vision.detection import detect
+
+    arrays = {
+        "xyxy": np.array([[0, 0, 10, 20], [0, 0, 10, 21], [50, 0, 60, 20]]),
+        "confidence": np.array([0.6, 0.9, 0.8]),
+        "class_id": np.array([1, 1, 3]),
+        "keypoints_xy": None,
+        "keypoints_conf": None,
+    }
+    monkeypatch.setattr(rfdetr_adapter, "predict", lambda *args: arrays)
+
+    people = detect(object(), np.zeros((4, 4, 3)), classes=[1])
+    everything = detect(object(), np.zeros((4, 4, 3)), nms_iou=None)
+
+    assert people.confidence.tolist() == [0.9]
+    assert len(everything) == 3
+
+
+def test_unknown_rfdetr_model_names_are_rejected():
+    pytest.importorskip("rfdetr")
+    from zul.adapters import rfdetr as rfdetr_adapter
+
+    with pytest.raises(ValueError, match="keypoint"):
+        rfdetr_adapter.model_class("yolo")
+
+
+def test_rfdetr_api_used_by_the_adapter_still_exists():
+    rfdetr = pytest.importorskip("rfdetr")
+    import inspect
+
+    from zul.adapters import rfdetr as rfdetr_adapter
+
+    model = rfdetr.RFDETRKeypointPreview
+    parameters = inspect.signature(model.predict).parameters
+
+    assert {"threshold", "include_source_image"} <= set(parameters)
+    assert callable(model.inference)
+    assert rfdetr_adapter.default_weights("keypoint").endswith(".pth")
+    assert callable(rfdetr_adapter.download_pretrain_weights)
 
 
 def test_standardise_frame_shrinks_the_long_side_only():
     pytest.importorskip("cv2")
+    pytest.importorskip("lap")
     from zul.computer_vision.detection import standardise_frame
 
     big, scale = standardise_frame(np.zeros((720, 1280, 3), dtype=np.uint8))
@@ -817,11 +873,57 @@ def test_standardise_frame_shrinks_the_long_side_only():
     assert standardise_frame(small) == (small, 1.0)
 
 
-def test_byte_tracker_keeps_ids_and_keypoints_with_their_boxes():
-    pytest.importorskip("ultralytics")
-    from zul.computer_vision.detection import ByteTracker
+def test_fetch_without_download_only_checks(tmp_path):
+    from zul.computer_vision.weights import fetch
 
-    tracker = ByteTracker(frame_rate=10)
+    present = tmp_path / "model.pt"
+    present.write_bytes(b"0" * 10)
+
+    assert fetch(tmp_path / "tidak_ada.pt", download=False) == (False, "belum ada")
+    assert fetch(present)[0] is True
+
+
+def test_fetch_reports_names_that_rfdetr_does_not_release(tmp_path):
+    pytest.importorskip("rfdetr")
+    from zul.computer_vision.weights import fetch
+
+    ok, detail = fetch(tmp_path / "bukan-bobot-rfdetr.pth")
+
+    assert ok is False
+    assert detail.startswith("GAGAL")
+
+
+# --------------------------------------------------------------------------
+# Tracking (zul[tracking])
+# --------------------------------------------------------------------------
+
+
+@pytest.fixture
+def tracker_class():
+    pytest.importorskip("lap")
+    from zul.computer_vision.tracking import ByteTracker
+
+    return ByteTracker
+
+
+def box(x, score=0.9):
+    return ([x, 50, x + 50, 200], score)
+
+
+def run_frames(tracker, frames):
+    """`frames`: daftar kotak per frame dari `box`; mengembalikan id aktif per frame."""
+    ids = []
+    for boxes in frames:
+        xyxy = np.array([xyxy for xyxy, _ in boxes], dtype=np.float64).reshape(-1, 4)
+        scores = np.array([score for _, score in boxes], dtype=np.float64)
+        tracks = tracker.step(xyxy, scores, np.zeros(len(scores)))
+        ids.append(sorted(track.track_id for track in tracks))
+    return ids
+
+
+def test_byte_tracker_keeps_ids_and_keypoints_with_their_boxes(tracker_class):
+    pytest.importorskip("cv2")
+    tracker = tracker_class(frame_rate=10)
     ids_by_x = []
     for step in range(6):
         boxes = [[10 + 4 * step, 50, 60 + 4 * step, 200], [300, 40, 350, 190]]
@@ -840,36 +942,66 @@ def test_byte_tracker_keeps_ids_and_keypoints_with_their_boxes():
     assert all(ids == ids_by_x[0] for ids in ids_by_x)
 
 
-def test_byte_tracker_returns_an_empty_frame_with_ids():
-    pytest.importorskip("ultralytics")
-    from zul.computer_vision.detection import ByteTracker, Detections
+def test_byte_tracker_returns_an_empty_frame_with_ids(tracker_class):
+    pytest.importorskip("cv2")
+    from zul.computer_vision.detection import Detections
 
-    people = ByteTracker().update(Detections())
+    people = tracker_class().update(Detections())
 
     assert len(people) == 0
     assert people.tracker_id is not None
 
 
-def test_yolo_world_without_clip_stops_with_install_hint():
-    pytest.importorskip("ultralytics")
-    import importlib.util
+def test_a_short_occlusion_keeps_the_same_id(tracker_class):
+    tracker = tracker_class(frame_rate=30, lost_track_buffer=30)
+    frames = [[box(100 + 2 * i)] for i in range(5)] + [[]] * 5
+    frames += [[box(120 + 2 * i)] for i in range(3)]
 
-    if importlib.util.find_spec("clip") is not None:
-        pytest.skip("CLIP ter-install")
-    from zul.computer_vision.detection import load_model
+    ids = run_frames(tracker, frames)
 
-    with pytest.raises(ImportError, match="CLIP"):
-        load_model("yolov8l-worldv2.pt", prompts=["person"])
+    assert ids[0] == [1] and ids[4] == [1]
+    assert ids[5:10] == [[]] * 5
+    assert ids[10:] == [[1]] * 3
 
 
-def test_fetch_without_download_only_checks(tmp_path):
-    from zul.computer_vision.weights import fetch
+def test_low_scores_continue_a_track_but_never_start_one(tracker_class):
+    tracker = tracker_class()
+    frames = [[box(100)], [box(102)], [box(104, score=0.2)], [box(400, score=0.2)]]
 
-    present = tmp_path / "model.pt"
-    present.write_bytes(b"0" * 10)
+    ids = run_frames(tracker, frames)
 
-    assert fetch(tmp_path / "tidak_ada.pt", download=False) == (False, "belum ada")
-    assert fetch(present)[0] is True
+    assert ids == [[1], [1], [1], []]
+
+
+def test_a_new_person_appears_after_two_frames(tracker_class):
+    tracker = tracker_class()
+    frames = [[box(100)], [box(102), box(400)], [box(104), box(402)]]
+
+    ids = run_frames(tracker, frames)
+
+    assert ids == [[1], [1], [1, 2]]
+
+
+def test_a_track_lost_longer_than_the_buffer_gets_a_new_id(tracker_class):
+    tracker = tracker_class(frame_rate=30, lost_track_buffer=2)
+    frames = [[box(100)], [box(102)], [], [], [], [], [box(104)], [box(106)]]
+
+    ids = run_frames(tracker, frames)
+
+    assert ids[:2] == [[1], [1]]
+    assert ids[-1] == [2]
+
+
+def test_box_iou_and_non_max_suppression():
+    boxes = np.array([[0, 0, 10, 10], [0, 0, 10, 10.5], [20, 20, 30, 30]])
+
+    overlap = geometry.box_iou(boxes, boxes)
+    keep = geometry.non_max_suppression(boxes, [0.6, 0.9, 0.5], iou_threshold=0.7)
+
+    assert overlap[0, 1] == pytest.approx(100 / 105)
+    assert overlap[0, 2] == 0.0
+    assert keep.tolist() == [1, 2]
+    assert geometry.box_iou(np.empty((0, 4)), boxes).shape == (0, 3)
 
 
 # --------------------------------------------------------------------------
@@ -913,15 +1045,3 @@ def test_unknown_colormap_names_are_rejected():
 
     with pytest.raises(ValueError, match="jet"):
         draw.draw_heatmap(np.zeros((10, 10, 3), dtype=np.uint8), heat, colormap="x")
-
-
-def test_ultralytics_internals_used_by_the_adapter_still_exist():
-    pytest.importorskip("ultralytics")
-    from ultralytics.trackers.byte_tracker import BYTETracker
-
-    from zul.adapters import ultralytics as yolo
-
-    assert issubclass(yolo.ZulBYTETracker, BYTETracker)
-    for method in ("update", "get_dists", "init_track"):
-        assert callable(getattr(BYTETracker, method))
-    assert callable(yolo.attempt_download_asset)

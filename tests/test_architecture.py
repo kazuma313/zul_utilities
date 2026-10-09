@@ -40,6 +40,7 @@ ADAPTERS = {
     "langchain_openai": {"langchain_openai"},
     "langchain_text_splitters": {"langchain_core", "langchain_text_splitters"},
     "langgraph": {"langgraph"},
+    "lap": {"lap"},
     "markdown": {"markdown"},
     "matplotlib": {"matplotlib"},
     "milvus": {"pymilvus"},
@@ -48,8 +49,8 @@ ADAPTERS = {
     "pptx": {"pptx"},
     "pypdf": {"PyPDF2", "pypdf"},
     "redis": {"redis", "redisvl"},
+    "rfdetr": {"rfdetr", "torch"},
     "scipy": {"scipy"},
-    "ultralytics": {"ultralytics"},
     "xhtml2pdf": {"xhtml2pdf"},
     "yaml": {"yaml"},
 }

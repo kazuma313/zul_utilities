@@ -16,12 +16,13 @@ Tabel berikut memetakan setiap modul ke isinya dan extra yang dibutuhkan:
 | [`draw`](#draw) | Teks di sudut, kotak, bentuk, kerangka, garis dan poligon penghitung, jejak, dan heatmap. | `vision` |
 | [`masks`](#masks) | Menghitamkan area, blur, dan pixelate. | `vision` |
 | [`video`](#video) | Membaca dan menulis video, dan mengukur kecepatan. | `vision` |
-| [`detection`](#detection) | Model YOLO, YOLO-World, pose, dan ByteTrack. | `yolo` |
-| [`weights`](#weights) | Mengunduh bobot model ke folder proyek. | `yolo` |
+| [`tracking`](#tracking) | ByteTrack: id yang sama untuk orang yang sama di setiap frame. | `tracking` |
+| [`detection`](#detection) | Model RF-DETR: kotak orang dan 17 keypoint, atau kotak 80 kelas COCO. | `detection` |
+| [`weights`](#weights) | Mengunduh bobot model ke folder proyek. | `detection` |
 
-Modul tanpa extra hanya mengimpor NumPy dan PyYAML, yang ada di instalasi dasar Zul. Mengimpor `zul.computer_vision` tidak memuat modul apa pun, jadi OpenCV dan ultralytics baru dimuat saat modul yang membutuhkannya diimpor.
+Modul tanpa extra hanya mengimpor NumPy dan PyYAML, yang ada di instalasi dasar Zul. Mengimpor `zul.computer_vision` tidak memuat modul apa pun, jadi OpenCV dan RF-DETR baru dimuat saat modul yang membutuhkannya diimpor.
 
-Modul-modul ini tidak mengimpor OpenCV, ultralytics, atau PyYAML sendiri. Semuanya dipakai lewat `zul.adapters.opencv`, `zul.adapters.ultralytics`, dan `zul.adapters.yaml`. Alasannya ada di [Lapisan adapter](../konsep/lapisan-adapter.md).
+Modul-modul ini tidak mengimpor OpenCV, RF-DETR, lap, atau PyYAML sendiri. Semuanya dipakai lewat `zul.adapters.opencv`, `zul.adapters.rfdetr`, `zul.adapters.lap`, dan `zul.adapters.yaml`. Alasannya ada di [Lapisan adapter](../konsep/lapisan-adapter.md).
 
 Semua koordinat memakai sistem gambar: x ke kanan, y ke bawah, dalam piksel frame asli. Kotak selalu berformat xyxy: `(x1, y1, x2, y2)`. Waktu selalu dalam detik dari awal video, dan nomor frame adalah nomor frame di video sumber.
 
@@ -68,7 +69,7 @@ Arah adalah vektor satuan di sistem koordinat gambar.
 
 Lokasi: `zul.computer_vision.pose`. Hanya membutuhkan NumPy.
 
-Fungsi di modul ini membaca keypoint COCO-17 dari model pose, misalnya `yolo11m-pose`: `xy` berbentuk `(17, 2)` per orang dan `confidence` berbentuk `(17,)`. Keypoint dengan confidence di bawah `min_confidence` dianggap tidak terlihat. `confidence=None` berarti semua keypoint terlihat.
+Fungsi di modul ini membaca keypoint COCO-17 dari model pose, misalnya model keypoint RF-DETR: `xy` berbentuk `(17, 2)` per orang dan `confidence` berbentuk `(17,)`. Keypoint dengan confidence di bawah `min_confidence` dianggap tidak terlihat. `confidence=None` berarti semua keypoint terlihat.
 
 ### Konstanta
 
@@ -411,9 +412,35 @@ Membuka `VideoWriter` melempar `OSError` jika OpenCV tidak bisa menulis file den
 
 `Pacer` menahan pratinjau agar tidak lebih cepat dari video aslinya. `wait_ms()` mengembalikan milidetik yang perlu ditunggu sebelum frame berikutnya, minimal 1, untuk `waitKey` milik OpenCV.
 
+## tracking
+
+Lokasi: `zul.computer_vision.tracking`. Membutuhkan extra `tracking`.
+
+ByteTrack (Zhang dkk., 2022), ditulis sendiri di Zul dengan NumPy. Pemasangan track dengan deteksi memakai `zul.adapters.lap`. Pada 500 frame video toko, hasilnya sama dengan implementasi ByteTrack ultralytics yang dipakai sebelumnya: deteksi yang sama ter-track, id-nya konsisten, dan selisih kotaknya di bawah 0,001 piksel.
+
+### `ByteTracker(frame_rate=30.0, high_threshold=0.35, low_threshold=0.1, new_track_threshold=0.25, lost_track_buffer=30, match_threshold=0.8)`
+
+| Parameter | Tipe | Default | Keterangan |
+|---|---|---|---|
+| `frame_rate` | `float` | `30.0` | FPS frame yang diproses, yaitu `VideoInfo.slice(...).fps`. |
+| `high_threshold` | `float` | `0.35` | Skor minimum deteksi untuk tahap pemasangan pertama. |
+| `low_threshold` | `float` | `0.1` | Deteksi dengan skor di atas nilai ini, tetapi di bawah `high_threshold`, dipakai di tahap kedua untuk menyambung track yang sudah ada. |
+| `new_track_threshold` | `float` | `0.25` | Skor minimum untuk membuka track baru. |
+| `lost_track_buffer` | `int` | `30` | Berapa lama track yang hilang disimpan, dalam frame pada 30 FPS. Nilainya disesuaikan dengan `frame_rate`. |
+| `match_threshold` | `float` | `0.8` | Ambang biaya pemasangan di tahap pertama. Biaya adalah 1 dikurangi IoU dikali skor deteksi. |
+
+| Method | Keterangan |
+|---|---|
+| `update(detections)` | Mengembalikan deteksi frame ini yang sudah punya track, dengan `tracker_id` terisi. `detections` boleh objek apa pun yang punya `xyxy`, `confidence`, dan `class_id`, bisa dipotong dengan indeks, dan berupa dataclass, misalnya `Detections`. `xyxy` diganti kotak hasil filter Kalman, dan kolom lain, termasuk keypoint, tetap sejajar dengan kotaknya. Frame tanpa deteksi mengembalikan hasil kosong dengan `tracker_id` berupa array kosong. |
+| `step(xyxy, scores, class_ids)` | Versi `update` untuk array mentah. Mengembalikan daftar `Track` yang aktif, masing-masing dengan `track_id`, `xyxy`, `score`, `class_id`, dan `row`, yaitu indeks baris deteksi asalnya. |
+
+Track baru baru dikembalikan setelah cocok lagi di frame berikutnya, kecuali di frame pertama. Track yang hilang lebih lama dari `lost_track_buffer` dihapus, dan orang yang kembali setelahnya mendapat id baru. Id dimulai dari 1 untuk setiap `ByteTracker`.
+
 ## detection
 
-Lokasi: `zul.computer_vision.detection`. Membutuhkan extra `yolo`.
+Lokasi: `zul.computer_vision.detection`. Membutuhkan extra `detection`.
+
+Model dijalankan lewat `zul.adapters.rfdetr`, dengan RF-DETR berlisensi Apache 2.0. `ByteTracker` juga bisa diimpor dari modul ini, untuk kode yang ditulis sebelum tracking dipisahkan.
 
 ### `Detections`
 
@@ -423,9 +450,9 @@ Deteksi satu frame sebagai array NumPy yang sejajar per baris: baris ke-i di set
 |---|---|---|
 | `xyxy` | `(n, 4)` | Kotak. |
 | `confidence` | `(n,)` | Skor deteksi. |
-| `class_id` | `(n,)` int | Kelas, sesuai urutan kelas model atau `prompts`. |
+| `class_id` | `(n,)` int | Id kategori COCO. Orang adalah kelas `1`. |
 | `tracker_id` | `(n,)` int atau `None` | Id track, diisi `ByteTracker.update`. |
-| `keypoints_xy` | `(n, 17, 2)` atau `None` | Keypoint dari model pose. |
+| `keypoints_xy` | `(n, 17, 2)` atau `None` | Keypoint COCO dari model keypoint. |
 | `keypoints_conf` | `(n, 17)` atau `None` | Confidence setiap keypoint. |
 
 | Anggota | Keterangan |
@@ -434,34 +461,20 @@ Deteksi satu frame sebagai array NumPy yang sejajar per baris: baris ke-i di set
 | `detections[index]` | Deteksi baru dengan semua field dipotong bersama, dengan mask bool atau daftar indeks. |
 | `rescale(scale)` | Membagi `xyxy` dan `keypoints_xy` dengan `scale`, untuk koordinat dari frame yang diperkecil `standardise_frame`. |
 | `Detections.from_arrays(arrays)` | Deteksi dari dict berkunci `xyxy`, `confidence`, `class_id`, `keypoints_xy`, dan `keypoints_conf`, misalnya hasil adapter model lain. |
-| `Detections.from_ultralytics(result)` | Deteksi dari satu `Results` ultralytics, lewat `zul.adapters.ultralytics`. |
 
 ### Fungsi
 
 | Fungsi | Mengembalikan | Keterangan |
 |---|---|---|
-| `load_model(weights, prompts=None)` | Model ultralytics | Tanpa `prompts`, model YOLO atau model pose biasa. Dengan `prompts`, model YOLO-World yang mendeteksi kelas dari teks, misalnya `["person"]`. YOLO-World membutuhkan paket CLIP dari ultralytics. Tanpa paket itu, fungsi ini melempar `ImportError` berisi perintah instalasinya. |
+| `load_model(model="keypoint", weights=None, half=True, device=None)` | Model RF-DETR | `model` adalah `keypoint`, untuk kotak orang dan 17 keypoint, atau `nano`, `small`, `medium`, `large`, untuk kotak 80 kelas COCO. Tanpa `weights`, bobot diunduh ke `~/.roboflow/models` saat pertama dipakai. `half` memakai float16 jika GPU tersedia. Nama lain melempar `ValueError`. |
 | `standardise_frame(image, size=640)` | `(image, scale)` | Memperkecil frame sampai sisi terpanjangnya `size` piksel, dengan rasio tetap. Frame yang lebih kecil tidak diperbesar, dan `scale`-nya 1. |
-| `detect(model, image, confidence=0.20, iou=0.5, imgsz=640, device=None, classes=None)` | `Detections` | Inference satu frame. Model pose ikut mengisi `keypoints_xy` dan `keypoints_conf`. |
+| `detect(model, image, confidence=0.5, classes=None, nms_iou=0.7)` | `Detections` | Inference satu frame BGR. `classes` menyaring id kategori COCO, misalnya `[1]`. Kotak yang IoU-nya dengan kotak berskor lebih tinggi melebihi `nms_iou` dibuang; `None` mematikan penyaringan ini. |
 
-### `ByteTracker(frame_rate=30.0, high_threshold=0.35, low_threshold=0.1, new_track_threshold=0.25, lost_track_buffer=30, match_threshold=0.8)`
-
-ByteTrack dari ultralytics, dengan ambang yang cocok untuk skor YOLO-World.
-
-| Parameter | Tipe | Default | Keterangan |
-|---|---|---|---|
-| `frame_rate` | `float` | `30.0` | FPS frame yang diproses, yaitu `VideoInfo.slice(...).fps`. |
-| `high_threshold` | `float` | `0.35` | Skor minimum deteksi untuk tahap pencocokan pertama. |
-| `low_threshold` | `float` | `0.1` | Skor minimum deteksi untuk tahap pencocokan kedua. |
-| `new_track_threshold` | `float` | `0.25` | Skor minimum untuk membuka track baru. |
-| `lost_track_buffer` | `int` | `30` | Berapa lama track yang hilang disimpan, dalam frame pada 30 FPS. Nilainya disesuaikan dengan `frame_rate`. |
-| `match_threshold` | `float` | `0.8` | Ambang pencocokan deteksi dengan track. |
-
-`update(detections)` mengembalikan deteksi frame ini yang sudah punya track, dengan `tracker_id` terisi. Deteksi yang belum dikonfirmasi dibuang: kecuali di frame pertama, track baru baru dikembalikan setelah cocok lagi di frame berikutnya. `xyxy` diganti kotak dari tracker, dan `keypoints_xy` tetap sejajar dengan kotaknya. Frame tanpa deteksi mengembalikan `Detections` kosong dengan `tracker_id` berupa array kosong.
+RF-DETR kadang memberi dua kotak yang hampir sama untuk satu orang. Pada video toko, 9 sampai 12 pasang kotak kembar muncul di 30 frame, karena itu `detect` menyaringnya secara bawaan.
 
 ## weights
 
-Lokasi: `zul.computer_vision.weights`. Membutuhkan extra `yolo` dan koneksi ke GitHub.
+Lokasi: `zul.computer_vision.weights`. Membutuhkan extra `detection` dan koneksi ke storage rilis RF-DETR.
 
 ### `fetch(path, download=True)`
 
@@ -471,7 +484,7 @@ Memastikan file bobot model ada di `path`. Mengembalikan `(bisa_dipakai, keteran
 |---|---|
 | File sudah ada | `(True, "ada ... MB")` |
 | File belum ada dan `download=False` | `(False, "belum ada")` |
-| Berhasil diunduh | `(True, "diunduh ... MB")` |
-| Nama file bukan bobot yang dirilis ultralytics | `(False, "GAGAL ...")` |
+| Berhasil diunduh | `(True, "diunduh ... MB")`. Unduhannya dicek dengan MD5. |
+| Nama file bukan bobot yang dirilis RF-DETR | `(False, "GAGAL ...")` |
 
-Nama file di `path` harus sama dengan nama aset rilis ultralytics, misalnya `yolo11m-pose.pt` atau `yolov8l-worldv2.pt`. Untuk mengganti file yang terpotong, hapus filenya, lalu panggil `fetch` lagi.
+Nama file di `path` harus sama dengan nama bobot rilis RF-DETR, misalnya `rf-detr-keypoint-preview-xlarge.pth`. Nama bawaan setiap model ada di `zul.adapters.rfdetr.default_weights(nama)`. Untuk mengganti file yang terpotong, hapus filenya, lalu panggil `fetch` lagi.

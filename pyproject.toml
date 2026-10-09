@@ -3,6 +3,8 @@ name = "zul"
 version = "0.0.1"
 description = "CLI tool untuk membuat template proyek dan utilities"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     { name = "kazuma313", email = "koerzoelmatondang@gmail.com" }
 ]
@@ -33,10 +35,14 @@ ocr = ["docling>=2.74.0"]
 llm = ["langchain-openai>=1.0.2", "langgraph>=1.0.2"]
 gemini = ["google-genai>=1.0.0"]
 # Computer vision: aturan perilaku cukup dengan numpy (dependency utama),
-# vision untuk menggambar dan membaca video, yolo untuk model dan tracker.
+# vision untuk menggambar dan membaca video, tracking untuk ByteTrack,
+# detection untuk model RF-DETR. Tidak ada library berlisensi AGPL.
 vision = ["opencv-python>=4.10"]
-yolo = ["zul[vision]", "ultralytics>=8.4.120,<8.5", "lap>=0.5.12"]
-all = ["zul[milvus,redis,converter,analysis,pdf,ocr,llm,gemini,vision,yolo]"]
+tracking = ["lap>=0.5.12"]
+detection = ["zul[vision,tracking]", "rfdetr>=1.11.2,<1.12"]
+all = [
+    "zul[milvus,redis,converter,analysis,pdf,ocr,llm,gemini,vision,tracking,detection]",
+]
 
 [project.scripts]
 zul = "zul.cli:app"
@@ -64,7 +70,6 @@ dev = [
     "nltk>=3.9.2",
     "torch",
     "torchvision",
-    "ultralytics>=8.4.120",
 ]
 # Dependency situs dokumentasi. Workflow .github/workflows/docs.yml
 # hanya meng-install grup ini, dengan versi persis dari uv.lock.

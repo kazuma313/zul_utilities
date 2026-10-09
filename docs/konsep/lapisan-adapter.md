@@ -1,6 +1,6 @@
 # Lapisan adapter
 
-Zul memakai banyak library pihak ketiga: OpenCV untuk gambar, ultralytics untuk model YOLO, pymilvus untuk vector database, dan lainnya. Halaman ini menjelaskan bagaimana Zul memakai library itu, dan kenapa: setiap library hanya diimpor di satu file di `src/zul/adapters/`, dan modul Zul lain memakai library itu lewat file tersebut.
+Zul memakai banyak library pihak ketiga: OpenCV untuk gambar, RF-DETR untuk mendeteksi orang, pymilvus untuk vector database, dan lainnya. Halaman ini menjelaskan bagaimana Zul memakai library itu, dan kenapa: setiap library hanya diimpor di satu file di `src/zul/adapters/`, dan modul Zul lain memakai library itu lewat file tersebut.
 
 ## Library sebagai induk, Zul sebagai anak
 
@@ -10,7 +10,7 @@ Kode Zul tersusun dalam tiga lapisan:
 flowchart TB
     app["Aplikasimu"] --> zul["Modul Zul<br/>computer_vision, utilities"]
     zul --> adapters["zul/adapters<br/>satu file per library"]
-    adapters --> libraries["Library pihak ketiga<br/>OpenCV, ultralytics, pymilvus, ..."]
+    adapters --> libraries["Library pihak ketiga<br/>OpenCV, RF-DETR, pymilvus, ..."]
 ```
 
 - **Library pihak ketiga** adalah lapisan induk. Zul tidak pernah mengubah kodenya di tempat ia ter-install.
@@ -25,9 +25,9 @@ Tanpa lapisan ini, setiap modul Zul mengimpor library sendiri-sendiri. Mengubah 
 
 Dengan lapisan adapter:
 
-- **Satu tempat untuk mengubah perilaku library.** Perilaku yang perlu diubah ditulis sebagai kelas turunan di adapter. Contohnya, semua tracker Zul dibuat dari `ZulBYTETracker`, turunan `BYTETracker` milik ultralytics. Mengubah cara tracker mencocokkan deteksi cukup dengan menurunkan satu method di kelas itu.
+- **Satu tempat untuk mengubah perilaku library.** Perilaku yang perlu diubah ditulis di adapter, sebagai parameter atau kelas turunan. Contohnya, model RF-DETR diubah ke float16 di `zul/adapters/rfdetr.py`, dan semua modul yang memakai model ikut mendapat percepatannya.
 - **Mengganti library tanpa mengubah aplikasi.** Jika OpenCV diganti library gambar lain, yang ditulis ulang hanya `zul/adapters/opencv.py`. Modul `draw`, `masks`, dan `video`, serta aplikasi yang memakainya, tidak berubah.
-- **Bagian internal library terlihat dan teruji.** Zul memakai dua bagian internal ultralytics: `BYTETracker` dan `attempt_download_asset`. Keduanya hanya dipakai di satu adapter, versi ultralytics dikunci ke `>=8.4.120,<8.5`, dan satu test gagal lebih dulu jika bagian itu berubah.
+- **Bagian library yang belum stabil terlihat dan teruji.** Model keypoint RF-DETR masih berstatus preview. Model itu hanya dipakai di satu adapter, versi RF-DETR dikunci ke `>=1.11.2,<1.12`, dan satu test gagal lebih dulu jika API yang dipakai Zul berubah.
 - **Kolaborator mendapat perubahan yang sama.** Perubahan perilaku library hidup di repository Zul, jadi ditinjau lewat pull request, diuji, dan sampai ke semua orang lewat versi Zul yang sama.
 
 ## Aturan adapter
@@ -47,7 +47,8 @@ Jika sebuah modul melanggar aturan pertama, pesan test-nya menyebut modul dan li
 |---|---|---|---|
 | `yaml` | PyYAML | `computer_vision.config`, `commands.install`, config vector database, `AIService` | Tidak ada |
 | `opencv` | OpenCV (`cv2`) | `computer_vision.draw`, `masks`, `video`, `detection` | `vision` |
-| `ultralytics` | ultralytics | `computer_vision.detection`, `weights` | `yolo` |
+| `lap` | lap | `computer_vision.tracking` | `tracking` |
+| `rfdetr` | RF-DETR, PyTorch | `computer_vision.detection`, `weights` | `detection` |
 | `milvus` | pymilvus | `MilvusHelper` | `milvus` |
 | `redis` | redis, redisvl | `RedisVectorDB`, `RedisHelper` | `redis` |
 | `docling` | Docling | `DoclingVLMConverter` | `ocr` |
@@ -92,6 +93,21 @@ Di beberapa tempat, modul Zul bekerja dengan objek yang dibuat library, walaupun
 | `ChartGenerator` | `current_fig` dan `current_ax`, objek Figure dan Axes | Grafik digambar dengan banyak method Axes. Membungkus semuanya sama saja dengan menulis ulang Matplotlib. |
 
 Library-nya tetap hanya diimpor di adapter. Yang lewat hanya objek yang dibuat adapter, jadi mengganti versi atau perilaku library tetap dimulai dari satu file.
+
+## Lisensi library
+
+Zul berlisensi MIT. Aplikasi yang dibangun dengan Zul boleh memakai lisensi apa pun, termasuk tertutup, asalkan pemberitahuan lisensi Zul dan library-nya tetap disertakan.
+
+Karena itu Zul tidak memakai library berlisensi AGPL, yang mewajibkan kode aplikasi pemakainya dibuka. `test_no_dependency_uses_an_agpl_license` memeriksa lisensi setiap dependency, termasuk dependency dari dependency, dan gagal jika ada yang berlisensi AGPL. Dulu deteksi orang memakai ultralytics, yang berlisensi AGPL. Sekarang Zul memakai RF-DETR, berlisensi Apache 2.0, dan ByteTrack yang ditulis sendiri.
+
+Beberapa library yang ikut ter-install berlisensi LGPL. LGPL membolehkan library dipakai lewat import biasa tanpa membuka kode aplikasimu:
+
+| Library | Ikut ter-install karena | Extra |
+|---|---|---|
+| `svglib`, `python-bidi` | Dependency xhtml2pdf | `converter` |
+| FFmpeg di dalam paket `av` | Dependency supervision, yang dipakai RF-DETR | `detection` |
+
+Library lain memakai MIT, BSD, atau Apache 2.0.
 
 ## Halaman terkait
 

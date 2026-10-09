@@ -79,6 +79,53 @@ def shrink_to_point(points: np.ndarray, size: float = 1.0) -> np.ndarray:
 
 
 # --------------------------------------------------------------------------
+# Tumpang Tindih Kotak
+# --------------------------------------------------------------------------
+#
+# IoU ialah luas irisan dua kotak dibagi luas gabungannya: 1 untuk kotak
+# yang sama persis, 0 untuk kotak yang terpisah. Tracker menggunakan
+# IoU untuk memasangkan track dengan deteksi di frame berikutnya.
+#
+
+
+def box_iou(first: np.ndarray, second: np.ndarray) -> np.ndarray:
+    """Matriks IoU `(n, m)` antara setiap kotak `first` dan setiap kotak `second`."""
+    a = np.asarray(first, dtype=np.float64).reshape(-1, 4)
+    b = np.asarray(second, dtype=np.float64).reshape(-1, 4)
+    if len(a) == 0 or len(b) == 0:
+        return np.zeros((len(a), len(b)))
+    top_left = np.maximum(a[:, None, :2], b[None, :, :2])
+    bottom_right = np.minimum(a[:, None, 2:], b[None, :, 2:])
+    sides = np.clip(bottom_right - top_left, 0, None)
+    inter = sides[..., 0] * sides[..., 1]
+    area_a = (a[:, 2] - a[:, 0]) * (a[:, 3] - a[:, 1])
+    area_b = (b[:, 2] - b[:, 0]) * (b[:, 3] - b[:, 1])
+    union = area_a[:, None] + area_b[None, :] - inter
+    return np.divide(inter, union, out=np.zeros_like(inter), where=union > 0)
+
+
+def non_max_suppression(
+    boxes: np.ndarray, scores: np.ndarray, iou_threshold: float = 0.7
+) -> np.ndarray:
+    """Indeks kotak yang dipertahankan, dari skor tertinggi, tanpa kotak kembar.
+
+    Kotak yang IoU-nya dengan kotak berskor lebih tinggi melebihi
+    `iou_threshold` dibuang. Indeksnya urut naik, sesuai urutan masukan.
+    """
+    boxes = np.asarray(boxes, dtype=np.float64).reshape(-1, 4)
+    order = np.argsort(-np.asarray(scores, dtype=np.float64), kind="stable")
+    overlap = box_iou(boxes, boxes)
+    keep: list[int] = []
+    removed = np.zeros(len(boxes), dtype=bool)
+    for index in order:
+        if removed[index]:
+            continue
+        keep.append(int(index))
+        removed |= overlap[index] > iou_threshold
+    return np.array(sorted(keep), dtype=int)
+
+
+# --------------------------------------------------------------------------
 # Poligon
 # --------------------------------------------------------------------------
 #

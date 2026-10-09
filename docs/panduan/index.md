@@ -73,4 +73,4 @@ Fungsi-fungsi kecil di `zul.computer_vision` untuk video, yang kamu rangkai send
 | Menerbitkan situs dokumentasi dan menyambungkan playground-nya | [Menerbitkan dokumentasi](menerbitkan-dokumentasi.md) |
 | Menambah tulisan bertanggal ke blog, beserta gambar dan file-nya | [Menulis tulisan blog](menulis-blog.md) |
 | Mengubah Zul sendiri: kode, test, atau dokumentasi | [Berkontribusi](berkontribusi.md) |
-| Mengubah perilaku OpenCV, ultralytics, atau library lain untuk kebutuhan proyek | [Mengubah perilaku library pihak ketiga](mengubah-perilaku-library.md) |
+| Mengubah perilaku OpenCV, RF-DETR, atau library lain untuk kebutuhan proyek | [Mengubah perilaku library pihak ketiga](mengubah-perilaku-library.md) |

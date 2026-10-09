@@ -1,6 +1,6 @@
 # Mengubah perilaku library pihak ketiga
 
-Zul memakai library seperti OpenCV, ultralytics, dan pymilvus lewat satu lapisan: `src/zul/adapters/`. Setiap library hanya diimpor di satu file adapter. Jika kamu atau kolaboratormu perlu mengubah perilaku sebuah library untuk kebutuhan proyek, perubahannya ditulis di adapter itu, bukan di dalam paket library yang ter-install.
+Zul memakai library seperti OpenCV, RF-DETR, dan pymilvus lewat satu lapisan: `src/zul/adapters/`. Setiap library hanya diimpor di satu file adapter. Jika kamu atau kolaboratormu perlu mengubah perilaku sebuah library untuk kebutuhan proyek, perubahannya ditulis di adapter itu, bukan di dalam paket library yang ter-install.
 
 Panduan ini untuk orang yang mengubah Zul sendiri. Alasan di balik lapisan ini ada di [Lapisan adapter](../konsep/lapisan-adapter.md).
 
@@ -23,60 +23,69 @@ Ketiga cara pertama hidup di repository Zul, jadi kolaborator mendapat perubahan
 
 ## Mencari adapter sebuah library
 
-1. Cari file adapter untuk library itu di `src/zul/adapters/`. Nama file mengikuti nama library, misalnya `opencv.py` untuk OpenCV dan `ultralytics.py` untuk ultralytics.
+1. Cari file adapter untuk library itu di `src/zul/adapters/`. Nama file mengikuti nama library, misalnya `opencv.py` untuk OpenCV dan `rfdetr.py` untuk RF-DETR.
 
 2. Pastikan library itu memang ditangani di file tersebut. Daftar lengkapnya ada di `ADAPTERS` di `tests/test_architecture.py`:
 
     ```python
     ADAPTERS = {
         "opencv": {"cv2"},
-        "ultralytics": {"ultralytics"},
+        "rfdetr": {"rfdetr", "torch"},
         "yaml": {"yaml"},
         ...
     }
     ```
 
-3. Cari fungsi adapter yang dipanggil modul Zul. Misalnya, `ByteTracker` di `zul/computer_vision/detection.py` memanggil `create_tracker` dan `track` dari `zul/adapters/ultralytics.py`.
+3. Cari fungsi adapter yang dipanggil modul Zul. Misalnya, `detect` di `zul/computer_vision/detection.py` memanggil `predict` dari `zul/adapters/rfdetr.py`.
 
 ## Mengubah lewat parameter
 
 Jika library sudah punya pilihan untuk perilaku yang kamu butuhkan, teruskan pilihan itu dari adapter, lalu dari modul Zul yang memakainya.
 
-Contohnya, ambang `ByteTracker` diteruskan ke `create_tracker` di adapter, lalu ke `BYTETracker` milik ultralytics. Untuk membuka pilihan baru, tambahkan parameter dengan nilai bawaan yang sama dengan perilaku sekarang, supaya kode yang sudah ada tidak berubah hasilnya.
+Contohnya, `half` di `load_model` diteruskan ke `load_model` di adapter, yang memanggil `model.inference(dtype=torch.float16)` milik RF-DETR. Untuk membuka pilihan baru, tambahkan parameter dengan nilai bawaan yang sama dengan perilaku sekarang, supaya kode yang sudah ada tidak berubah hasilnya.
 
 ## Mengubah lewat kelas turunan
 
-Untuk mengubah sebagian kecil perilaku sebuah kelas library, turunkan kelas itu di adapter. Contoh berikut mengubah cara tracker mencocokkan deteksi dengan track, dengan menurunkan method `get_dists` milik `BYTETracker`:
+Untuk mengubah sebagian kecil perilaku sebuah kelas library, turunkan kelas itu di adapter. Contoh berikut mengubah hasil model keypoint RF-DETR, dengan menurunkan method `predict` milik `RFDETRKeypointPreview`:
 
-1. Buka `src/zul/adapters/ultralytics.py` dan cari kelas `ZulBYTETracker`. Kelas ini sudah menjadi turunan `BYTETracker`, dan semua tracker Zul dibuat dari kelas ini.
+1. Buka `src/zul/adapters/rfdetr.py`.
 
-2. Tambahkan method yang ingin diubah:
+2. Tambahkan kelas turunan di bawah import:
 
     ```python
-    class ZulBYTETracker(BYTETracker):
-        """BYTETracker milik ultralytics, dengan Zul sebagai kelas turunannya."""
+    class ZulKeypointModel(rfdetr.RFDETRKeypointPreview):
+        """Model keypoint RF-DETR, dengan Zul sebagai kelas turunannya."""
 
-        def get_dists(self, tracks, detections):
-            dists = super().get_dists(tracks, detections)
-            # perubahan khusus proyek, misalnya bobot jarak yang berbeda
-            return dists
+        def predict(self, images, threshold=0.5, **kwargs):
+            result = super().predict(images, threshold=threshold, **kwargs)
+            # perubahan khusus proyek, misalnya menyaring hasil
+            return result
     ```
 
-3. Tulis test yang membuktikan perilaku barunya, misalnya di `tests/test_computer_vision.py`, dengan deteksi buatan.
+3. Arahkan `model_class` ke kelas itu untuk nama `keypoint`, supaya `load_model("keypoint")` di seluruh Zul memakainya:
 
-4. Jalankan test arsitektur dan test modul itu:
+    ```python
+    def model_class(name: str) -> Any:
+        if name == "keypoint":
+            return ZulKeypointModel
+        ...
+    ```
+
+4. Tulis test yang membuktikan perilaku barunya, misalnya di `tests/test_computer_vision.py`, dengan model palsu seperti `FakeRFDETR`.
+
+5. Jalankan test arsitektur dan test modul itu:
 
     ```shell
     uv run pytest tests/test_architecture.py tests/test_computer_vision.py
     ```
 
-Kelas turunan tetap memakai kode library yang ter-install, jadi ia ikut rusak jika method induknya berubah di versi library berikutnya. Karena itu Zul mengunci versi library yang bagian internalnya dipakai, misalnya `ultralytics>=8.4.120,<8.5`. Test `test_ultralytics_internals_used_by_the_adapter_still_exist` gagal lebih dulu jika method yang dipakai hilang.
+Kelas turunan tetap memakai kode library yang ter-install, jadi ia ikut rusak jika method induknya berubah di versi library berikutnya. Karena itu Zul mengunci versi library yang API-nya belum stabil, misalnya `rfdetr>=1.11.2,<1.12`. Test `test_rfdetr_api_used_by_the_adapter_still_exists` gagal lebih dulu jika bagian yang dipakai berubah.
 
 ## Menyalin kode library ke Zul
 
 Jika perubahannya terlalu besar untuk kelas turunan, salin file library yang perlu diubah ke `src/zul/adapters/_vendor/`:
 
-1. Buat folder untuk library itu, misalnya `src/zul/adapters/_vendor/bytetrack/`.
+1. Buat folder untuk library itu, misalnya `src/zul/adapters/_vendor/rfdetr/`.
 
 2. Salin file yang perlu diubah ke folder itu, beserta file lisensi asli library-nya sebagai `LICENSE`. Test `test_vendored_libraries_keep_their_license` gagal jika file lisensi tidak ada.
 
@@ -90,15 +99,15 @@ Salinan tidak ikut diperbarui saat library-nya diperbarui. Perbaikan dari versi 
 
 Jika perubahannya menyebar di banyak file library:
 
-1. Fork repository library itu di GitHub, misalnya ke `kazuma313/ultralytics`.
+1. Fork repository library itu di GitHub, misalnya ke `kazuma313/rf-detr`.
 
-2. Buat perubahanmu di fork, lalu beri tag yang menyebut versi asal dan versi perubahanmu, misalnya `v8.4.120-zul.1`.
+2. Buat perubahanmu di fork, lalu beri tag yang menyebut versi asal dan versi perubahanmu, misalnya `v1.11.2-zul.1`.
 
 3. Arahkan dependency ke tag itu di `pyproject.toml`:
 
     ```toml
     [tool.uv.sources]
-    ultralytics = { git = "https://github.com/kazuma313/ultralytics", tag = "v8.4.120-zul.1" }
+    rfdetr = { git = "https://github.com/kazuma313/rf-detr", tag = "v1.11.2-zul.1" }
     ```
 
 4. Jalankan `uv lock`, lalu commit `pyproject.toml` dan `uv.lock` bersama. Kolaborator mendapat fork yang sama saat menjalankan `uv sync`.
@@ -127,10 +136,13 @@ Untuk memakai library yang belum dipakai Zul:
 
 ## Memeriksa lisensi
 
-Mengubah kode library, lewat kelas turunan, salinan, atau fork, berarti membuat turunan dari kode itu. Periksa lisensinya sebelum perubahan dibagikan:
+Zul berlisensi MIT, dan aplikasi yang memakainya tidak boleh ikut terikat lisensi AGPL. Karena itu tidak ada dependency Zul yang berlisensi AGPL, dan `test_no_dependency_uses_an_agpl_license` gagal jika ada.
 
-- ultralytics berlisensi AGPL-3.0. Kode turunan yang dibagikan, atau dijalankan sebagai layanan yang dipakai orang lewat jaringan, wajib dibuka dengan lisensi AGPL juga.
-- Library berlisensi MIT, BSD, atau Apache 2.0 membolehkan perubahan, asalkan pemberitahuan lisensinya tetap disertakan.
+Sebelum menambah library, atau mengubah kode library lewat kelas turunan, salinan, atau fork, periksa lisensinya:
+
+- MIT, BSD, dan Apache 2.0 membolehkan pemakaian dan perubahan, asalkan pemberitahuan lisensinya tetap disertakan. Hampir semua library Zul memakai salah satunya.
+- LGPL membolehkan library dipakai lewat import biasa tanpa membuka kode aplikasimu. Library LGPL di Zul hanya `svglib` dan `python-bidi`, yang ikut xhtml2pdf, serta FFmpeg di dalam paket `av`, yang ikut RF-DETR.
+- GPL dan AGPL mewajibkan kode aplikasi yang memakainya dibuka. Jangan tambahkan library dengan lisensi ini.
 
 ## Halaman terkait
 

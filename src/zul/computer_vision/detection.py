@@ -1,28 +1,27 @@
 """
-Deteksi orang, pose, dan tracking dengan model YOLO.
+Deteksi orang dan keypoint pose dengan model RF-DETR.
 
 Gunanya:
-    Frame masuk, deteksi yang punya id track keluar. Hasilnya berupa
-    Detections, wadah numpy biasa yang dibaca oleh semua modul lain,
-    jadi modul itu tidak terikat pada library model mana pun. Model,
-    inference, dan tracker dijalankan lewat zul.adapters.ultralytics.
-    Butuh extra yolo: `pip install "zul[yolo]"`.
+    Frame masuk, deteksi keluar sebagai Detections, wadah numpy biasa yang
+    dibaca oleh semua modul lain, jadi modul itu tidak terikat pada library
+    model mana pun. Model dan inference dijalankan lewat zul.adapters.rfdetr
+    (Apache 2.0). Model keypoint memberi kotak orang dan 17 keypoint COCO
+    sekaligus. Butuh extra detection: `pip install "zul[detection]"`.
 
 Cara pakai:
-    from zul.computer_vision.detection import (
-        ByteTracker, detect, load_model, standardise_frame,
-    )
+    from zul.computer_vision.detection import detect, load_model, standardise_frame
+    from zul.computer_vision.tracking import ByteTracker
 
-    model = load_model("models/yolo11m-pose.pt")
+    model = load_model("keypoint")
     tracker = ByteTracker(frame_rate=10)
 
     prepared, scale = standardise_frame(frame, size=640)
-    people = detect(model, prepared, confidence=0.2).rescale(scale)
+    people = detect(model, prepared, confidence=0.3).rescale(scale)
     people = tracker.update(people)          # hanya track yang sudah dikonfirmasi
     people.xyxy, people.tracker_id, people.keypoints_xy
 
-YOLO-World mendeteksi kelas dari teks, misalnya ["person", "person wearing
-a red apron"], tetapi butuh paket CLIP dari ultralytics (lihat load_model).
+ByteTracker juga bisa diimpor dari modul ini, untuk kode yang ditulis
+sebelum tracking dipisahkan ke zul.computer_vision.tracking.
 """
 
 from __future__ import annotations
@@ -34,6 +33,10 @@ from typing import Any
 import numpy as np
 
 from ..adapters import opencv
+from .geometry import non_max_suppression
+from .tracking import ByteTracker
+
+__all__ = ["ByteTracker", "Detections", "detect", "load_model", "standardise_frame"]
 
 # --------------------------------------------------------------------------
 # Wadah Deteksi
@@ -90,34 +93,37 @@ class Detections:
             keypoints_conf=arrays.get("keypoints_conf"),
         )
 
-    @classmethod
-    def from_ultralytics(cls, result: Any) -> Detections:
-        """Deteksi dari satu `Results` ultralytics, plus keypoint dari model pose."""
-        from ..adapters import ultralytics as yolo
-
-        return cls.from_arrays(yolo.result_arrays(result))
-
 
 # --------------------------------------------------------------------------
 # Model Dan Inference
 # --------------------------------------------------------------------------
 #
 # Satu ukuran input untuk semua model: frame diperkecil sekali
-# ke ukuran latih model, dan satu faktor skala mengembalikan
+# ke ukuran kerja model, dan satu faktor skala mengembalikan
 # koordinatnya. Pada proyek toko, langkah ini menaikkan
 # kecepatan dari 8,3 menjadi 13,9 frame per detik.
 #
+# RF-DETR kadang memberi dua kotak yang hampir sama untuk satu orang,
+# di proyek toko 9 sampai 12 pasang dari 30 frame. Karena itu hasil
+# detect disaring dulu dengan non-max suppression di IoU 0,7.
+#
 
 
-def load_model(weights: str | Path, prompts: list[str] | None = None) -> Any:
-    """Muat model YOLO atau model pose; dengan `prompts`, YOLO-World berkelas teks.
+def load_model(
+    model: str = "keypoint",
+    weights: str | Path | None = None,
+    half: bool = True,
+    device: str | None = None,
+) -> Any:
+    """Muat model RF-DETR: keypoint, nano, small, medium, atau large.
 
-    YOLO-World butuh paket `clip` dari ultralytics. Tanpa paket itu,
-    fungsi ini berhenti dengan ImportError berisi cara meng-install-nya.
+    `keypoint` memberi kotak orang dan 17 keypoint COCO. Model lain hanya
+    memberi kotak, untuk 80 kelas COCO. Tanpa `weights`, bobot diunduh ke
+    folder cache RF-DETR saat pertama dipakai. `half` memakai float16 di GPU.
     """
-    from ..adapters import ultralytics as yolo
+    from ..adapters import rfdetr as rfdetr_adapter
 
-    return yolo.load_model(weights, prompts)
+    return rfdetr_adapter.load_model(model, weights, half=half, device=device)
 
 
 def standardise_frame(image: np.ndarray, size: int = 640) -> tuple[np.ndarray, float]:
@@ -137,73 +143,21 @@ def standardise_frame(image: np.ndarray, size: int = 640) -> tuple[np.ndarray, f
 def detect(
     model: Any,
     image: np.ndarray,
-    confidence: float = 0.20,
-    iou: float = 0.5,
-    imgsz: int = 640,
-    device: str | None = None,
+    confidence: float = 0.5,
     classes: list[int] | None = None,
+    nms_iou: float | None = 0.7,
 ) -> Detections:
-    """Inference satu frame. Model pose mengisi `keypoints_xy` dan `keypoints_conf`.
+    """Inference satu frame BGR. Model keypoint juga mengisi keypoint per orang.
 
-    Confidence bawaan 0,20 lebih rendah dari bawaan ultralytics (0,25),
-    karena skor YOLO-World lebih dingin daripada skor detektor COCO.
+    `classes` menyaring id kelas COCO, misalnya `[1]` untuk orang. Kotak
+    yang IoU-nya dengan kotak berskor lebih tinggi melebihi `nms_iou`
+    dibuang; isi None untuk mematikan penyaringan ini.
     """
-    from ..adapters import ultralytics as yolo
+    from ..adapters import rfdetr as rfdetr_adapter
 
-    arrays = yolo.predict(model, image, confidence, iou, imgsz, device, classes)
-    return Detections.from_arrays(arrays)
-
-
-# --------------------------------------------------------------------------
-# Tracking
-# --------------------------------------------------------------------------
-#
-# Ambang bawaan ultralytics mengandaikan skor detektor COCO lebih dari 0,9.
-# Untuk skor YOLO-World yang lebih rendah, ambang 0,25 dan 0,35 menaikkan
-# jumlah deteksi di satu frame dari proyek toko dari 2 menjadi 6 orang.
-#
-# Track baru hanya dikembalikan setelah cocok di frame berikutnya, jadi satu
-# deteksi yang muncul sekali tidak pernah menjadi orang tambahan. Hitungan
-# aturan selalu memakai id track, bukan jumlah kotak di setiap frame.
-#
-
-
-class ByteTracker:
-    """ByteTrack: id yang bertahan antar frame untuk setiap deteksi."""
-
-    def __init__(
-        self,
-        frame_rate: float = 30.0,
-        high_threshold: float = 0.35,
-        low_threshold: float = 0.1,
-        new_track_threshold: float = 0.25,
-        lost_track_buffer: int = 30,
-        match_threshold: float = 0.8,
-    ) -> None:
-        from ..adapters import ultralytics as yolo
-
-        self._yolo = yolo
-        self._tracker = yolo.create_tracker(
-            frame_rate,
-            high_threshold,
-            low_threshold,
-            new_track_threshold,
-            lost_track_buffer,
-            match_threshold,
-        )
-
-    def update(self, detections: Detections) -> Detections:
-        """Deteksi frame ini yang punya id track; yang belum dikonfirmasi dibuang."""
-        rows = self._yolo.track(
-            self._tracker,
-            detections.xyxy,
-            detections.confidence,
-            detections.class_id,
-        )
-        if len(rows) == 0:
-            empty = detections[np.zeros(len(detections), dtype=bool)]
-            return replace(empty, tracker_id=np.empty(0, dtype=int))
-        tracked = detections[rows[:, 7].astype(int)]
-        tracked.xyxy = rows[:, :4].astype(np.float64)
-        tracked.tracker_id = rows[:, 4].astype(int)
-        return tracked
+    found = Detections.from_arrays(rfdetr_adapter.predict(model, image, confidence))
+    if classes is not None:
+        found = found[np.isin(found.class_id, classes)]
+    if nms_iou is not None and len(found) > 1:
+        found = found[non_max_suppression(found.xyxy, found.confidence, nms_iou)]
+    return found

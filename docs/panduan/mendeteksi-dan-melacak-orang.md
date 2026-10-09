@@ -1,6 +1,8 @@
 # Mendeteksi dan melacak orang
 
-Fungsi lain di `zul.computer_vision` menerima kotak, keypoint, dan id track. Halaman ini membuat ketiganya dari video: membaca frame, mendeteksi orang dengan model YOLO, memberi id yang sama untuk orang yang sama di setiap frame, lalu menulis video beranotasi.
+Fungsi lain di `zul.computer_vision` menerima kotak, keypoint, dan id track. Halaman ini membuat ketiganya dari video: membaca frame, mendeteksi orang dengan model RF-DETR, memberi id yang sama untuk orang yang sama di setiap frame dengan ByteTrack, lalu menulis video beranotasi.
+
+RF-DETR dan semua library di halaman ini berlisensi MIT, BSD, atau Apache 2.0. Zul tidak memakai library berlisensi AGPL.
 
 **Sebelum mulai:** kamu butuh:
 
@@ -10,13 +12,13 @@ Fungsi lain di `zul.computer_vision` menerima kotak, keypoint, dan id track. Hal
 
 ## Menyiapkan model
 
-1. Install Zul dengan extra `yolo`. Extra ini sudah termasuk extra `vision` untuk OpenCV:
+1. Install Zul dengan extra `detection`. Extra ini sudah termasuk extra `vision` untuk OpenCV dan `tracking` untuk ByteTrack:
 
     ```shell
-    pip install "zul[yolo] @ git+https://github.com/kazuma313/zul_utilities.git"
+    pip install "zul[detection] @ git+https://github.com/kazuma313/zul_utilities.git"
     ```
 
-    Extra `yolo` meng-install ultralytics, yang ikut meng-install PyTorch. Di Windows, PyTorch dari PyPI hanya berjalan di CPU. Untuk GPU NVIDIA, install PyTorch versi CUDA dulu dengan perintah dari [pytorch.org](https://pytorch.org/get-started/locally/), lalu jalankan perintah di atas.
+    Extra `detection` meng-install RF-DETR, yang ikut meng-install PyTorch. Di Windows, PyTorch dari PyPI hanya berjalan di CPU. Untuk GPU NVIDIA, install PyTorch versi CUDA dulu dengan perintah dari [pytorch.org](https://pytorch.org/get-started/locally/), lalu jalankan perintah di atas.
 
 2. Pastikan PyTorch melihat GPU-mu:
 
@@ -26,15 +28,15 @@ Fungsi lain di `zul.computer_vision` menerima kotak, keypoint, dan id track. Hal
 
     Perintah itu mencetak `True` jika GPU bisa dipakai.
 
-3. Unduh bobot model ke folder `models`:
+3. Unduh bobot model keypoint ke folder `models`:
 
     ```python
     from zul.computer_vision.weights import fetch
 
-    print(fetch("models/yolo11m-pose.pt"))
+    print(fetch("models/rf-detr-keypoint-preview-xlarge.pth"))
     ```
 
-    Hasilnya `(True, ...)` dengan keterangan `diunduh` dan ukuran file, sekitar 42 MB. Jika file sudah ada, keterangannya `ada` dan tidak ada yang diunduh. Tanpa `fetch`, ultralytics mengunduh bobot ke folder tempat kamu menjalankan script, dan mengunduhnya lagi saat kamu pindah folder.
+    Hasilnya `(True, ...)` dengan keterangan `diunduh` dan ukuran file, sekitar 164 MB. Unduhannya dicek dengan MD5. Jika file sudah ada, keterangannya `ada` dan tidak ada yang diunduh. Tanpa `fetch`, RF-DETR mengunduh bobot ke `~/.roboflow/models` saat model pertama kali dimuat.
 
 ## Mendeteksi dan melacak orang di video
 
@@ -42,20 +44,17 @@ Fungsi lain di `zul.computer_vision` menerima kotak, keypoint, dan id track. Hal
 
     ```python title="lacak_orang.py"
     from zul.computer_vision import draw, geometry
-    from zul.computer_vision.detection import (
-        ByteTracker,
-        detect,
-        load_model,
-        standardise_frame,
-    )
+    from zul.computer_vision.detection import detect, load_model, standardise_frame
+    from zul.computer_vision.tracking import ByteTracker
     from zul.computer_vision.video import FpsMeter, VideoInfo, VideoWriter, read_frames
 
     VIDEO = "videos/toko.mp4"
+    WEIGHTS = "models/rf-detr-keypoint-preview-xlarge.pth"
     START, END, STRIDE = 0, 900, 3
 
     info = VideoInfo.from_path(VIDEO)
     output = info.slice(START, END, STRIDE)
-    model = load_model("models/yolo11m-pose.pt")
+    model = load_model("keypoint", weights=WEIGHTS)
     tracker = ByteTracker(frame_rate=output.fps)
     trace = draw.TrackTrace(length=30)
     meter = FpsMeter()
@@ -97,7 +96,7 @@ Fungsi lain di `zul.computer_vision` menerima kotak, keypoint, dan id track. Hal
     Script itu mencetak jumlah frame yang diproses, jumlah id track berbeda, dan kecepatan rata-rata 30 frame terakhir. Untuk video toko 1280×720 di RTX 3060 Laptop, hasilnya:
 
     ```text
-    300 frame, 19 id track, 45.0 fps
+    300 frame, 18 id track, 26.9 fps
     ```
 
 3. Buka `outputs/lacak_orang.mp4`. Setiap orang punya kotak dan id dengan warna yang tetap, jejak gerak kakinya, dan jumlah orang di kiri atas.
@@ -108,30 +107,31 @@ Setiap frame melewati langkah yang sama:
 |---|---|---|
 | Membaca frame | `read_frames` | Frame demi frame, beserta nomor frame asli dan detiknya dari awal video. |
 | Ukuran input | `standardise_frame`, `Detections.rescale` | Memperkecil frame ke 640 piksel untuk model, lalu mengembalikan koordinatnya ke ukuran asli. |
-| Deteksi | `detect` | Kotak orang, dan keypoint jika modelnya model pose. |
+| Deteksi | `detect` | Kotak orang dan 17 keypoint per orang. Kotak kembar dari satu orang dibuang dengan non-max suppression. |
 | Tracking | `ByteTracker.update` | Id yang sama untuk orang yang sama di setiap frame. Deteksi yang belum dikonfirmasi dibuang. |
 | Menulis video | `VideoWriter` | Video hasil dengan FPS dibagi `STRIDE`, jadi durasinya sama dengan video sumber. |
 
-Hasil `tracker.update` adalah `Detections`, wadah array NumPy: `people.xyxy`, `people.confidence`, `people.tracker_id`, dan untuk model pose, `people.keypoints_xy` serta `people.keypoints_conf`. Semua array sejajar per baris, dan `people[mask]` memotong semuanya sekaligus.
+Hasil `tracker.update` adalah `Detections`, wadah array NumPy: `people.xyxy`, `people.confidence`, `people.tracker_id`, dan untuk model keypoint, `people.keypoints_xy` serta `people.keypoints_conf`. Semua array sejajar per baris, dan `people[mask]` memotong semuanya sekaligus.
 
 Jumlah id track bisa lebih besar dari jumlah orang sebenarnya. Orang yang lama tertutup orang lain bisa kembali dengan id baru.
 
 ## Memilih model
 
-`load_model` memuat tiga jenis model:
+`load_model` memuat model RF-DETR berdasarkan namanya:
 
-| Model | Hasil | Kapan dipakai |
+| Nama | Hasil | Kapan dipakai |
 |---|---|---|
-| Model pose, misalnya `yolo11m-pose.pt` | Kotak orang dan 17 keypoint per orang. | Saat kamu butuh [arah hadap](membaca-arah-hadap-dan-jarak.md) atau kerangka pose. |
-| Model deteksi biasa, misalnya `yolo11m.pt` | Kotak untuk 80 kelas COCO. | Saat kamu hanya butuh kotak. Isi `classes=[0]` di `detect` untuk orang saja. |
-| YOLO-World, misalnya `yolov8l-worldv2.pt` | Kotak untuk kelas yang kamu tulis sebagai teks. | Saat kelasnya tidak ada di COCO. Panggil `load_model(path, prompts=["person"])`. |
+| `keypoint` | Kotak orang dan 17 keypoint COCO per orang. | Saat kamu butuh [arah hadap](membaca-arah-hadap-dan-jarak.md) atau kerangka pose. |
+| `nano`, `small`, `medium`, `large` | Kotak untuk 80 kelas COCO. Makin besar, makin akurat dan makin lambat. | Saat kamu hanya butuh kotak. Isi `classes=[1]` di `detect` untuk orang saja. |
 
-YOLO-World butuh paket CLIP dari ultralytics. Tanpa paket itu, `load_model` berhenti dengan `ImportError` berisi perintah instalasinya.
+Kelas memakai id kategori COCO, jadi orang adalah kelas `1`. Model keypoint masih berstatus preview di RF-DETR. Karena itu Zul mengunci versi RF-DETR ke `>=1.11.2,<1.12`, dan menguji bagian API yang dipakainya.
+
+`ByteTracker` tidak terikat ke RF-DETR. Ia menerima `Detections` dari model apa pun, dan hanya butuh extra `tracking`.
 
 ## Mempercepat proses
 
+- **Pakai GPU dengan float16.** `load_model` mengubah model ke float16 secara bawaan jika GPU tersedia. Di RTX 3060 Laptop, langkah ini memangkas waktu model keypoint dari sekitar 77 menjadi 39 milidetik per frame. Isi `half=False` untuk tetap memakai float32.
 - **Lewati frame.** `STRIDE = 3` memproses satu dari setiap tiga frame. Nilai yang lebih besar mempercepat proses, tetapi track lebih mudah tertukar saat orang bergerak cepat.
-- **Pertahankan ukuran input 640.** `standardise_frame` memperkecil frame ke ukuran latih model. Pada video 1280×720, langkah ini menaikkan kecepatan dari 8,3 menjadi 13,9 frame per detik, dengan hitungan yang sama.
 - **Hitamkan area yang tidak diukur.** Lihat [Menghitamkan dan menyamarkan area](menghitamkan-dan-menyamarkan-area.md).
 
 ## Menyimpan pengaturan di YAML
@@ -140,7 +140,7 @@ Untuk memakai script yang sama di beberapa kamera, simpan pengaturannya di YAML.
 
 ```yaml title="base.yaml"
 settings:
-  POSE_MODEL: models/yolo11m-pose.pt
+  MODEL: keypoint
   CONFIDENCE: 0.20
   STRIDE: 3
 ```
@@ -159,7 +159,7 @@ from zul.computer_vision.config import load_scene, validate_settings
 
 @dataclass(frozen=True)
 class Settings:
-    POSE_MODEL: str
+    MODEL: str
     CONFIDENCE: float
     STRIDE: int
 
@@ -172,7 +172,7 @@ print(scene["VIDEO"], settings, scene["overrides"])
 Script itu mencetak:
 
 ```text
-videos/pintu.mp4 {'POSE_MODEL': 'models/yolo11m-pose.pt', 'CONFIDENCE': 0.25, 'STRIDE': 3} ['CONFIDENCE']
+videos/pintu.mp4 {'MODEL': 'keypoint', 'CONFIDENCE': 0.25, 'STRIDE': 3} ['CONFIDENCE']
 ```
 
 `overrides` berisi pengaturan dasar yang ditimpa file kamera. Nama yang salah ketik, pengaturan yang belum diisi, atau tipe yang salah menghentikan script dengan `ConfigError`, misalnya `settings: kunci tidak dikenal: CONFIDENSE (maksudnya CONFIDENCE?)`.
@@ -185,7 +185,11 @@ Path video dibaca relatif terhadap folder tempat kamu menjalankan script. Jalank
 
 ### Prosesnya sangat lambat
 
-Periksa langkah 2 di [Menyiapkan model](#menyiapkan-model). Jika `torch.cuda.is_available()` mencetak `False`, model berjalan di CPU.
+Periksa langkah 2 di [Menyiapkan model](#menyiapkan-model). Jika `torch.cuda.is_available()` mencetak `False`, model berjalan di CPU tanpa float16.
+
+### ValueError: model tidak dikenal
+
+`load_model` hanya menerima nama di tabel [Memilih model](#memilih-model). Pesan error-nya menyebut nama yang tersedia.
 
 ## Halaman terkait
 

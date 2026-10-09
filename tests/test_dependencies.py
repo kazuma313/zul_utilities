@@ -99,8 +99,12 @@ EXTRA_MODULES = {
         "zul.computer_vision.masks",
         "zul.computer_vision.video",
     ],
-    "yolo": [
-        "zul.adapters.ultralytics",
+    "tracking": [
+        "zul.adapters.lap",
+        "zul.computer_vision.tracking",
+    ],
+    "detection": [
+        "zul.adapters.rfdetr",
         "zul.computer_vision.detection",
         "zul.computer_vision.weights",
     ],
@@ -179,6 +183,7 @@ def blocked_modules(allowed: set[str]) -> list[str]:
 
 IMPORT_SCRIPT = """
 import importlib
+import importlib.util
 import json
 import sys
 
@@ -193,6 +198,16 @@ class Blocker:
         return None
 
 
+original_find_spec = importlib.util.find_spec
+
+
+def find_spec(name, package=None):
+    if name.partition(".")[0] in blocked:
+        return None
+    return original_find_spec(name, package)
+
+
+importlib.util.find_spec = find_spec
 sys.meta_path.insert(0, Blocker())
 for module in job["modules"]:
     importlib.import_module(module)
@@ -246,3 +261,47 @@ def test_every_module_is_assigned_to_core_or_an_extra():
     }
 
     assert found == listed
+
+
+# --------------------------------------------------------------------------
+# Lisensi Dependency
+# --------------------------------------------------------------------------
+#
+# Zul berlisensi MIT, dan aplikasi yang memakainya tidak boleh ikut
+# terikat AGPL. Test ini membaca lisensi setiap distribusi untuk
+# Zul dan semua extra-nya, termasuk dependency dari dependency.
+#
+
+FORBIDDEN_LICENSES = ("AGPL", "AFFERO")
+
+
+def license_text(name: str) -> str:
+    """Nama lisensi sebuah distribusi, tanpa teks lisensi lengkap yang ikut dibundel.
+
+    Teks lengkap dilewati, karena teks GPL 3 menyebut AGPL di pasal 13
+    walaupun paketnya sendiri tidak berlisensi AGPL, misalnya scipy.
+    """
+    meta = distribution(name).metadata
+    classifiers = [
+        line for line in meta.get_all("Classifier") or [] if line.startswith("License")
+    ]
+    short = meta.get("License") or ""
+    fields = [meta.get("License-Expression") or "", short if len(short) < 200 else ""]
+    return " ".join(fields + classifiers)
+
+
+def test_no_dependency_uses_an_agpl_license():
+    names: set[str] = set()
+    for extra in ["", *PROJECT["optional-dependencies"]]:
+        names |= installed_closure(zul_requirements(extra))
+
+    offending = []
+    for name in sorted(names):
+        try:
+            text = license_text(name).upper()
+        except PackageNotFoundError:
+            continue
+        if any(word in text for word in FORBIDDEN_LICENSES):
+            offending.append(name)
+
+    assert not offending, f"dependency berlisensi AGPL: {offending}"

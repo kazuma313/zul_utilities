@@ -18,12 +18,13 @@ Modul dan extra yang dibutuhkan:
     draw        teks, kotak, garis, poligon, jejak, dan heatmap     zul[vision]
     masks       menghitamkan area, blur, dan pixelate               zul[vision]
     video       membaca, menulis, dan mengukur kecepatan            zul[vision]
-    detection   model YOLO, YOLO-World, pose, dan ByteTrack         zul[yolo]
-    weights     mengunduh bobot model ke folder proyek              zul[yolo]
+    tracking    ByteTrack: id yang sama di setiap frame             zul[tracking]
+    detection   model RF-DETR: kotak orang dan keypoint pose        zul[detection]
+    weights     mengunduh bobot model ke folder proyek              zul[detection]
 
 Cara pakai:
     from zul.computer_vision import draw, zones
 
 Paket ini tidak mengimpor modul apa pun saat diimpor, jadi modul yang
-butuh OpenCV atau ultralytics hanya dimuat ketika benar-benar dipakai.
+butuh OpenCV atau RF-DETR hanya dimuat ketika benar-benar dipakai.
 """

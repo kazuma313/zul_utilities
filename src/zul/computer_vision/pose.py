@@ -3,7 +3,7 @@ Arah hadap seseorang, dibaca dari keypoint pose COCO-17.
 
 Gunanya:
     Menjawab "ke mana orang ini menghadap?" dari keluaran model pose
-    seperti yolo11m-pose. Arah kepala dibaca dari hidung dan telinga.
+    seperti RF-DETR keypoint. Arah kepala dibaca dari hidung dan telinga.
     Saat wajah tidak terlihat, misalnya orang membelakangi kamera, arah
     badan dibaca dari garis bahu. Hanya butuh numpy.
 

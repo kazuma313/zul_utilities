@@ -2,7 +2,7 @@
 Lapisan adapter: satu-satunya tempat Zul mengimpor library pihak ketiga.
 
 Gunanya:
-    Library seperti OpenCV, ultralytics, atau pymilvus adalah lapisan induk.
+    Library seperti OpenCV, RF-DETR, atau pymilvus adalah lapisan induk.
     Modul Zul lain adalah lapisan anak: mereka merangkai fungsi dari adapter
     menjadi alat yang siap dipakai, dan tidak pernah mengimpor library itu
     sendiri. Jika sebuah library perlu diubah, diganti, atau dikunci ke
@@ -13,7 +13,7 @@ Aturan adapter:
     - Fungsi adapter menerima dan mengembalikan tipe Python biasa atau
       array NumPy, bukan objek library, kecuali disebut di docstring-nya.
     - Perilaku library yang perlu diubah ditulis sebagai kelas turunan di
-      sini, misalnya ZulBYTETracker, bukan dengan mengubah library-nya.
+      sini, bukan dengan mengubah file library yang ter-install.
     - Adapter hanya mengimpor library-nya, NumPy, dan adapter lain, tidak
       pernah modul Zul di luar folder ini.
 

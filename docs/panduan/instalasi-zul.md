@@ -1,6 +1,6 @@
 # Instalasi Zul
 
-Zul ter-install sebagai perintah `zul` di terminal dan sebagai library Python. Instalasi dasar hanya berisi yang dibutuhkan perintah `zul`, config vector database, dan helper kecil. Utilities lain di-install per fitur lewat *extra*, jadi library besar seperti Docling dan PyTorch hanya ter-install jika fiturnya dipakai.
+Zul berlisensi MIT, dan ter-install sebagai perintah `zul` di terminal dan sebagai library Python. Instalasi dasar hanya berisi yang dibutuhkan perintah `zul`, config vector database, dan helper kecil. Utilities lain di-install per fitur lewat *extra*, jadi library besar seperti Docling dan PyTorch hanya ter-install jika fiturnya dipakai.
 
 **Sebelum mulai:** kamu butuh Python 3.11 atau lebih baru (periksa dengan `python --version`), Git, dan [uv](https://github.com/astral-sh/uv) atau `pip`.
 
@@ -40,7 +40,8 @@ Setiap kelompok utilities punya extra sendiri. Tabel berikut memetakan extra ke 
 | `llm` | [`AIService`](memanggil-llm-dan-embedding.md), [`react_graph`](memakai-helper.md#menjalankan-graph-langgraph-terkecil) | `langchain-openai`, `langgraph` |
 | `gemini` | [OCR dengan Gemini](membaca-dokumen-ocr.md#membaca-pdf-dengan-gemini) | `google-genai` |
 | `vision` | [`draw`, `masks`, dan `video` dari Computer Vision](menggambar-di-frame.md) | `opencv-python` |
-| `yolo` | [Deteksi dan tracking dari Computer Vision](mendeteksi-dan-melacak-orang.md) | `vision`, `ultralytics`, yang ikut meng-install PyTorch, dan `lap` |
+| `tracking` | [`ByteTracker` dari Computer Vision](mendeteksi-dan-melacak-orang.md) | `lap` |
+| `detection` | [Deteksi orang dengan RF-DETR](mendeteksi-dan-melacak-orang.md) | `vision`, `tracking`, dan `rfdetr`, yang ikut meng-install PyTorch, transformers, dan supervision |
 | `all` | Semua di atas | Semua di atas |
 
 ## Instalasi sebagian utilities
@@ -164,7 +165,8 @@ Pesan seperti `No module named 'pymilvus'` berarti extra untuk utility itu belum
 | `langchain_openai`, `langgraph` | `llm` |
 | `google` | `gemini` |
 | `cv2` | `vision` |
-| `ultralytics` | `yolo` |
+| `lap` | `tracking` |
+| `rfdetr` | `detection` |
 
 Install extra itu dengan perintah di [Instalasi sebagian utilities](#instalasi-sebagian-utilities), langkah 2.
 
