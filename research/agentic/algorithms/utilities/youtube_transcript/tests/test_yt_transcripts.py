@@ -1,6 +1,6 @@
 """Tests without network access for scripts/yt_transcripts.py and the get_youtube_transcript tool.
 
-    python -m pytest research/agentic/algorithms/skills/youtube_transcript/tests -q -p no:cacheprovider
+    python -m pytest research/agentic/algorithms/utilities/youtube_transcript/tests -q -p no:cacheprovider
 """
 
 import io
@@ -17,7 +17,7 @@ SKILL = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SKILL / "scripts"))
 sys.path.insert(0, str(SKILL.parent.parent))
 import yt_transcripts as yt  # noqa: E402
-from skills.youtube_transcript import youtube_transcript_skill as skill  # noqa: E402
+from utilities.youtube_transcript import youtube_transcript_skill as skill  # noqa: E402
 from youtube_transcript_api import IpBlocked, NoTranscriptFound  # noqa: E402
 
 # the URLs from evals/sample_urls.txt, in the forms users paste them
@@ -221,7 +221,7 @@ NO_LLM_CHECK = r"""
 import sys
 sys.modules["langchain_core"] = None          # as if LangChain were not installed
 sys.path.insert(0, sys.argv[1])
-from skills.youtube_transcript import youtube_transcript_skill as skill
+from utilities.youtube_transcript import youtube_transcript_skill as skill
 sys.path.insert(0, sys.argv[2])
 import yt_transcripts
 loaded = {name.split(".")[0] for name, module in sys.modules.items() if module is not None}

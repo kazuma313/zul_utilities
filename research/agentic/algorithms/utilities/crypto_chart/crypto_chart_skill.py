@@ -4,7 +4,7 @@ No language model is involved anywhere: candles come from Binance's public API, 
 by scripts/crypto_chart.py with the same formulas and candle count as the crypto_snapshot skill (so the
 numbers in the picture match the snapshot), and matplotlib draws the image.
 
-    from skills.crypto_chart.crypto_chart_skill import draw_chart
+    from utilities.crypto_chart.crypto_chart_skill import draw_chart
     result = draw_chart("BTC")                                  # charts/btcusdt-1h-chart.png
     result = draw_chart("ETH/USDT", "4h", indicators="none")    # candles only
     result["path"], result["ema_fast"], result["stoch_k"], result["summary"]
@@ -23,7 +23,7 @@ OUTPUT_DIR_ENV = "CRYPTO_CHART_DIR"     # where the tool saves images; default .
 
 
 def _load(required, optional=()):
-    """Import this skill's scripts without leaving their names behind (the other skills share module names)."""
+    """Import this folder's scripts without leaving their names behind (other folders share module names)."""
     own = {p.stem for p in _SCRIPTS.glob("*.py")}
     aside = {name: sys.modules.pop(name) for name in own if name in sys.modules}
     sys.path.insert(0, str(_SCRIPTS))

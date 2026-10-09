@@ -48,7 +48,7 @@ Survei ini meneliti kebiasaan belanja online mahasiswa di Medan.
 
 
 def test_docx_reads_a_document_written_as_markdown(tmp_path):
-    from skills.docx import docx_skill
+    from utilities.docx import docx_skill
 
     spec = docx_skill._spec_from_markdown(MARKDOWN)
     assert spec["title"] == "Ringkasan Eksekutif Survei"
@@ -64,7 +64,7 @@ def test_docx_reads_a_document_written_as_markdown(tmp_path):
 
 
 def test_docx_closes_the_bracket_a_model_left_open(tmp_path):
-    from skills.docx import docx_skill
+    from utilities.docx import docx_skill
 
     cut = '{"title":"Ringkasan","sections":[{"type":"table","headers":["Alasan","Persen"],"rows":[["Harga","54%"]]}]'
     assert docx_skill._loads_lenient(cut)["sections"][0]["rows"] == [["Harga", "54%"]]
@@ -77,7 +77,7 @@ def test_docx_closes_the_bracket_a_model_left_open(tmp_path):
 def test_xlsx_reads_rows_written_with_braces_and_no_keys(tmp_path):
     from openpyxl import load_workbook
 
-    from skills.xlsx import xlsx_skill
+    from utilities.xlsx import xlsx_skill
 
     data = '{\n "Alasan": [\n  {"alasan", "persen"},\n  {"harga", "54"},\n  {"kemudahan", "31"}\n ]\n}'
     assert xlsx_skill._loads_lenient(data) == {"Alasan": [["alasan", "persen"], ["harga", "54"], ["kemudahan", "31"]]}
@@ -89,7 +89,7 @@ def test_xlsx_reads_rows_written_with_braces_and_no_keys(tmp_path):
 
 
 def test_xlsx_keeps_the_sheet_after_a_workbook_closed_too_early():
-    from skills.xlsx import xlsx_skill
+    from utilities.xlsx import xlsx_skill
 
     data = '{"Alasan":[{"alasan":"harga","persen":54}]}"Tren":[{"tahun":"2024","persen":12},{"tahun":"2026","persen":29}]}"'
     assert list(xlsx_skill._loads_lenient(data)) == ["Alasan", "Tren"]

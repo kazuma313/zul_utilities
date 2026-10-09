@@ -1,4 +1,4 @@
-"""Check every skill in this pool against a small local model (Ollama).
+"""Check every skill and utility in this pool against a small local model (Ollama).
 
     python evals/small_model_check.py qwen3:8b
     python evals/small_model_check.py qwen3:8b --only calculator,docx --num-ctx 8192
@@ -14,8 +14,9 @@ Four things are measured, in this order:
 The tools are executed for real when that is safe offline (calculator, docx, mind map); for tools that
 need the network or an upload (web search, subagents, image) only the arguments are checked.
 
-`app.agent.minio_connection` and `app.config.settings` belong to the application these skills were
-written for.  They are replaced by stubs here, so a skill that imports them can still be checked.
+Skills (a model works inside them) live in skills/, utilities (scripts only, still tools an agent can
+call) in ../utilities/; both are checked.  `app.agent.minio_connection` and `app.config.settings` belong
+to the application these skills were written for.  They are replaced by stubs here, so a skill that imports them can still be checked.
 Standard library only, plus whatever each skill itself imports.
 """
 
@@ -36,6 +37,12 @@ import urllib.request
 from pathlib import Path
 
 POOL = Path(__file__).resolve().parent.parent
+UTILITIES = POOL.parent / "utilities"
+
+
+def home(folder: str) -> tuple[str, Path]:
+    """(package, folder path) of a pool folder: utilities.<folder> when it is a script-only utility."""
+    return ("utilities", UTILITIES / folder) if (UTILITIES / folder).is_dir() else ("skills", POOL / folder)
 CHARS_PER_TOKEN = 3.6           # mixed Indonesian / English text, same figure as REQUIREMENTS.md
 
 # skill folder -> (module with the tools, request used for the selection test)
@@ -124,7 +131,7 @@ def front_matter(path: Path) -> dict:
 def load_tools(module_name: str) -> tuple[dict, str]:
     """Import a skill module; return ({tool name: tool}, error text)."""
     try:
-        module = importlib.import_module(f"skills.{module_name}")
+        module = importlib.import_module(f"{home(module_name.split('.')[0])[0]}.{module_name}")
     except Exception as e:  # noqa: BLE001 - the error text is the finding
         return {}, f"{type(e).__name__}: {str(e)[:110]}"
     tools = {getattr(v, "name", ""): v for v in vars(module).values()
@@ -136,8 +143,9 @@ def inventory(names: list[str]) -> dict:
     rows = {}
     for folder in names:
         module_name, _ = SKILLS[folder]
-        meta = front_matter(POOL / folder / "METADATA.md") or front_matter(POOL / folder / "SKILL.md")
-        skill_md = (POOL / folder / "SKILL.md").read_text(encoding="utf-8", errors="replace")
+        path = home(folder)[1]
+        meta = front_matter(path / "METADATA.md") or front_matter(path / "SKILL.md")
+        skill_md = (path / "SKILL.md").read_text(encoding="utf-8", errors="replace")
         tools, error = load_tools(module_name)
         rows[folder] = {"name": meta.get("name", folder), "description": meta.get("description", ""),
                         "skill_md": skill_md, "tools": tools, "error": error}
@@ -250,7 +258,7 @@ def invoke_tool(args, rows: dict, tool_name: str, out_dir: Path) -> tuple[str, s
 
 def run_runner(args, folder: str, out_dir: Path) -> tuple[str, str, float]:
     script, *rest = RUNNERS[folder]
-    command = [sys.executable, str(POOL / folder / script), *[a.format(out=out_dir) for a in rest],
+    command = [sys.executable, str(home(folder)[1] / script), *[a.format(out=out_dir) for a in rest],
                "--model", args.model, "--base-url", args.base_url, "--think", "on" if args.thinking else "off",
                "--num-ctx", str(args.num_ctx)]
     if args.thinking:

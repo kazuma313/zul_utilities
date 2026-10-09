@@ -1,20 +1,20 @@
 # Membuat candlestick chart crypto
 
-Skill `crypto_chart` menggambar candlestick chart token crypto dari candle API publik Binance, dalam bentuk PNG atau SVG. Indikator yang dipilih ikut digambar: EMA 12 dan 21 di atas candle, volume di panel kedua, dan Stochastic (5, 3, 3) di panel ketiga. Tanpa indikator, gambarnya hanya berisi candle.
+Utility `crypto_chart` menggambar candlestick chart token crypto dari candle API publik Binance, dalam bentuk PNG atau SVG. Indikator yang dipilih ikut digambar: EMA 12 dan 21 di atas candle, volume di panel kedua, dan Stochastic (5, 3, 3) di panel ketiga. Tanpa indikator, gambarnya hanya berisi candle.
 
-Skill ini tidak memakai model AI. Rumus indikator dan jumlah candle-nya sama dengan skill `crypto_snapshot`, jadi angka di gambar sama dengan angka di [snapshot](mengambil-snapshot-crypto.md) yang diambil pada saat yang sama.
+Utility ini tidak memakai model AI. Rumus indikator dan jumlah candle-nya sama dengan utility `crypto_snapshot`, jadi angka di gambar sama dengan angka di [snapshot](mengambil-snapshot-crypto.md) yang diambil pada saat yang sama.
 
 > [!NOTE]
 > Chart dan indikatornya menggambarkan posisi harga, bukan saran beli atau jual.
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, komputermu bisa membuka `api.binance.com` atau `data-api.binance.vision`, dan matplotlib sudah ter-install. matplotlib ikut ter-install bersama extra `analysis` atau `all` milik Zul; jika belum ada, install dengan `uv pip install matplotlib`. Skill ini ada di `research/agentic/algorithms/skills/crypto_chart/`.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, komputermu bisa membuka `api.binance.com` atau `data-api.binance.vision`, dan matplotlib sudah ter-install. matplotlib ikut ter-install bersama extra `analysis` atau `all` milik Zul; jika belum ada, install dengan `uv pip install matplotlib`. Utility ini ada di `research/agentic/algorithms/utilities/crypto_chart/`.
 
 ## Membuat chart dari terminal
 
-1. Pindah ke folder skill:
+1. Pindah ke folder utility:
 
     ```shell
-    cd research/agentic/algorithms/skills/crypto_chart
+    cd research/agentic/algorithms/utilities/crypto_chart
     ```
 
 2. Jalankan skripnya dengan nama token:
@@ -88,7 +88,7 @@ INFO Selesai: 1 sukses, 0 gagal
 | `--format svg` | Gambar SVG, bukan PNG. |
 | `-q USDC` | Quote untuk nama token tanpa pair. Bawaannya USDT. |
 
-Bentuk input sama dengan skill snapshot: nama token (`BTC`), pair (`ETH/USDT`, `ETHBTC`), URL Binance atau TradingView, atau file berisi satu input per baris. Rinciannya ada di [Memilih token, pair, dan timeframe](mengambil-snapshot-crypto.md#memilih-token-pair-dan-timeframe).
+Bentuk input sama dengan utility snapshot: nama token (`BTC`), pair (`ETH/USDT`, `ETHBTC`), URL Binance atau TradingView, atau file berisi satu input per baris. Rinciannya ada di [Memilih token, pair, dan timeframe](mengambil-snapshot-crypto.md#memilih-token-pair-dan-timeframe).
 
 ## Membuat chart dari kode Python
 
@@ -97,7 +97,7 @@ Fungsi `draw_chart` menggambar dan menyimpan chart satu token, lalu mengembalika
 ```python title="contoh pemakaian di kode"
 import json
 
-from skills.crypto_chart.crypto_chart_skill import draw_chart
+from utilities.crypto_chart.crypto_chart_skill import draw_chart
 
 result = draw_chart("SOL", "4h", indicators="ema,volume")
 print(json.dumps(result, indent=2))
@@ -129,14 +129,14 @@ Contoh keluarannya pada 8 Oktober 2026 pukul 06.04 UTC:
 }
 ```
 
-Indikator yang tidak digambar bernilai `null` (`None` di Python), seperti Stochastic pada contoh ini. Gambar disimpan di `output_dir` jika diisi, lalu di folder dari environment variable `CRYPTO_CHART_DIR`, lalu di `./charts`. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `skills` bisa diimpor. Jika gagal, fungsi ini melempar `ChartError` dengan alasannya.
+Indikator yang tidak digambar bernilai `null` (`None` di Python), seperti Stochastic pada contoh ini. Gambar disimpan di `output_dir` jika diisi, lalu di folder dari environment variable `CRYPTO_CHART_DIR`, lalu di `./charts`. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Jika gagal, fungsi ini melempar `ChartError` dengan alasannya.
 
-## Memakai skill di agent
+## Memakai utility di agent
 
-Skill ini menyediakan tool LangChain bernama `get_crypto_chart`. Tool ini hanya ada jika `langchain-core` ter-install; tanpa itu nilainya `None`, dan fungsi `draw_chart` tetap bisa dipakai.
+Utility ini menyediakan tool LangChain bernama `get_crypto_chart`. Tool ini hanya ada jika `langchain-core` ter-install; tanpa itu nilainya `None`, dan fungsi `draw_chart` tetap bisa dipakai.
 
 ```python title="contoh pemakaian di agent"
-from skills.crypto_chart.crypto_chart_skill import get_crypto_chart
+from utilities.crypto_chart.crypto_chart_skill import get_crypto_chart
 
 tools = [get_crypto_chart]
 ```
@@ -157,7 +157,7 @@ No chart for 'NOPE': HTTP 400 dari https://api.binance.com: {"code":-1121,"msg":
 
 ## Jika skrip gagal
 
-Kode keluar dan baris `GAGAL` sama dengan skill snapshot: `0` semua berhasil, `1` sebagian gagal tetapi token lain tetap digambar, `2` tidak ada input yang valid. Pesan yang khusus untuk skill ini:
+Kode keluar dan baris `GAGAL` sama dengan utility snapshot: `0` semua berhasil, `1` sebagian gagal tetapi token lain tetap digambar, `2` tidak ada input yang valid. Pesan yang khusus untuk utility ini:
 
 | Pesan | Penyebab | Yang bisa dilakukan |
 |---|---|---|
@@ -173,15 +173,15 @@ Pengaturan gambar adalah konstanta di bagian atas `scripts/crypto_chart.py`:
 | Konstanta | Bawaan | Isi |
 |---|---|---|
 | `DEFAULT_CANDLES_SHOWN` | `80` | Jumlah candle di gambar jika `-n` tidak diisi. |
-| `CANDLE_LIMIT` | `200` | Candle yang diambil dari Binance. Samakan dengan skill snapshot, supaya angkanya tetap sama. |
+| `CANDLE_LIMIT` | `200` | Candle yang diambil dari Binance. Samakan dengan utility snapshot, supaya angkanya tetap sama. |
 | `DPI`, `FIGURE_WIDTH` | `130`, `12` | Resolusi dan lebar gambar dalam inci. Bawaannya menghasilkan gambar selebar 1.560 piksel. |
 | `THEMES` | `light`, `dark` | Warna latar, teks, grid, candle, dan garis indikator untuk setiap tema. |
-| `EMA_FAST`, `EMA_SLOW`, `STOCH_*`, `VOLUME_AVG_PERIOD` | Sama dengan skill snapshot | Periode indikator. |
+| `EMA_FAST`, `EMA_SLOW`, `STOCH_*`, `VOLUME_AVG_PERIOD` | Sama dengan utility snapshot | Periode indikator. |
 
-Test skill ini berjalan tanpa jaringan dan tanpa model. Salah satunya memastikan nilai indikator di gambar sama dengan nilai di skill snapshot:
+Test utility ini berjalan tanpa jaringan dan tanpa model. Salah satunya memastikan nilai indikator di gambar sama dengan nilai di utility snapshot:
 
 ```shell
-uv run pytest research/agentic/algorithms/skills/crypto_chart/tests -q -p no:cacheprovider
+uv run pytest research/agentic/algorithms/utilities/crypto_chart/tests -q -p no:cacheprovider
 ```
 
 ## Halaman terkait

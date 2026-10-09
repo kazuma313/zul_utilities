@@ -4,7 +4,7 @@ No language model is involved anywhere: candles and the 24-hour ticker come from
 every number is computed by scripts/crypto_snapshot.py, and the readings (bullish, overbought, ...) are
 fixed thresholds in that script.  The same input at the same moment gives the same numbers.
 
-    from skills.crypto_snapshot.crypto_snapshot_skill import get_snapshot
+    from utilities.crypto_snapshot.crypto_snapshot_skill import get_snapshot
     record = get_snapshot("BTC")                  # also "ETH/USDT", "SOLUSDT" or a Binance / TradingView URL
     record["price"], record["ema_reading"], record["stoch_reading"], record["summary"], record["document"]
 
@@ -21,7 +21,7 @@ _SCRIPTS = Path(__file__).resolve().parent / "scripts"
 
 
 def _load(required, optional=()):
-    """Import this skill's scripts without leaving their names behind (the other skills share module names)."""
+    """Import this folder's scripts without leaving their names behind (other folders share module names)."""
     own = {p.stem for p in _SCRIPTS.glob("*.py")}
     aside = {name: sys.modules.pop(name) for name in own if name in sys.modules}
     sys.path.insert(0, str(_SCRIPTS))

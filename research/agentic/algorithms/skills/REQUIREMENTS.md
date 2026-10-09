@@ -2,6 +2,8 @@
 
 Dokumen ini untuk manusia, bukan untuk model. Isinya: berapa besar model yang dibutuhkan, framework apa saja yang bisa dipakai, dan apa syarat minimum mesin yang menjalankan skill.
 
+Folder ini hanya berisi **skill**: yang di dalamnya ada model bahasa yang bekerja. Script yang tidak memanggil model, seperti `youtube_transcript`, `crypto_snapshot`, `crypto_chart`, `calculator`, `chart`, `docx`, `xlsx`, dan `web_search`, ada di `../utilities/`. Formatnya sama (METADATA.md, SKILL.md, tool LangChain opsional), jadi agent tetap bisa memanggilnya sebagai tool.
+
 ## Prinsip: dua mesin yang terpisah
 
 Setiap skill di folder ini dibagi dua bagian yang boleh berjalan di komputer berbeda.
@@ -20,7 +22,7 @@ Karena itu pertanyaan "berapa billion" sebenarnya adalah pertanyaan "seberapa ru
 | `resaerch_poster` | Python 3.9+ (stdlib saja) | — | HTML tidak butuh browser; **PDF dan PNG butuh** Edge / Chrome / Chromium |
 | `pptx_research` | Python 3.9+, `python-pptx` (diuji 1.0.2) | — | `assets/template.pptx` 6 MB harus ikut disalin |
 | `pptx_claude` | Python 3.9+, Node.js 18+ (diuji v22), `npm install` di folder skill (`pptxgenjs` ^4) | `sharp`, `react-icons` untuk ikon | satu-satunya skill yang butuh Node |
-| `youtube_transcript` | Python 3.9+, `youtube-transcript-api` (diuji 1.2.4), akses jaringan ke youtube.com | `yt-dlp` (diuji 2026.8.19) untuk durasi, kategori, tag, dan bab; tanpa itu hanya judul dan channel | Tidak memakai model. YouTube memblokir IP sementara setelah sekitar 30 permintaan dalam beberapa menit; dengan `SUPADATA_API_KEY` (gratis 100 transcript per bulan) skrip beralih ke layanan itu selama blokir |
+| `youtube_transcript` (di `../utilities/`) | Python 3.9+, `youtube-transcript-api` (diuji 1.2.4), akses jaringan ke youtube.com | `yt-dlp` (diuji 2026.8.19) untuk durasi, kategori, tag, dan bab; tanpa itu hanya judul dan channel | Tidak memakai model. YouTube memblokir IP sementara setelah sekitar 30 permintaan dalam beberapa menit; dengan `SUPADATA_API_KEY` (gratis 100 transcript per bulan) skrip beralih ke layanan itu selama blokir |
 | `contextual_retrieval` | Python 3.9+ (stdlib saja) | model chat lokal lewat Ollama untuk kalimat konteks; `nomic-embed-text` untuk `--embed`; PyYAML untuk header YAML | `--no-llm` membuat chunk dengan header dari kode saja, tanpa model |
 
 Python diuji pada 3.10 dan 3.11; 3.9 adalah batas bawah dari sintaks yang dipakai. RAM 2 GB cukup, disk sekitar 100 MB per skill termasuk font, template dan `node_modules`. Windows, Linux dan macOS sama saja — deteksi browser sudah mencakup lokasi Edge bawaan Windows, dan `POSTER_BROWSER` dipakai kalau path-nya tidak standar.
@@ -165,18 +167,18 @@ Skrip yang memanggil model lokal memilih modelnya sendiri, jadi `--model` tidak 
 
 Jika tidak ada satu pun model di daftar, skrip memakai model chat pertama yang terpasang. `--model NAMA_MODEL` memilih model untuk satu perintah, dan variabel lingkungan `SKILL_MODEL` memilih satu model untuk semua skill.
 
-Skill lain tidak memanggil model sendiri; modelnya ditentukan aplikasi agent yang memakainya:
+Skill dan utility lain tidak memanggil model sendiri; modelnya ditentukan aplikasi agent yang memakainya:
 
 | Kebutuhan agent | Model yang disarankan | Catatan |
 |---|---|---|
 | Memilih skill dan memanggil tool (`docx`, `xlsx`, `chart`, `calculator`, `web_search`, `subagent_research`, `youtube_transcript`, `crypto_snapshot`, `crypto_chart`) | `qwen3:8b` | Tool calling bawaan jalan dengan penalaran mati. `gemma3:4b` juga bisa, tetapi lewat JSON berskema karena Ollama tidak memberinya tool calling. |
 | Membaca gambar (`image`) | `gemma3:4b` | Model teks seperti `qwen3` tidak bisa membaca gambar. Isi `VISION_MODEL_ID`; tanpa itu tool memakai `GENERAL_MODEL_ID`. |
 
-`youtube_transcript`, `crypto_snapshot`, dan `crypto_chart` tidak butuh model sama sekali. Skrip dan fungsi Python-nya bisa dipakai langsung dari terminal atau kode; model hanya dibutuhkan jika skill itu dipakai sebagai tool di agent.
+`youtube_transcript`, `crypto_snapshot`, dan `crypto_chart` tidak butuh model sama sekali, karena itu ketiganya ada di `../utilities/`. Skrip dan fungsi Python-nya bisa dipakai langsung dari terminal atau kode; model hanya dibutuhkan jika script itu dipakai sebagai tool di agent.
 
 ## Ringkasnya
 
-Mesin: Python 3.9+ untuk semuanya, tambah `python-pptx` untuk satu skill, `matplotlib` untuk `crypto_chart`, Node 18+ untuk satu skill lagi, browser Chromium-family untuk PNG/PDF. Tidak ada GPU yang dibutuhkan di sisi ini.
+Mesin: Python 3.9+ untuk semuanya, tambah `python-pptx` untuk satu skill, `matplotlib` untuk utility `crypto_chart`, Node 18+ untuk satu skill lagi, browser Chromium-family untuk PNG/PDF. Tidak ada GPU yang dibutuhkan di sisi ini.
 
 Model: menurut hasil uji di atas, `gemma3:4b` sudah menjalankan `mind_map`, `pptx_research`, `resaerch_poster`, pemilihan skill, dan pemanggilan tool, asalkan tool dipanggil lewat JSON berskema. Di perbandingan isi, `qwen3:8b` lebih lengkap dan lebih jarang salah daripada `gemma3:4b`; `qwen3:4b` menulis argumen tool lebih rapi daripada `gemma3:4b` tetapi butuh 3 sampai 16 menit per panggilan karena menalar, dan ketiganya masih bisa memasangkan angka dengan hal yang salah, jadi angka di hasil model lokal perlu dicek terhadap sumbernya. 8B tetap pilihan jika agent-mu bergantung pada tool calling bawaan model. 14B kalau mau isi poster lebih tajam, dan 0B tetap menghasilkan file lewat jalur `--no-llm` atau JSON yang ditulis tangan.
 

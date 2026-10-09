@@ -28,6 +28,8 @@ Setiap panduan berisi langkah untuk menyelesaikan satu tugas dengan Zul.
 
 ## Utilities
 
+Alat bantu yang kamu panggil langsung dari kode atau terminal: helper dari paket `zul`, dan script di `research/agentic/algorithms/utilities/` yang bekerja tanpa model AI.
+
 | Tugas | Panduan |
 |---|---|
 | Menyimpan dan mencari vektor di Milvus | [Milvus](memakai-milvus.md) |
@@ -37,15 +39,17 @@ Setiap panduan berisi langkah untuk menyelesaikan satu tugas dengan Zul.
 | Mengubah Markdown menjadi PDF atau PPTX | [Markdown ke PDF dan PPTX](mengonversi-markdown.md) |
 | Membandingkan hasil pengukuran dalam grafik | [Grafik perbandingan](membuat-grafik.md) |
 | Memakai logger, pengukur waktu, dan helper lain | [Helper kecil](memakai-helper.md) |
+| Mengambil transcript dan metadata video YouTube, tanpa model AI | [Mengambil transcript YouTube](mengambil-transcript-youtube.md) |
+| Mengambil harga token crypto beserta EMA, Stochastic, dan volume, tanpa model AI | [Mengambil snapshot harga crypto](mengambil-snapshot-crypto.md) |
+| Menggambar candlestick chart token crypto beserta indikatornya, tanpa model AI | [Membuat candlestick chart crypto](membuat-chart-crypto.md) |
 
 ## Skill
+
+Kemampuan yang di dalamnya ada model AI yang bekerja, dengan model lokal lewat Ollama atau model lain. Kodenya ada di `research/agentic/algorithms/skills/`.
 
 | Tugas | Panduan |
 |---|---|
 | Mengubah topik, catatan, atau dokumen menjadi mind map, juga dengan model lokal | [Membuat mind map](membuat-mindmap.md) |
-| Mengambil transcript dan metadata video YouTube, tanpa model AI | [Mengambil transcript YouTube](mengambil-transcript-youtube.md) |
-| Mengambil harga token crypto beserta EMA, Stochastic, dan volume, tanpa model AI | [Mengambil snapshot harga crypto](mengambil-snapshot-crypto.md) |
-| Menggambar candlestick chart token crypto beserta indikatornya, tanpa model AI | [Membuat candlestick chart crypto](membuat-chart-crypto.md) |
 | Membuat silabus dan materi belajar dari topik, PDF, gambar, atau dokumen, dengan model lokal | [Membuat silabus dan materi belajar](membuat-silabus-dan-materi.md) |
 | Memotong dokumen menjadi chunk berkonteks untuk vector database, dengan model lokal | [Menyiapkan dokumen untuk RAG](menyiapkan-dokumen-untuk-rag.md) |
 

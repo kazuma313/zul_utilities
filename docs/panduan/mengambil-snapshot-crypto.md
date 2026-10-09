@@ -1,20 +1,20 @@
 # Mengambil snapshot harga crypto
 
-Skill `crypto_snapshot` mengambil harga token crypto saat ini beserta EMA 12 dan 21, Stochastic (5, 3, 3), dan volume dari API publik Binance. Hasilnya satu file `.txt` per token dan satu baris ringkasan per token di terminal.
+Utility `crypto_snapshot` mengambil harga token crypto saat ini beserta EMA 12 dan 21, Stochastic (5, 3, 3), dan volume dari API publik Binance. Hasilnya satu file `.txt` per token dan satu baris ringkasan per token di terminal.
 
-Skill ini tidak memakai model AI. Semua angka dan pembacaannya dihitung oleh kode, jadi skill ini bisa dipakai langsung dari terminal atau dari kode Python tanpa agent.
+Utility ini tidak memakai model AI. Semua angka dan pembacaannya dihitung oleh kode, jadi utility ini bisa dipakai langsung dari terminal atau dari kode Python tanpa agent.
 
 > [!NOTE]
 > Pembacaan seperti `bullish` atau `overbought` hanya menggambarkan posisi indikator, bukan saran beli atau jual.
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka `api.binance.com` atau `data-api.binance.vision`. Skill ini ada di `research/agentic/algorithms/skills/crypto_snapshot/`. Tidak ada package yang perlu di-install, karena skripnya hanya memakai standard library Python.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka `api.binance.com` atau `data-api.binance.vision`. Utility ini ada di `research/agentic/algorithms/utilities/crypto_snapshot/`. Tidak ada package yang perlu di-install, karena skripnya hanya memakai standard library Python.
 
 ## Mengambil snapshot dari terminal
 
-1. Pindah ke folder skill:
+1. Pindah ke folder utility:
 
     ```shell
-    cd research/agentic/algorithms/skills/crypto_snapshot
+    cd research/agentic/algorithms/utilities/crypto_snapshot
     ```
 
 2. Jalankan skripnya dengan nama token:
@@ -141,7 +141,7 @@ Fungsi `get_snapshot` mengembalikan snapshot satu token sebagai `dict` biasa. Fu
 ```python title="contoh pemakaian di kode"
 import json
 
-from skills.crypto_snapshot.crypto_snapshot_skill import get_snapshot
+from utilities.crypto_snapshot.crypto_snapshot_skill import get_snapshot
 
 record = get_snapshot("BTC")          # juga "ETH/USDT", get_snapshot("SOL", "4h"), atau URL
 record.pop("document")                # teks file .txt, sama dengan hasil skrip
@@ -175,14 +175,14 @@ Contoh keluarannya pada 8 Oktober 2026 pukul 05.43 UTC:
 }
 ```
 
-`summary` sama dengan baris ringkasan di log skrip. `document` berisi teks file `.txt` yang sama dengan hasil skrip. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `skills` bisa diimpor. Jika gagal, fungsi ini melempar `SnapshotError` dengan alasannya, misalnya symbol yang tidak ada di Binance.
+`summary` sama dengan baris ringkasan di log skrip. `document` berisi teks file `.txt` yang sama dengan hasil skrip. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Jika gagal, fungsi ini melempar `SnapshotError` dengan alasannya, misalnya symbol yang tidak ada di Binance.
 
-## Memakai skill di agent
+## Memakai utility di agent
 
-Skill ini menyediakan tool LangChain bernama `get_crypto_snapshot`. Tool ini hanya ada jika `langchain-core` ter-install; tanpa itu nilainya `None`, dan fungsi `get_snapshot` tetap bisa dipakai.
+Utility ini menyediakan tool LangChain bernama `get_crypto_snapshot`. Tool ini hanya ada jika `langchain-core` ter-install; tanpa itu nilainya `None`, dan fungsi `get_snapshot` tetap bisa dipakai.
 
 ```python title="contoh pemakaian di agent"
-from skills.crypto_snapshot.crypto_snapshot_skill import get_crypto_snapshot
+from utilities.crypto_snapshot.crypto_snapshot_skill import get_crypto_snapshot
 
 tools = [get_crypto_snapshot]
 ```
@@ -270,14 +270,14 @@ Periode indikator dan pengaturan lain adalah konstanta di bagian atas `scripts/c
 | `DEFAULT_QUOTE` | `USDT` | Quote untuk input berupa nama token saja. |
 | `API_HOSTS` | `api.binance.com`, `data-api.binance.vision` | Host yang dicoba berurutan. |
 
-Test skill ini berjalan tanpa jaringan dan tanpa model:
+Test utility ini berjalan tanpa jaringan dan tanpa model:
 
 ```shell
-uv run pytest research/agentic/algorithms/skills/crypto_snapshot/tests -q -p no:cacheprovider
+uv run pytest research/agentic/algorithms/utilities/crypto_snapshot/tests -q -p no:cacheprovider
 ```
 
 ## Halaman terkait
 
 - [Membuat candlestick chart crypto](membuat-chart-crypto.md) untuk melihat candle dan indikator yang sama dalam bentuk gambar.
-- [Mengambil transcript YouTube](mengambil-transcript-youtube.md), skill lain yang juga berjalan tanpa model AI.
+- [Mengambil transcript YouTube](mengambil-transcript-youtube.md), utility lain yang juga berjalan tanpa model AI.
 - [Menambah tool](menambah-tool.md) untuk memasukkan tool seperti `get_crypto_snapshot` ke agent di proyek hasil `zul build hexa`.

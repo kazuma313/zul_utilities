@@ -1,6 +1,6 @@
 """Tests without network access or a model for scripts/crypto_chart.py and the get_crypto_chart tool.
 
-    python -m pytest research/agentic/algorithms/skills/crypto_chart/tests -q -p no:cacheprovider
+    python -m pytest research/agentic/algorithms/utilities/crypto_chart/tests -q -p no:cacheprovider
 """
 
 import importlib.util
@@ -15,7 +15,7 @@ SKILL = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SKILL / "scripts"))
 sys.path.insert(0, str(SKILL.parent.parent))
 import crypto_chart as cc  # noqa: E402
-from skills.crypto_chart import crypto_chart_skill as skill  # noqa: E402
+from utilities.crypto_chart import crypto_chart_skill as skill  # noqa: E402
 
 # The snapshot skill's script, loaded by path: the picture must show the same numbers as the snapshot file.
 _spec = importlib.util.spec_from_file_location("snapshot_for_chart_tests",

@@ -169,11 +169,11 @@ nav:
           - Markdown ke PDF dan PPTX: panduan/mengonversi-markdown.md
           - Grafik perbandingan: panduan/membuat-grafik.md
           - Helper kecil: panduan/memakai-helper.md
-      - Skill:
-          - Membuat mind map: panduan/membuat-mindmap.md
           - Mengambil transcript YouTube: panduan/mengambil-transcript-youtube.md
           - Mengambil snapshot harga crypto: panduan/mengambil-snapshot-crypto.md
           - Membuat candlestick chart crypto: panduan/membuat-chart-crypto.md
+      - Skill:
+          - Membuat mind map: panduan/membuat-mindmap.md
           - Membuat silabus dan materi belajar: panduan/membuat-silabus-dan-materi.md
           - Menyiapkan dokumen untuk RAG: panduan/menyiapkan-dokumen-untuk-rag.md
       - Proyek Zul:

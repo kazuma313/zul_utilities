@@ -1,6 +1,6 @@
 """Tests without network access or a model for scripts/crypto_snapshot.py and the get_crypto_snapshot tool.
 
-    python -m pytest research/agentic/algorithms/skills/crypto_snapshot/tests -q -p no:cacheprovider
+    python -m pytest research/agentic/algorithms/utilities/crypto_snapshot/tests -q -p no:cacheprovider
 """
 
 import logging
@@ -14,7 +14,7 @@ SKILL = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SKILL / "scripts"))
 sys.path.insert(0, str(SKILL.parent.parent))
 import crypto_snapshot as cs  # noqa: E402
-from skills.crypto_snapshot import crypto_snapshot_skill as skill  # noqa: E402
+from utilities.crypto_snapshot import crypto_snapshot_skill as skill  # noqa: E402
 
 START_MS = 1_790_000_000_000
 HOUR_MS = 3_600_000

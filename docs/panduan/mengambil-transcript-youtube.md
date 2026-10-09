@@ -1,14 +1,14 @@
 # Mengambil transcript YouTube
 
-Skill `youtube_transcript` mengambil transcript video YouTube beserta metadatanya: dari terminal untuk banyak video sekaligus, dari kode Python, atau sebagai tool di agent. Skill ini tidak memakai model AI. Caption diambil dari YouTube, metadata dari yt-dlp, dan semua format dibuat oleh kode.
+Utility `youtube_transcript` mengambil transcript video YouTube beserta metadatanya: dari terminal untuk banyak video sekaligus, dari kode Python, atau sebagai tool di agent. Utility ini tidak memakai model AI. Caption diambil dari YouTube, metadata dari yt-dlp, dan semua format dibuat oleh kode.
 
-Skill ini hanya mengambil caption yang sudah ada di YouTube. Video tanpa caption tidak punya transcript, karena skill ini tidak mengubah suara menjadi teks.
+Utility ini hanya mengambil caption yang sudah ada di YouTube. Video tanpa caption tidak punya transcript, karena utility ini tidak mengubah suara menjadi teks.
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka youtube.com. Skill ini ada di `research/agentic/algorithms/skills/youtube_transcript/`.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka youtube.com. Utility ini ada di `research/agentic/algorithms/utilities/youtube_transcript/`.
 
 ## Instalasi kebutuhannya
 
-Install dua paket yang dipakai skill ini ke environment proyek:
+Install dua paket yang dipakai utility ini ke environment proyek:
 
 ```shell
 uv pip install "youtube-transcript-api>=1.2" yt-dlp
@@ -18,10 +18,10 @@ uv pip install "youtube-transcript-api>=1.2" yt-dlp
 
 ## Mengambil transcript beberapa video
 
-1. Pindah ke folder skill:
+1. Pindah ke folder utility:
 
     ```shell
-    cd research/agentic/algorithms/skills/youtube_transcript
+    cd research/agentic/algorithms/utilities/youtube_transcript
     ```
 
 2. Tulis URL video di file teks, satu URL per baris. Baris kosong dan baris yang diawali `#` diabaikan:
@@ -114,7 +114,7 @@ Video yang dilewati muncul sebagai `SKIPPED` di log, dan transcript-nya tidak di
 Fungsi `fetch_transcript` mengembalikan metadata dan transcript satu video sebagai `dict`. Fungsi ini tidak memakai model AI maupun LangChain:
 
 ```python title="contoh pemakaian di kode"
-from skills.youtube_transcript.youtube_transcript_skill import fetch_transcript
+from utilities.youtube_transcript.youtube_transcript_skill import fetch_transcript
 
 record = fetch_transcript("https://youtu.be/Pc3GWaOWHLk")
 print(record["metadata"]["title"])      # Cara Coach Justin Menghadapi Ketidakpastian Hidup
@@ -131,21 +131,21 @@ Isi `record`:
 | `transcript` | Transcript dalam paragraf, dengan subjudul per bab. |
 | `document` | Semuanya sebagai teks satu file `.txt`, sama dengan hasil skrip. |
 
-Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `skills` bisa diimpor. Untuk link yang bukan video, fungsi ini menimbulkan `ValueError`.
+Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Untuk link yang bukan video, fungsi ini menimbulkan `ValueError`.
 
-## Memakai skill di agent
+## Memakai utility di agent
 
-Skill ini menyediakan tool LangChain bernama `get_youtube_transcript`. Pasang ke agent seperti tool lain:
+Utility ini menyediakan tool LangChain bernama `get_youtube_transcript`. Pasang ke agent seperti tool lain:
 
 ```python title="contoh pemakaian di agent"
-from skills.youtube_transcript.youtube_transcript_skill import get_youtube_transcript
+from utilities.youtube_transcript.youtube_transcript_skill import get_youtube_transcript
 
 tools = [get_youtube_transcript]
 ```
 
 Model cukup menulis argumen `url`. Transcript yang panjang dibagi menjadi bagian sekitar 12.000 karakter, supaya muat di konteks model kecil. Podcast satu jam menjadi lima bagian, dan setiap balasan diakhiri penanda seperti `[part 1 of 5; call again with part=2 for the rest]`.
 
-Dalam uji pemilihan skill dengan 12 skill sekaligus, `qwen3:8b` memilih skill ini dengan benar pada 27 dari 27 permintaan, dan `gemma3:4b` pada 24 dari 27. Kesalahan `gemma3:4b` terjadi pada permintaan rekomendasi video tanpa link. Untuk kasus itu tool membalas dengan arahan memakai web search.
+Dalam uji pemilihan tool dengan 12 tool sekaligus, `qwen3:8b` memilih tool ini dengan benar pada 27 dari 27 permintaan, dan `gemma3:4b` pada 24 dari 27. Kesalahan `gemma3:4b` terjadi pada permintaan rekomendasi video tanpa link. Untuk kasus itu tool membalas dengan arahan memakai web search.
 
 ## Jika YouTube memblokir komputermu
 
@@ -175,6 +175,6 @@ Pilihan lain adalah proxy residensial berputar. Isi `WEBSHARE_PROXY_USERNAME` da
 
 ## Halaman terkait
 
-- `SKILL.md` di folder skill untuk semua opsi skrip dan arti setiap pesan kesalahan.
-- `evals/check_metadata.py` di folder skill untuk memeriksa apakah setiap file punya metadata yang cukup dan transcript yang lengkap.
-- `REQUIREMENTS.md` di folder `skills/` untuk kebutuhan mesin semua skill.
+- `SKILL.md` di folder utility untuk semua opsi skrip dan arti setiap pesan kesalahan.
+- `evals/check_metadata.py` di folder utility untuk memeriksa apakah setiap file punya metadata yang cukup dan transcript yang lengkap.
+- `REQUIREMENTS.md` di folder `skills/` untuk kebutuhan mesin semua skill dan utility.

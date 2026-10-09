@@ -57,7 +57,7 @@ def _closed(text: str) -> str:
             stack.pop()
     return text + ('"' if in_string else "") + "".join(reversed(stack))
 
-# skills/chart/ → project root → app/static/charts/
+# utilities/chart/ → project root → app/static/charts/
 CHARTS_DIR = Path(__file__).parent.parent.parent / "app" / "static" / "charts"
 CHARTS_DIR.mkdir(parents=True, exist_ok=True)
 

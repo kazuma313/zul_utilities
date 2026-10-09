@@ -49,7 +49,7 @@ Exit code 0 all succeeded, 1 something failed (the others still ran), 2 no valid
 ## One token, from Python: the function
 
 ```python
-from skills.crypto_chart.crypto_chart_skill import draw_chart
+from utilities.crypto_chart.crypto_chart_skill import draw_chart
 
 result = draw_chart("BTC")                                  # charts/btcusdt-1h-chart.png
 result = draw_chart("ETH/USDT", "4h", indicators="none")    # candles only
@@ -77,4 +77,4 @@ The reply gives the path of the saved image and the line of what it shows; send 
 
 Indicator periods, the candle count, the overbought/oversold levels, image size and DPI, and the colours of both themes are constants at the top of `scripts/crypto_chart.py`. Keep `CANDLE_LIMIT` equal to the one in `crypto_snapshot`, so both skills show the same numbers.
 
-Tests without network or model: `python -m pytest research/agentic/algorithms/skills/crypto_chart/tests -q -p no:cacheprovider`.
+Tests without network or model: `python -m pytest research/agentic/algorithms/utilities/crypto_chart/tests -q -p no:cacheprovider`.

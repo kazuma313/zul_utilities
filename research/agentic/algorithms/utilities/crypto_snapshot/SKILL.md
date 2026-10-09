@@ -45,7 +45,7 @@ Exit code 0 all succeeded, 1 something failed (the others still ran), 2 no valid
 ## One token, from Python: the function
 
 ```python
-from skills.crypto_snapshot.crypto_snapshot_skill import get_snapshot
+from utilities.crypto_snapshot.crypto_snapshot_skill import get_snapshot
 
 record = get_snapshot("BTC")            # or get_snapshot("ETH/USDT", "4h"), or a URL
 record["price"], record["ema_reading"], record["stoch_reading"], record["volume_ratio"]
@@ -103,4 +103,4 @@ To change the format, change `render()` in the script, so the output stays repea
 
 Indicator periods, candle count, overbought/oversold levels, the default quote, API hosts and retries are constants at the top of `scripts/crypto_snapshot.py`.
 
-Tests without network or model: `python -m pytest research/agentic/algorithms/skills/crypto_snapshot/tests -q -p no:cacheprovider`.
+Tests without network or model: `python -m pytest research/agentic/algorithms/utilities/crypto_snapshot/tests -q -p no:cacheprovider`.

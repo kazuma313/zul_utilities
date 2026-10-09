@@ -12,7 +12,7 @@ No language model is used anywhere in this skill. The captions come from YouTube
 ## From Python, without a model
 
 ```python
-from skills.youtube_transcript.youtube_transcript_skill import fetch_transcript
+from utilities.youtube_transcript.youtube_transcript_skill import fetch_transcript
 
 record = fetch_transcript("https://youtu.be/Pc3GWaOWHLk")
 record["metadata"]           # dict: title, channel, upload_date, duration, category, tags, chapters, captions, ...

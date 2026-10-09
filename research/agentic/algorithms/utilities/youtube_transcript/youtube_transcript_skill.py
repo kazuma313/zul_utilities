@@ -3,7 +3,7 @@
 No language model is involved anywhere: the captions come from YouTube (or Supadata), the metadata from
 yt-dlp, and the header, the paragraphs, the chapter headings and the parts are made by code.
 
-    from skills.youtube_transcript.youtube_transcript_skill import fetch_transcript
+    from utilities.youtube_transcript.youtube_transcript_skill import fetch_transcript
     record = fetch_transcript("https://youtu.be/Pc3GWaOWHLk")
     record["metadata"]["title"], record["metadata"]["duration"], record["transcript"]
 
@@ -27,7 +27,7 @@ CACHED_VIDEOS = 8       # records kept in memory, so part=2, 3 ... do not fetch 
 
 
 def _load(required, optional=()):
-    """Import this skill's scripts without leaving their names behind (the other skills share module names)."""
+    """Import this folder's scripts without leaving their names behind (other folders share module names)."""
     own = {p.stem for p in _SCRIPTS.glob("*.py")}
     aside = {name: sys.modules.pop(name) for name in own if name in sys.modules}
     sys.path.insert(0, str(_SCRIPTS))
