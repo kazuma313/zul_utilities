@@ -1,6 +1,6 @@
 # Computer Vision
 
-Modul di `zul.computer_vision` untuk menganalisis perilaku orang di video: deteksi, tracking, zona, arah hadap, dan aturan yang mengubah hasil per frame menjadi catatan. Cara memakainya ada di [Mengukur perhatian pengunjung ke rak](../panduan/mengukur-perhatian-ke-rak.md), dan alasan di balik aturannya ada di [Cara kerja aturan perilaku di video](../konsep/aturan-perilaku-di-video.md).
+Fungsi-fungsi di `zul.computer_vision` untuk video: deteksi dan tracking, garis dan poligon penghitung, timer, arah hadap, jarak, gambar, dan masker. Setiap fungsi mengerjakan satu hal dan bisa dirangkai sendiri. Cara memakainya ada di panduan, mulai dari [Mendeteksi dan melacak orang](../panduan/mendeteksi-dan-melacak-orang.md), dan alasan di balik rancangannya ada di [Cara kerja Computer Vision](../konsep/cara-kerja-computer-vision.md).
 
 Tabel berikut memetakan setiap modul ke isinya dan extra yang dibutuhkan:
 
@@ -8,16 +8,18 @@ Tabel berikut memetakan setiap modul ke isinya dan extra yang dibutuhkan:
 |---|---|---|
 | [`geometry`](#geometry) | Titik jangkar kotak, poligon, zona, dan arah. | Tidak ada |
 | [`pose`](#pose) | Arah kepala dan badan dari keypoint COCO-17. | Tidak ada |
-| [`crossing`](#crossing) | Lintasan masuk dan keluar sebuah garis. | Tidak ada |
-| [`analytics`](#analytics) | Kunjungan, perhatian, kontak, dan minat. | Tidak ada |
-| [`config`](#config) | Config scene dari YAML dan validasinya. | Tidak ada |
-| [`report`](#report) | CSV dengan satu baris per kejadian. | Tidak ada |
-| [`draw`](#draw) | Anotasi frame dan masker area. | `vision` |
+| [`zones`](#zones) | Poligon penghitung dan garis penghitung. | Tidak ada |
+| [`timers`](#timers) | Lama di zona dan lama sebuah kondisi benar. | Tidak ada |
+| [`distance`](#distance) | Jarak dalam meter dan lama dua orang berdekatan. | Tidak ada |
+| [`config`](#config) | Config dari YAML dan validasinya. | Tidak ada |
+| [`report`](#report) | CSV dengan satu baris per catatan. | Tidak ada |
+| [`draw`](#draw) | Teks di sudut, kotak, bentuk, kerangka, garis dan poligon penghitung, jejak, dan heatmap. | `vision` |
+| [`masks`](#masks) | Menghitamkan area, blur, dan pixelate. | `vision` |
 | [`video`](#video) | Membaca dan menulis video, dan mengukur kecepatan. | `vision` |
 | [`detection`](#detection) | Model YOLO, YOLO-World, pose, dan ByteTrack. | `yolo` |
 | [`weights`](#weights) | Mengunduh bobot model ke folder proyek. | `yolo` |
 
-Modul tanpa extra hanya mengimpor NumPy dan PyYAML, yang ada di instalasi dasar Zul. Mengimpor `zul.computer_vision` tidak memuat modul apa pun, jadi OpenCV dan ultralytics baru dimuat saat `draw`, `video`, `detection`, atau `weights` diimpor.
+Modul tanpa extra hanya mengimpor NumPy dan PyYAML, yang ada di instalasi dasar Zul. Mengimpor `zul.computer_vision` tidak memuat modul apa pun, jadi OpenCV dan ultralytics baru dimuat saat modul yang membutuhkannya diimpor.
 
 Semua koordinat memakai sistem gambar: x ke kanan, y ke bawah, dalam piksel frame asli. Kotak selalu berformat xyxy: `(x1, y1, x2, y2)`. Waktu selalu dalam detik dari awal video, dan nomor frame adalah nomor frame di video sumber.
 
@@ -105,33 +107,55 @@ Saat orang dideteksi oleh satu model dan pose oleh model lain, pasangkan keduany
 | `match_poses_to_boxes(boxes, keypoints_xy)` | `dict[int, int]` | Indeks kotak ke indeks pose, untuk kotak yang memuat hidung pose itu. Setiap pose dipasangkan sekali, ke kotak pertama yang memuatnya. |
 | `by_box(pairing, values, count, empty=None)` | `list` | Nilai per pose disusun ulang menjadi per kotak, sepanjang `count`. Kotak tanpa pose mendapat `empty`. |
 
-## crossing
+## zones
 
-Lokasi: `zul.computer_vision.crossing`. Hanya membutuhkan NumPy.
+Lokasi: `zul.computer_vision.zones`. Hanya membutuhkan NumPy.
 
-### `LineCrossing(start, end, minimum_frames=3)`
+Kedua kelas menerima satu titik per orang, misalnya dari `geometry.box_anchors`, dan id track-nya. Gambar keduanya dengan [`draw_polygon_zone` dan `draw_line_counter`](#garis-dan-poligon-penghitung).
 
-Menghitung lintasan masuk dan keluar per track di satu segmen garis.
+### `PolygonZone(polygon, label="")`
+
+Satu poligon yang menghitung orang di dalamnya.
 
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
-| `start`, `end` | `(x, y)` | Wajib | Kedua ujung garis. Sisi kiri saat berjalan dari `start` ke `end` di gambar adalah sisi masuk. |
-| `minimum_frames` | `int` | `3` | Jumlah frame sebuah track harus berada di sisi baru sebelum lintasannya dihitung. |
-
-Titik yang proyeksinya jatuh di luar kedua ujung garis diabaikan. Aturan sisinya sama dengan `LineZone` milik supervision, jadi urutan titik yang sama memberi arah masuk yang sama.
+| `polygon` | list titik atau array `(n, 2)` | Wajib | Titik sudut poligon dalam piksel. Melempar `ValueError` jika kurang dari 3 titik. |
+| `label` | `str` | `""` | Nama poligon, ditulis oleh `draw_polygon_zone`. |
 
 | Anggota | Keterangan |
 |---|---|
-| `update(tracker_ids, points)` | Maju satu frame dengan satu titik per orang. Mengembalikan `(crossed_in, crossed_out)`: dua `list[bool]`, satu nilai per baris. `tracker_ids=None` memberi `([], [])`. |
+| `update(points, tracker_ids=None)` | Maju satu frame. Mengembalikan array bool per baris: apakah titiknya di dalam poligon. Tanpa `tracker_ids`, hanya `current_count` yang diperbarui. |
+| `contains(points)` | Array bool per titik, tanpa mengubah hitungan. Titik tepat di tepi dihitung di dalam. |
+| `current_count` | Jumlah titik di dalam poligon pada `update` terakhir. |
+| `total_count` | Jumlah id track berbeda yang pernah di dalam poligon. |
+| `centroid` | Rata-rata titik sudut poligon. |
+| `polygon`, `label` | Sesuai parameter. `polygon` disimpan sebagai array int32. |
+
+### `LineCounter(start, end, minimum_frames=3, label="")`
+
+Satu segmen garis yang menghitung lintasan masuk dan keluar per track.
+
+| Parameter | Tipe | Default | Keterangan |
+|---|---|---|---|
+| `start`, `end` | `(x, y)` | Wajib | Kedua ujung garis. Sisi kiri saat berjalan dari `start` ke `end` di gambar adalah sisi masuk. Melempar `ValueError` jika keduanya sama. |
+| `minimum_frames` | `int` | `3` | Jumlah frame sebuah track harus berada di sisi baru sebelum lintasannya dihitung. |
+| `label` | `str` | `""` | Nama garis, ditulis oleh `draw_line_counter`. |
+
+Titik yang proyeksinya jatuh di luar kedua ujung garis diabaikan. Aturan sisinya sama dengan `LineZone` milik supervision.
+
+| Anggota | Keterangan |
+|---|---|
+| `update(points, tracker_ids)` | Maju satu frame. Mengembalikan `(crossed_in, crossed_out)`: dua `list[bool]`, satu nilai per baris, True di frame saat lintasan baris itu dihitung. `tracker_ids=None` tidak menghitung apa pun. |
 | `sides(points)` | `(inside, in_band)`: dua array bool, apakah setiap titik di sisi masuk dan apakah di rentang segmen. |
 | `in_count`, `out_count` | Jumlah lintasan masuk dan keluar sejauh ini. |
-| `midpoint` | Titik tengah garis, misalnya target arah hadap ke pintu. |
+| `midpoint` | Titik tengah garis, misalnya target arah hadap. |
+| `in_normal` | Vektor satuan tegak lurus garis, menunjuk ke sisi masuk. |
 
-## analytics
+## timers
 
-Lokasi: `zul.computer_vision.analytics`. Hanya membutuhkan NumPy.
+Lokasi: `zul.computer_vision.timers`. Tidak membutuhkan library di luar Python.
 
-Pelacak di modul ini menerima id track dan hasil uji per frame, lalu mengembalikan catatan dengan awal, akhir, dan durasi. Setiap pelacak menerima `tracker_ids=None` sebagai frame tanpa orang.
+Timer menerima id track dan hasil uji per frame, lalu mengembalikan catatan dengan awal, akhir, dan durasi. `tracker_ids=None` dianggap frame tanpa orang. Waktu dalam detik dari awal video.
 
 ### Catatan
 
@@ -139,17 +163,10 @@ Semua catatan adalah dataclass. Kolom berakhiran `_s` dalam detik.
 
 | Kelas | Field | Property |
 |---|---|---|
-| `Visit` | `visit_id`, `track_id`, `zone_index`, `zone_name`, `enter_frame`, `enter_time_s`, `exit_frame`, `exit_time_s` | `duration_s` |
-| `Attention` | `attention_id`, `track_id`, `zone_index`, `zone_name`, `start_frame`, `start_time_s`, `end_frame`, `end_time_s`, `looking_s` | `span_s`: lama di zona, termasuk saat tidak menghadapnya |
-| `Contact` | `subject_id`, `other_id`, `start_frame`, `start_time_s`, `end_frame`, `end_time_s` | `duration_s` |
-| `InterestRecord` | `track_id`, `outcome`, `qualified_frame`, `qualified_time_s`, `crossed_frame`, `crossed_time_s` | `entered` |
-| `InterestCounts` | `entered`, `passed_by` | `total` |
+| `ZoneVisit` | `visit_id`, `track_id`, `zone_index`, `zone_name`, `enter_frame`, `enter_time_s`, `exit_frame`, `exit_time_s` | `duration_s` |
+| `Spell` | `spell_id`, `track_id`, `group`, `group_name`, `start_frame`, `start_time_s`, `end_frame`, `end_time_s`, `active_s` | `span_s`: lama track terlihat, termasuk saat kondisinya tidak benar |
 
-### `credit_cap(frame_period_s, threshold_s, periods, fraction)`
-
-Mengembalikan waktu maksimum yang dihitung dari satu jeda antar pengamatan: `min(periods × frame_period_s, fraction × threshold_s)`. `AttentionTracker` dan `InterestTracker` memakainya.
-
-### `ZoneVisitTracker(zone_labels, grace_s=1.0)`
+### `ZoneTimer(zone_labels, grace_s=1.0)`
 
 Mengubah keanggotaan zona per frame menjadi kunjungan.
 
@@ -158,12 +175,12 @@ Mengubah keanggotaan zona per frame menjadi kunjungan.
 | `zone_labels` | `list[str]` | Wajib | Nama zona, urut sesuai indeks zona. |
 | `grace_s` | `float` | `1.0` | Kunjungan ditutup jika track tidak terlihat di zona selama `grace_s` detik atau lebih. |
 
-Kunjungan juga ditutup seketika saat track pindah ke zona lain. Waktu keluar adalah saat track terakhir terlihat, bukan saat grace habis.
+Kunjungan juga ditutup seketika saat track pindah ke zona lain. Waktu keluar adalah saat track terakhir terlihat.
 
 | Method | Mengembalikan | Keterangan |
 |---|---|---|
-| `update(frame_number, timestamp_s, tracker_ids, membership)` | `list[Visit]` | Maju satu frame. `membership` dari `geometry.zone_membership`. Mengembalikan kunjungan yang selesai di frame ini. |
-| `close_all()` | `list[Visit]` | Menutup semua kunjungan yang masih terbuka, di akhir video. |
+| `update(frame_number, timestamp_s, tracker_ids, membership)` | `list[ZoneVisit]` | Maju satu frame. `membership` berisi indeks zona per baris, `-1` di luar semua zona, misalnya dari `geometry.zone_membership`. Mengembalikan kunjungan yang selesai di frame ini. |
+| `close_all()` | `list[ZoneVisit]` | Menutup semua kunjungan yang masih terbuka, di akhir video. |
 | `dwell_s(track_id, timestamp_s)` | `float` atau `None` | Lama track di zonanya sekarang. |
 | `zone_of(track_id)` | `int` atau `None` | Zona track sekarang. |
 | `unique_visitors(zone_index)` | `int` | Jumlah id track berbeda yang pernah di zona itu. |
@@ -171,105 +188,68 @@ Kunjungan juga ditutup seketika saat track pindah ke zona lain. Waktu keluar ada
 
 Atribut `completed` berisi semua kunjungan yang sudah ditutup.
 
-### `AttentionTracker(zone_labels, minimum_s=3.0, grace_s=1.0, frame_period_s=1/30, max_gap_frame_periods=2, max_gap_threshold_fraction=0.25)`
+### `ConditionTimer(minimum_s=0.0, grace_s=1.0, frame_period_s=1/30, max_gap_frame_periods=2, max_gap_threshold_fraction=0.25, group_labels=None)`
 
-Mencatat perhatian per zona: rentang waktu seseorang berada di zona, dan berapa lama ia menghadapnya.
+Mencatat berapa lama sebuah kondisi benar untuk setiap track, per grup jika `groups` diisi.
 
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
-| `zone_labels` | `list[str]` | Wajib | Nama zona, urut sesuai indeks zona. |
-| `minimum_s` | `float` | `3.0` | Waktu menghadap minimum agar sebuah rentang dicatat. |
-| `grace_s` | `float` | `1.0` | Rentang ditutup jika track tidak terlihat di zona lebih dari `grace_s` detik. |
+| `minimum_s` | `float` | `0.0` | Waktu aktif minimum agar sebuah rentang dicatat. |
+| `grace_s` | `float` | `1.0` | Rentang ditutup jika track tidak terlihat lebih dari `grace_s` detik. |
 | `frame_period_s` | `float` | `1/30` | Jarak waktu antar frame yang diproses, yaitu `stride / fps`. |
 | `max_gap_frame_periods` | `int` | `2` | Bagian pertama batas kredit, dalam kelipatan `frame_period_s`. |
-| `max_gap_threshold_fraction` | `float` | `0.25` | Bagian kedua batas kredit, dalam pecahan `minimum_s`. |
+| `max_gap_threshold_fraction` | `float` | `0.25` | Bagian kedua batas kredit, dalam pecahan `minimum_s`. Tidak dipakai jika `minimum_s` bernilai 0. |
+| `group_labels` | `list[str]` atau `None` | `None` | Nama grup untuk `Spell.group_name`, urut sesuai indeks grup. |
 
-Setiap frame saat track menghadap zonanya menambah waktu sejak frame menghadap sebelumnya, paling banyak `credit_cap_s`. Satu track di satu zona adalah satu rentang. Rentang yang `looking_s`-nya di bawah `minimum_s` dibuang saat ditutup.
+Satu track di satu grup adalah satu rentang, dibuka saat track itu pertama terlihat. Setiap frame saat kondisinya benar menambah waktu sejak frame aktif sebelumnya, paling banyak `credit_cap_s`. Rentang dengan `active_s` di bawah `minimum_s` dibuang saat ditutup.
 
 | Method | Mengembalikan | Keterangan |
 |---|---|---|
-| `update(frame_number, timestamp_s, tracker_ids, membership, looking)` | `list[Attention]` | Maju satu frame. `looking` dari `pose.facing_zone_targets`. Mengembalikan rentang yang ditutup di frame ini dan memenuhi `minimum_s`. |
-| `close_all()` | `list[Attention]` | Menutup semua rentang yang masih terbuka, di akhir video. |
-| `looking_s(track_id, zone_index)` | `float` | Waktu menghadap rentang yang sedang terbuka, untuk label di layar. |
-| `count(zone_index)` | `int` | Jumlah rentang yang sudah dicatat di zona itu. |
-| `qualified(zone_index)` | `int` | `count`, ditambah rentang terbuka yang sudah memenuhi `minimum_s`. |
-| `people(zone_index)` | `int` | Jumlah id track berbeda dengan rentang tercatat di zona itu. |
-| `seconds(zone_index)` | `float` | Total `looking_s` rentang tercatat di zona itu. |
+| `update(frame_number, timestamp_s, tracker_ids, active, groups=None)` | `list[Spell]` | Maju satu frame. `active` berisi hasil kondisi per baris. `groups`, misalnya indeks zona, memisahkan rentang per grup; baris dengan grup `-1` dilewati. Mengembalikan rentang yang ditutup di frame ini dan mencapai `minimum_s`. |
+| `close_all()` | `list[Spell]` | Menutup semua rentang yang masih terbuka, di akhir video. |
+| `active_s(track_id, group=None)` | `float` | Waktu aktif rentang yang sedang terbuka. |
+| `reached(track_id, group=None)` | `bool` | Apakah track itu sudah mencapai `minimum_s`, di rentang terbuka atau yang sudah dicatat. |
+| `count(group=None)` | `int` | Jumlah rentang yang sudah dicatat. `group=None` berarti semua grup. |
+| `qualified(group=None)` | `int` | `count`, ditambah rentang terbuka yang sudah mencapai `minimum_s`. |
+| `people(group=None)` | `int` | Jumlah id track berbeda dengan rentang yang dicatat. |
+| `seconds(group=None)` | `float` | Total `active_s` rentang yang dicatat. |
 
 Atribut `completed` berisi semua rentang yang dicatat, dan `credit_cap_s` berisi batas kredit.
 
-### `proximity_pairs(boxes, is_subject, max_distance_m=2.0, person_height_m=1.7, exclude=None)`
+### `credit_cap(frame_period_s, threshold_s, periods, fraction)`
 
-Mengembalikan `list[(baris_subject, baris_lain, meter)]` untuk setiap pasangan subject dan bukan-subject yang jaraknya paling jauh `max_distance_m`.
+Mengembalikan waktu maksimum yang dihitung dari satu jeda antar pengamatan: `min(periods × frame_period_s, fraction × threshold_s)`. `ConditionTimer` memakainya untuk `credit_cap_s`.
 
-| Parameter | Tipe | Default | Keterangan |
-|---|---|---|---|
-| `boxes` | `ndarray (n, 4)` | Wajib | Kotak semua orang di frame. |
-| `is_subject` | `list[bool]` | Wajib | True untuk anggota kelompok utama, misalnya staf. |
-| `max_distance_m` | `float` | `2.0` | Jarak terjauh yang dihitung dekat, dalam meter. |
-| `person_height_m` | `float` | `1.7` | Tinggi orang dewasa yang dipakai sebagai penggaris. |
-| `exclude` | `list[bool]` atau `None` | `None` | Baris yang tidak ikut dipasangkan, misalnya orang di lorong mal. Dipakai hanya jika panjangnya sama dengan `boxes`. |
+## distance
+
+Lokasi: `zul.computer_vision.distance`. Hanya membutuhkan NumPy.
 
 Jarak diukur dari kaki ke kaki, lalu dibagi rata-rata skala kedua orang. Skala satu orang adalah tinggi kotaknya dibagi `person_height_m`. Orang yang jongkok atau terpotong tepi frame terbaca lebih jauh.
 
-### `ProximityLog(minimum_s=1.0, grace_s=1.0)`
+| Nama | Mengembalikan | Keterangan |
+|---|---|---|
+| `DEFAULT_PERSON_HEIGHT_M` | `1.7` | Tinggi orang dewasa yang dipakai sebagai penggaris. |
+| `pixels_per_metre(boxes, person_height_m=1.7)` | `ndarray (n,)` | Jumlah piksel per meter di tempat setiap orang berdiri. |
+| `distance_m(first_box, second_box, person_height_m=1.7)` | `float` | Jarak antara dua orang dalam meter. `NaN` jika kedua kotak tidak punya tinggi. |
+| `pairs_within(boxes, max_distance_m=2.0, first=None, second=None, person_height_m=1.7)` | `list[(int, int, float)]` | `(baris_a, baris_b, meter)` untuk setiap pasangan yang jaraknya paling jauh `max_distance_m`. Tanpa `first` dan `second`, setiap pasangan muncul sekali dengan `baris_a < baris_b`. Dengan keduanya, berupa mask bool, `baris_a` dari `first` dan `baris_b` dari `second`. |
 
-Mencatat kontak per anggota kelompok utama dari pasangan `proximity_pairs`.
+### `PairTimer(minimum_s=1.0, grace_s=1.0, ordered=False)`
+
+Mengubah pasangan dari `pairs_within` per frame menjadi kontak.
 
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
 | `minimum_s` | `float` | `1.0` | Durasi minimum agar sebuah kontak dicatat. `0` mencatat setiap pertemuan. |
-| `grace_s` | `float` | `1.0` | Kontak ditutup jika pasangan itu tidak dekat lebih dari `grace_s` detik. |
+| `grace_s` | `float` | `1.0` | Kontak ditutup jika pasangan itu tidak berdekatan lebih dari `grace_s` detik. |
+| `ordered` | `bool` | `False` | Dengan `False`, pasangan (a, b) dan (b, a) adalah kontak yang sama, dengan id terkecil di `first_id`. Dengan `True`, urutannya dipertahankan, misalnya staf selalu di `first_id`. |
 
 | Method | Mengembalikan | Keterangan |
 |---|---|---|
-| `note_subjects(tracker_ids, is_subject, timestamp_s)` | `None` | Mencatat setiap subject yang terlihat, ada kontak atau tidak. Panggil setiap frame. |
 | `update(frame_number, timestamp_s, tracker_ids, pairs)` | `list[Contact]` | Membuka atau memperpanjang kontak untuk setiap pasangan. Mengembalikan kontak yang ditutup di frame ini dan memenuhi `minimum_s`. |
 | `close_all()` | `list[Contact]` | Menutup semua kontak yang masih terbuka. |
-| `contacts_per_subject()` | `dict[int, int]` | Jumlah kontak per subject, termasuk subject dengan nol kontak. |
-| `seconds_per_subject()` | `dict[int, float]` | Total durasi kontak per subject. |
-| `idle_subjects()` | `list[int]` | Subject tanpa kontak, urut naik. |
-| `average_contacts()` | `float` | Rata-rata kontak per subject, dibagi semua subject yang terlihat. |
+| `contacts_per_track()` | `dict[int, int]` | Jumlah kontak tercatat per id track, dihitung dari kedua sisi pasangan. |
 
-Contoh berikut mencatat kontak staf dari satu frame. `staff` berisi `True` untuk setiap baris yang merupakan staf:
-
-```python
-from zul.computer_vision.analytics import ProximityLog, proximity_pairs
-
-contacts = ProximityLog(minimum_s=1.0)
-
-# di setiap frame
-contacts.note_subjects(people.tracker_id, staff, timestamp_s)
-pairs = proximity_pairs(people.xyxy, staff, max_distance_m=2.0)
-contacts.update(frame_number, timestamp_s, people.tracker_id, pairs)
-
-# di akhir video
-contacts.close_all()
-print(contacts.contacts_per_subject(), contacts.average_contacts())
-```
-
-### `InterestTracker(threshold_s=2.0, frame_period_s=1/30, max_gap_frame_periods=2, max_gap_threshold_fraction=0.25)`
-
-Mencatat waktu minat per orang, lalu hasilnya: `entered` atau `passed_by`.
-
-| Parameter | Tipe | Default | Keterangan |
-|---|---|---|---|
-| `threshold_s` | `float` | `2.0` | Waktu minat minimum agar seseorang dihitung berminat. |
-| `frame_period_s` | `float` | `1/30` | Jarak waktu antar frame yang diproses, yaitu `stride / fps`. |
-| `max_gap_frame_periods`, `max_gap_threshold_fraction` | `int`, `float` | `2`, `0.25` | Batas kredit, seperti di `AttentionTracker`. |
-
-Setiap frame menambah waktu sejak track terakhir terlihat, paling banyak `max_gap_s`, hanya jika `looking`, `in_zone`, dan `facing` ketiganya True untuk track itu. Hasil yang sudah diberikan tidak pernah turun: `passed_by` bisa menjadi `entered`, tetapi tidak sebaliknya.
-
-| Anggota | Keterangan |
-|---|---|
-| `update(frame_number, timestamp_s, tracker_ids, looking, in_zone=None, facing=None)` | Maju satu frame. `in_zone` dan `facing` yang `None` dianggap True untuk semua. Mengembalikan id yang baru memenuhi `threshold_s` di frame ini. |
-| `mark_crossed(tracker_ids, frame_number, timestamp_s)` | Mencatat bahwa track ini melintasi garis masuk. |
-| `counts()` | `InterestCounts` saat ini. |
-| `outcome_of(track_id)` | `"entered"`, `"passed_by"`, atau `None`. |
-| `looking_s(track_id)` | Waktu minat track itu. |
-| `label(track_id)` | Teks untuk video: `look 0.5/2s` sebelum memenuhi syarat, lalu `INTERESTED:entered` atau `INTERESTED:passed_by`. |
-| `records()` | `list[InterestRecord]`, satu per orang yang berminat, urut menurut id track. |
-| `ENTERED`, `PASSED_BY` | Konstanta `"entered"` dan `"passed_by"`. |
+`Contact` adalah dataclass dengan field `contact_id`, `first_id`, `second_id`, `start_frame`, `start_time_s`, `end_frame`, `end_time_s`, dan `closest_m`, jarak terdekat selama kontak, serta property `duration_s`. Atribut `completed` berisi semua kontak yang dicatat.
 
 ## config
 
@@ -327,29 +307,68 @@ Warna ditulis sebagai string `"#RRGGBB"` atau tuple BGR. Semua fungsi `draw_*` m
 | `bgr(color)` | Warna sebagai tuple BGR untuk OpenCV. |
 | `track_color(track_id, saturation=0.85)` | Warna BGR yang tetap untuk satu id track. Id yang berdekatan mendapat warna yang jauh berbeda. |
 | `text_size(text, scale=0.5, thickness=1)` | Lebar dan tinggi teks dalam piksel. |
+| `draw_corner_text(scene, lines, corner=Corner.TOP_LEFT, color=(255, 255, 255), scale=0.55, thickness=1, margin=12, line_height=26, top=None, background=(0, 0, 0))` | Beberapa baris teks menempel ke satu sudut frame. `Corner` berisi `TOP_LEFT`, `TOP_RIGHT`, `BOTTOM_LEFT`, dan `BOTTOM_RIGHT`. `top` menggeser baris pertama di sudut atas ke bawah, misalnya agar tidak menutupi cap waktu video CCTV. `background=None` menggambar teks tanpa latar. |
+
+### Kotak dan label
+
+| Fungsi | Keterangan |
+|---|---|
+| `draw_box(scene, xyxy, color, style=BoxStyle.CORNER, thickness=2, corner_length=14, fill_alpha=0.25, dash=8)` | Satu kotak. `BoxStyle` berisi `CORNER`, `RECT`, `DASHED`, dan `FILLED`. |
+| `draw_label(scene, text, anchor, color, text_color=(0, 0, 0), scale=0.4, thickness=1, padding=2, above=True)` | Teks di atas pelat berwarna. `anchor` adalah sudut kiri bawah pelat, atau sudut kiri atasnya jika `above=False`. |
+| `draw_labelled_box(scene, xyxy, label, color, style=BoxStyle.CORNER, **box_options)` | Kotak dan keterangannya di atas sudut kiri atas. |
 
 ### Bentuk
 
 | Fungsi | Keterangan |
 |---|---|
-| `draw_box(scene, xyxy, color, style=BoxStyle.CORNER, thickness=2, corner_length=14, fill_alpha=0.25, dash=8)` | Satu kotak. `BoxStyle` berisi `CORNER`, `RECT`, `DASHED`, dan `FILLED`. |
-| `draw_label(scene, text, anchor, color, text_color=(0, 0, 0), scale=0.4, thickness=1, padding=2, above=True)` | Teks di atas pelat berwarna, di atas `anchor` atau di bawahnya jika `above=False`. |
-| `draw_labelled_box(scene, xyxy, label, color, style=BoxStyle.CORNER, **box_options)` | Kotak dan keterangannya di atas sudut kiri atas. |
-| `draw_text_block(scene, lines, corner=Corner.TOP_LEFT, color=(255, 255, 255), scale=0.55, thickness=1, margin=12, line_height=26, top=None, background=(0, 0, 0))` | Beberapa baris teks menempel ke satu sudut frame. `Corner` berisi `TOP_LEFT`, `TOP_RIGHT`, `BOTTOM_LEFT`, dan `BOTTOM_RIGHT`. `top` menggeser baris pertama ke bawah, misalnya agar tidak menutupi cap waktu video CCTV. `background=None` menggambar teks tanpa latar. |
 | `draw_polygons(scene, polygons, color, thickness=2, fill_alpha=0.0)` | Garis tepi beberapa poligon, dengan isi transparan jika `fill_alpha` di atas 0. |
 | `draw_line(scene, start, end, color, thickness=2)` | Satu garis. |
 | `draw_arrow(scene, origin, direction, color, length, thickness=2, tip_ratio=0.35)` | Panah sepanjang `length` piksel dari `origin` searah `direction`. |
 | `draw_point(scene, point, color, radius=4)` | Satu titik penuh. |
-| `draw_link(scene, start, end, color, label="", thickness=2, scale=0.45)` | Garis antara dua titik dengan keterangan di tengahnya, misalnya jarak dalam meter. |
+| `draw_link(scene, start, end, color, label="", thickness=2, scale=0.45)` | Garis antara dua titik, dengan keterangan berpelat di tengahnya, misalnya jarak dalam meter. |
 | `draw_skeleton(scene, keypoints_xy, keypoints_conf=None, min_confidence=0.35, color="#E0E0E0", vertex_color="#FFFFFF", thickness=1, radius=3)` | Kerangka pose untuk setiap orang, hanya dari keypoint dengan confidence cukup. `keypoints_xy=None` tidak menggambar apa pun. |
 
-### Masker
+### Garis dan poligon penghitung
+
+| Fungsi | Keterangan |
+|---|---|
+| `draw_line_counter(scene, counter, color="#FF4081", thickness=2, in_text="masuk", out_text="keluar", scale=0.5, arrow_length=30.0)` | Garis `LineCounter`, panah ke sisi masuk di tengah garis, dan jumlah lintasan di sisi keluar, diawali label garis jika ada. |
+| `draw_polygon_zone(scene, zone, color="#00d4ff", thickness=2, fill_alpha=0.2, text=None, scale=0.5)` | Poligon `PolygonZone` dan keterangannya di tengah poligon. Tanpa `text`, isinya `current_count` dan `total_count`, diawali label poligon jika ada. |
+
+### Jejak dan heatmap
+
+`TrackTrace(length=40)` mengingat `length` titik terakhir setiap track.
+
+| Anggota | Keterangan |
+|---|---|
+| `update(points, tracker_ids)` | Menambahkan titik frame ini. Panggil sekali per frame. Track yang tidak muncul selama `length` pemanggilan dilupakan. |
+| `paths` | `dict[int, deque]`: titik setiap id track, dari yang terlama. |
+
+`HeatMap(width, height, radius=20, decay=1.0)` menjumlahkan kehadiran per piksel.
+
+| Anggota | Keterangan |
+|---|---|
+| `update(points)` | Menambahkan 1 di lingkaran berjari-jari `radius` di sekeliling setiap titik. Dengan `decay` di bawah 1, nilai lama dikalikan `decay` lebih dulu. |
+| `values` | Array float32 `(height, width)` berisi jumlahnya. |
+
+| Fungsi | Keterangan |
+|---|---|
+| `draw_traces(scene, trace, color=None, thickness=2)` | Jejak setiap track sebagai garis. Tanpa `color`, warnanya `track_color` id itu. |
+| `draw_heatmap(scene, heatmap, alpha=0.5, colormap=cv2.COLORMAP_JET)` | Mewarnai area yang pernah ditempati, makin sering makin panas. Area yang jarang ditempati makin transparan. |
+
+## masks
+
+Lokasi: `zul.computer_vision.masks`. Membutuhkan extra `vision`.
 
 | Fungsi | Keterangan |
 |---|---|
 | `polygon_mask(polygons, width, height, keep_inside=False)` | Masker seukuran frame. Dengan `keep_inside=False`, area di dalam poligon dihitamkan. Dengan `keep_inside=True`, area di luar poligon yang dihitamkan. `None` jika tidak ada poligon dengan 3 titik atau lebih. |
 | `combine_masks(*masks)` | Gabungan beberapa masker, dengan `None` dilewati. `None` jika semuanya `None`. |
 | `apply_mask(image, mask)` | Salinan frame dengan area masker dihitamkan. Frame asli jika `mask` bernilai `None`. |
+| `blur_boxes(scene, boxes, kernel=25)` | Mengaburkan isi setiap kotak di `scene` langsung. `kernel` lebih besar berarti lebih kabur. |
+| `pixelate_boxes(scene, boxes, pixel_size=12)` | Mengubah isi setiap kotak di `scene` menjadi blok seukuran `pixel_size` piksel. |
+
+Bagian kotak di luar tepi frame dipotong, dan kotak yang tidak punya luas setelah dipotong dilewati.
 
 ## video
 

@@ -31,12 +31,13 @@ CORE_MODULES = [
     "zul.cli",
     "zul.commands.build",
     "zul.commands.install",
-    "zul.computer_vision.analytics",
     "zul.computer_vision.config",
-    "zul.computer_vision.crossing",
+    "zul.computer_vision.distance",
     "zul.computer_vision.geometry",
     "zul.computer_vision.pose",
     "zul.computer_vision.report",
+    "zul.computer_vision.timers",
+    "zul.computer_vision.zones",
     "zul.utilities.fake_embedding",
     "zul.utilities.logger",
     "zul.utilities.time",
@@ -79,6 +80,7 @@ EXTRA_MODULES = {
     "gemini": ["zul.utilities.OCR.gemini_ocr"],
     "vision": [
         "zul.computer_vision.draw",
+        "zul.computer_vision.masks",
         "zul.computer_vision.video",
     ],
     "yolo": [

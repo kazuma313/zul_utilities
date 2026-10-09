@@ -55,12 +55,16 @@ Kemampuan yang di dalamnya ada model AI yang bekerja, dengan model lokal lewat O
 
 ## Computer Vision
 
-Modul `zul.computer_vision` untuk menganalisis perilaku orang di video CCTV: deteksi, tracking, zona, arah hadap, dan aturan yang menghasilkan CSV.
+Fungsi-fungsi kecil di `zul.computer_vision` untuk video, yang kamu rangkai sendiri sesuai kebutuhan.
 
 | Tugas | Panduan |
 |---|---|
-| Mengukur siapa memperhatikan rak mana, dan berapa lama | [Mengukur perhatian pengunjung ke rak](mengukur-perhatian-ke-rak.md) |
-| Menghitung orang yang berminat ke toko, dan berapa yang masuk | [Menghitung pengunjung yang berminat dan masuk](menghitung-pengunjung-masuk.md) |
+| Mendeteksi orang di video dan memberi id yang sama di setiap frame | [Mendeteksi dan melacak orang](mendeteksi-dan-melacak-orang.md) |
+| Menulis teks di sudut frame, menggambar kotak, bentuk, kerangka, jejak gerak, dan heatmap | [Menggambar di frame](menggambar-di-frame.md) |
+| Menghitung orang yang melintasi garis, dan orang di dalam poligon | [Menghitung dengan garis dan poligon](menghitung-dengan-garis-dan-poligon.md) |
+| Mengukur lama setiap orang di zona, atau lama sebuah kondisi benar | [Mengukur durasi per orang](mengukur-durasi.md) |
+| Membaca ke mana orang menghadap, dan jarak antar orang dalam meter | [Membaca arah hadap dan jarak](membaca-arah-hadap-dan-jarak.md) |
+| Menghitamkan area sebelum deteksi, atau mengaburkan wajah dan badan | [Menghitamkan dan menyamarkan area](menghitamkan-dan-menyamarkan-area.md) |
 
 ## Proyek Zul
 

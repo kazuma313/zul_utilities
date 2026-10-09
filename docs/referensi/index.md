@@ -35,7 +35,7 @@ Fakta untuk dicari cepat: opsi sebuah perintah, bentuk request, parameter sebuah
 
 | Halaman | Isi |
 |---|---|
-| [Computer Vision](computer-vision.md) | Semua modul `zul.computer_vision`: geometri, pose, garis, aturan, config, CSV, gambar, video, deteksi, dan bobot model. |
+| [Computer Vision](computer-vision.md) | Semua fungsi `zul.computer_vision`: geometri, pose, garis dan poligon penghitung, timer, jarak, config, CSV, gambar, masker, video, deteksi, dan bobot model. |
 
 ## Situs dokumentasi
 

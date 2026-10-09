@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from zul.computer_vision import analytics, geometry, pose
+from zul.computer_vision import geometry, pose
 from zul.computer_vision.config import (
     ConfigError,
     changed_settings,
@@ -15,8 +15,15 @@ from zul.computer_vision.config import (
     read_yaml,
     validate_settings,
 )
-from zul.computer_vision.crossing import LineCrossing
+from zul.computer_vision.distance import (
+    PairTimer,
+    distance_m,
+    pairs_within,
+    pixels_per_metre,
+)
 from zul.computer_vision.report import RecordWriter
+from zul.computer_vision.timers import ConditionTimer, Spell, ZoneTimer, credit_cap
+from zul.computer_vision.zones import LineCounter, PolygonZone
 
 # --------------------------------------------------------------------------
 # Geometry
@@ -180,17 +187,48 @@ def test_poses_pair_with_the_box_that_holds_their_nose():
 
 
 # --------------------------------------------------------------------------
-# Lintasan Garis
+# Poligon Penghitung
+# --------------------------------------------------------------------------
+
+SQUARE = [[0, 0], [100, 0], [100, 100], [0, 100]]
+
+
+def test_polygon_zone_counts_now_and_unique_ids_over_time():
+    zone = PolygonZone(SQUARE, "rak")
+
+    zone.update(np.array([[10, 10], [50, 50], [200, 200]]), [1, 2, 3])
+    inside = zone.update(np.array([[10, 10], [300, 300]]), [1, 4])
+
+    assert inside.tolist() == [True, False]
+    assert (zone.current_count, zone.total_count) == (1, 2)
+    assert zone.centroid.tolist() == [50.0, 50.0]
+
+
+def test_polygon_zone_without_ids_counts_only_the_current_frame():
+    zone = PolygonZone(SQUARE)
+
+    zone.update(np.array([[10, 10], [20, 20]]))
+
+    assert (zone.current_count, zone.total_count) == (2, 0)
+
+
+def test_polygon_zone_needs_three_points():
+    with pytest.raises(ValueError):
+        PolygonZone([[0, 0], [10, 10]])
+
+
+# --------------------------------------------------------------------------
+# Garis Penghitung
 # --------------------------------------------------------------------------
 
 
 def walk(line, track_id, ys, x=50.0):
     """Jalankan satu track melewati `ys`; kembalikan daftar (masuk, keluar)."""
-    return [line.update([track_id], np.array([[x, y]])) for y in ys]
+    return [line.update(np.array([[x, y]]), [track_id]) for y in ys]
 
 
-def test_crossing_counts_once_after_minimum_frames_on_the_new_side():
-    line = LineCrossing((0, 0), (100, 0), minimum_frames=3)
+def test_line_counts_once_after_minimum_frames_on_the_new_side():
+    line = LineCounter((0, 0), (100, 0), minimum_frames=3)
 
     steps = walk(line, 1, [10, -10, -10, -10, -10])
 
@@ -204,16 +242,16 @@ def test_crossing_counts_once_after_minimum_frames_on_the_new_side():
     assert (line.in_count, line.out_count) == (1, 0)
 
 
-def test_crossing_ignores_a_box_jittering_on_the_line():
-    line = LineCrossing((0, 0), (100, 0), minimum_frames=3)
+def test_line_ignores_a_box_jittering_on_the_line():
+    line = LineCounter((0, 0), (100, 0), minimum_frames=3)
 
     walk(line, 1, [10, -10, 10, -10, 10, -10, 10, -10])
 
     assert (line.in_count, line.out_count) == (0, 0)
 
 
-def test_crossing_ignores_people_beside_the_segment():
-    line = LineCrossing((0, 0), (100, 0), minimum_frames=1)
+def test_line_ignores_people_beside_the_segment():
+    line = LineCounter((0, 0), (100, 0), minimum_frames=1)
 
     walk(line, 1, [10, -10, -10], x=150)
 
@@ -221,7 +259,7 @@ def test_crossing_ignores_people_beside_the_segment():
 
 
 def test_swapping_line_points_swaps_in_and_out():
-    line = LineCrossing((100, 0), (0, 0), minimum_frames=1)
+    line = LineCounter((100, 0), (0, 0), minimum_frames=1)
 
     walk(line, 1, [10, -10])
 
@@ -229,13 +267,28 @@ def test_swapping_line_points_swaps_in_and_out():
     assert line.midpoint.tolist() == [50.0, 0.0]
 
 
+def test_in_normal_points_to_the_in_side():
+    line = LineCounter((0, 0), (100, 0))
+    probe = line.midpoint + line.in_normal * 10
+
+    assert line.sides(probe)[0].tolist() == [True]
+
+
+def test_line_without_ids_counts_nothing():
+    line = LineCounter((0, 0), (100, 0))
+
+    assert line.update(np.array([[50, 10]]), None) == ([False], [False])
+    with pytest.raises(ValueError):
+        LineCounter((5, 5), (5, 5))
+
+
 # --------------------------------------------------------------------------
-# Kunjungan Zona
+# Timer Zona
 # --------------------------------------------------------------------------
 
 
 def test_short_gap_keeps_one_visit_and_long_gap_starts_another():
-    visits = analytics.ZoneVisitTracker(["rak"], grace_s=1.0)
+    visits = ZoneTimer(["rak"], grace_s=1.0)
     seen = {0.0, 0.25, 0.5, 1.0, 1.25, 3.0, 3.25}
 
     for step in range(15):
@@ -252,171 +305,141 @@ def test_short_gap_keeps_one_visit_and_long_gap_starts_another():
 
 
 def test_moving_to_another_zone_closes_the_visit_at_once():
-    visits = analytics.ZoneVisitTracker(["a", "b"], grace_s=5.0)
+    visits = ZoneTimer(["a", "b"], grace_s=5.0)
 
     visits.update(0, 0.0, [4], [0])
     closed = visits.update(1, 0.5, [4], [1])
 
     assert [v.zone_name for v in closed] == ["a"]
     assert visits.zone_of(4) == 1
+    assert visits.dwell_s(4, 1.5) == pytest.approx(1.0)
 
 
 # --------------------------------------------------------------------------
-# Perhatian Ke Zona
+# Timer Kondisi
 # --------------------------------------------------------------------------
 
 
-def run_attention(tracker, frames):
-    """`frames`: daftar (detik, membership, looking) untuk track 1."""
+def run_condition(timer, frames, groups=True):
+    """`frames`: daftar (detik, grup, aktif) untuk track 1."""
     closed = []
-    for number, (t, zone, looking) in enumerate(frames):
-        closed += tracker.update(number, t, [1], [zone], [looking])
-    return closed + tracker.close_all()
+    for number, (t, group, active) in enumerate(frames):
+        closed += timer.update(
+            number, t, [1], [active], groups=[group] if groups else None
+        )
+    return closed + timer.close_all()
 
 
-def test_looking_at_the_shelf_long_enough_is_attention():
-    tracker = analytics.AttentionTracker(["rak"], minimum_s=1.0, frame_period_s=0.25)
+def test_condition_true_long_enough_is_recorded():
+    timer = ConditionTimer(minimum_s=1.0, frame_period_s=0.25, group_labels=["rak"])
 
-    (spell,) = run_attention(tracker, [(i * 0.25, 0, True) for i in range(5)])
+    (spell,) = run_condition(timer, [(i * 0.25, 0, True) for i in range(5)])
 
-    assert spell.looking_s == pytest.approx(1.0)
+    assert (spell.group, spell.group_name) == (0, "rak")
+    assert spell.active_s == pytest.approx(1.0)
     assert spell.span_s == pytest.approx(1.0)
 
 
-def test_a_face_outside_the_zone_earns_nothing():
-    tracker = analytics.AttentionTracker(["rak"], minimum_s=1.0, frame_period_s=0.25)
+def test_rows_outside_every_group_earn_nothing():
+    timer = ConditionTimer(minimum_s=1.0, frame_period_s=0.25)
 
-    assert run_attention(tracker, [(i * 0.25, -1, True) for i in range(20)]) == []
-
-
-def test_standing_in_the_zone_without_looking_is_not_attention():
-    tracker = analytics.AttentionTracker(["rak"], minimum_s=1.0, frame_period_s=0.25)
-
-    assert run_attention(tracker, [(i * 0.25, 0, False) for i in range(20)]) == []
+    assert run_condition(timer, [(i * 0.25, -1, True) for i in range(20)]) == []
 
 
-def test_a_glance_shorter_than_the_threshold_is_not_attention():
-    tracker = analytics.AttentionTracker(["rak"], minimum_s=3.0, frame_period_s=0.25)
+def test_presence_without_the_condition_is_not_recorded():
+    timer = ConditionTimer(minimum_s=1.0, frame_period_s=0.25)
 
-    assert run_attention(tracker, [(i * 0.25, 0, True) for i in range(8)]) == []
+    assert run_condition(timer, [(i * 0.25, 0, False) for i in range(20)]) == []
+
+
+def test_a_condition_shorter_than_the_minimum_is_not_recorded():
+    timer = ConditionTimer(minimum_s=3.0, frame_period_s=0.25)
+
+    assert run_condition(timer, [(i * 0.25, 0, True) for i in range(8)]) == []
+
+
+def test_without_groups_one_spell_per_track():
+    timer = ConditionTimer(minimum_s=1.0, frame_period_s=0.25)
+
+    frames = [(i * 0.25, 0, True) for i in range(5)]
+    (spell,) = run_condition(timer, frames, groups=False)
+
+    assert (spell.group, spell.group_name) == (None, "")
 
 
 def test_a_gap_inside_grace_earns_only_the_credit_cap():
-    tracker = analytics.AttentionTracker(
-        ["rak"], minimum_s=3.0, grace_s=1.0, frame_period_s=0.1
-    )
+    timer = ConditionTimer(minimum_s=3.0, grace_s=1.0, frame_period_s=0.1)
 
-    tracker.update(0, 0.0, [1], [0], [True])
-    tracker.update(9, 0.9, [1], [0], [True])
+    timer.update(0, 0.0, [1], [True], groups=[0])
+    timer.update(9, 0.9, [1], [True], groups=[0])
 
-    assert tracker.credit_cap_s == pytest.approx(0.2)
-    assert tracker.looking_s(1, 0) == pytest.approx(0.2)
+    assert timer.credit_cap_s == pytest.approx(0.2)
+    assert timer.active_s(1, 0) == pytest.approx(0.2)
 
 
 def test_an_empty_frame_after_grace_closes_the_spell():
-    tracker = analytics.AttentionTracker(["rak"], minimum_s=1.0, frame_period_s=0.25)
+    timer = ConditionTimer(minimum_s=1.0, frame_period_s=0.25)
     for i in range(5):
-        tracker.update(i, i * 0.25, [1], [0], [True])
+        timer.update(i, i * 0.25, [1], [True], groups=[0])
 
-    assert tracker.update(10, 2.5, None, [], []) != []
-    assert tracker.people(0) == 1
+    assert timer.reached(1, 0)
+    assert timer.update(10, 2.5, None, []) != []
+    assert (timer.count(0), timer.people(0), timer.qualified()) == (1, 1, 1)
+    assert timer.seconds(0) == pytest.approx(1.0)
 
 
 def test_credit_cap_follows_the_threshold():
-    assert analytics.credit_cap(1 / 30, 3.0, 2, 0.25) == pytest.approx(2 / 30)
-    assert analytics.credit_cap(1.0, 0.5, 2, 0.25) == pytest.approx(0.125)
+    assert credit_cap(1 / 30, 3.0, 2, 0.25) == pytest.approx(2 / 30)
+    assert credit_cap(1.0, 0.5, 2, 0.25) == pytest.approx(0.125)
 
 
 # --------------------------------------------------------------------------
-# Kontak Antar Kelompok
+# Jarak Dalam Meter
 # --------------------------------------------------------------------------
 
+PEOPLE = np.array([[0, 0, 50, 170], [150, 0, 200, 170], [400, 0, 450, 170]])
 
-def test_proximity_is_measured_in_metres_from_box_height():
-    boxes = np.array([[0, 0, 50, 170], [150, 0, 200, 170], [400, 0, 450, 170]])
 
-    pairs = analytics.proximity_pairs(boxes, [True, False, False])
+def test_distance_is_measured_in_metres_from_box_height():
+    assert distance_m(PEOPLE[0], PEOPLE[1]) == pytest.approx(1.5)
+    assert pixels_per_metre(PEOPLE).tolist() == pytest.approx([100.0] * 3)
+    assert np.isnan(distance_m([0, 0, 10, 0], [5, 0, 15, 0]))
 
-    assert [(s, o) for s, o, _ in pairs] == [(0, 1)]
+
+def test_pairs_within_counts_each_pair_once_without_groups():
+    pairs = pairs_within(PEOPLE, max_distance_m=2.6)
+
+    assert [(a, b) for a, b, _ in pairs] == [(0, 1), (1, 2)]
+
+
+def test_pairs_within_keeps_group_order():
+    pairs = pairs_within(PEOPLE, first=[False, True, False], second=[True, False, True])
+
+    assert [(a, b) for a, b, _ in pairs] == [(1, 0)]
     assert pairs[0][2] == pytest.approx(1.5)
-    assert analytics.proximity_pairs(boxes, [False] * 3) == []
-    assert (
-        analytics.proximity_pairs(boxes, [True, False, False], exclude=[0, 1, 0]) == []
-    )
 
 
 def test_sixty_frames_close_together_are_one_contact():
-    log = analytics.ProximityLog(minimum_s=1.0, grace_s=1.0)
+    contacts = PairTimer(minimum_s=1.0, grace_s=1.0)
 
     for frame in range(60):
-        log.update(frame, frame / 30, [7, 9], [(0, 1, 1.2)])
-    (contact,) = log.close_all()
+        rows = [(0, 1, 1.2)] if frame % 2 else [(1, 0, 1.0)]
+        contacts.update(frame, frame / 30, [7, 9], rows)
+    (contact,) = contacts.close_all()
 
-    assert (contact.subject_id, contact.other_id) == (7, 9)
+    assert (contact.first_id, contact.second_id) == (7, 9)
     assert contact.duration_s == pytest.approx(59 / 30)
+    assert contact.closest_m == pytest.approx(1.0)
+    assert contacts.contacts_per_track() == {7: 1, 9: 1}
 
 
-def test_subjects_without_contact_stay_in_the_average():
-    log = analytics.ProximityLog(minimum_s=0.0)
-    log.note_subjects([7, 8, 9], [True, True, False], 0.0)
+def test_ordered_pairs_keep_who_is_first():
+    contacts = PairTimer(minimum_s=0.0, ordered=True)
 
-    log.update(0, 0.0, [7, 8, 9], [(0, 2, 1.0)])
-    log.close_all()
+    contacts.update(0, 0.0, [7, 9], [(1, 0, 1.0)])
+    (contact,) = contacts.close_all()
 
-    assert log.contacts_per_subject() == {7: 1, 8: 0}
-    assert log.idle_subjects() == [8]
-    assert log.average_contacts() == pytest.approx(0.5)
-
-
-# --------------------------------------------------------------------------
-# Minat Dan Konversi
-# --------------------------------------------------------------------------
-
-
-def test_interest_qualifies_then_upgrades_to_entered_and_stays():
-    interest = analytics.InterestTracker(threshold_s=1.0, frame_period_s=0.25)
-
-    newly = [interest.update(i, i * 0.25, [3], [True]) for i in range(5)]
-    assert newly[-1] == [3]
-    assert interest.outcome_of(3) == interest.PASSED_BY
-
-    interest.mark_crossed([3], 6, 1.5)
-    interest.update(7, 1.75, [3], [False])
-
-    assert interest.outcome_of(3) == interest.ENTERED
-    assert (interest.counts().entered, interest.counts().passed_by) == (1, 0)
-    (record,) = interest.records()
-    assert (record.qualified_time_s, record.crossed_time_s) == (1.0, 1.5)
-
-
-def test_a_glance_is_not_interest():
-    interest = analytics.InterestTracker(threshold_s=1.0, frame_period_s=0.25)
-
-    for i in range(3):
-        interest.update(i, i * 0.25, [3], [True])
-
-    assert interest.outcome_of(3) is None
-    assert interest.records() == []
-    assert interest.counts().total == 0
-
-
-def test_interest_needs_the_zone_and_the_facing_test():
-    interest = analytics.InterestTracker(threshold_s=1.0, frame_period_s=0.25)
-
-    for i in range(10):
-        interest.update(i, i * 0.25, [1, 2], [True, True], [False, True], [True, False])
-
-    assert interest.looking_s(1) == 0.0
-    assert interest.looking_s(2) == 0.0
-
-
-def test_interest_after_a_long_gap_earns_only_the_credit_cap():
-    interest = analytics.InterestTracker(threshold_s=1.0, frame_period_s=0.25)
-
-    interest.update(0, 0.0, [3], [True])
-    interest.update(1, 5.0, [3], [True])
-
-    assert interest.looking_s(3) == pytest.approx(0.25)
+    assert (contact.first_id, contact.second_id) == (9, 7)
 
 
 # --------------------------------------------------------------------------
@@ -497,26 +520,27 @@ def read_rows(path):
 
 
 def test_record_writer_writes_fields_properties_and_rounds_floats(tmp_path):
-    spell = analytics.Attention(1, 4, 0, "rak", 10, 1.0, 40, 4.123456, 2.0004)
-    path = tmp_path / "out" / "attention.csv"
+    spell = Spell(1, 4, 0, "rak", 10, 1.0, 40, 4.123456, 2.0004)
+    path = tmp_path / "out" / "spells.csv"
 
-    with RecordWriter(path, ["attention_id", "zone_name", "looking_s", "span_s"]) as w:
+    with RecordWriter(path, ["spell_id", "group_name", "active_s", "span_s"]) as w:
         w.write([spell])
 
     assert read_rows(path) == [
-        ["attention_id", "zone_name", "looking_s", "span_s"],
+        ["spell_id", "group_name", "active_s", "span_s"],
         ["1", "rak", "2.0", "3.123"],
     ]
 
 
 def test_record_writer_takes_columns_from_a_dataclass_and_blanks_none(tmp_path):
-    record = analytics.InterestRecord(3, "passed_by", 30, 1.0, None, None)
-    path = tmp_path / "interest.csv"
+    spell = Spell(2, 5, None, "", 0, 0.0, 9, 0.9, 0.5)
+    path = tmp_path / "spells.csv"
 
-    with RecordWriter(path, analytics.InterestRecord) as writer:
-        writer.write([record])
+    with RecordWriter(path, Spell) as writer:
+        writer.write([spell])
 
-    assert read_rows(path)[1] == ["3", "passed_by", "30", "1.0", "", ""]
+    assert read_rows(path)[0][:3] == ["spell_id", "track_id", "group"]
+    assert read_rows(path)[1][:4] == ["2", "5", "", ""]
 
 
 def test_record_writer_leaves_a_header_when_nothing_happened(tmp_path):
@@ -531,40 +555,39 @@ def test_record_writer_leaves_a_header_when_nothing_happened(tmp_path):
 
 
 # --------------------------------------------------------------------------
-# Gambar Dan Masker (zul[vision])
+# Gambar (zul[vision])
 # --------------------------------------------------------------------------
 
 
-def test_polygon_mask_keeps_or_blacks_out_the_inside():
+@pytest.fixture
+def draw():
     pytest.importorskip("cv2")
     from zul.computer_vision import draw
 
-    square = [[10, 10], [30, 10], [30, 30], [10, 30]]
-    keep = draw.polygon_mask([square], 40, 40, keep_inside=True)
-    drop = draw.polygon_mask([square], 40, 40)
-    image = np.full((40, 40, 3), 200, dtype=np.uint8)
-
-    assert (keep[20, 20, 0], keep[0, 0, 0]) == (255, 0)
-    assert (drop[20, 20, 0], drop[0, 0, 0]) == (0, 255)
-    assert draw.apply_mask(image, keep)[0, 0, 0] == 0
-    assert draw.apply_mask(image, None) is image
-    assert draw.combine_masks(None, None) is None
-    assert draw.combine_masks(keep, drop).max() == 0
+    return draw
 
 
-def test_colours_are_stable_per_track_and_parse_hex():
-    pytest.importorskip("cv2")
-    from zul.computer_vision import draw
+def blank(width=200, height=120):
+    return np.zeros((height, width, 3), dtype=np.uint8)
 
+
+def test_colours_are_stable_per_track_and_parse_hex(draw):
     assert draw.bgr("#FF8000") == (0, 128, 255)
     assert draw.track_color(5) == draw.track_color(5)
     assert draw.track_color(1) != draw.track_color(2)
 
 
-def test_skeleton_skips_hidden_keypoints_and_empty_frames():
-    pytest.importorskip("cv2")
-    from zul.computer_vision import draw
+def test_corner_text_sticks_to_the_chosen_corner(draw):
+    left = draw.draw_corner_text(blank(), ["kiri"])
+    right = draw.draw_corner_text(blank(), ["kanan"], corner=draw.Corner.TOP_RIGHT)
+    bottom = draw.draw_corner_text(blank(), ["bawah"], corner=draw.Corner.BOTTOM_LEFT)
 
+    assert left[:60, :100].any() and not left[:, 100:].any()
+    assert right[:60, 100:].any() and not right[:, :100].any()
+    assert bottom[60:, :100].any() and not bottom[:60].any()
+
+
+def test_skeleton_skips_hidden_keypoints_and_empty_frames(draw):
     scene = np.zeros((200, 200, 3), dtype=np.uint8)
     xy, conf = person()
 
@@ -572,6 +595,110 @@ def test_skeleton_skips_hidden_keypoints_and_empty_frames():
     draw.draw_skeleton(scene, xy[None], conf[None])
     assert scene[0, 0].tolist() == [0, 0, 0]
     assert scene[100, 100].any()
+
+
+def test_line_counter_draws_the_line_and_its_counts(draw):
+    line = LineCounter((20, 60), (180, 60))
+    walk(line, 1, [80, 40, 40, 40, 40], x=100)
+    scene = blank()
+
+    draw.draw_line_counter(scene, line)
+
+    assert line.in_count == 1
+    assert scene[60, 25].any()
+    assert scene[61:, 60:140].any(), "keterangan di sisi keluar, di bawah garis"
+    assert scene[30:58, 100].any(), "panah ke sisi masuk, di atas garis"
+
+
+def test_polygon_zone_draws_its_count_in_the_middle(draw):
+    zone = PolygonZone([[20, 20], [180, 20], [180, 100], [20, 100]], "rak")
+    zone.update(np.array([[50, 50]]), [3])
+    scene = blank()
+
+    draw.draw_polygon_zone(scene, zone)
+
+    assert scene[20, 100].any()
+    assert scene[60, 100].any()
+    assert scene[0, 0].tolist() == [0, 0, 0]
+
+
+def test_trace_keeps_recent_points_and_forgets_lost_tracks(draw):
+    trace = draw.TrackTrace(length=3)
+    for x in (10, 20, 30, 40):
+        trace.update(np.array([[x, 50]]), [1])
+    scene = draw.draw_traces(blank(), trace)
+
+    assert list(trace.paths[1]) == [(20.0, 50.0), (30.0, 50.0), (40.0, 50.0)]
+    assert scene[50, 25].any() and not scene[50, 12].any()
+    for _ in range(3):
+        trace.update(np.empty((0, 2)), [])
+    assert trace.paths == {}
+
+
+def test_heatmap_marks_where_people_stood(draw):
+    heat = draw.HeatMap(200, 120, radius=10)
+    for _ in range(5):
+        heat.update(np.array([[50, 60]]))
+    heat.update(np.array([[150, 60]]))
+    scene = draw.draw_heatmap(blank(), heat)
+
+    assert heat.values[60, 50] == 5 and heat.values[60, 150] == 1
+    assert scene[60, 50].any() and not scene[5, 5].any()
+    assert draw.draw_heatmap(blank(), draw.HeatMap(10, 10)).max() == 0
+
+
+# --------------------------------------------------------------------------
+# Masker, Blur, Dan Pixelate (zul[vision])
+# --------------------------------------------------------------------------
+
+
+@pytest.fixture
+def masks():
+    pytest.importorskip("cv2")
+    from zul.computer_vision import masks
+
+    return masks
+
+
+def test_polygon_mask_keeps_or_blacks_out_the_inside(masks):
+    square = [[10, 10], [30, 10], [30, 30], [10, 30]]
+    keep = masks.polygon_mask([square], 40, 40, keep_inside=True)
+    drop = masks.polygon_mask([square], 40, 40)
+    image = np.full((40, 40, 3), 200, dtype=np.uint8)
+
+    assert (keep[20, 20, 0], keep[0, 0, 0]) == (255, 0)
+    assert (drop[20, 20, 0], drop[0, 0, 0]) == (0, 255)
+    assert masks.apply_mask(image, keep)[0, 0, 0] == 0
+    assert masks.apply_mask(image, None) is image
+    assert masks.combine_masks(None, None) is None
+    assert masks.combine_masks(keep, drop).max() == 0
+
+
+def checkerboard():
+    cells = (np.indices((40, 40)).sum(axis=0) % 2) * 255
+    return np.repeat(cells[:, :, None], 3, axis=2).astype(np.uint8)
+
+
+def test_blur_changes_only_inside_the_box(masks):
+    scene = checkerboard()
+    original = scene.copy()
+
+    masks.blur_boxes(scene, np.array([[10, 10, 30, 30], [35, 35, 90, 90]]))
+
+    assert scene[20, 20].tolist() != original[20, 20].tolist()
+    assert np.array_equal(scene[:10], original[:10])
+    assert np.array_equal(scene[:, :10], original[:, :10])
+
+
+def test_pixelate_turns_the_box_into_blocks(masks):
+    scene = np.random.default_rng(0).integers(0, 255, (40, 40, 3), dtype=np.uint8)
+    original = scene.copy()
+
+    masks.pixelate_boxes(scene, np.array([[0, 0, 20, 20]]), pixel_size=10)
+
+    assert len({tuple(scene[r, c]) for r in range(10) for c in range(10)}) == 1
+    assert np.array_equal(scene[20:], original[20:])
+    assert masks.pixelate_boxes(scene, np.array([[50, 50, 60, 60]])) is scene
 
 
 # --------------------------------------------------------------------------

@@ -23,7 +23,7 @@ Untuk instalasi ke environment Python yang sedang aktif, gunakan pip:
 pip install git+https://github.com/kazuma313/zul_utilities.git
 ```
 
-Instalasi dasar berisi Typer, InquirerPy, Pydantic, PyYAML, NumPy, dan dependency-nya. Dengan instalasi itu, yang sudah bisa dipakai adalah perintah `zul`, config vector database dari `zul install`, `FakeEmbeddingModel`, `get_logger`, pengukur waktu, `documents_to_custom_json`, dan modul Computer Vision yang hanya butuh NumPy: `geometry`, `pose`, `crossing`, `analytics`, `config`, dan `report`.
+Instalasi dasar berisi Typer, InquirerPy, Pydantic, PyYAML, NumPy, dan dependency-nya. Dengan instalasi itu, yang sudah bisa dipakai adalah perintah `zul`, config vector database dari `zul install`, `FakeEmbeddingModel`, `get_logger`, pengukur waktu, `documents_to_custom_json`, dan modul Computer Vision yang hanya butuh NumPy: `geometry`, `pose`, `zones`, `timers`, `distance`, `config`, dan `report`.
 
 ## Memilih extra
 
@@ -39,8 +39,8 @@ Setiap kelompok utilities punya extra sendiri. Tabel berikut memetakan extra ke 
 | `ocr` | [`DoclingVLMConverter`](membaca-dokumen-ocr.md) | `docling`, yang ikut meng-install PyTorch |
 | `llm` | [`AIService`](memanggil-llm-dan-embedding.md), [`react_graph`](memakai-helper.md#menjalankan-graph-langgraph-terkecil) | `langchain-openai`, `langgraph` |
 | `gemini` | [OCR dengan Gemini](membaca-dokumen-ocr.md#membaca-pdf-dengan-gemini) | `google-genai` |
-| `vision` | [`draw` dan `video` dari Computer Vision](../referensi/computer-vision.md#draw) | `opencv-python` |
-| `yolo` | [Deteksi dan tracking dari Computer Vision](mengukur-perhatian-ke-rak.md) | `vision`, `ultralytics`, yang ikut meng-install PyTorch, dan `lap` |
+| `vision` | [`draw`, `masks`, dan `video` dari Computer Vision](menggambar-di-frame.md) | `opencv-python` |
+| `yolo` | [Deteksi dan tracking dari Computer Vision](mendeteksi-dan-melacak-orang.md) | `vision`, `ultralytics`, yang ikut meng-install PyTorch, dan `lap` |
 | `all` | Semua di atas | Semua di atas |
 
 ## Instalasi sebagian utilities

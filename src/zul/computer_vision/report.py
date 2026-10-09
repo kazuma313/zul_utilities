@@ -1,19 +1,20 @@
 """
-Menulis catatan hasil ke CSV, satu baris per kejadian.
+Menulis catatan ke CSV, satu baris per catatan.
 
 Gunanya:
-    Catatan dari zul.computer_vision.analytics, misalnya Attention atau
-    Visit, ditulis ke CSV saat kejadiannya selesai. File di-flush setiap
-    baris, jadi run yang terputus tetap meninggalkan data yang bisa dipakai.
+    Catatan dari timer, misalnya ZoneVisit, Spell, atau Contact, ditulis ke
+    CSV saat kejadiannya selesai. File di-flush setiap baris, jadi run yang
+    terputus tetap meninggalkan data yang bisa dipakai.
 
 Cara pakai:
-    from zul.computer_vision.analytics import Attention
     from zul.computer_vision.report import RecordWriter
+    from zul.computer_vision.timers import ZoneVisit
 
-    columns = ["attention_id", "track_id", "zone_name", "start_time_s",
-               "end_time_s", "looking_s", "span_s"]
-    with RecordWriter("outputs/interior_attention.csv", columns) as writer:
-        writer.write(tracker.update(...))     # boleh list kosong
+    with RecordWriter("outputs/kunjungan.csv", ZoneVisit) as writer:
+        writer.write(visits.update(...))      # boleh list kosong
+
+    # atau pilih kolomnya sendiri, termasuk property
+    columns = ["track_id", "group_name", "active_s", "span_s"]
 
 Kolom boleh berupa field dataclass maupun property, misalnya `span_s`.
 Angka desimal dibulatkan ke 3 angka di belakang koma.

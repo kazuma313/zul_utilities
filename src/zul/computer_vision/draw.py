@@ -1,34 +1,43 @@
 """
-Menggambar hasil analisis di atas frame video dengan OpenCV.
+Menggambar di atas frame video dengan OpenCV, satu fungsi untuk satu hal.
 
 Gunanya:
-    Kotak orang, label, panel teks di sudut, zona, panah arah hadap,
-    kerangka pose, dan masker area yang diabaikan. Aturan yang tidak
-    terlihat sulit diperiksa, jadi semua yang dipakai aturan bisa digambar.
+    Teks di sudut frame, kotak dan label, poligon, garis, panah, titik,
+    kerangka pose, garis dan poligon penghitung beserta angkanya, jejak
+    gerak, dan heatmap. Semua fungsi menggambar langsung di frame yang
+    diberikan, jadi bisa dipakai bergantian dalam urutan apa pun.
     Butuh extra vision: `pip install "zul[vision]"`.
 
 Cara pakai:
     from zul.computer_vision import draw
 
     scene = frame.copy()
-    draw.draw_polygons(scene, zones, "#00d4ff", fill_alpha=0.2)
+    draw.draw_corner_text(scene, ["orang di rak: 3"])            # kiri atas
+    draw.draw_corner_text(scene, ["24 fps"], corner=draw.Corner.TOP_RIGHT)
     for box, track_id in zip(boxes, tracker_ids):
         draw.draw_labelled_box(scene, box, f"#{track_id}", draw.track_color(track_id))
-    draw.draw_text_block(scene, ["orang di rak = 3"], top=58)
+    draw.draw_line_counter(scene, line)          # garis dan jumlah lintasannya
+    draw.draw_polygon_zone(scene, zone)          # poligon dan jumlah orangnya
 
 Warna boleh ditulis "#RRGGBB" atau tuple BGR seperti (0, 230, 118).
+Menghitamkan atau mengaburkan area ada di zul.computer_vision.masks.
 """
 
 from __future__ import annotations
 
 import colorsys
+from collections import deque
 from collections.abc import Sequence
 from enum import Enum
+from typing import TYPE_CHECKING
 
 import cv2
 import numpy as np
 
 from .pose import SKELETON_EDGES
+
+if TYPE_CHECKING:
+    from .zones import LineCounter, PolygonZone
 
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 GOLDEN_ANGLE_DEG = 137.508
@@ -180,7 +189,7 @@ class Corner(str, Enum):
     BOTTOM_RIGHT = "bottom_right"
 
 
-def draw_text_block(
+def draw_corner_text(
     scene: np.ndarray,
     lines: Sequence[str],
     corner: Corner = Corner.TOP_LEFT,
@@ -308,8 +317,10 @@ def draw_link(
     """Garis antara dua titik, berketerangan di tengah, misalnya jarak dalam meter."""
     draw_line(scene, start, end, color, thickness)
     if label:
-        middle = (int((start[0] + end[0]) / 2), int((start[1] + end[1]) / 2))
-        cv2.putText(scene, label, middle, FONT, scale, bgr(color), 1, cv2.LINE_AA)
+        width, height = text_size(label, scale)
+        middle_x, middle_y = (start[0] + end[0]) / 2, (start[1] + end[1]) / 2
+        anchor = (middle_x - width / 2 - 2, middle_y + height / 2 + 2)
+        draw_label(scene, label, anchor, color, scale=scale)
     return scene
 
 
@@ -344,44 +355,160 @@ def draw_skeleton(
 
 
 # --------------------------------------------------------------------------
-# Masker Area
+# Garis Dan Poligon Penghitung
 # --------------------------------------------------------------------------
 #
-# Area yang diabaikan dihitamkan sebelum frame masuk ke model,
-# jadi deteksi yang tidak diinginkan tidak pernah ada dan
-# tidak bisa dihitung dua kali. Masker digambar sekali
-# di awal, lalu setiap frame cukup satu bitwise_and.
+# Angka hitungan digambar di objek penghitungnya sendiri: jumlah lintasan
+# di tengah garis, jumlah orang di tengah poligon. Panah kecil di garis
+# menunjuk ke sisi masuk, jadi arah hitungannya bisa dibaca langsung.
 #
 
 
-def polygon_mask(
-    polygons: Sequence[Sequence], width: int, height: int, keep_inside: bool = False
-) -> np.ndarray | None:
-    """Masker seukuran frame: hitamkan poligon, atau hitamkan semua di luar poligon."""
-    shapes = [
-        np.asarray(p, dtype=np.int32).reshape(-1, 2)
-        for p in (polygons or [])
-        if len(p) >= 3
-    ]
-    if not shapes:
-        return None
-    fill = 255 if keep_inside else 0
-    mask = np.full((height, width, 3), 255 - fill, dtype=np.uint8)
-    cv2.fillPoly(mask, shapes, (fill, fill, fill))
-    return mask
+def draw_line_counter(
+    scene: np.ndarray,
+    counter: LineCounter,
+    color: Color = "#FF4081",
+    thickness: int = 2,
+    in_text: str = "masuk",
+    out_text: str = "keluar",
+    scale: float = 0.5,
+    arrow_length: float = 30.0,
+) -> np.ndarray:
+    """Garis penghitung, panah ke sisi masuk, dan jumlah lintasannya di tengah garis.
+
+    Keterangannya ditulis di sisi keluar, berseberangan dengan panah.
+    """
+    draw_line(scene, counter.start, counter.end, color, thickness)
+    middle = counter.midpoint
+    normal = counter.in_normal
+    draw_arrow(scene, middle, normal, color, arrow_length, thickness)
+    text = f"{in_text} {counter.in_count}  {out_text} {counter.out_count}"
+    if counter.label:
+        text = f"{counter.label}: {text}"
+    width, height = text_size(text, scale)
+    reach = abs(normal[0]) * (width / 2 + 8) + abs(normal[1]) * (height / 2 + 8)
+    centre = middle - normal * reach
+    anchor = (centre[0] - width / 2 - 2, centre[1] + height / 2 + 2)
+    return draw_label(scene, text, anchor, color, scale=scale)
 
 
-def combine_masks(*masks: np.ndarray | None) -> np.ndarray | None:
-    """Gabungkan beberapa masker menjadi satu, agar setiap frame cukup satu operasi."""
-    present = [mask for mask in masks if mask is not None]
-    if not present:
-        return None
-    combined = present[0]
-    for mask in present[1:]:
-        combined = cv2.bitwise_and(combined, mask)
-    return combined
+def draw_polygon_zone(
+    scene: np.ndarray,
+    zone: PolygonZone,
+    color: Color = "#00d4ff",
+    thickness: int = 2,
+    fill_alpha: float = 0.2,
+    text: str | None = None,
+    scale: float = 0.5,
+) -> np.ndarray:
+    """Poligon penghitung dan jumlah orang di dalamnya, di tengah poligon.
+
+    Tanpa `text`, isinya jumlah orang sekarang dan jumlah id berbeda sejauh
+    ini, diawali label poligon jika ada.
+    """
+    draw_polygons(scene, [zone.polygon], color, thickness, fill_alpha)
+    if text is None:
+        text = f"{zone.current_count} di dalam, {zone.total_count} total"
+        if zone.label:
+            text = f"{zone.label}: {text}"
+    width, height = text_size(text, scale)
+    centre = zone.centroid
+    anchor = (centre[0] - width / 2 - 2, centre[1] + height / 2 + 2)
+    return draw_label(scene, text, anchor, color, scale=scale)
 
 
-def apply_mask(image: np.ndarray, mask: np.ndarray | None) -> np.ndarray:
-    """Salinan frame dengan area masker dihitamkan; frame asli jika tidak ada masker."""
-    return image if mask is None else cv2.bitwise_and(image, mask)
+# --------------------------------------------------------------------------
+# Jejak Dan Heatmap
+# --------------------------------------------------------------------------
+#
+# Keduanya mengingat posisi di frame sebelumnya. Jejak menyimpan
+# titik terakhir setiap track lalu melupakan track yang sudah
+# lama hilang. Heatmap menjumlahkan semua posisi, sehingga
+# area yang paling sering ditempati tampak paling panas.
+#
+
+
+class TrackTrace:
+    """Beberapa titik terakhir setiap track, untuk digambar sebagai jejak gerak."""
+
+    def __init__(self, length: int = 40) -> None:
+        self.length = length
+        self.paths: dict[int, deque[tuple[float, float]]] = {}
+        self._last_update: dict[int, int] = {}
+        self._updates = 0
+
+    def update(self, points: np.ndarray, tracker_ids: Sequence[int] | None) -> None:
+        """Tambahkan titik frame ini; track yang hilang `length` frame dilupakan."""
+        self._updates += 1
+        points = np.asarray(points, dtype=np.float64).reshape(-1, 2)
+        for point, track_id in zip(
+            points, tracker_ids if tracker_ids is not None else [], strict=False
+        ):
+            path = self.paths.setdefault(int(track_id), deque(maxlen=self.length))
+            path.append((float(point[0]), float(point[1])))
+            self._last_update[int(track_id)] = self._updates
+        for track_id, last in list(self._last_update.items()):
+            if self._updates - last >= self.length:
+                del self.paths[track_id], self._last_update[track_id]
+
+
+def draw_traces(
+    scene: np.ndarray,
+    trace: TrackTrace,
+    color: Color | None = None,
+    thickness: int = 2,
+) -> np.ndarray:
+    """Jejak setiap track sebagai garis; tanpa `color`, warnanya `track_color`."""
+    for track_id, path in trace.paths.items():
+        if len(path) < 2:
+            continue
+        line = np.round(np.asarray(path)).astype(np.int32).reshape(-1, 1, 2)
+        ink = bgr(color) if color is not None else track_color(track_id)
+        cv2.polylines(scene, [line], False, ink, thickness, cv2.LINE_AA)
+    return scene
+
+
+class HeatMap:
+    """Jumlah kehadiran per piksel dari semua frame, untuk area yang sering ditempati.
+
+    `decay` di bawah 1 membuat posisi lama memudar, misalnya 0.99 per frame.
+    """
+
+    def __init__(
+        self, width: int, height: int, radius: int = 20, decay: float = 1.0
+    ) -> None:
+        self.radius = radius
+        self.decay = decay
+        self.values = np.zeros((height, width), dtype=np.float32)
+
+    def update(self, points: np.ndarray) -> None:
+        """Tambahkan satu lingkaran berisi 1 di sekeliling setiap titik."""
+        if self.decay < 1.0:
+            self.values *= self.decay
+        stamp = np.zeros_like(self.values)
+        for x, y in np.asarray(points, dtype=np.float64).reshape(-1, 2):
+            cv2.circle(stamp, (int(round(x)), int(round(y))), self.radius, 1.0, -1)
+        self.values += stamp
+
+
+def draw_heatmap(
+    scene: np.ndarray,
+    heatmap: HeatMap,
+    alpha: float = 0.5,
+    colormap: int = cv2.COLORMAP_JET,
+) -> np.ndarray:
+    """Warnai area yang pernah ditempati; makin sering, makin panas warnanya.
+
+    Area yang jarang ditempati makin transparan, jadi tepinya memudar
+    ke frame asli, bukan berupa tepi yang tajam.
+    """
+    peak = float(heatmap.values.max())
+    if peak <= 0:
+        return scene
+    level = (heatmap.values / peak * 255).astype(np.uint8)
+    level = cv2.GaussianBlur(level, (0, 0), sigmaX=max(heatmap.radius / 2, 1))
+    coloured = cv2.applyColorMap(level, colormap).astype(np.float32)
+    weight = alpha * np.clip(level.astype(np.float32) / 64.0, 0.0, 1.0)[..., None]
+    mixed = coloured * weight + scene.astype(np.float32) * (1.0 - weight)
+    scene[:] = np.round(mixed).astype(np.uint8)
+    return scene
