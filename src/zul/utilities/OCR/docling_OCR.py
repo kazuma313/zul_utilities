@@ -5,6 +5,7 @@ Gunanya:
     Membaca PDF, gambar, DOCX, PPTX, HTML, CSV, dan Markdown, lalu
     mengubahnya menjadi teks terstruktur. Halaman PDF dan gambar dikirim ke
     VLM lewat endpoint chat completions yang kompatibel dengan OpenAI.
+    Converter Docling dirakit dan dijalankan lewat zul.adapters.docling.
 
 Cara pakai (`pip install "zul[ocr]"`):
     from zul.utilities.OCR.docling_OCR import DoclingVLMConverter
@@ -33,24 +34,7 @@ Mengambil tabel sebagai DataFrame:
 import os
 from typing import Any
 
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import (
-    PictureDescriptionApiOptions,
-    VlmPipelineOptions,
-)
-from docling.datamodel.pipeline_options_vlm_model import ApiVlmOptions, ResponseFormat
-from docling.document_converter import (
-    AsciiDocFormatOption,
-    CsvFormatOption,
-    DocumentConverter,
-    HTMLFormatOption,
-    ImageFormatOption,
-    MarkdownFormatOption,
-    PdfFormatOption,
-    PowerpointFormatOption,
-    WordFormatOption,
-)
-from docling.pipeline.vlm_pipeline import VlmPipeline
+from zul.adapters import docling as docling_adapter
 
 # --------------------------------------------------------------------------
 # Nilai Bawaan
@@ -71,16 +55,11 @@ DEFAULT_VLM_URL = "https://llmservice.air.id/chat/completions"
 # Kunci selalu ditulis dengan huruf kecil sebab response_format dari
 # pemanggil diubah ke huruf kecil lebih dulu sebelum dicocokkan.
 # Dengan begitu "Markdown" dan "markdown" sama-sama diterima.
+# Daftarnya ada di zul.adapters.docling, dan nilainya adalah
+# ResponseFormat milik Docling, sama seperti sebelumnya.
 #
 
-RESPONSE_FORMATS = {
-    "doctags": ResponseFormat.DOCTAGS,
-    "markdown": ResponseFormat.MARKDOWN,
-    "deepseek_markdown": ResponseFormat.DEEPSEEKOCR_MARKDOWN,
-    "html": ResponseFormat.HTML,
-    "otsl": ResponseFormat.OTSL,
-    "plaintext": ResponseFormat.PLAINTEXT,
-}
+RESPONSE_FORMATS = docling_adapter.RESPONSE_FORMATS
 
 # --------------------------------------------------------------------------
 # Konverter Dokumen
@@ -150,96 +129,25 @@ class DoclingVLMConverter:
         self._doc_converter = None
 
     # ----------------------------------------------------------------------
-    # Opsi Pipeline VLM
+    # Converter Docling
     # ----------------------------------------------------------------------
 
-    def _create_vlm_options(self) -> ApiVlmOptions:
-        """Create VLM options for OpenAI-compatible endpoints."""
-        headers = {}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
-
-        return ApiVlmOptions(
-            url=self.hostname_and_port,  # type: ignore
-            params={
-                "model": self.model,
-                "max_tokens": self.max_tokens,
-                "skip_special_tokens": self.skip_special_tokens,
-            },
-            headers=headers,
-            prompt=self.prompt,
-            timeout=self.timeout,
-            scale=self.scale,
-            temperature=self.temperature,
-            response_format=self.response_format,
-        )
-
-    def _create_pipeline_options(self) -> VlmPipelineOptions:
-        """Create VLM pipeline options with remote services enabled."""
-        pipeline_options = VlmPipelineOptions(
-            enable_remote_services=True,
-            images_scale=1.0,
-        )
-        pipeline_options.vlm_options = self._create_vlm_options()
-
-        if self.enable_picture_description:
-            pipeline_options.do_picture_description = True
-            pipeline_options.generate_picture_images = True
-            pipeline_options.picture_description_options = PictureDescriptionApiOptions(
-                url=self.hostname_and_port,  # type: ignore
-                params={
-                    "model": self.model,
-                    "max_tokens": self.max_tokens,
-                    "skip_special_tokens": self.skip_special_tokens,
-                },
-                headers=(
-                    {"Authorization": f"Bearer {self.api_key}"} if self.api_key else {}
-                ),
-                prompt=self.picture_prompt,
-            )
-
-        return pipeline_options
-
-    def _get_converter(self) -> DocumentConverter:
+    def _get_converter(self) -> Any:
         """Get or create the underlying DocumentConverter instance."""
         if self._doc_converter is None:
-            pipeline_options = self._create_pipeline_options()
-
-            self._doc_converter = DocumentConverter(
-                allowed_formats=[
-                    InputFormat.PDF,
-                    InputFormat.IMAGE,
-                    InputFormat.DOCX,
-                    InputFormat.HTML,
-                    InputFormat.PPTX,
-                    InputFormat.ASCIIDOC,
-                    InputFormat.CSV,
-                    InputFormat.MD,
-                ],
-                format_options={
-                    InputFormat.PDF: PdfFormatOption(
-                        pipeline_options=pipeline_options, pipeline_cls=VlmPipeline
-                    ),
-                    InputFormat.IMAGE: ImageFormatOption(
-                        pipeline_options=pipeline_options, pipeline_cls=VlmPipeline
-                    ),
-                    InputFormat.DOCX: WordFormatOption(
-                        pipeline_options=pipeline_options
-                    ),
-                    InputFormat.HTML: HTMLFormatOption(
-                        pipeline_options=pipeline_options
-                    ),
-                    InputFormat.PPTX: PowerpointFormatOption(
-                        pipeline_options=pipeline_options
-                    ),
-                    InputFormat.ASCIIDOC: AsciiDocFormatOption(
-                        pipeline_options=pipeline_options
-                    ),
-                    InputFormat.CSV: CsvFormatOption(pipeline_options=pipeline_options),
-                    InputFormat.MD: MarkdownFormatOption(
-                        pipeline_options=pipeline_options
-                    ),
-                },
+            self._doc_converter = docling_adapter.create_converter(
+                url=self.hostname_and_port,
+                model=self.model,
+                prompt=self.prompt,
+                response_format=self.response_format,
+                api_key=self.api_key,
+                picture_prompt=self.picture_prompt,
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
+                skip_special_tokens=self.skip_special_tokens,
+                timeout=self.timeout,
+                scale=self.scale,
+                enable_picture_description=self.enable_picture_description,
             )
         return self._doc_converter
 
@@ -263,22 +171,19 @@ class DoclingVLMConverter:
             Raw ConversionResult from DocumentConverter.convert()
         """
         converter = self._get_converter()
-        return converter.convert(document_path)  # Returns raw result
+        return docling_adapter.convert(converter, document_path)  # raw result
 
     def convert_to_dict(self, document_path: str) -> dict:
         """Convert and return result.document.export_to_dict()."""
-        result = self.convert(document_path)
-        return result.document.export_to_dict()
+        return docling_adapter.export_dict(self.convert(document_path))
 
     def convert_to_text(self, document_path: str) -> str:
         """Convert and return result.document.export_to_text()."""
-        result = self.convert(document_path)
-        return result.document.export_to_text()
+        return docling_adapter.export_text(self.convert(document_path))
 
     def convert_to_markdown(self, document_path: str) -> str:
         """Convert and return result.document.export_to_markdown()."""
-        result = self.convert(document_path)
-        return result.document.export_to_markdown()
+        return docling_adapter.export_markdown(self.convert(document_path))
 
     # ----------------------------------------------------------------------
     # Konstruktor Alternatif

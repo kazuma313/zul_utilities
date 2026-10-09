@@ -31,15 +31,14 @@ from collections.abc import Sequence
 from enum import Enum
 from typing import TYPE_CHECKING
 
-import cv2
 import numpy as np
 
+from ..adapters import opencv
 from .pose import SKELETON_EDGES
 
 if TYPE_CHECKING:
     from .zones import LineCounter, PolygonZone
 
-FONT = cv2.FONT_HERSHEY_SIMPLEX
 GOLDEN_ANGLE_DEG = 137.508
 
 Color = str | tuple[int, int, int]
@@ -62,9 +61,8 @@ def track_color(track_id: int, saturation: float = 0.85) -> tuple[int, int, int]
 
 
 def text_size(text: str, scale: float = 0.5, thickness: int = 1) -> tuple[int, int]:
-    """Lebar dan tinggi teks dalam piksel, seperti yang digambar OpenCV."""
-    (width, height), _ = cv2.getTextSize(text, FONT, scale, thickness)
-    return width, height
+    """Lebar dan tinggi teks dalam piksel, seperti yang digambar fungsi teks di sini."""
+    return opencv.text_size(text, scale, thickness)
 
 
 # --------------------------------------------------------------------------
@@ -96,29 +94,21 @@ def draw_box(
     color = bgr(color)
 
     if style is BoxStyle.RECT:
-        cv2.rectangle(scene, (x1, y1), (x2, y2), color, thickness, cv2.LINE_AA)
+        opencv.rectangle(scene, (x1, y1), (x2, y2), color, thickness)
         return scene
     if style is BoxStyle.FILLED:
         overlay = scene.copy()
-        cv2.rectangle(overlay, (x1, y1), (x2, y2), color, -1)
-        cv2.addWeighted(overlay, fill_alpha, scene, 1 - fill_alpha, 0, dst=scene)
-        cv2.rectangle(scene, (x1, y1), (x2, y2), color, thickness, cv2.LINE_AA)
+        opencv.rectangle(overlay, (x1, y1), (x2, y2), color, -1)
+        opencv.blend(overlay, fill_alpha, scene)
+        opencv.rectangle(scene, (x1, y1), (x2, y2), color, thickness)
         return scene
     if style is BoxStyle.DASHED:
         for x in range(x1, x2, dash * 2):
-            cv2.line(
-                scene, (x, y1), (min(x + dash, x2), y1), color, thickness, cv2.LINE_AA
-            )
-            cv2.line(
-                scene, (x, y2), (min(x + dash, x2), y2), color, thickness, cv2.LINE_AA
-            )
+            opencv.line(scene, (x, y1), (min(x + dash, x2), y1), color, thickness)
+            opencv.line(scene, (x, y2), (min(x + dash, x2), y2), color, thickness)
         for y in range(y1, y2, dash * 2):
-            cv2.line(
-                scene, (x1, y), (x1, min(y + dash, y2)), color, thickness, cv2.LINE_AA
-            )
-            cv2.line(
-                scene, (x2, y), (x2, min(y + dash, y2)), color, thickness, cv2.LINE_AA
-            )
+            opencv.line(scene, (x1, y), (x1, min(y + dash, y2)), color, thickness)
+            opencv.line(scene, (x2, y), (x2, min(y + dash, y2)), color, thickness)
         return scene
 
     length = max(1, min(corner_length, (x2 - x1) // 2, (y2 - y1) // 2))
@@ -128,8 +118,8 @@ def draw_box(
         (x1, y2, 1, -1),
         (x2, y2, -1, -1),
     ):
-        cv2.line(scene, (cx, cy), (cx + dx * length, cy), color, thickness, cv2.LINE_AA)
-        cv2.line(scene, (cx, cy), (cx, cy + dy * length), color, thickness, cv2.LINE_AA)
+        opencv.line(scene, (cx, cy), (cx + dx * length, cy), color, thickness)
+        opencv.line(scene, (cx, cy), (cx, cy + dy * length), color, thickness)
     return scene
 
 
@@ -152,13 +142,10 @@ def draw_label(
     x, y = int(anchor[0]), int(anchor[1])
     top = max(0, min(y - plate_h if above else y, scene.shape[0] - plate_h))
     left = max(0, min(x, scene.shape[1] - (width + padding * 2)))
-    cv2.rectangle(
-        scene, (left, top), (left + width + padding * 2, top + plate_h), bgr(color), -1
-    )
-    cv2.putText(
-        scene, text, (left + padding, top + height + padding - 1), FONT, scale,
-        bgr(text_color), thickness, cv2.LINE_AA,
-    )  # fmt: skip
+    right, bottom = left + width + padding * 2, top + plate_h
+    opencv.rectangle(scene, (left, top), (right, bottom), bgr(color), -1)
+    baseline = (left + padding, top + height + padding - 1)
+    opencv.put_text(scene, text, baseline, scale, bgr(text_color), thickness)
     return scene
 
 
@@ -176,8 +163,22 @@ def draw_labelled_box(
 
 
 # --------------------------------------------------------------------------
-# Teks Di Sudut Frame
+# Teks
 # --------------------------------------------------------------------------
+
+
+def draw_text(
+    scene: np.ndarray,
+    text: str,
+    origin: Sequence[float],
+    color: Color = (255, 255, 255),
+    scale: float = 0.55,
+    thickness: int = 1,
+) -> np.ndarray:
+    """Teks tanpa latar, dengan `origin` di kiri garis dasar baris itu."""
+    point = (int(round(origin[0])), int(round(origin[1])))
+    opencv.put_text(scene, text, point, scale, bgr(color), thickness)
+    return scene
 
 
 class Corner(str, Enum):
@@ -223,16 +224,9 @@ def draw_corner_text(
         x = width - margin - text_w if right else margin
         y = first_y + row * line_height
         if background is not None:
-            cv2.rectangle(
-                scene,
-                (x - 4, y - text_h - 4),
-                (x + text_w + 4, y + 6),
-                bgr(background),
-                -1,
-            )
-        cv2.putText(
-            scene, line, (x, y), FONT, scale, bgr(color), thickness, cv2.LINE_AA
-        )
+            corner_a, corner_b = (x - 4, y - text_h - 4), (x + text_w + 4, y + 6)
+            opencv.rectangle(scene, corner_a, corner_b, bgr(background), -1)
+        opencv.put_text(scene, line, (x, y), scale, bgr(color), thickness)
     return scene
 
 
@@ -249,16 +243,16 @@ def draw_polygons(
     fill_alpha: float = 0.0,
 ) -> np.ndarray:
     """Beberapa zona, diwarnai dalam satu kali blend, bukan satu blend per zona."""
-    shapes = [np.asarray(p, dtype=np.int32).reshape(-1, 1, 2) for p in (polygons or [])]
+    shapes = [np.asarray(p, dtype=np.int32).reshape(-1, 2) for p in (polygons or [])]
     if not shapes:
         return scene
     color = bgr(color)
     if fill_alpha > 0:
         overlay = scene.copy()
-        cv2.fillPoly(overlay, shapes, color)
-        cv2.addWeighted(overlay, fill_alpha, scene, 1 - fill_alpha, 0, dst=scene)
+        opencv.fill_polygons(overlay, shapes, color)
+        opencv.blend(overlay, fill_alpha, scene)
     if thickness > 0:
-        cv2.polylines(scene, shapes, True, color, thickness, cv2.LINE_AA)
+        opencv.polylines(scene, shapes, True, color, thickness)
     return scene
 
 
@@ -272,7 +266,7 @@ def draw_line(
     """Satu garis, misalnya garis masuk toko."""
     a = (int(round(start[0])), int(round(start[1])))
     b = (int(round(end[0])), int(round(end[1])))
-    cv2.line(scene, a, b, bgr(color), thickness, cv2.LINE_AA)
+    opencv.line(scene, a, b, bgr(color), thickness)
     return scene
 
 
@@ -288,10 +282,8 @@ def draw_arrow(
     """Panah sepanjang `length` piksel dari `origin` searah vektor `direction`."""
     start = np.asarray(origin, dtype=np.float64)
     tip = start + np.asarray(direction, dtype=np.float64) * length
-    cv2.arrowedLine(
-        scene, (int(start[0]), int(start[1])), (int(tip[0]), int(tip[1])), bgr(color),
-        thickness, cv2.LINE_AA, tipLength=tip_ratio,
-    )  # fmt: skip
+    begin, end = (int(start[0]), int(start[1])), (int(tip[0]), int(tip[1]))
+    opencv.arrow(scene, begin, end, bgr(color), thickness, tip_ratio)
     return scene
 
 
@@ -299,9 +291,8 @@ def draw_point(
     scene: np.ndarray, point: Sequence[float], color: Color, radius: int = 4
 ) -> np.ndarray:
     """Titik penuh, misalnya titik jangkar yang dipakai uji zona."""
-    cv2.circle(
-        scene, (int(round(point[0])), int(round(point[1]))), radius, bgr(color), -1
-    )
+    centre = (int(round(point[0])), int(round(point[1])))
+    opencv.circle(scene, centre, radius, bgr(color))
     return scene
 
 
@@ -462,9 +453,9 @@ def draw_traces(
     for track_id, path in trace.paths.items():
         if len(path) < 2:
             continue
-        line = np.round(np.asarray(path)).astype(np.int32).reshape(-1, 1, 2)
+        line = np.round(np.asarray(path)).astype(np.int32)
         ink = bgr(color) if color is not None else track_color(track_id)
-        cv2.polylines(scene, [line], False, ink, thickness, cv2.LINE_AA)
+        opencv.polylines(scene, [line], False, ink, thickness)
     return scene
 
 
@@ -487,7 +478,7 @@ class HeatMap:
             self.values *= self.decay
         stamp = np.zeros_like(self.values)
         for x, y in np.asarray(points, dtype=np.float64).reshape(-1, 2):
-            cv2.circle(stamp, (int(round(x)), int(round(y))), self.radius, 1.0, -1)
+            opencv.circle(stamp, (int(round(x)), int(round(y))), self.radius, 1.0)
         self.values += stamp
 
 
@@ -495,19 +486,19 @@ def draw_heatmap(
     scene: np.ndarray,
     heatmap: HeatMap,
     alpha: float = 0.5,
-    colormap: int = cv2.COLORMAP_JET,
+    colormap: str = "jet",
 ) -> np.ndarray:
     """Warnai area yang pernah ditempati; makin sering, makin panas warnanya.
 
     Area yang jarang ditempati makin transparan, jadi tepinya memudar
-    ke frame asli, bukan berupa tepi yang tajam.
+    ke frame asli. `colormap` bisa jet, turbo, inferno, viridis, atau hot.
     """
     peak = float(heatmap.values.max())
     if peak <= 0:
         return scene
     level = (heatmap.values / peak * 255).astype(np.uint8)
-    level = cv2.GaussianBlur(level, (0, 0), sigmaX=max(heatmap.radius / 2, 1))
-    coloured = cv2.applyColorMap(level, colormap).astype(np.float32)
+    level = opencv.gaussian_blur(level, sigma=max(heatmap.radius / 2, 1))
+    coloured = opencv.colorize(level, colormap).astype(np.float32)
     weight = alpha * np.clip(level.astype(np.float32) / 64.0, 0.0, 1.0)[..., None]
     mixed = coloured * weight + scene.astype(np.float32) * (1.0 - weight)
     scene[:] = np.round(mixed).astype(np.uint8)

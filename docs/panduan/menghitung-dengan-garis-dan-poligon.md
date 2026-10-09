@@ -20,10 +20,10 @@ pip install "zul[vision] @ git+https://github.com/kazuma313/zul_utilities.git"
 2. Buat `LineCounter`, lalu panggil `update` sekali per frame dengan titik dan id track setiap orang. Contoh berikut menjalankan tiga orang selama 30 frame: dua berjalan ke atas melewati garis, satu ke bawah:
 
     ```python title="garis_penghitung.py"
-    import cv2
     import numpy as np
 
     from zul.computer_vision import draw
+    from zul.computer_vision.video import save_image
     from zul.computer_vision.zones import LineCounter
 
     line = LineCounter(start=(40, 200), end=(600, 200), label="pintu")
@@ -40,7 +40,7 @@ pip install "zul[vision] @ git+https://github.com/kazuma313/zul_utilities.git"
 
     frame = np.full((360, 640, 3), 60, dtype=np.uint8)
     draw.draw_line_counter(frame, line)
-    cv2.imwrite("garis_penghitung.png", frame)
+    save_image("garis_penghitung.png", frame)
     ```
 
     Script itu mencetak `2 1`: dua lintasan masuk dan satu keluar.
@@ -60,10 +60,10 @@ Jika masuk dan keluar tertukar, tukar urutan `start` dan `end`.
 `PolygonZone` menghitung dua angka: `current_count`, jumlah orang di dalam poligon di frame terakhir, dan `total_count`, jumlah id track berbeda yang pernah di dalamnya. Contoh berikut menjalankan tiga orang: satu berjalan melewati poligon, satu diam di dalamnya, dan satu di luar:
 
 ```python title="poligon_penghitung.py"
-import cv2
 import numpy as np
 
 from zul.computer_vision import draw
+from zul.computer_vision.video import save_image
 from zul.computer_vision.zones import PolygonZone
 
 zone = PolygonZone([[200, 80], [440, 80], [440, 300], [200, 300]], label="rak")
@@ -78,7 +78,7 @@ frame = np.full((360, 640, 3), 60, dtype=np.uint8)
 draw.draw_polygon_zone(frame, zone)
 for point, is_inside in zip(points, inside):
     draw.draw_point(frame, point, "#00E676" if is_inside else "#FF1744", radius=6)
-cv2.imwrite("poligon_penghitung.png", frame)
+save_image("poligon_penghitung.png", frame)
 ```
 
 Script itu mencetak `1 2`: sekarang satu orang di dalam, dan sepanjang video dua orang berbeda pernah masuk.

@@ -187,3 +187,56 @@ def test_ai_config_requires_an_llm_api_key(monkeypatch):
 
     with pytest.raises(ValueError, match="LLM_API_KEY"):
         AIConfig.from_env()
+
+
+@pytest.fixture
+def no_ai_env(monkeypatch):
+    """Hapus environment variable AI supaya hanya isi file config yang dibaca."""
+    for name in list(os.environ):
+        if name.startswith(("LLM_", "EMBEDDING_", "SERVICE_")):
+            monkeypatch.delenv(name)
+
+
+def test_ai_config_from_file_reads_yaml(tmp_path, no_ai_env):
+    from zul.utilities.embedding_service import AIConfig
+
+    config_file = tmp_path / "config.yaml"
+    config_file.write_text(
+        "llm:\n  api_key: file-key\n  model: qwen-kecil\n"
+        "embedding:\n  api_key: embed-key\n  model: embed-kecil\n",
+        encoding="utf-8",
+    )
+
+    config = AIConfig.from_file(config_file)
+
+    assert config.llm.api_key.get_secret_value() == "file-key"
+    assert config.llm.model == "qwen-kecil"
+    assert config.embedding.model == "embed-kecil"
+
+
+def test_ai_config_from_empty_yaml_uses_defaults_and_env(
+    tmp_path, no_ai_env, monkeypatch
+):
+    from zul.utilities.embedding_service import AIConfig
+
+    monkeypatch.setenv("LLM_API_KEY", "llm-key")
+    config_file = tmp_path / "config.yml"
+    config_file.write_text("", encoding="utf-8")
+
+    config = AIConfig.from_file(config_file)
+
+    assert config.llm.model == "qwen2-32B-Instruct-resolved"
+    assert config.embedding is None
+
+
+def test_ai_config_from_file_rejects_invalid_yaml(tmp_path, no_ai_env):
+    from zul.adapters.yaml import YamlError
+    from zul.utilities.embedding_service import AIConfig
+
+    config_file = tmp_path / "config.yaml"
+    config_file.write_text("llm:\n  api_key: [belum ditutup\n", encoding="utf-8")
+
+    with pytest.raises(YamlError, match="YAML tidak valid") as error:
+        AIConfig.from_file(config_file)
+
+    assert isinstance(error.value, ValueError)

@@ -28,6 +28,7 @@ PROJECT = tomllib.loads(PYPROJECT.read_text(encoding="utf-8"))["project"]
 #
 
 CORE_MODULES = [
+    "zul.adapters.yaml",
     "zul.cli",
     "zul.commands.build",
     "zul.commands.install",
@@ -52,38 +53,54 @@ CORE_MODULES = [
 ]
 
 EXTRA_MODULES = {
-    "milvus": ["zul.utilities.vector_DB.milvus_helper"],
+    "milvus": ["zul.adapters.milvus", "zul.utilities.vector_DB.milvus_helper"],
     "redis": [
+        "zul.adapters.redis",
         "zul.utilities.vector_DB.redis_helper",
         "zul.utilities.redis_vector_helper",
     ],
     "converter": [
+        "zul.adapters.markdown",
+        "zul.adapters.pptx",
+        "zul.adapters.xhtml2pdf",
         "zul.utilities.markdown_converter.md_to_pdf",
         "zul.utilities.markdown_converter.md_to_ppt",
         "zul.utilities.md_to_pdf",
         "zul.utilities.md_to_ppt",
     ],
     "analysis": [
+        "zul.adapters.matplotlib",
+        "zul.adapters.pandas",
+        "zul.adapters.scipy",
         "zul.utilities.analysis",
         "zul.utilities.script_helper.save_file",
     ],
-    "pdf": ["zul.utilities.script_helper.read_pdf2"],
+    "pdf": [
+        "zul.adapters.langchain_text_splitters",
+        "zul.adapters.pypdf",
+        "zul.utilities.script_helper.read_pdf2",
+    ],
     "ocr": [
+        "zul.adapters.docling",
         "zul.utilities.OCR.docling_OCR",
         "zul.utilities.docling_OCR",
     ],
     "llm": [
+        "zul.adapters.langchain_openai",
+        "zul.adapters.langgraph",
         "zul.utilities.embedding_service",
         "zul.utilities.script_helper.ai_models",
         "zul.utilities.react_graph",
     ],
-    "gemini": ["zul.utilities.OCR.gemini_ocr"],
+    "gemini": ["zul.adapters.gemini", "zul.utilities.OCR.gemini_ocr"],
     "vision": [
+        "zul.adapters.opencv",
         "zul.computer_vision.draw",
         "zul.computer_vision.masks",
         "zul.computer_vision.video",
     ],
     "yolo": [
+        "zul.adapters.ultralytics",
         "zul.computer_vision.detection",
         "zul.computer_vision.weights",
     ],

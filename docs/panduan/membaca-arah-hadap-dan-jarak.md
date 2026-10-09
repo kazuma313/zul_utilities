@@ -18,10 +18,10 @@ Keduanya hanya butuh instalasi dasar Zul. Contoh yang menyimpan gambar butuh ext
 Contoh berikut membaca dua orang: satu menghadap kamera dengan wajah tidak terbaca, satu menoleh ke kanan:
 
 ```python title="arah_hadap.py"
-import cv2
 import numpy as np
 
 from zul.computer_vision import draw, pose
+from zul.computer_vision.video import save_image
 
 frame = np.full((360, 640, 3), 60, dtype=np.uint8)
 
@@ -44,7 +44,7 @@ for row, direction in enumerate(directions):
     origin = keypoints_xy[row, 5:7].mean(axis=0)
     colour = "#FFC400" if sources[row] == "head" else "#B388FF"
     draw.draw_arrow(frame, origin, direction, colour, length=60)
-cv2.imwrite("arah_hadap.png", frame)
+save_image("arah_hadap.png", frame)
 ```
 
 Script itu mencetak `['body', 'head']`.
@@ -83,12 +83,12 @@ Jarak piksel antar orang tidak bisa diubah ke meter dengan satu angka, karena or
 `pairs_within` mencari semua pasangan yang jaraknya dalam batas:
 
 ```python title="jarak_meter.py"
-import cv2
 import numpy as np
 
 from zul.computer_vision import draw
 from zul.computer_vision.distance import distance_m, pairs_within
 from zul.computer_vision.geometry import foot_points
+from zul.computer_vision.video import save_image
 
 frame = np.full((360, 640, 3), 60, dtype=np.uint8)
 boxes = np.array([[60, 120, 130, 340], [230, 130, 300, 340], [470, 40, 510, 150]])
@@ -100,7 +100,7 @@ for track_id, box in enumerate(boxes, start=1):
     draw.draw_labelled_box(frame, box, f"#{track_id}", draw.track_color(track_id))
 for a, b, metres in pairs_within(boxes, max_distance_m=2.0):
     draw.draw_link(frame, feet[a], feet[b], "#00E676", label=f"{metres:.1f} m")
-cv2.imwrite("jarak_meter.png", frame)
+save_image("jarak_meter.png", frame)
 ```
 
 Script itu mencetak `1.34 3.13`. Hanya pasangan pertama yang dalam 2 meter, jadi hanya pasangan itu yang digambar.

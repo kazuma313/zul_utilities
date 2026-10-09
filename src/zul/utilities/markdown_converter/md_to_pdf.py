@@ -4,6 +4,8 @@ Konversi Markdown menjadi PDF dengan styling siap cetak.
 Gunanya:
     Mengubah jawaban LLM atau laporan berformat Markdown (heading, tabel,
     daftar, kode) menjadi PDF, baik ke file maupun ke bytes untuk diunduh.
+    Markdown diubah menjadi HTML lewat zul.adapters.markdown, lalu HTML itu
+    dicetak menjadi PDF lewat zul.adapters.xhtml2pdf.
 
 Cara pakai (`pip install "zul[converter]"`):
     from zul.utilities.markdown_converter.md_to_pdf import MarkdownToPDFConverter
@@ -28,10 +30,9 @@ Contoh:
 """
 
 import os
-from io import BytesIO
 
-import markdown
-from xhtml2pdf import pisa
+from ...adapters import markdown as markdown_adapter
+from ...adapters import xhtml2pdf as xhtml2pdf_adapter
 
 # --------------------------------------------------------------------------
 # Konverter Markdown ke PDF
@@ -312,7 +313,7 @@ class MarkdownToPDFConverter:
         Returns:
             str: Konten HTML
         """
-        return markdown.markdown(markdown_content, extensions=self.markdown_extensions)
+        return markdown_adapter.to_html(markdown_content, self.markdown_extensions)
 
     # ----------------------------------------------------------------------
     # Konversi
@@ -346,17 +347,15 @@ class MarkdownToPDFConverter:
             output_file = os.path.join(output_path, filename)
 
             # Simpan ke PDF
-            with open(output_file, "wb") as pdf_file:
-                pisa_status = pisa.CreatePDF(html_document, dest=pdf_file)
-
-            if pisa_status.err:  # type: ignore
-                print("✗ Error saat membuat PDF")
-                return False
+            xhtml2pdf_adapter.write_pdf(html_document, output_file)
 
             print(f"✓ PDF berhasil disimpan di: {output_file}")
             print(f"✓ Absolute path: {os.path.abspath(output_file)}")
             return True
 
+        except xhtml2pdf_adapter.PdfRenderError:
+            print("✗ Error saat membuat PDF")
+            return False
         except Exception as e:
             print(f"✗ Error: {e}")
             return False
@@ -379,15 +378,11 @@ class MarkdownToPDFConverter:
             html_document = self.create_html_document(html_content)
 
             # Simpan PDF ke memori (bukan file fisik)
-            pdf_io = BytesIO()
-            pisa_status = pisa.CreatePDF(html_document, dest=pdf_io)
-            pdf_io.seek(0)
+            return xhtml2pdf_adapter.render_pdf(html_document)
 
-            if pisa_status.err:  # type: ignore
-                raise Exception("Gagal membuat PDF dari Markdown.")
-
-            return pdf_io.getvalue()
-
+        except xhtml2pdf_adapter.PdfRenderError:
+            print("✗ Error saat konversi ke bytes: Gagal membuat PDF dari Markdown.")
+            return b""
         except Exception as e:
             print(f"✗ Error saat konversi ke bytes: {e}")
             return b""

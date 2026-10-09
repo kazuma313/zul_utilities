@@ -116,6 +116,7 @@ Memuat konfigurasi dari file YAML atau JSON. Format dipilih dari ekstensi file: 
 
 - `FileNotFoundError` dengan pesan `Config file not found: 'FILE'` jika file tidak ada.
 - `ValueError` dengan pesan `Unsupported config file format: 'EKSTENSI'` jika ekstensinya bukan `.yaml`, `.yml`, atau `.json`.
+- `zul.adapters.yaml.YamlError`, turunan `ValueError`, jika file YAML tidak valid. Pesannya menyebut nomor baris dan masalahnya.
 - `pydantic.ValidationError`, turunan `ValueError`, jika isi file tidak lolos validasi.
 
 ### `AIConfig.from_env()`
@@ -149,7 +150,7 @@ Nilai kembalian `AIService.chat`. Model Pydantic.
 | `content` | `str` | Wajib | Teks jawaban model. |
 | `model` | `str` | Wajib | Nama model yang menjawab. |
 | `finish_reason` | `str` atau `None` | `None` | Alasan model berhenti, misalnya `stop` atau `length`. |
-| `usage` | `dict[str, int]` atau `None` | `None` | Jumlah token: `prompt_tokens`, `completion_tokens`, `total_tokens`. `None` jika API tidak mengembalikannya. |
+| `usage` | `dict[str, int]` atau `None` | `None` | Jumlah token: `prompt_tokens`, `completion_tokens`, `total_tokens`. Rincian bertingkat seperti `completion_tokens_details` tidak ikut. `None` jika API tidak mengembalikannya. |
 
 ## `EmbedResponse`
 

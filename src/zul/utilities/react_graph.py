@@ -3,7 +3,9 @@ Contoh paling kecil sebuah graph LangGraph: satu node, satu state.
 
 Gunanya:
     Titik awal untuk memahami StateGraph sebelum membaca agent yang lebih
-    lengkap di template hexa (`zul build hexa`).
+    lengkap di template hexa (`zul build hexa`). Graph disusun lewat
+    zul.adapters.langgraph, satu-satunya file Zul yang mengimpor
+    langgraph.
 
 Cara pakai (`pip install "zul[llm]"`):
     from zul.utilities.react_graph import graph
@@ -13,11 +15,16 @@ Cara pakai (`pip install "zul[llm]"`):
 Pola yang dipakai:
     1. Definisikan state (di sini model Pydantic `OverallState`).
     2. Tulis node: fungsi `(state) -> dict` berisi perubahan state.
-    3. Sambungkan START -> node -> END lalu `compile()`.
+    3. Sambungkan START -> node -> END dengan `chain`, lalu `compile_graph`.
+
+`builder` adalah StateGraph dan `graph` adalah graph ter-compile milik
+LangGraph. Keduanya sengaja dibiarkan sebagai objek LangGraph, supaya
+contoh ini tetap bisa dipakai dengan method LangGraph seperti invoke.
 """
 
-from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel
+
+from zul.adapters import langgraph as langgraph_adapter
 
 # --------------------------------------------------------------------------
 # State
@@ -45,17 +52,14 @@ def node(state: OverallState):
 # Menyusun Graph
 # --------------------------------------------------------------------------
 #
-# add_node mengambil nama fungsi sebagai nama node, karena itu
-# edge di bawah menyebutnya dengan teks "node". compile()
-# menjadikan rancangan ini graph yang bisa dijalankan.
+# Fungsi chain memakai nama fungsi sebagai nama node, lalu menyambung
+# START ke node itu dan node itu ke END. Sesudah itu compile_graph
+# mengubah rancangan ini menjadi graph yang bisa dijalankan.
 #
 
-builder = StateGraph(OverallState)
-builder.add_node(node)
-builder.add_edge(START, "node")
-builder.add_edge("node", END)
-graph = builder.compile()
+builder = langgraph_adapter.chain(OverallState, [node])
+graph = langgraph_adapter.compile_graph(builder)
 
 
 if __name__ == "__main__":
-    print(graph.invoke({"a": "hello"}))
+    print(langgraph_adapter.invoke(graph, {"a": "hello"}))

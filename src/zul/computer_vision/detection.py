@@ -1,11 +1,11 @@
 """
-Deteksi orang, pose, dan tracking dengan model YOLO dari ultralytics.
+Deteksi orang, pose, dan tracking dengan model YOLO.
 
 Gunanya:
     Frame masuk, deteksi yang punya id track keluar. Hasilnya berupa
-    Detections, wadah numpy biasa yang dibaca oleh semua modul aturan,
-    jadi aturan tidak terikat pada ultralytics. Model pose juga mendeteksi
-    orang, jadi satu model pose cukup untuk kotak dan arah hadap sekaligus.
+    Detections, wadah numpy biasa yang dibaca oleh semua modul lain,
+    jadi modul itu tidak terikat pada library model mana pun. Model,
+    inference, dan tracker dijalankan lewat zul.adapters.ultralytics.
     Butuh extra yolo: `pip install "zul[yolo]"`.
 
 Cara pakai:
@@ -27,14 +27,13 @@ a red apron"], tetapi butuh paket CLIP dari ultralytics (lihat load_model).
 
 from __future__ import annotations
 
-import importlib.util
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from types import SimpleNamespace
 from typing import Any
 
-import cv2
 import numpy as np
+
+from ..adapters import opencv
 
 # --------------------------------------------------------------------------
 # Wadah Deteksi
@@ -81,24 +80,22 @@ class Detections:
         return replace(self, xyxy=self.xyxy / scale, keypoints_xy=keypoints)
 
     @classmethod
+    def from_arrays(cls, arrays: dict[str, np.ndarray | None]) -> Detections:
+        """Deteksi dari dict array, misalnya hasil adapter model."""
+        return cls(
+            xyxy=arrays["xyxy"],
+            confidence=arrays["confidence"],
+            class_id=arrays["class_id"],
+            keypoints_xy=arrays.get("keypoints_xy"),
+            keypoints_conf=arrays.get("keypoints_conf"),
+        )
+
+    @classmethod
     def from_ultralytics(cls, result: Any) -> Detections:
         """Deteksi dari satu `Results` ultralytics, plus keypoint dari model pose."""
-        boxes = result.boxes
-        if boxes is None or len(boxes) == 0:
-            return cls()
-        detections = cls(
-            xyxy=boxes.xyxy.cpu().numpy().astype(np.float64),
-            confidence=boxes.conf.cpu().numpy().astype(np.float64),
-            class_id=boxes.cls.cpu().numpy().astype(int),
-        )
-        keypoints = getattr(result, "keypoints", None)
-        if keypoints is not None and keypoints.xy is not None and len(keypoints.xy):
-            detections.keypoints_xy = keypoints.xy.cpu().numpy().astype(np.float64)
-            if keypoints.conf is not None:
-                detections.keypoints_conf = (
-                    keypoints.conf.cpu().numpy().astype(np.float64)
-                )
-        return detections
+        from ..adapters import ultralytics as yolo
+
+        return cls.from_arrays(yolo.result_arrays(result))
 
 
 # --------------------------------------------------------------------------
@@ -116,21 +113,11 @@ def load_model(weights: str | Path, prompts: list[str] | None = None) -> Any:
     """Muat model YOLO atau model pose; dengan `prompts`, YOLO-World berkelas teks.
 
     YOLO-World butuh paket `clip` dari ultralytics. Tanpa paket itu,
-    ultralytics akan meng-install-nya sendiri dari git saat pertama dipakai,
-    jadi fungsi ini berhenti lebih dulu dengan pesan cara meng-install-nya.
+    fungsi ini berhenti dengan ImportError berisi cara meng-install-nya.
     """
-    from ultralytics import YOLO, YOLOWorld
+    from ..adapters import ultralytics as yolo
 
-    if not prompts:
-        return YOLO(str(weights))
-    if importlib.util.find_spec("clip") is None:
-        raise ImportError(
-            "YOLO-World butuh CLIP: pip install ftfy regex "
-            '"clip @ git+https://github.com/ultralytics/CLIP.git"'
-        )
-    model = YOLOWorld(str(weights))
-    model.set_classes(list(prompts))
-    return model
+    return yolo.load_model(weights, prompts)
 
 
 def standardise_frame(image: np.ndarray, size: int = 640) -> tuple[np.ndarray, float]:
@@ -143,11 +130,7 @@ def standardise_frame(image: np.ndarray, size: int = 640) -> tuple[np.ndarray, f
     scale = size / max(width, height)
     if scale >= 1.0:
         return image, 1.0
-    resized = cv2.resize(
-        image,
-        (round(width * scale), round(height * scale)),
-        interpolation=cv2.INTER_LINEAR,
-    )
+    resized = opencv.resize(image, round(width * scale), round(height * scale))
     return resized, scale
 
 
@@ -165,13 +148,10 @@ def detect(
     Confidence bawaan 0,20 lebih rendah dari bawaan ultralytics (0,25),
     karena skor YOLO-World lebih dingin daripada skor detektor COCO.
     """
-    options = {"conf": confidence, "iou": iou, "imgsz": imgsz, "verbose": False}
-    if device is not None:
-        options["device"] = device
-    if classes is not None:
-        options["classes"] = classes
-    result = model.predict(image, **options)[0]
-    return Detections.from_ultralytics(result)
+    from ..adapters import ultralytics as yolo
+
+    arrays = yolo.predict(model, image, confidence, iou, imgsz, device, classes)
+    return Detections.from_arrays(arrays)
 
 
 # --------------------------------------------------------------------------
@@ -188,25 +168,8 @@ def detect(
 #
 
 
-class _TrackInput:
-    """Bentuk yang dibaca BYTETracker: conf, cls, xywh, xyxy, dan potongan boolean."""
-
-    def __init__(self, xyxy: np.ndarray, conf: np.ndarray, cls: np.ndarray) -> None:
-        self.xyxy = np.asarray(xyxy, dtype=np.float32).reshape(-1, 4)
-        self.conf = np.asarray(conf, dtype=np.float32)
-        self.cls = np.asarray(cls, dtype=np.float32)
-        wh = self.xyxy[:, 2:4] - self.xyxy[:, 0:2]
-        self.xywh = np.concatenate([self.xyxy[:, 0:2] + wh / 2, wh], axis=1)
-
-    def __len__(self) -> int:
-        return len(self.conf)
-
-    def __getitem__(self, index: Any) -> _TrackInput:
-        return _TrackInput(self.xyxy[index], self.conf[index], self.cls[index])
-
-
 class ByteTracker:
-    """ByteTrack dari ultralytics: id yang bertahan antar frame untuk setiap deteksi."""
+    """ByteTrack: id yang bertahan antar frame untuk setiap deteksi."""
 
     def __init__(
         self,
@@ -217,33 +180,30 @@ class ByteTracker:
         lost_track_buffer: int = 30,
         match_threshold: float = 0.8,
     ) -> None:
-        from ultralytics.trackers.byte_tracker import BYTETracker
+        from ..adapters import ultralytics as yolo
 
-        args = SimpleNamespace(
-            track_high_thresh=high_threshold,
-            track_low_thresh=low_threshold,
-            new_track_thresh=new_track_threshold,
-            track_buffer=int(round(lost_track_buffer * frame_rate / 30.0)),
-            match_thresh=match_threshold,
-            fuse_score=True,
+        self._yolo = yolo
+        self._tracker = yolo.create_tracker(
+            frame_rate,
+            high_threshold,
+            low_threshold,
+            new_track_threshold,
+            lost_track_buffer,
+            match_threshold,
         )
-        self._tracker = BYTETracker(args)
 
     def update(self, detections: Detections) -> Detections:
         """Deteksi frame ini yang punya id track; yang belum dikonfirmasi dibuang."""
-        if len(detections) == 0:
-            self._tracker.update(
-                _TrackInput(np.empty((0, 4)), np.empty(0), np.empty(0))
-            )
-            return replace(detections, tracker_id=np.empty(0, dtype=int))
-        rows = self._tracker.update(
-            _TrackInput(detections.xyxy, detections.confidence, detections.class_id)
+        rows = self._yolo.track(
+            self._tracker,
+            detections.xyxy,
+            detections.confidence,
+            detections.class_id,
         )
         if len(rows) == 0:
             empty = detections[np.zeros(len(detections), dtype=bool)]
             return replace(empty, tracker_id=np.empty(0, dtype=int))
-        index = rows[:, 7].astype(int)
-        tracked = detections[index]
+        tracked = detections[rows[:, 7].astype(int)]
         tracked.xyxy = rows[:, :4].astype(np.float64)
         tracked.tracker_id = rows[:, 4].astype(int)
         return tracked

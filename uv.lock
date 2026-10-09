@@ -6569,7 +6569,7 @@ requires-dist = [
     { name = "redisvl", marker = "extra == 'redis'", specifier = ">=0.10.0" },
     { name = "scipy", marker = "extra == 'analysis'", specifier = ">=1.16.2" },
     { name = "typer", specifier = ">=0.12.0" },
-    { name = "ultralytics", marker = "extra == 'yolo'", specifier = ">=8.3" },
+    { name = "ultralytics", marker = "extra == 'yolo'", specifier = ">=8.4.120,<8.5" },
     { name = "xhtml2pdf", marker = "extra == 'converter'", specifier = ">=0.2.17" },
     { name = "zul", extras = ["milvus", "redis", "converter", "analysis", "pdf", "ocr", "llm", "gemini", "vision", "yolo"], marker = "extra == 'all'" },
     { name = "zul", extras = ["vision"], marker = "extra == 'yolo'" },

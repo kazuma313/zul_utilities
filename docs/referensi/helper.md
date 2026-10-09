@@ -398,7 +398,7 @@ Contoh graph LangGraph terkecil: satu state dan satu node. Lokasi: `zul.utilitie
 |---|---|---|
 | `OverallState` | Model Pydantic | State graph, dengan satu field `a` bertipe `str`. |
 | `node(state)` | Fungsi | Node satu-satunya. Mengembalikan `{"a": "goodbye"}`. |
-| `builder` | `StateGraph` | Graph sebelum di-compile: `START` ke `node` ke `END`. |
+| `builder` | `StateGraph` | Graph sebelum di-compile: `START` ke `node` ke `END`, dirakit lewat `zul.adapters.langgraph.chain`. |
 | `graph` | Graph ter-compile | Hasil `builder.compile()`, siap dipanggil dengan `invoke`. |
 
 Contoh berikut memanggil graph itu:

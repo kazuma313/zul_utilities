@@ -22,8 +22,9 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-import cv2
 import numpy as np
+
+from ..adapters import opencv
 
 # --------------------------------------------------------------------------
 # Masker Area
@@ -49,7 +50,7 @@ def polygon_mask(
         return None
     fill = 255 if keep_inside else 0
     mask = np.full((height, width, 3), 255 - fill, dtype=np.uint8)
-    cv2.fillPoly(mask, shapes, (fill, fill, fill))
+    opencv.fill_polygons(mask, shapes, (fill, fill, fill))
     return mask
 
 
@@ -60,13 +61,13 @@ def combine_masks(*masks: np.ndarray | None) -> np.ndarray | None:
         return None
     combined = present[0]
     for mask in present[1:]:
-        combined = cv2.bitwise_and(combined, mask)
+        combined = opencv.bitwise_and(combined, mask)
     return combined
 
 
 def apply_mask(image: np.ndarray, mask: np.ndarray | None) -> np.ndarray:
     """Salinan frame dengan area masker dihitamkan; frame asli jika tidak ada masker."""
-    return image if mask is None else cv2.bitwise_and(image, mask)
+    return image if mask is None else opencv.bitwise_and(image, mask)
 
 
 # --------------------------------------------------------------------------
@@ -92,7 +93,7 @@ def blur_boxes(scene: np.ndarray, boxes: np.ndarray, kernel: int = 25) -> np.nda
     """Kaburkan isi setiap kotak; `kernel` lebih besar berarti lebih kabur."""
     size = max(int(kernel), 1)
     for rows, cols in _regions(scene, boxes):
-        scene[rows, cols] = cv2.blur(scene[rows, cols], (size, size))
+        scene[rows, cols] = opencv.box_blur(scene[rows, cols], size)
     return scene
 
 
@@ -104,12 +105,6 @@ def pixelate_boxes(
     for rows, cols in _regions(scene, boxes):
         region = scene[rows, cols]
         height, width = region.shape[:2]
-        small = cv2.resize(
-            region,
-            (max(width // size, 1), max(height // size, 1)),
-            interpolation=cv2.INTER_LINEAR,
-        )
-        scene[rows, cols] = cv2.resize(
-            small, (width, height), interpolation=cv2.INTER_NEAREST
-        )
+        small = opencv.resize(region, max(width // size, 1), max(height // size, 1))
+        scene[rows, cols] = opencv.resize(small, width, height, "nearest")
     return scene

@@ -36,7 +36,7 @@ from difflib import get_close_matches
 from pathlib import Path
 from typing import Any
 
-import yaml
+from ..adapters import yaml as yaml_adapter
 
 
 class ConfigError(ValueError):
@@ -59,12 +59,11 @@ def read_yaml(path: str | Path) -> dict:
     if not path.exists():
         return {}
     try:
-        data = yaml.safe_load(path.read_text(encoding="utf-8"))
-    except yaml.YAMLError as error:
-        mark = getattr(error, "problem_mark", None)
-        where = f" di baris {mark.line + 1}" if mark is not None else ""
+        data = yaml_adapter.loads(path.read_text(encoding="utf-8"))
+    except yaml_adapter.YamlError as error:
+        where = f" di baris {error.line}" if error.line is not None else ""
         raise ConfigError(
-            f"{path} bukan YAML yang valid{where}: {getattr(error, 'problem', error)}. "
+            f"{path} bukan YAML yang valid{where}: {error.problem}. "
             "Setiap entri butuh `KUNCI:` dan item list butuh `- ` di depannya."
         ) from error
     if data is None:

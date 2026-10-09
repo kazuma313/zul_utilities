@@ -127,15 +127,15 @@ Stylesheet bawaan memakai aksen oranye pada heading dan header tabel.
 2. Tanpa template, atur font dan warna per jenis teks lewat `style_config`:
 
     ```python
-    from pptx.dml.color import RGBColor
-
     service = DynamicMarkdownToPPTXService(
         style_config={
-            "h2": {"font_size": 36, "font_color": RGBColor(26, 54, 93)},
+            "h2": {"font_size": 36, "font_color": (26, 54, 93)},
             "bullet": {"font_size": 20},
         }
     )
     ```
+
+    Warna ditulis sebagai tuple RGB, misalnya `(26, 54, 93)`, atau string `"#1A365D"`. `RGBColor` dari python-pptx juga diterima.
 
     Judul slide memakai gaya `h2`. Jenis teks lain yang bisa diatur ada di [Referensi Markdown converter](../referensi/markdown-converter.md).
 

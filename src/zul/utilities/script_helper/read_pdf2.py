@@ -4,6 +4,8 @@ Baca PDF dan potong isinya menjadi chunk.
 Gunanya:
     Langkah awal pipeline RAG untuk PDF yang teksnya bisa diekstrak langsung
     (bukan hasil scan; untuk scan pakai `zul.utilities.OCR`).
+    PDF dibaca lewat zul.adapters.pypdf, dan teksnya dipotong lewat
+    zul.adapters.langchain_text_splitters.
 
 Cara pakai (`pip install "zul[pdf]"`):
     from zul.utilities.script_helper.read_pdf2 import PDFProcessor
@@ -41,17 +43,12 @@ None atau list kosong dan menyimpan pesannya di `pdf.last_error`.
 """
 
 import os
-
-try:
-    from pypdf import PdfReader
-except ImportError:  # PyPDF2 adalah nama lama pypdf
-    from PyPDF2 import PdfReader
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from langchain_core.documents import Document
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from ...adapters import langchain_text_splitters as text_splitters
+from ...adapters import pypdf as pypdf_adapter
 
 # --------------------------------------------------------------------------
 # Konfigurasi
@@ -147,22 +144,12 @@ class PDFProcessor:
                 self._handle_error(f"PDF file does not exist: {file_path}")
                 return None
 
-            with open(file_path, "rb") as file:
-                pdf_reader = PdfReader(file, strict=self.config.strict)
-
-                # Extract text from each page
-                pages_text = []
-                for page_num, page in enumerate(pdf_reader.pages):
-                    try:
-                        text = page.extract_text()
-                        pages_text.append(text.strip() if text else "")
-                    except Exception as page_error:
-                        self._handle_error(
-                            f"Error reading page {page_num + 1}: {str(page_error)}"
-                        )
-                        pages_text.append("")
-
-                return pages_text
+            # Halaman yang gagal diekstrak menjadi "" dan error-nya dicatat
+            return pypdf_adapter.read_pages(
+                file_path,
+                strict=self.config.strict,
+                on_page_error=self._handle_page_error,
+            )
 
         except Exception as e:
             self._handle_error(f"Error reading PDF {file_path}: {str(e)}")
@@ -204,7 +191,7 @@ class PDFProcessor:
         pages = self.read_pdf_pages(file_path)
         if pages is None:
             return []
-        return [Document(page) for page in pages]
+        return text_splitters.to_documents(pages)
 
     def chunk_recursive_character_splitter(
         self,
@@ -233,18 +220,16 @@ class PDFProcessor:
         if separators is None:
             separators = ["\n\n", "\n", " ", ""]
 
-        text_splitter = RecursiveCharacterTextSplitter(
+        split = text_splitters.recursive_character_splitter(
             chunk_size=chunk_size,
-            chunk_overlap=overlap,
+            overlap=overlap,
+            separators=separators,
             length_function=length_function,
             is_separator_regex=is_sperator,
-            separators=separators,
         )
 
         text = self.read_pdf_as_single_text(file_path)
-        recursive_chunk = text_splitter.create_documents([text]) if text else []
-
-        return recursive_chunk
+        return text_splitters.to_documents(split(text)) if text else []
 
     # ----------------------------------------------------------------------
     # Pembantu Teks
@@ -344,6 +329,10 @@ class PDFProcessor:
         self._last_error = error_message
         if self.config.verbose:
             print(f"PDFProcessor Error: {error_message}")
+
+    def _handle_page_error(self, page_number: int, message: str) -> None:
+        """Catat error satu halaman; `page_number` dihitung mulai dari 1."""
+        self._handle_error(f"Error reading page {page_number}: {message}")
 
     @property
     def last_error(self) -> str | None:

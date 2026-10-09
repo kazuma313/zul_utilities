@@ -35,7 +35,7 @@ gemini = ["google-genai>=1.0.0"]
 # Computer vision: aturan perilaku cukup dengan numpy (dependency utama),
 # vision untuk menggambar dan membaca video, yolo untuk model dan tracker.
 vision = ["opencv-python>=4.10"]
-yolo = ["zul[vision]", "ultralytics>=8.3", "lap>=0.5.12"]
+yolo = ["zul[vision]", "ultralytics>=8.4.120,<8.5", "lap>=0.5.12"]
 all = ["zul[milvus,redis,converter,analysis,pdf,ocr,llm,gemini,vision,yolo]"]
 
 [project.scripts]

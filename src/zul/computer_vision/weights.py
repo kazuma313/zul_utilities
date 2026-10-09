@@ -5,7 +5,8 @@ Gunanya:
     Tanpa langkah ini, ultralytics mengunduh bobot yang belum ada ke folder
     tempat perintah dijalankan, bukan ke folder model, dan run berikutnya
     mengunduhnya lagi. Fungsi di sini mengunduh sekali ke path yang diminta.
-    Butuh extra yolo dan koneksi ke GitHub release ultralytics.
+    Unduhannya lewat zul.adapters.ultralytics. Butuh extra yolo dan
+    koneksi ke GitHub release ultralytics.
 
 Cara pakai:
     from zul.computer_vision.weights import fetch
@@ -29,10 +30,10 @@ def fetch(path: str | Path, download: bool = True) -> tuple[bool, str]:
     if not download:
         return False, "belum ada"
 
-    from ultralytics.utils.downloads import attempt_download_asset
+    from ..adapters import ultralytics as yolo
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    attempt_download_asset(str(path))
+    yolo.download_asset(path)
     if not path.exists():
         return False, "GAGAL       bukan nama file bobot yang dirilis ultralytics"
     return True, f"diunduh     {path.stat().st_size / 1e6:.0f} MB"

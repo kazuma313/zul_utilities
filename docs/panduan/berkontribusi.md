@@ -30,8 +30,10 @@ Mengubah Zul sendiri mencakup menambah perintah, memperbaiki helper, mengembangk
 | `src/zul/cli.py` | Entry point perintah `zul`. |
 | `src/zul/commands/` | Kelompok perintah: `build.py`, `install.py`. |
 | `src/zul/templates/hexa/` | Template proyek yang disalin `zul build hexa`. |
+| `src/zul/adapters/` | Satu-satunya tempat library pihak ketiga diimpor, satu file per library. Rinciannya ada di [Mengubah perilaku library pihak ketiga](mengubah-perilaku-library.md). |
+| `src/zul/computer_vision/` | Fungsi computer vision: deteksi, garis dan poligon penghitung, timer, gambar. |
 | `src/zul/utilities/` | Helper yang bisa diimpor. |
-| `tests/` | Test untuk CLI, utilities, dan template. |
+| `tests/` | Test untuk CLI, utilities, template, dan aturan arsitektur (`test_architecture.py`). |
 | `research/agentic/algorithms/skills/` | Kumpulan skill untuk agent AI. Rinciannya ada di [Membuat mind map](membuat-mindmap.md). |
 | `scripts/comment_style.py` | Pemeriksa bentuk komentar. |
 | `scripts/new_post.py` | Pembuat tulisan blog baru dari template. Rinciannya ada di [Menulis tulisan blog](menulis-blog.md). |

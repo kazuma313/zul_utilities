@@ -187,6 +187,7 @@ nav:
           - Menerbitkan dokumentasi: panduan/menerbitkan-dokumentasi.md
           - Menulis tulisan blog: panduan/menulis-blog.md
           - Berkontribusi: panduan/berkontribusi.md
+          - Mengubah perilaku library: panduan/mengubah-perilaku-library.md
   - Referensi:
       - referensi/index.md
       - Zul CLI:
@@ -223,6 +224,7 @@ nav:
       - Cara situs dokumentasi diterbitkan: konsep/penerbitan-dokumentasi.md
       - Model lokal untuk skill belajar: konsep/model-lokal-untuk-skill-belajar.md
       - Cara kerja Computer Vision: konsep/cara-kerja-computer-vision.md
+      - Lapisan adapter: konsep/lapisan-adapter.md
       - Hexagonal dari nol: hexagonal.md
   - Playground: playground.md
   - Blog:

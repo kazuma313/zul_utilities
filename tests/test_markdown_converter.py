@@ -1,4 +1,5 @@
 from io import BytesIO
+from types import SimpleNamespace
 
 import pytest
 
@@ -7,6 +8,7 @@ pytest.importorskip("markdown")
 pytest.importorskip("xhtml2pdf")
 
 from pptx import Presentation
+from pptx.dml.color import RGBColor
 
 from zul.utilities.markdown_converter.md_to_pdf import MarkdownToPDFConverter
 from zul.utilities.markdown_converter.md_to_ppt import DynamicMarkdownToPPTXService
@@ -196,3 +198,54 @@ def test_convert_writes_pdf_into_output_directory(tmp_path):
 
     assert succeeded
     assert (output_dir / "dokumen.pdf").read_bytes().startswith(b"%PDF")
+
+
+def test_pdf_errors_reported_by_xhtml2pdf_give_false_and_empty_bytes(
+    monkeypatch, tmp_path
+):
+    from zul.adapters import xhtml2pdf as xhtml2pdf_adapter
+
+    monkeypatch.setattr(
+        xhtml2pdf_adapter.pisa, "CreatePDF", lambda html, dest: SimpleNamespace(err=1)
+    )
+    converter = MarkdownToPDFConverter()
+
+    assert converter.convert("# Judul", str(tmp_path), "dokumen.pdf") is False
+    assert converter.convert_to_bytes("# Judul") == b""
+
+
+# --------------------------------------------------------------------------
+# Markdown → PPTX: warna
+# --------------------------------------------------------------------------
+
+
+def title_color(pptx_bytes, title):
+    slide = Presentation(BytesIO(pptx_bytes)).slides[0]
+    for shape in slide.shapes:
+        for paragraph in shape.text_frame.paragraphs:
+            if paragraph.text == title:
+                return paragraph.font.color.rgb
+    raise AssertionError(f"judul {title!r} tidak ditemukan")
+
+
+def test_default_style_colors_are_still_pptx_rgbcolor(pptx_service):
+    style = pptx_service.get_default_style()
+
+    assert isinstance(style["h2"]["font_color"], RGBColor)
+    assert style["h2"]["font_color"] == RGBColor(230, 126, 34)
+    assert style["table"]["header_color"] == RGBColor(0, 51, 102)
+
+
+@pytest.mark.parametrize("color", [(26, 54, 93), "#1A365D", RGBColor(26, 54, 93)])
+def test_title_color_can_be_tuple_hex_or_rgbcolor(color):
+    service = DynamicMarkdownToPPTXService(style_config={"h2": {"font_color": color}})
+
+    assert title_color(service.convert_to_bytes("## Judul"), "Judul") == RGBColor(
+        26, 54, 93
+    )
+
+
+def test_default_title_color_is_applied(pptx_service):
+    pptx_bytes = pptx_service.convert_to_bytes("## Judul")
+
+    assert title_color(pptx_bytes, "Judul") == RGBColor(230, 126, 34)

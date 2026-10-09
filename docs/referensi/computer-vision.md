@@ -21,6 +21,8 @@ Tabel berikut memetakan setiap modul ke isinya dan extra yang dibutuhkan:
 
 Modul tanpa extra hanya mengimpor NumPy dan PyYAML, yang ada di instalasi dasar Zul. Mengimpor `zul.computer_vision` tidak memuat modul apa pun, jadi OpenCV dan ultralytics baru dimuat saat modul yang membutuhkannya diimpor.
 
+Modul-modul ini tidak mengimpor OpenCV, ultralytics, atau PyYAML sendiri. Semuanya dipakai lewat `zul.adapters.opencv`, `zul.adapters.ultralytics`, dan `zul.adapters.yaml`. Alasannya ada di [Lapisan adapter](../konsep/lapisan-adapter.md).
+
 Semua koordinat memakai sistem gambar: x ke kanan, y ke bawah, dalam piksel frame asli. Kotak selalu berformat xyxy: `(x1, y1, x2, y2)`. Waktu selalu dalam detik dari awal video, dan nomor frame adalah nomor frame di video sumber.
 
 ## geometry
@@ -307,6 +309,7 @@ Warna ditulis sebagai string `"#RRGGBB"` atau tuple BGR. Semua fungsi `draw_*` m
 | `bgr(color)` | Warna sebagai tuple BGR untuk OpenCV. |
 | `track_color(track_id, saturation=0.85)` | Warna BGR yang tetap untuk satu id track. Id yang berdekatan mendapat warna yang jauh berbeda. |
 | `text_size(text, scale=0.5, thickness=1)` | Lebar dan tinggi teks dalam piksel. |
+| `draw_text(scene, text, origin, color=(255, 255, 255), scale=0.55, thickness=1)` | Teks tanpa latar. `origin` adalah titik kiri garis dasar teks. |
 | `draw_corner_text(scene, lines, corner=Corner.TOP_LEFT, color=(255, 255, 255), scale=0.55, thickness=1, margin=12, line_height=26, top=None, background=(0, 0, 0))` | Beberapa baris teks menempel ke satu sudut frame. `Corner` berisi `TOP_LEFT`, `TOP_RIGHT`, `BOTTOM_LEFT`, dan `BOTTOM_RIGHT`. `top` menggeser baris pertama di sudut atas ke bawah, misalnya agar tidak menutupi cap waktu video CCTV. `background=None` menggambar teks tanpa latar. |
 
 ### Kotak dan label
@@ -354,7 +357,7 @@ Warna ditulis sebagai string `"#RRGGBB"` atau tuple BGR. Semua fungsi `draw_*` m
 | Fungsi | Keterangan |
 |---|---|
 | `draw_traces(scene, trace, color=None, thickness=2)` | Jejak setiap track sebagai garis. Tanpa `color`, warnanya `track_color` id itu. |
-| `draw_heatmap(scene, heatmap, alpha=0.5, colormap=cv2.COLORMAP_JET)` | Mewarnai area yang pernah ditempati, makin sering makin panas. Area yang jarang ditempati makin transparan. |
+| `draw_heatmap(scene, heatmap, alpha=0.5, colormap="jet")` | Mewarnai area yang pernah ditempati, makin sering makin panas. Area yang jarang ditempati makin transparan. `colormap` bisa `jet`, `turbo`, `inferno`, `viridis`, atau `hot`; nama lain melempar `ValueError`. |
 
 ## masks
 
@@ -387,6 +390,10 @@ Ukuran, kecepatan, dan jumlah frame sebuah video. Dataclass yang tidak bisa diub
 
 Menghasilkan `(nomor_frame, detik, frame)` untuk setiap frame ke-`stride`, dari `start` sampai sebelum `end`. `nomor_frame` adalah nomor di video sumber, dan `detik` adalah `nomor_frame / fps`. Frame berformat BGR. Melempar `FileNotFoundError` jika video tidak bisa dibuka.
 
+### `save_image(path, image)` dan `read_image(path)`
+
+`save_image` menyimpan frame BGR sebagai file gambar, dengan format mengikuti ekstensi, misalnya `.png` atau `.jpg`. Foldernya dibuat jika belum ada, dan fungsinya mengembalikan `Path` file itu. `read_image` membaca file gambar sebagai frame BGR, dan melempar `FileNotFoundError` jika file tidak ada atau bukan gambar.
+
 ### `VideoWriter(path, info, codec="mp4v")`
 
 Menulis video dengan ukuran dan FPS dari `info`. Pakai dengan `with`. Folder `path` dibuat jika belum ada.
@@ -402,7 +409,7 @@ Membuka `VideoWriter` melempar `OSError` jika OpenCV tidak bisa menulis file den
 
 `FpsMeter` mengukur kecepatan proses. Panggil `start()` sebelum memproses satu frame dan `stop()` sesudahnya. `fps` berisi rata-rata dari `window` frame terakhir, dan `full` bernilai True setelah `window` frame terukur.
 
-`Pacer` menahan pratinjau agar tidak lebih cepat dari video aslinya. `wait_ms()` mengembalikan milidetik yang perlu ditunggu sebelum frame berikutnya, minimal 1, untuk `cv2.waitKey`.
+`Pacer` menahan pratinjau agar tidak lebih cepat dari video aslinya. `wait_ms()` mengembalikan milidetik yang perlu ditunggu sebelum frame berikutnya, minimal 1, untuk `waitKey` milik OpenCV.
 
 ## detection
 
@@ -426,7 +433,8 @@ Deteksi satu frame sebagai array NumPy yang sejajar per baris: baris ke-i di set
 | `len(detections)` | Jumlah deteksi. |
 | `detections[index]` | Deteksi baru dengan semua field dipotong bersama, dengan mask bool atau daftar indeks. |
 | `rescale(scale)` | Membagi `xyxy` dan `keypoints_xy` dengan `scale`, untuk koordinat dari frame yang diperkecil `standardise_frame`. |
-| `Detections.from_ultralytics(result)` | Deteksi dari satu `Results` ultralytics. |
+| `Detections.from_arrays(arrays)` | Deteksi dari dict berkunci `xyxy`, `confidence`, `class_id`, `keypoints_xy`, dan `keypoints_conf`, misalnya hasil adapter model lain. |
+| `Detections.from_ultralytics(result)` | Deteksi dari satu `Results` ultralytics, lewat `zul.adapters.ultralytics`. |
 
 ### Fungsi
 

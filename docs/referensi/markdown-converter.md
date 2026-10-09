@@ -200,6 +200,8 @@ Jenis `table` punya kunci sendiri:
 | `cell_color` | `RGBColor(60, 60, 60)` | Warna teks sel lain. |
 | `bold_header` | `True` | Jika `True`, teks baris header ditebalkan. |
 
+Setiap warna, yaitu `font_color`, `header_color`, dan `cell_color`, boleh berupa tuple RGB seperti `(26, 54, 93)`, string `"#1A365D"`, atau `RGBColor` dari python-pptx. Nilai lain melempar `ValueError`. Nilai bawaannya tetap `RGBColor`.
+
 Gaya yang kamu berikan digabung per jenis: kunci yang tidak disebut tetap memakai nilai bawaan.
 
 ### `get_default_style()`

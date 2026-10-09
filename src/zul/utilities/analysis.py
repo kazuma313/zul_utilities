@@ -5,6 +5,8 @@ Gunanya:
     Membandingkan hasil eksperimen (latency, throughput, akurasi) dalam satu
     chart, sekaligus mendapat ringkasan statistik: mean, median, std, dan uji
     signifikansi (t-test untuk 2 dataset, ANOVA untuk 3 atau lebih).
+    Figure dibuat lewat zul.adapters.matplotlib, uji statistik dihitung
+    lewat zul.adapters.scipy, dan file CSV dibaca lewat zul.adapters.pandas.
 
 Cara pakai (`pip install "zul[analysis]"`):
     from zul.utilities.analysis import ChartGenerator
@@ -37,28 +39,11 @@ Contoh lengkap semua tipe chart ada di blok `__main__` di akhir file.
 import json
 from typing import Any
 
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from scipy import stats
 
-# --------------------------------------------------------------------------
-# Kompatibilitas Matplotlib
-# --------------------------------------------------------------------------
-#
-# Matplotlib 3.9 mengubah nama parameter labels jadi tick_labels.
-# Nama baru dicoba dulu, kemudian nama lama dipakai jika versi
-# matplotlib yang ter-install belum mengenal nama baru itu.
-#
-
-
-def _boxplot(ax, box_data, labels):
-    """Draw a box plot; matplotlib 3.9 renamed `labels` to `tick_labels`."""
-    try:
-        return ax.boxplot(box_data, tick_labels=labels, patch_artist=True)
-    except TypeError:
-        return ax.boxplot(box_data, labels=labels, patch_artist=True)
-
+from zul.adapters import matplotlib as matplotlib_adapter
+from zul.adapters import pandas as pandas_adapter
+from zul.adapters import scipy as scipy_adapter
 
 # --------------------------------------------------------------------------
 # Pembuat Chart
@@ -122,7 +107,7 @@ class ChartGenerator:
         }
 
         self.config = {**default_config, **(config or {})}
-        plt.style.use(self.config["style"])
+        matplotlib_adapter.use_style(self.config["style"])
         self.current_fig = None
         self.current_ax = None
 
@@ -195,7 +180,7 @@ class ChartGenerator:
         colors = config.get("colors", self.config["colors"][: len(datasets)])
 
         figsize = config.get("figsize", self.config["figsize"])
-        self.current_fig, self.current_ax = plt.subplots(figsize=figsize)
+        self.current_fig, self.current_ax = matplotlib_adapter.new_axes(figsize)
 
         x = np.arange(len(labels))
         n_datasets = len(datasets)
@@ -280,7 +265,7 @@ class ChartGenerator:
         if self.config["grid"]:
             self.current_ax.grid(True, alpha=self.config["grid_alpha"])
 
-        plt.tight_layout()
+        self.current_fig.tight_layout()
 
         # Add statistical tests if more than one dataset
         if len(datasets) >= 2:
@@ -303,7 +288,7 @@ class ChartGenerator:
         colors = config.get("colors", self.config["colors"][: len(datasets)])
 
         figsize = config.get("figsize", self.config["figsize"])
-        self.current_fig, self.current_ax = plt.subplots(figsize=figsize)
+        self.current_fig, self.current_ax = matplotlib_adapter.new_axes(figsize)
 
         stats_summary = {}
         marker_styles = ["o", "s", "^", "D", "v", "<", ">", "p", "*", "h"]
@@ -350,8 +335,8 @@ class ChartGenerator:
         if self.config["grid"]:
             self.current_ax.grid(True, alpha=self.config["grid_alpha"])
 
-        plt.xticks(rotation=45)
-        plt.tight_layout()
+        matplotlib_adapter.rotate_x_labels(self.current_ax, 45)
+        self.current_fig.tight_layout()
 
         # Statistical tests
         if len(datasets) >= 2:
@@ -371,17 +356,14 @@ class ChartGenerator:
         colors = config.get("colors", self.config["colors"][: len(datasets)])
 
         figsize = config.get("figsize", self.config["figsize"])
-        self.current_fig, self.current_ax = plt.subplots(figsize=figsize)
+        self.current_fig, self.current_ax = matplotlib_adapter.new_axes(figsize)
 
         # Prepare data for box plot
         box_data = [data[dataset] for dataset in datasets]
 
-        bp = _boxplot(self.current_ax, box_data, datasets)
-
-        # Color the boxes
-        for patch, color in zip(bp["boxes"], colors, strict=False):
-            patch.set_facecolor(color)  # type: ignore
-            patch.set_alpha(self.config["alpha"])
+        matplotlib_adapter.colored_boxplot(
+            self.current_ax, box_data, datasets, colors, self.config["alpha"]
+        )
 
         self.current_ax.set_title(title)
         self.current_ax.set_ylabel(ylabel)
@@ -389,8 +371,8 @@ class ChartGenerator:
         if self.config["grid"]:
             self.current_ax.grid(True, alpha=self.config["grid_alpha"])
 
-        plt.xticks(rotation=45)
-        plt.tight_layout()
+        matplotlib_adapter.rotate_x_labels(self.current_ax, 45)
+        self.current_fig.tight_layout()
 
         # Calculate comprehensive statistics
         stats_summary = {}
@@ -443,7 +425,7 @@ class ChartGenerator:
         figsize = config.get("figsize", self.config["figsize"])
 
         if overlay:
-            self.current_fig, self.current_ax = plt.subplots(figsize=figsize)
+            self.current_fig, self.current_ax = matplotlib_adapter.new_axes(figsize)
 
             for i, (dataset_name, dataset_values) in enumerate(data.items()):
                 self.current_ax.hist(
@@ -464,29 +446,27 @@ class ChartGenerator:
                 self.current_ax.grid(True, alpha=self.config["grid_alpha"])
         else:
             n_datasets = len(datasets)
-            self.current_fig, axes = plt.subplots(
-                n_datasets, 1, figsize=(figsize[0], figsize[1] * n_datasets)
+            self.current_fig, axes = matplotlib_adapter.new_stacked_axes(
+                n_datasets, (figsize[0], figsize[1] * n_datasets)
             )
-            if n_datasets == 1:
-                axes = [axes]
 
             for i, (dataset_name, dataset_values) in enumerate(data.items()):
                 axes[i].hist(
                     dataset_values,
                     bins=bins,
-                    color=colors[i],  # type: ignore
+                    color=colors[i],
                     alpha=self.config["alpha"],
                     density=density,
                 )
-                axes[i].set_title(f"{title} - {dataset_name}")  # type: ignore
-                axes[i].set_ylabel("Density" if density else ylabel)  # type: ignore
+                axes[i].set_title(f"{title} - {dataset_name}")
+                axes[i].set_ylabel("Density" if density else ylabel)
                 if i == n_datasets - 1:
-                    axes[i].set_xlabel(xlabel)  # type: ignore
+                    axes[i].set_xlabel(xlabel)
 
                 if self.config["grid"]:
-                    axes[i].grid(True, alpha=self.config["grid_alpha"])  # type: ignore
+                    axes[i].grid(True, alpha=self.config["grid_alpha"])
 
-        plt.tight_layout()
+        self.current_fig.tight_layout()
 
         # Calculate statistics
         stats_summary = {}
@@ -495,8 +475,8 @@ class ChartGenerator:
                 "mean": np.mean(dataset_values),
                 "median": np.median(dataset_values),
                 "std": np.std(dataset_values),
-                "skewness": stats.skew(dataset_values),  # type: ignore
-                "kurtosis": stats.kurtosis(dataset_values),  # type: ignore
+                "skewness": scipy_adapter.skewness(dataset_values),
+                "kurtosis": scipy_adapter.kurtosis(dataset_values),
             }
 
         if len(datasets) >= 2:
@@ -521,7 +501,7 @@ class ChartGenerator:
         colors = config.get("colors", self.config["colors"][:n_datasets])
 
         figsize = config.get("figsize", [16, 12])
-        self.current_fig = plt.figure(figsize=figsize)
+        self.current_fig = matplotlib_adapter.new_figure(figsize)
 
         # Create dynamic grid based on number of datasets
         if n_datasets <= 3:
@@ -552,16 +532,14 @@ class ChartGenerator:
 
         # 2. Box plot comparison
         ax2 = self.current_fig.add_subplot(gs[0, 1])
-        bp = _boxplot(ax2, [data[ds] for ds in datasets], datasets)
-
-        for patch, color in zip(bp["boxes"], colors, strict=False):
-            patch.set_facecolor(color)  # type: ignore
-            patch.set_alpha(self.config["alpha"])
+        matplotlib_adapter.colored_boxplot(
+            ax2, [data[ds] for ds in datasets], datasets, colors, self.config["alpha"]
+        )
 
         ax2.set_title(f"{metric_name} Distribution")
         ax2.set_ylabel(metric_name)
         ax2.grid(True, alpha=self.config["grid_alpha"])
-        plt.setp(ax2.get_xticklabels(), rotation=45)
+        matplotlib_adapter.rotate_x_labels(ax2, 45)
 
         # 3. Line chart
         ax3 = self.current_fig.add_subplot(gs[1, :])
@@ -675,17 +653,15 @@ class ChartGenerator:
             data_a, data_b = list(data.values())
 
             # t-test
-            t_stat, p_value = stats.ttest_ind(data_a, data_b)  # type: ignore
+            t_stat, p_value = scipy_adapter.t_test(data_a, data_b)
             results["t_test"] = {
                 "statistic": t_stat,
                 "p_value": p_value,
-                "significant": p_value < 0.05,  # type: ignore
+                "significant": p_value < 0.05,
             }
 
             # Mann-Whitney U test
-            u_stat, u_p_value = stats.mannwhitneyu(  # type: ignore
-                data_a, data_b, alternative="two-sided"
-            )
+            u_stat, u_p_value = scipy_adapter.mann_whitney(data_a, data_b)
             results["mann_whitney"] = {
                 "statistic": u_stat,
                 "p_value": u_p_value,
@@ -693,11 +669,11 @@ class ChartGenerator:
             }
 
             # Kolmogorov-Smirnov test
-            ks_stat, ks_p_value = stats.ks_2samp(data_a, data_b)  # type: ignore
+            ks_stat, ks_p_value = scipy_adapter.kolmogorov_smirnov(data_a, data_b)
             results["kolmogorov_smirnov"] = {
                 "statistic": ks_stat,
                 "p_value": ks_p_value,
-                "significant": ks_p_value < 0.05,  # type: ignore
+                "significant": ks_p_value < 0.05,
             }
 
         elif len(datasets) > 2:
@@ -705,7 +681,7 @@ class ChartGenerator:
             data_values = list(data.values())
 
             # One-way ANOVA
-            f_stat, f_p_value = stats.f_oneway(*data_values)  # type: ignore
+            f_stat, f_p_value = scipy_adapter.anova(*data_values)
             results["anova"] = {
                 "f_statistic": f_stat,
                 "p_value": f_p_value,
@@ -713,7 +689,7 @@ class ChartGenerator:
             }
 
             # Kruskal-Wallis test
-            h_stat, h_p_value = stats.kruskal(*data_values)  # type: ignore
+            h_stat, h_p_value = scipy_adapter.kruskal_wallis(*data_values)
             results["kruskal_wallis"] = {
                 "h_statistic": h_stat,
                 "p_value": h_p_value,
@@ -828,17 +804,19 @@ class ChartGenerator:
     def show(self) -> None:
         """Display the current chart."""
         if self.current_fig:
-            plt.show()
+            matplotlib_adapter.show()
 
     def save(self, filename: str, dpi: int = 300, bbox_inches: str = "tight") -> None:
         """Save the current chart to file."""
         if self.current_fig:
-            self.current_fig.savefig(filename, dpi=dpi, bbox_inches=bbox_inches)
+            matplotlib_adapter.save(
+                self.current_fig, filename, dpi=dpi, bbox_inches=bbox_inches
+            )
 
     def clear(self) -> None:
         """Clear the current chart."""
         if self.current_fig:
-            plt.close(self.current_fig)
+            matplotlib_adapter.close(self.current_fig)
             self.current_fig = None
             self.current_ax = None
 
@@ -862,25 +840,24 @@ def create_chart_from_csv(
     Returns:
         Statistical analysis results
     """
-
-    # Read CSV
-    df = pd.read_csv(csv_file)
-
-    # Extract data based on configuration
-    data_columns = config.get("data_columns", [])
+    data_columns = list(config.get("data_columns", []))
     label_column = config.get("label_column")
+
+    # Read only the requested columns, as lists
+    wanted = [*data_columns, label_column] if label_column else data_columns
+    columns = pandas_adapter.read_csv_columns(csv_file, wanted)
 
     chart_config = config.copy()
     chart_config["data"] = {}
 
     # Build data dictionary from CSV columns
     for col in data_columns:
-        if col in df.columns:
-            chart_config["data"][col] = df[col].tolist()
+        if col in columns:
+            chart_config["data"][col] = columns[col]
 
     # Extract labels if specified
-    if label_column and label_column in df.columns:
-        chart_config["labels"] = df[label_column].tolist()
+    if label_column and label_column in columns:
+        chart_config["labels"] = columns[label_column]
 
     # Create chart
     return chart_gen.create_comparison_chart(chart_config)

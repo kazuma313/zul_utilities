@@ -6,7 +6,10 @@ import yaml
 
 pytest.importorskip("redisvl")
 
-from zul.utilities.vector_DB import redis_helper
+from redis.exceptions import ConnectionError as RedisConnectionError
+from redis.exceptions import ResponseError
+
+from zul.adapters import redis as redis_adapter
 from zul.utilities.vector_DB.redis_helper import (
     RedisHelper,
     RedisVectorDB,
@@ -22,6 +25,7 @@ SCHEMA = {
 
 class FakeRedis:
     modules = [{b"name": b"search", b"ver": 20810}]
+    info_error: Exception | None = None
 
     def __init__(self, **connection):
         self.connection = connection
@@ -31,6 +35,8 @@ class FakeRedis:
         return True
 
     def info(self):
+        if self.info_error is not None:
+            raise self.info_error
         return {"redis_version": "7.4.0"}
 
     def execute_command(self, *_args):
@@ -46,6 +52,7 @@ class FakeIndex:
         self.create_calls = []
         self.loaded_batches = []
         self.queries = []
+        self.deleted = False
 
     @classmethod
     def from_dict(cls, schema, **_kwargs):
@@ -62,19 +69,26 @@ class FakeIndex:
         self.queries.append(query)
         return [{"content": "hasil"}]
 
+    def delete(self):
+        self.deleted = True
+
+    def info(self):
+        return {"index_name": self.schema["index"]["name"]}
+
 
 @pytest.fixture(autouse=True)
 def fake_redis_stack(monkeypatch):
-    monkeypatch.setattr(redis_helper, "Redis", FakeRedis)
-    monkeypatch.setattr(redis_helper, "SearchIndex", FakeIndex)
+    monkeypatch.setattr(redis_adapter, "Redis", FakeRedis)
+    monkeypatch.setattr(redis_adapter, "SearchIndex", FakeIndex)
     # Query asli diganti perekam argumen, supaya test ini tak
     # bergantung pada cara kerja internal redisvl sendiri.
     monkeypatch.setattr(
-        redis_helper, "AggregateHybridQuery", lambda **kwargs: {"hybrid": kwargs}
+        redis_adapter, "AggregateHybridQuery", lambda **kwargs: {"hybrid": kwargs}
     )
     monkeypatch.setattr(
-        redis_helper, "VectorQuery", lambda **kwargs: {"vector": kwargs}
+        redis_adapter, "VectorQuery", lambda **kwargs: {"vector": kwargs}
     )
+    monkeypatch.setattr(redis_adapter, "TextQuery", lambda **kwargs: {"text": kwargs})
 
 
 def write_config(tmp_path, hybrid_search=None):
@@ -169,6 +183,63 @@ def test_insert_data_loads_in_batches_and_returns_all_keys():
     assert len(keys) == 5
 
 
+def test_vector_search_sends_float32_bytes_and_settings():
+    db = RedisVectorDB()
+    db.create_index(SCHEMA)
+
+    results = db.vector_search([0.5, 1.0], "embedding", num_results=3)
+
+    assert results == [{"content": "hasil"}]
+    assert db.index.queries == [
+        {
+            "vector": {
+                "vector": np.array([0.5, 1.0], dtype=np.float32).tobytes(),
+                "vector_field_name": "embedding",
+                "return_fields": [],
+                "num_results": 3,
+            }
+        }
+    ]
+
+
+def test_hybrid_search_rrf_fuses_vector_and_text_results():
+    db = RedisVectorDB()
+    db.create_index(SCHEMA)
+
+    scored, ranked = db.hybrid_search_rrf("q", [0.1], "content", "embedding")
+
+    assert ranked == ["hasil"]
+    assert dict(scored)["hasil"] == pytest.approx(2 / 101)
+    vector_query, text_query = db.index.queries
+    assert vector_query["vector"]["return_fields"] is None
+    assert text_query["text"] == {
+        "text": "q",
+        "text_field_name": "content",
+        "text_scorer": "BM25",
+        "num_results": 5,
+        "return_fields": None,
+    }
+
+
+def test_delete_index_forgets_index_and_schema():
+    db = RedisVectorDB()
+    index = db.create_index(SCHEMA)
+
+    assert db.get_info() == {"index_name": "idx"}
+    db.delete_index()
+
+    assert index.deleted
+    assert (db.index, db.schema) == (None, None)
+
+
+def test_close_closes_the_redis_client():
+    db = RedisVectorDB()
+
+    db.close()
+
+    assert db.client.closed
+
+
 def test_requirements_met_when_search_module_is_recent_enough():
     requirements = RedisVectorDB().check_requirements()
 
@@ -194,6 +265,23 @@ def test_requirements_not_met_without_recent_search_module(
     requirements = RedisVectorDB().check_requirements()
 
     assert requirements["search_module_version"] == module_version
+    assert requirements["vector_search_supported"] is False
+
+
+@pytest.mark.parametrize(
+    "error, message",
+    [
+        (RedisConnectionError("putus"), "Error koneksi: putus"),
+        (ResponseError("unknown command"), "Error saat eksekusi perintah"),
+        (RuntimeError("aneh"), "Error tak terduga: aneh"),
+    ],
+)
+def test_requirements_report_the_kind_of_error(monkeypatch, capsys, error, message):
+    monkeypatch.setattr(FakeRedis, "info_error", error)
+
+    requirements = RedisVectorDB().check_requirements()
+
+    assert message in capsys.readouterr().out
     assert requirements["vector_search_supported"] is False
 
 

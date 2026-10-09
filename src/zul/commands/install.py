@@ -26,7 +26,8 @@ from pathlib import Path
 from typing import Any
 
 import typer
-import yaml
+
+from zul.adapters import yaml as yaml_adapter
 
 app = typer.Typer(
     no_args_is_help=True, help="Tulis file config utilitas ke folder proyek"
@@ -141,7 +142,7 @@ def _serialize_config(config: dict[str, Any], config_file: Path) -> str:
     suffix = config_file.suffix.lower()
 
     if suffix in YAML_SUFFIXES:
-        return yaml.safe_dump(config, sort_keys=False, allow_unicode=True)
+        return yaml_adapter.dumps(config)
 
     if suffix in JSON_SUFFIXES:
         return json.dumps(config, indent=4) + "\n"

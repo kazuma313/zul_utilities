@@ -18,10 +18,10 @@ Contoh di halaman ini memakai frame buatan berwarna gradasi, supaya area yang di
 1. Buat masker sekali, sebelum perulangan frame. `polygon_mask` menerima daftar poligon dan ukuran frame:
 
     ```python title="masker_area.py"
-    import cv2
     import numpy as np
 
     from zul.computer_vision import masks
+    from zul.computer_vision.video import save_image
 
     frame = np.zeros((360, 640, 3), dtype=np.uint8)
     frame[:, :, 0] = np.linspace(60, 220, 640).astype(np.uint8)
@@ -30,7 +30,7 @@ Contoh di halaman ini memakai frame buatan berwarna gradasi, supaya area yang di
     measured = [[120, 40], [520, 40], [600, 320], [40, 320]]
     mask = masks.polygon_mask([measured], width=640, height=360, keep_inside=True)
 
-    cv2.imwrite("masker_area.png", masks.apply_mask(frame, mask))
+    save_image("masker_area.png", masks.apply_mask(frame, mask))
     ```
 
     ![Frame gradasi yang hanya terlihat di dalam sebuah trapesium; semua di luarnya hitam](../assets/computer-vision/masker_area.png)
@@ -64,21 +64,21 @@ Masker diterapkan ke frame yang masuk ke model, bukan ke kotak hasil deteksi. Ka
 `blur_boxes` mengaburkan isi setiap kotak, dan `pixelate_boxes` mengubahnya menjadi blok-blok besar. Keduanya mengubah frame langsung:
 
 ```python title="samarkan_kotak.py"
-import cv2
 import numpy as np
 
-from zul.computer_vision import masks
+from zul.computer_vision import draw, masks
+from zul.computer_vision.video import save_image
 
 frame = np.zeros((360, 640, 3), dtype=np.uint8)
 frame[:, :, 0] = np.linspace(60, 220, 640).astype(np.uint8)
 frame[:, :, 1] = np.linspace(220, 60, 360).astype(np.uint8)[:, None]
 for x in (90, 390):
-    cv2.putText(frame, "WAJAH", (x, 190), cv2.FONT_HERSHEY_SIMPLEX, 1.6, (255, 255, 255), 4)
+    draw.draw_text(frame, "WAJAH", (x, 190), scale=1.6, thickness=4)
 
 masks.blur_boxes(frame, np.array([[70, 120, 290, 230]]), kernel=31)
 masks.pixelate_boxes(frame, np.array([[370, 120, 590, 230]]), pixel_size=16)
 
-cv2.imwrite("samarkan_kotak.png", frame)
+save_image("samarkan_kotak.png", frame)
 ```
 
 ![Dua tulisan WAJAH di frame gradasi: yang kiri kabur, yang kanan berupa blok-blok besar](../assets/computer-vision/samarkan_kotak.png)

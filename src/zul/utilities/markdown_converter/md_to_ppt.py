@@ -14,6 +14,13 @@ Cara pakai (`pip install "zul[converter]"`):
     service.convert_markdown(markdown, "hasil.pptx")
     pptx_bytes = service.convert_to_bytes(markdown)               # untuk respons HTTP
 
+Mengganti gaya:
+    service.set_style({"h2": {"font_size": 36, "font_color": (26, 54, 93)}})
+
+    Warna boleh ditulis sebagai tuple (r, g, b), "#RRGGBB", atau RGBColor
+    dari python-pptx. Semua pemakaian python-pptx lewat zul.adapters.pptx;
+    slide dan paragraf yang diisi di sini adalah objek python-pptx asli.
+
 Sintaks Markdown yang dikenali:
     # Judul              judul slide
     ## Judul             judul slide (jika belum ada), selain itu sub-judul
@@ -35,14 +42,9 @@ Contoh:
 """
 
 import re
-from io import BytesIO
 from pathlib import Path
 
-from pptx import Presentation
-from pptx.dml.color import RGBColor
-from pptx.enum.text import PP_ALIGN
-from pptx.oxml import parse_xml
-from pptx.util import Inches, Pt
+from ...adapters import pptx as pptx_adapter
 
 # --------------------------------------------------------------------------
 # Aturan Slide dan Pola Markdown
@@ -120,11 +122,8 @@ class DynamicMarkdownToPPTXService:
     def _new_presentation(self):
         """Presentation baru: dari template jika ada, kalau tidak kosong 16:9."""
         if self.use_template:
-            return Presentation(self.template_path)
-        prs = Presentation()
-        prs.slide_width = Inches(SLIDE_WIDTH_INCHES)
-        prs.slide_height = Inches(SLIDE_HEIGHT_INCHES)
-        return prs
+            return pptx_adapter.open_presentation(self.template_path)
+        return pptx_adapter.new_presentation(SLIDE_WIDTH_INCHES, SLIDE_HEIGHT_INCHES)
 
     # ----------------------------------------------------------------------
     # Gaya Teks
@@ -136,50 +135,50 @@ class DynamicMarkdownToPPTXService:
             "h1": {
                 "font_size": 44,
                 "font_name": "Calibri",
-                "font_color": RGBColor(0, 51, 102),
+                "font_color": pptx_adapter.color((0, 51, 102)),
                 "bold": True,
                 "italic": False,
             },
             "h2": {
                 "font_size": 32,
                 "font_name": "Calibri",
-                "font_color": RGBColor(230, 126, 34),
+                "font_color": pptx_adapter.color((230, 126, 34)),
                 "bold": True,
                 "italic": False,
             },
             "h3": {
                 "font_size": 24,
                 "font_name": "Calibri",
-                "font_color": RGBColor(52, 73, 94),
+                "font_color": pptx_adapter.color((52, 73, 94)),
                 "bold": True,
                 "italic": False,
             },
             "h4": {
                 "font_size": 20,
                 "font_name": "Calibri",
-                "font_color": RGBColor(52, 73, 94),
+                "font_color": pptx_adapter.color((52, 73, 94)),
                 "bold": True,
                 "italic": False,
             },
             "body": {
                 "font_size": 18,
                 "font_name": "Calibri",
-                "font_color": RGBColor(60, 60, 60),
+                "font_color": pptx_adapter.color((60, 60, 60)),
                 "bold": False,
                 "italic": False,
             },
             "bullet": {
                 "font_size": 18,
                 "font_name": "Calibri",
-                "font_color": RGBColor(60, 60, 60),
+                "font_color": pptx_adapter.color((60, 60, 60)),
                 "bold": False,
                 "italic": False,
             },
             "table": {
                 "font_size": 12,
                 "font_name": "Calibri",
-                "header_color": RGBColor(0, 51, 102),
-                "cell_color": RGBColor(60, 60, 60),
+                "header_color": pptx_adapter.color((0, 51, 102)),
+                "cell_color": pptx_adapter.color((60, 60, 60)),
                 "bold_header": True,
             },
         }
@@ -198,8 +197,10 @@ class DynamicMarkdownToPPTXService:
 
         Example:
             service.set_style({
-                'h1': {'font_size': 48, 'font_color': RGBColor(255, 0, 0)}
+                'h1': {'font_size': 48, 'font_color': (255, 0, 0)}
             })
+
+        Warna boleh tuple (r, g, b), "#RRGGBB", atau RGBColor python-pptx.
         """
         self._merge_style(style_dict)
         print(f"✅ Style updated for: {', '.join(style_dict.keys())}")
@@ -212,11 +213,11 @@ class DynamicMarkdownToPPTXService:
             style = self.style_config.get("body", {})
 
         if "font_size" in style and style["font_size"]:
-            paragraph.font.size = Pt(style["font_size"])
+            paragraph.font.size = pptx_adapter.points(style["font_size"])
         if "font_name" in style and style["font_name"]:
             paragraph.font.name = style["font_name"]
         if "font_color" in style and style["font_color"]:
-            paragraph.font.color.rgb = style["font_color"]
+            paragraph.font.color.rgb = pptx_adapter.color(style["font_color"])
         if "bold" in style:
             paragraph.font.bold = style["bold"]
         if "italic" in style:
@@ -230,31 +231,8 @@ class DynamicMarkdownToPPTXService:
             paragraph: Paragraph object
             level: Bullet level (0, 1, 2, ...)
         """
-        # Set paragraph level
         paragraph.level = level
-
-        # Get or create pPr (paragraph properties)
-        pPr = paragraph._element.get_or_add_pPr()
-
-        # Remove any existing buNone (no bullet) element
-        for buNone in pPr.findall(
-            ".//{http://schemas.openxmlformats.org/drawingml/2006/main}buNone"
-        ):
-            pPr.remove(buNone)
-
-        # Add bullet char element if not exists
-        buChar = pPr.find(
-            ".//{http://schemas.openxmlformats.org/drawingml/2006/main}buChar"
-        )
-        if buChar is None:
-            # Create bullet with default bullet character
-            buChar_xml = (
-                "<a:buChar"
-                ' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'
-                ' char="•"/>'
-            )
-            buChar = parse_xml(buChar_xml)
-            pPr.append(buChar)
+        pptx_adapter.show_bullet(paragraph, "•")
 
     # ----------------------------------------------------------------------
     # Slide dan Textbox
@@ -272,16 +250,8 @@ class DynamicMarkdownToPPTXService:
             blank_layout = self.prs.slide_layouts[6]
             slide = self.prs.slides.add_slide(blank_layout)
 
-            # Remove all shapes
-            for shape in list(slide.shapes):
-                sp = shape.element
-                sp.getparent().remove(sp)
-
-            # Set background
-            background = slide.background
-            fill = background.fill
-            fill.solid()
-            fill.fore_color.rgb = RGBColor(255, 255, 255)
+            pptx_adapter.remove_shapes(slide)
+            pptx_adapter.fill_solid(slide.background.fill, (255, 255, 255))
 
         return slide
 
@@ -290,7 +260,7 @@ class DynamicMarkdownToPPTXService:
     ):
         """Add textbox dengan custom styling"""
         textbox = slide.shapes.add_textbox(
-            Inches(left), Inches(top), Inches(width), Inches(height)
+            *pptx_adapter.inches_box(left, top, width, height)
         )
 
         text_frame = textbox.text_frame
@@ -299,7 +269,7 @@ class DynamicMarkdownToPPTXService:
 
         p = text_frame.add_paragraph()
         p.text = text
-        p.alignment = PP_ALIGN.LEFT
+        pptx_adapter.align(p, "left")
 
         self.apply_text_style(p, style_type)
 
@@ -322,7 +292,7 @@ class DynamicMarkdownToPPTXService:
         total_height = len(content_items) * 0.45 + 0.5
 
         textbox = slide.shapes.add_textbox(
-            Inches(left), Inches(top), Inches(width), Inches(total_height)
+            *pptx_adapter.inches_box(left, top, width, total_height)
         )
 
         text_frame = textbox.text_frame
@@ -346,8 +316,8 @@ class DynamicMarkdownToPPTXService:
                 p.level = 0
                 style_type = "h3" if item.get("header_level", 3) == 3 else "h4"
                 self.apply_text_style(p, style_type)
-                p.space_before = Pt(12)
-                p.space_after = Pt(6)
+                p.space_before = pptx_adapter.points(12)
+                p.space_after = pptx_adapter.points(6)
             elif item_type == "bullet":
                 # CRITICAL: Enable bullet formatting explicitly
                 self.enable_bullet(p, level)
@@ -364,7 +334,7 @@ class DynamicMarkdownToPPTXService:
         total_height = len(bullets) * 0.4 + 0.2
 
         textbox = slide.shapes.add_textbox(
-            Inches(left), Inches(top), Inches(width), Inches(total_height)
+            *pptx_adapter.inches_box(left, top, width, total_height)
         )
 
         text_frame = textbox.text_frame
@@ -454,7 +424,7 @@ class DynamicMarkdownToPPTXService:
 
         # Add table shape
         table_shape = slide.shapes.add_table(
-            rows, cols, Inches(left), Inches(top), Inches(width), Inches(height)
+            rows, cols, *pptx_adapter.inches_box(left, top, width, height)
         )
 
         table = table_shape.table
@@ -469,23 +439,26 @@ class DynamicMarkdownToPPTXService:
 
                     # Style cell text
                     for paragraph in cell.text_frame.paragraphs:
-                        paragraph.alignment = PP_ALIGN.LEFT
+                        pptx_adapter.align(paragraph, "left")
 
                         # Header row styling
                         if i == 0:
                             paragraph.font.bold = style.get("bold_header", True)
-                            paragraph.font.size = Pt(style.get("font_size", 12))
-                            paragraph.font.color.rgb = style.get(
-                                "header_color", RGBColor(0, 51, 102)
+                            paragraph.font.size = pptx_adapter.points(
+                                style.get("font_size", 12)
+                            )
+                            paragraph.font.color.rgb = pptx_adapter.color(
+                                style.get("header_color", (0, 51, 102))
                             )
 
                             # Header background color
-                            cell.fill.solid()
-                            cell.fill.fore_color.rgb = RGBColor(220, 230, 241)
+                            pptx_adapter.fill_solid(cell.fill, (220, 230, 241))
                         else:
-                            paragraph.font.size = Pt(style.get("font_size", 12))
-                            paragraph.font.color.rgb = style.get(
-                                "cell_color", RGBColor(60, 60, 60)
+                            paragraph.font.size = pptx_adapter.points(
+                                style.get("font_size", 12)
+                            )
+                            paragraph.font.color.rgb = pptx_adapter.color(
+                                style.get("cell_color", (60, 60, 60))
                             )
 
                         if style.get("font_name"):
@@ -515,14 +488,17 @@ class DynamicMarkdownToPPTXService:
             if height:
                 pic = slide.shapes.add_picture(
                     image_path,
-                    Inches(left),
-                    Inches(top),
-                    width=Inches(width),
-                    height=Inches(height),
+                    pptx_adapter.inches(left),
+                    pptx_adapter.inches(top),
+                    width=pptx_adapter.inches(width),
+                    height=pptx_adapter.inches(height),
                 )
             else:
                 pic = slide.shapes.add_picture(
-                    image_path, Inches(left), Inches(top), width=Inches(width)
+                    image_path,
+                    pptx_adapter.inches(left),
+                    pptx_adapter.inches(top),
+                    width=pptx_adapter.inches(width),
                 )
             return pic
         except Exception as e:
@@ -818,7 +794,7 @@ class DynamicMarkdownToPPTXService:
         self._add_slides_from_markdown(md_content)
 
         # Save
-        self.prs.save(output_path)
+        pptx_adapter.save(self.prs, output_path)
         mode = "template-based" if self.use_template else "generated"
         print(f"\n✅ Presentasi berhasil dibuat ({mode}): {output_path}")
         print(f"   Total slides: {len(self.prs.slides)}")
@@ -838,13 +814,12 @@ class DynamicMarkdownToPPTXService:
             self.prs = self._new_presentation()
             self._add_slides_from_markdown(markdown_content)
 
-            bytes_io = BytesIO()
-            self.prs.save(bytes_io)
+            pptx_bytes = pptx_adapter.to_bytes(self.prs)
 
             print("\n✅ Presentasi berhasil dikonversi ke bytes")
             print(f"   Total slides: {len(self.prs.slides)}")
 
-            return bytes_io.getvalue()
+            return pptx_bytes
 
         except Exception as e:
             print(f"✗ Error saat konversi ke bytes: {e}")
@@ -859,15 +834,12 @@ class DynamicMarkdownToPPTXService:
             bytes: File PPTX dalam bentuk bytes.
         """
         try:
-            bytes_io = BytesIO()
-            self.prs.save(bytes_io)
-            bytes_io.seek(0)
-            return bytes_io.getvalue()
+            return pptx_adapter.to_bytes(self.prs)
         except Exception as e:
             print(f"✗ Error saat get bytes: {e}")
             return b""
 
     def save(self, output_path):
         """Save presentation"""
-        self.prs.save(output_path)
+        pptx_adapter.save(self.prs, output_path)
         print(f"✅ Saved: {output_path}")

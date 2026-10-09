@@ -352,6 +352,7 @@ Membaca file YAML atau JSON menjadi `dict` tanpa validasi skema.
 
 - `FileNotFoundError` dengan pesan `Configuration file not found: ...` jika file tidak ada.
 - `ValueError` dengan pesan `Unsupported file format: ... Use .yaml, .yml, or .json` jika ekstensinya lain.
+- `ValueError` dengan pesan `Invalid YAML in FILE at line N: ...` jika file YAML tidak valid. Pesannya menyebut nomor baris dan masalahnya.
 - `ValueError` dengan pesan `Configuration file is empty: ...` jika file kosong.
 - `ValueError` dengan pesan `Configuration root must be a mapping: ...` jika akar file bukan mapping.
 

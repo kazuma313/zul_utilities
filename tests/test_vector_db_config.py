@@ -2,7 +2,10 @@ import json
 
 import pytest
 
-from zul.utilities.vector_DB.config.config_file import read_config_file
+from zul.utilities.vector_DB.config.config_file import (
+    read_config_file,
+    write_config_file,
+)
 from zul.utilities.vector_DB.config.config_loader import (
     ConfigLoader as MilvusConfigLoader,
 )
@@ -92,6 +95,38 @@ def test_empty_config_file_is_rejected(tmp_path):
 
     with pytest.raises(ValueError, match="empty"):
         read_config_file(config_file)
+
+
+def test_invalid_yaml_is_reported_with_file_and_line(tmp_path):
+    config_file = tmp_path / "config.yaml"
+    config_file.write_text("connection:\n  uri: [unclosed\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match=r"Invalid YAML in .*config\.yaml at line"):
+        read_config_file(config_file)
+
+
+def test_yaml_config_keeps_key_order_and_unicode(tmp_path):
+    output = tmp_path / "config.yaml"
+
+    write_config_file({"name": "café", "alpha": [1, 2]}, output, format="YML")
+
+    assert output.read_text(encoding="utf-8") == "name: café\nalpha:\n- 1\n- 2\n"
+    assert read_config_file(output) == {"name": "café", "alpha": [1, 2]}
+
+
+def test_json_config_is_indented_with_two_spaces(tmp_path):
+    output = tmp_path / "config.json"
+
+    write_config_file({"name": "café"}, output, format="json")
+
+    assert output.read_text(encoding="utf-8") == '{\n  "name": "café"\n}'
+
+
+def test_unknown_output_format_is_rejected(tmp_path):
+    with pytest.raises(ValueError, match="Unsupported format: toml"):
+        write_config_file({"a": 1}, tmp_path / "config.toml", format="toml")
+
+    assert not (tmp_path / "config.toml").exists()
 
 
 # --------------------------------------------------------------------------

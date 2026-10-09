@@ -5,6 +5,8 @@ Gunanya:
     Membungkus `ChatOpenAI` dan `OpenAIEmbeddings` dari LangChain dengan
     konfigurasi yang divalidasi Pydantic. Konfigurasi bisa datang dari file
     YAML/JSON, dari environment variable, atau dirakit langsung di kode.
+    Kedua model dibuat dan dipanggil lewat zul.adapters.langchain_openai,
+    dan file YAML dibaca lewat zul.adapters.yaml.
 
 Cara pakai (`pip install "zul[llm]"`):
     from zul.utilities.embedding_service import AIService
@@ -37,9 +39,10 @@ from functools import cached_property
 from pathlib import Path
 from typing import Any
 
-import yaml
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from pydantic import BaseModel, Field, SecretStr, field_validator, model_validator
+
+from zul.adapters import langchain_openai as openai_adapter
+from zul.adapters import yaml as yaml_adapter
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +68,8 @@ def _load_config_file(path: Path) -> dict[str, Any]:
     Raises:
         FileNotFoundError: If the file doesn't exist at the given path.
         ValueError: If the file extension is not .yaml, .yml, or .json.
+        YamlError: If a .yaml/.yml file is not valid YAML. YamlError is a
+            ValueError subclass from zul.adapters.yaml.
     """
     if not path.exists():
         raise FileNotFoundError(
@@ -75,8 +80,8 @@ def _load_config_file(path: Path) -> dict[str, Any]:
     suffix = path.suffix.lower()  # e.g. ".yaml", ".json"
 
     if suffix in (".yaml", ".yml"):
-        with path.open("r", encoding="utf-8") as f:
-            return yaml.safe_load(f) or {}  # safe_load returns None on empty file
+        text = path.read_text(encoding="utf-8")
+        return yaml_adapter.loads(text) or {}  # loads returns None on empty file
 
     if suffix == ".json":
         with path.open("r", encoding="utf-8") as f:
@@ -442,9 +447,10 @@ class EmbedResponse(BaseModel):
 # --------------------------------------------------------------------------
 #
 # Kelas inilah yang kamu pakai. Ia adalah pembungkus ChatOpenAI dan
-# OpenAIEmbeddings dari LangChain. Kedua client baru akan dibuat
-# saat pertama kali dibutuhkan, yaitu waktu chat() atau embed()
-# dipanggil, dan dipakai ulang di tiap pemanggilan berikutnya.
+# OpenAIEmbeddings dari LangChain yang dibuat dan dipanggil lewat
+# zul.adapters.langchain_openai. Kedua client baru dibuat saat
+# pertama kali dibutuhkan, yaitu ketika chat() atau embed()
+# dipanggil, dan dipakai ulang di pemanggilan berikutnya.
 #
 
 
@@ -518,11 +524,11 @@ class AIService:
     #
 
     @cached_property
-    def _llm(self) -> ChatOpenAI:
+    def _llm(self) -> Any:
         """LangChain ChatOpenAI client — created once on first use."""
         cfg = self.config.llm
         logger.debug("Creating ChatOpenAI client (model=%s)", cfg.model)
-        return ChatOpenAI(
+        return openai_adapter.create_chat_model(
             base_url=cfg.base_url,
             api_key=cfg.api_key.get_secret_value(),  # unwrap SecretStr to plain str
             model=cfg.model,
@@ -532,7 +538,7 @@ class AIService:
         )
 
     @cached_property
-    def _embedding_client(self) -> OpenAIEmbeddings | None:
+    def _embedding_client(self) -> Any | None:
         """LangChain OpenAIEmbeddings client, or None if embedding is disabled."""
         if not self.config.service.enable_embedding:
             logger.debug("Embedding disabled via service.enable_embedding=false.")
@@ -543,7 +549,7 @@ class AIService:
 
         cfg = self.config.embedding
         logger.debug("Creating OpenAIEmbeddings client (model=%s)", cfg.model)
-        return OpenAIEmbeddings(
+        return openai_adapter.create_embeddings(
             base_url=cfg.base_url,
             api_key=cfg.api_key.get_secret_value(),  # unwrap SecretStr to plain str
             model=cfg.model,
@@ -573,12 +579,12 @@ class AIService:
         """
         logger.debug("chat() → prompt length=%d chars", len(prompt))
         try:
-            raw = self._llm.invoke(prompt)
+            reply = openai_adapter.chat(self._llm, prompt)
             return ChatResponse(
-                content=raw.content,
-                model=raw.response_metadata.get("model_name", self.config.llm.model),
-                finish_reason=raw.response_metadata.get("finish_reason"),
-                usage=raw.response_metadata.get("token_usage"),
+                content=reply.content,
+                model=reply.model_name or self.config.llm.model,
+                finish_reason=reply.finish_reason,
+                usage=reply.token_usage,
             )
         except Exception as exc:
             logger.exception("chat() failed")
@@ -610,7 +616,7 @@ class AIService:
             )
         logger.debug("embed() → text length=%d chars", len(text))
         try:
-            vector = self._embedding_client.embed_query(text)
+            vector = openai_adapter.embed_query(self._embedding_client, text)
             return EmbedResponse(
                 vector=vector,
                 dimensions=len(vector),

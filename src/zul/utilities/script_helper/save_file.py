@@ -14,12 +14,13 @@ Cara pakai:
         file_name="latency_milvus",
     )                                                    # data/latency_milvus.csv
 
-Folder `data/` dibuat otomatis di direktori kerja saat ini.
+Folder `data/` dibuat otomatis di direktori kerja saat ini. File CSV
+ditulis lewat zul.adapters.pandas, jadi butuh extra analysis.
 """
 
 import os
 
-import pandas as pd
+from zul.adapters import pandas as pandas_adapter
 
 # --------------------------------------------------------------------------
 # Menyimpan ke Folder data
@@ -55,7 +56,5 @@ def save_latency_to_csv(
     # Ensure the 'data' directory exists
     os.makedirs("data", exist_ok=True)
 
-    df_latency = pd.DataFrame(mapping)
-
     file_path = os.path.join("data", f"{file_name}.csv")
-    df_latency.to_csv(file_path, index=False)
+    pandas_adapter.write_csv(file_path, mapping)

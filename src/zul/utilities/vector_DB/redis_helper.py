@@ -37,6 +37,9 @@ Catatan penting:
       RedisHelper selalu memakai `overwrite=False`, jadi index yang sudah ada
       dibiarkan. `delete_index()` menghapus index beserta semua record-nya.
     - Contoh lengkap ada di blok `__main__` di akhir file.
+    - Modul ini tidak mengimpor redis atau redisvl sendiri; semua
+      pemanggilannya lewat `zul.adapters.redis`. Atribut `client` dan
+      `index` tetap objek `redis.Redis` dan `redisvl.index.SearchIndex`.
 """
 
 import logging
@@ -45,16 +48,8 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-from redis import Redis
-from redis.exceptions import ConnectionError as RedisConnectionError
-from redis.exceptions import ResponseError
-from redisvl.index import SearchIndex
-from redisvl.query import TextQuery, VectorQuery
 
-try:
-    from redisvl.query import AggregateHybridQuery
-except ImportError:  # redisvl < 0.11 menamai query ini HybridQuery
-    from redisvl.query import HybridQuery as AggregateHybridQuery
+from zul.adapters import redis as redis_adapter
 
 from .config.config_loader_redis import ConfigLoader
 from .config.config_schema_redis import RedisConfig
@@ -154,11 +149,11 @@ class RedisVectorDB:
 
         self.logger = logger
 
-        # Redis client
-        self.client: Redis | None = None
+        # Redis client (objek redis.Redis dari adapter)
+        self.client: Any = None
 
-        # Search index
-        self.index: SearchIndex | None = None
+        # Search index (objek redisvl SearchIndex dari adapter)
+        self.index: Any = None
         self.schema: dict | None = None
 
         # Connect to Redis
@@ -167,7 +162,7 @@ class RedisVectorDB:
     def _connect(self) -> None:
         """Membuat koneksi ke Redis"""
         try:
-            self.client = Redis(
+            self.client = redis_adapter.create_client(
                 host=self.host,
                 port=self.port,
                 username=self.username,
@@ -177,19 +172,19 @@ class RedisVectorDB:
             )
 
             # Test connection
-            self.client.ping()
+            redis_adapter.ping(self.client)
             self.logger.info(
                 f"Successfully connected to Redis at {self.host}:{self.port}"
             )
 
-        except RedisConnectionError as e:
-            self.logger.error(f"Failed to connect to Redis: {e}")
-            raise
         except Exception as e:
-            self.logger.error(f"Unexpected error during connection: {e}")
+            if redis_adapter.is_connection_error(e):
+                self.logger.error(f"Failed to connect to Redis: {e}")
+            else:
+                self.logger.error(f"Unexpected error during connection: {e}")
             raise
 
-    def _require_index(self) -> SearchIndex:
+    def _require_index(self) -> Any:
         if not self.index:
             raise ValueError("Index not created. Call create_index() first.")
         return self.index
@@ -208,7 +203,7 @@ class RedisVectorDB:
             "vector_search_supported": False,
         }
         try:
-            info = self.client.info()  # type: ignore
+            info = redis_adapter.server_info(self.client)
             redis_version = info.get("redis_version", "Unknown")  # type: ignore
             requirements["redis_version"] = _decode(redis_version)
             print(f"Versi Redis: {requirements['redis_version']}")
@@ -236,17 +231,18 @@ class RedisVectorDB:
                     "Upgrade atau tambahkan modul."
                 )
 
-        except RedisConnectionError as e:
-            print(f"Error koneksi: {e}")
-        except ResponseError as e:
-            print(f"Error saat eksekusi perintah: {e}")
         except Exception as e:
-            print(f"Error tak terduga: {e}")
+            if redis_adapter.is_connection_error(e):
+                print(f"Error koneksi: {e}")
+            elif redis_adapter.is_command_error(e):
+                print(f"Error saat eksekusi perintah: {e}")
+            else:
+                print(f"Error tak terduga: {e}")
         return requirements
 
     def _search_module_version(self) -> int | None:
         """Versi modul 'search' / 'RediSearch', atau None jika modul tidak ada"""
-        modules = self.client.execute_command("MODULE LIST")  # type: ignore
+        modules = redis_adapter.module_list(self.client)
         for module in modules:
             module = {_decode(key): _decode(value) for key, value in module.items()}
             if module.get("name") in SEARCH_MODULE_NAMES:
@@ -255,7 +251,7 @@ class RedisVectorDB:
 
     def create_index(
         self, schema: dict[str, Any], overwrite: bool = False, validate: bool = True
-    ) -> SearchIndex:
+    ) -> Any:
         """
         Membuat index dengan schema yang diberikan
 
@@ -265,18 +261,18 @@ class RedisVectorDB:
             validate: Validasi schema saat load
 
         Returns:
-            SearchIndex object
+            SearchIndex object (redisvl)
         """
         try:
             self.schema = schema
 
             # Create index from schema
-            self.index = SearchIndex.from_dict(
-                schema, redis_client=self.client, validate_on_load=validate
+            self.index = redis_adapter.index_from_schema(
+                self.client, schema, validate=validate
             )
 
             # Create index
-            self.index.create(overwrite=overwrite)
+            redis_adapter.create_index(self.index, overwrite=overwrite)
 
             self.logger.info(f"Index '{schema['index']['name']}' created successfully")
             return self.index
@@ -306,7 +302,7 @@ class RedisVectorDB:
 
             for i in range(0, len(data), batch_size):
                 batch = data[i : i + batch_size]
-                keys = index.load(batch)
+                keys = redis_adapter.load(index, batch)
                 all_keys.extend(keys)
 
                 self.logger.info(
@@ -350,7 +346,8 @@ class RedisVectorDB:
         index = self._require_index()
 
         try:
-            query = AggregateHybridQuery(
+            results = redis_adapter.hybrid_query(
+                index,
                 text=text_query,
                 text_field_name=text_field_name,
                 vector=_to_vector_bytes(vector_query),
@@ -360,8 +357,6 @@ class RedisVectorDB:
                 return_fields=return_fields or [],
                 num_results=num_results,
             )
-
-            results = index.query(query)
 
             self.logger.info(f"Hybrid search completed: {len(results)} results found")
             return results
@@ -390,22 +385,20 @@ class RedisVectorDB:
         """
         index = self._require_index()
 
-        vector_result = index.query(
-            VectorQuery(
-                vector=_to_vector_bytes(vector_query),
-                vector_field_name=vector_field_name,
-                num_results=num_results,
-                return_fields=return_fields,
-            )
+        vector_result = redis_adapter.vector_query(
+            index,
+            vector=_to_vector_bytes(vector_query),
+            vector_field_name=vector_field_name,
+            num_results=num_results,
+            return_fields=return_fields,
         )
-        full_text_result = index.query(
-            TextQuery(
-                text=text_query,
-                text_field_name=text_field_name,
-                text_scorer=text_scorer,
-                num_results=num_results,
-                return_fields=return_fields,
-            )
+        full_text_result = redis_adapter.text_query(
+            index,
+            text=text_query,
+            text_field_name=text_field_name,
+            text_scorer=text_scorer,
+            num_results=num_results,
+            return_fields=return_fields,
         )
 
         return reciprocal_rank_fusion(
@@ -436,14 +429,13 @@ class RedisVectorDB:
         index = self._require_index()
 
         try:
-            query = VectorQuery(
+            results = redis_adapter.vector_query(
+                index,
                 vector=_to_vector_bytes(vector_query),
                 vector_field_name=vector_field_name,
                 return_fields=return_fields or [],
                 num_results=num_results,
             )
-
-            results = index.query(query)
 
             self.logger.info(f"Vector search completed: {len(results)} results found")
             return results
@@ -457,7 +449,7 @@ class RedisVectorDB:
         index = self._require_index()
 
         try:
-            index.delete()
+            redis_adapter.delete_index(index)
             self.logger.info("Index deleted successfully")
             self.index = None
             self.schema = None
@@ -470,7 +462,7 @@ class RedisVectorDB:
         index = self._require_index()
 
         try:
-            return index.info()
+            return redis_adapter.index_info(index)
         except Exception as e:
             self.logger.error(f"Error getting index info: {e}")
             raise
@@ -478,7 +470,7 @@ class RedisVectorDB:
     def close(self) -> None:
         """Close Redis connection"""
         if self.client:
-            self.client.close()
+            redis_adapter.close(self.client)
             self.logger.info("Redis connection closed")
 
 

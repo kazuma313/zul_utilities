@@ -784,7 +784,7 @@ def test_detections_slice_and_rescale_every_column_together():
 
 
 def test_detections_from_an_ultralytics_result_without_torch():
-    pytest.importorskip("cv2")
+    pytest.importorskip("ultralytics")
     from zul.computer_vision.detection import Detections
 
     class Boxes:
@@ -870,3 +870,58 @@ def test_fetch_without_download_only_checks(tmp_path):
 
     assert fetch(tmp_path / "tidak_ada.pt", download=False) == (False, "belum ada")
     assert fetch(present)[0] is True
+
+
+# --------------------------------------------------------------------------
+# Adapter
+# --------------------------------------------------------------------------
+
+
+def test_yaml_adapter_reads_writes_and_reports_the_line():
+    from zul.adapters import yaml as yaml_adapter
+
+    data = yaml_adapter.loads("b: 1\na: [x, y]\n")
+
+    assert data == {"b": 1, "a": ["x", "y"]}
+    assert yaml_adapter.dumps(data) == "b: 1\na:\n- x\n- y\n"
+    with pytest.raises(yaml_adapter.YamlError) as error:
+        yaml_adapter.loads("a: [1, 2\n")
+    assert error.value.line == 2
+
+
+def test_image_files_round_trip_through_the_adapter(tmp_path):
+    pytest.importorskip("cv2")
+    from zul.computer_vision import draw
+    from zul.computer_vision.video import read_image, save_image
+
+    frame = np.zeros((40, 120, 3), dtype=np.uint8)
+    draw.draw_text(frame, "zul", (5, 30), scale=0.8, thickness=2)
+    path = save_image(tmp_path / "baru" / "teks.png", frame)
+
+    assert frame.any()
+    assert np.array_equal(read_image(path), frame)
+    with pytest.raises(FileNotFoundError):
+        read_image(tmp_path / "tidak_ada.png")
+
+
+def test_unknown_colormap_names_are_rejected():
+    pytest.importorskip("cv2")
+    from zul.computer_vision import draw
+
+    heat = draw.HeatMap(10, 10, radius=2)
+    heat.update(np.array([[5, 5]]))
+
+    with pytest.raises(ValueError, match="jet"):
+        draw.draw_heatmap(np.zeros((10, 10, 3), dtype=np.uint8), heat, colormap="x")
+
+
+def test_ultralytics_internals_used_by_the_adapter_still_exist():
+    pytest.importorskip("ultralytics")
+    from ultralytics.trackers.byte_tracker import BYTETracker
+
+    from zul.adapters import ultralytics as yolo
+
+    assert issubclass(yolo.ZulBYTETracker, BYTETracker)
+    for method in ("update", "get_dists", "init_track"):
+        assert callable(getattr(BYTETracker, method))
+    assert callable(yolo.attempt_download_asset)

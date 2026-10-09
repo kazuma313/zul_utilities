@@ -4,6 +4,8 @@ Shared reader for YAML / JSON configuration files
 Gunanya:
     Satu tempat untuk membaca file config dan memvalidasinya dengan model
     Pydantic. Format dipilih dari ekstensi file (.yaml, .yml, .json).
+    YAML dibaca dan ditulis lewat `zul.adapters.yaml`, dalam bentuk aman
+    yang tidak bisa menjalankan kode Python.
 
 Cara pakai:
     from zul.utilities.vector_DB.config.config_file import load_config, read_config_file
@@ -13,16 +15,18 @@ Cara pakai:
 
 Error yang dilempar:
     FileNotFoundError   file tidak ada
-    ValueError          format tidak didukung, file kosong, atau isi tidak
-                        lolos validasi (pesan menyebut nama file dan field)
+    ValueError          format tidak didukung, YAML tidak valid, file kosong,
+                        atau isi tidak lolos validasi (pesan menyebut nama
+                        file dan field)
 """
 
 import json
 from pathlib import Path
 from typing import Any, TypeVar
 
-import yaml
 from pydantic import BaseModel, ValidationError
+
+from zul.adapters import yaml as yaml_adapter
 
 # --------------------------------------------------------------------------
 # Format File yang Didukung
@@ -50,7 +54,8 @@ def read_config_file(config_path: str | Path) -> dict[str, Any]:
 
     Raises:
         FileNotFoundError: If config file doesn't exist
-        ValueError: If the format is unsupported, or the file is empty / not a mapping
+        ValueError: If the format is unsupported, the YAML is invalid, or the file
+            is empty / not a mapping
     """
     config_path = Path(config_path)
 
@@ -60,7 +65,7 @@ def read_config_file(config_path: str | Path) -> dict[str, Any]:
     suffix = config_path.suffix.lower()
     with open(config_path, encoding="utf-8") as f:
         if suffix in YAML_SUFFIXES:
-            config_dict = yaml.safe_load(f)
+            config_dict = _parse_yaml(f.read(), config_path)
         elif suffix in JSON_SUFFIXES:
             config_dict = json.load(f)
         else:
@@ -76,6 +81,17 @@ def read_config_file(config_path: str | Path) -> dict[str, Any]:
         raise ValueError(f"Configuration root must be a mapping: {config_path}")
 
     return config_dict
+
+
+def _parse_yaml(text: str, config_path: Path) -> Any:
+    """Isi teks YAML; YAML yang rusak menjadi ValueError dengan nama file."""
+    try:
+        return yaml_adapter.loads(text)
+    except yaml_adapter.YamlError as error:
+        where = f" at line {error.line}" if error.line is not None else ""
+        raise ValueError(
+            f"Invalid YAML in {config_path}{where}: {error.problem}"
+        ) from error
 
 
 def load_config(model: type[ConfigModel], config_path: str | Path) -> ConfigModel:
@@ -112,16 +128,11 @@ def write_config_file(
     format = format.lower()
 
     if format in ("yaml", "yml"):
-        with open(output_path, "w", encoding="utf-8") as f:
-            yaml.dump(
-                config_dict,
-                f,
-                default_flow_style=False,
-                allow_unicode=True,
-                sort_keys=False,
-            )
+        text = yaml_adapter.dumps(config_dict, sort_keys=False)
     elif format == "json":
-        with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(config_dict, f, indent=2, ensure_ascii=False)
+        text = json.dumps(config_dict, indent=2, ensure_ascii=False)
     else:
         raise ValueError(f"Unsupported format: {format}. Use 'yaml' or 'json'")
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(text)

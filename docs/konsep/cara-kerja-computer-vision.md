@@ -12,6 +12,8 @@ Setiap modul punya satu tugas dan tidak tahu modul lain dipakai untuk apa:
 - `geometry`, `pose`, `zones`, `timers`, dan `distance` hanya menerima array NumPy dan id track. Modul ini tidak tahu model apa yang dipakai, dan bisa diuji dengan data buatan.
 - `draw` dan `masks` menggambar atau menyembunyikan bagian frame.
 
+Tidak ada modul di atas yang mengimpor OpenCV atau ultralytics sendiri. Keduanya dipakai lewat `zul.adapters.opencv` dan `zul.adapters.ultralytics`, dengan alasan yang dijelaskan di [Lapisan adapter](lapisan-adapter.md).
+
 Dengan pemisahan ini, tidak ada fungsi yang terikat pada satu kasus. "Berapa orang yang menghadap rak lebih dari 3 detik" adalah rangkaian `zone_membership`, `facing_zone_targets`, dan `ConditionTimer`. "Berapa orang yang masuk setelah melihat etalase" adalah `ConditionTimer` dan `LineCounter`. Mengganti model cukup dengan mengganti file bobot di `load_model`.
 
 Semua hitungan memakai id track, bukan jumlah kotak di setiap frame. Orang yang terlihat selama 300 frame tetap satu orang. `ByteTracker` membuang deteksi yang track-nya belum dikonfirmasi. Di proyek asal, 105 dari 493 deteksi (21%) belum punya track yang dikonfirmasi, dan meloloskannya menambah satu orang palsu ke setiap hitungan.

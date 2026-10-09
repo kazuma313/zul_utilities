@@ -25,7 +25,8 @@ Cara pakai (`pip install "zul[milvus]"`, config dari `zul install milvus-helper`
     milvus.delete("my_collection", filter_expr='id == "doc-1"')
 
 Operasi di luar helper ini bisa dilakukan lewat `milvus.client`
-(objek `pymilvus.MilvusClient`).
+(objek `pymilvus.MilvusClient`). Helper ini sendiri tidak mengimpor
+pymilvus; semua pemanggilannya lewat `zul.adapters.milvus`.
 
 Modul ini tidak mengatur logging. Untuk melihat log-nya:
     logging.basicConfig(level=logging.INFO)
@@ -33,8 +34,9 @@ Modul ini tidak mengatur logging. Untuk melihat log-nya:
 
 import logging
 from pathlib import Path
+from typing import Any
 
-from pymilvus import DataType, Function, FunctionType, MilvusClient
+from zul.adapters import milvus
 
 from .config.config_loader import ConfigLoader
 
@@ -42,26 +44,6 @@ from .config.config_loader import ConfigLoader
 # yang menentukan ke mana catatan ini ditulis, misalnya lewat
 # logging.basicConfig ketika aplikasi itu mulai berjalan.
 logger = logging.getLogger(__name__)
-
-# --------------------------------------------------------------------------
-# Pemetaan Tipe Data
-# --------------------------------------------------------------------------
-#
-# File config menulis tipe data sebagai teks, sedangkan Milvus meminta
-# anggota enum DataType. Tabel ini menghubungkan keduanya, dan tipe
-# yang di luar daftar ini ditolak dengan pesan error yang jelas.
-#
-
-
-_DATATYPES = {
-    "VARCHAR": DataType.VARCHAR,
-    "INT64": DataType.INT64,
-    "FLOAT": DataType.FLOAT,
-    "FLOAT_VECTOR": DataType.FLOAT_VECTOR,
-    "SPARSE_FLOAT_VECTOR": DataType.SPARSE_FLOAT_VECTOR,
-    "BOOL": DataType.BOOL,
-    "JSON": DataType.JSON,
-}
 
 
 class MilvusHelper:
@@ -91,13 +73,7 @@ class MilvusHelper:
             conn = self.config.connection
             uri = f"{conn.uri}:{conn.port}"
 
-            client_params = {"uri": uri}
-            if conn.user:
-                client_params["user"] = conn.user
-            if conn.password:
-                client_params["password"] = conn.password
-
-            self.client = MilvusClient(**client_params)  # type: ignore
+            self.client = milvus.connect(uri, user=conn.user, password=conn.password)
             logger.info(f"Connected to Milvus at {uri}")
         except Exception as e:
             logger.error(f"Failed to connect to Milvus: {e}")
@@ -110,13 +86,13 @@ class MilvusHelper:
             if not db_name:
                 return
 
-            existing_dbs = self.client.list_databases()
+            existing_dbs = milvus.list_databases(self.client)
 
             if db_name not in existing_dbs:
-                self.client.create_database(db_name=db_name)
+                milvus.create_database(self.client, db_name)
                 logger.info(f"Created database: {db_name}")
 
-            self.client.use_database(db_name=db_name)
+            milvus.use_database(self.client, db_name)
             logger.info(f"Using database: {db_name}")
         except Exception as e:
             logger.error(f"Failed to setup database: {e}")
@@ -124,7 +100,7 @@ class MilvusHelper:
 
     def _create_collections(self):
         """Create all collections defined in configuration"""
-        existing = self.client.list_collections()
+        existing = milvus.list_collections(self.client)
 
         for col_config in self.config.collections:
             if col_config.collection_name in existing:  # type: ignore
@@ -142,81 +118,59 @@ class MilvusHelper:
 
     def _create_single_collection(self, col_config):
         """Create a single collection"""
-        # Build schema
-        schema = self.client.create_schema(
-            auto_id=col_config.milvus_schema.auto_id,
-            enable_dynamic_field=col_config.milvus_schema.enable_dynamic_field,
-            description=col_config.milvus_schema.description or "",
-        )
-
-        # Add fields
-        for field in col_config.milvus_schema.fields:
-            field_params = {
-                "field_name": field.field_name,
-                "datatype": self._map_datatype(field.datatype),
-                "is_primary": field.is_primary,
-            }
-
-            if field.auto_id:
-                field_params["auto_id"] = field.auto_id
-            if field.max_length:
-                field_params["max_length"] = field.max_length
-            if field.dim:
-                field_params["dim"] = field.dim
-            if field.description:
-                field_params["description"] = field.description
-            if field.enable_analyzer:
-                field_params["enable_analyzer"] = field.enable_analyzer
-
-            schema.add_field(**field_params)
-
-        # Add functions (e.g., BM25)
-        for func in col_config.milvus_schema.functions or []:
-            function = Function(
-                name=func.name,
-                input_field_names=func.input_field_names,
-                output_field_names=func.output_field_names,
-                function_type=self._map_function_type(func.function_type),
-            )
-            schema.add_function(function)
-
-        # Build indexes
-        index_params = self.client.prepare_index_params()
-        for idx in col_config.indexes:
-            params = {
-                "field_name": idx.field_name,
-                "index_name": idx.index_name,
-                "index_type": idx.index_type,
-                "metric_type": idx.metric_type,
-            }
-            if idx.params:
-                params["params"] = idx.params
-
-            index_params.add_index(**params)
-
-        # Create collection
-        self.client.create_collection(
-            collection_name=col_config.collection_name,
-            schema=schema,
-            index_params=index_params,
+        schema = col_config.milvus_schema
+        milvus.create_collection(
+            self.client,
+            col_config.collection_name,
+            fields=[self._field_params(field) for field in schema.fields],
+            functions=[
+                {
+                    "name": func.name,
+                    "input_field_names": func.input_field_names,
+                    "output_field_names": func.output_field_names,
+                    "function_type": func.function_type,
+                }
+                for func in schema.functions or []
+            ],
+            indexes=[self._index_params(idx) for idx in col_config.indexes],
             shards_num=col_config.shards_num,
+            auto_id=schema.auto_id,
+            enable_dynamic_field=schema.enable_dynamic_field,
+            description=schema.description or "",
         )
 
-    def _map_datatype(self, datatype: str):
-        """Map string datatype to Milvus DataType"""
-        try:
-            return _DATATYPES[datatype.upper()]
-        except KeyError:
-            raise ValueError(
-                f"Unsupported datatype: {datatype}. Use one of {sorted(_DATATYPES)}"
-            ) from None
+    @staticmethod
+    def _field_params(field) -> dict[str, Any]:
+        """Argumen satu field; nilai yang kosong di config tidak dikirim."""
+        params = {
+            "field_name": field.field_name,
+            "datatype": field.datatype,
+            "is_primary": field.is_primary,
+        }
+        if field.auto_id:
+            params["auto_id"] = field.auto_id
+        if field.max_length:
+            params["max_length"] = field.max_length
+        if field.dim:
+            params["dim"] = field.dim
+        if field.description:
+            params["description"] = field.description
+        if field.enable_analyzer:
+            params["enable_analyzer"] = field.enable_analyzer
+        return params
 
-    def _map_function_type(self, function_type: str):
-        """Map string function type (e.g. "BM25") to Milvus FunctionType"""
-        try:
-            return FunctionType[function_type.upper()]
-        except KeyError:
-            raise ValueError(f"Unsupported function type: {function_type}") from None
+    @staticmethod
+    def _index_params(idx) -> dict[str, Any]:
+        """Argumen satu index; `params` hanya dikirim jika diisi."""
+        params = {
+            "field_name": idx.field_name,
+            "index_name": idx.index_name,
+            "index_type": idx.index_type,
+            "metric_type": idx.metric_type,
+        }
+        if idx.params:
+            params["params"] = idx.params
+        return params
 
     # ----------------------------------------------------------------------
     # Operasi Data
@@ -237,7 +191,7 @@ class MilvusHelper:
             if isinstance(data, dict):
                 data = [data]
 
-            result = self.client.insert(collection_name=collection_name, data=data)
+            result = milvus.insert(self.client, collection_name, data)
             logger.info(f"Inserted {len(data)} records into {collection_name}")
             return result
         except Exception as e:
@@ -265,9 +219,10 @@ class MilvusHelper:
             **kwargs: Additional search parameters
         """
         try:
-            result = self.client.search(
-                collection_name=collection_name,
-                data=query_vectors,
+            result = milvus.search(
+                self.client,
+                collection_name,
+                query_vectors,
                 anns_field=anns_field,
                 limit=limit,
                 output_fields=output_fields or ["id", "distance"],
@@ -296,9 +251,10 @@ class MilvusHelper:
             limit: Max results
         """
         try:
-            result = self.client.query(
-                collection_name=collection_name,
-                filter=filter_expr,
+            result = milvus.query(
+                self.client,
+                collection_name,
+                filter_expr,
                 output_fields=output_fields or ["*"],
                 limit=limit,
             )
@@ -317,9 +273,7 @@ class MilvusHelper:
             filter_expr: Filter for deletion
         """
         try:
-            result = self.client.delete(
-                collection_name=collection_name, filter=filter_expr
-            )
+            result = milvus.delete(self.client, collection_name, filter_expr)
             logger.info(f"Deleted from {collection_name}")
             return result
         except Exception as e:
@@ -332,12 +286,12 @@ class MilvusHelper:
 
     def list_collections(self) -> list[str]:
         """List all collections"""
-        return self.client.list_collections()  # type: ignore
+        return milvus.list_collections(self.client)
 
     def drop_collection(self, collection_name: str):
         """Drop a collection"""
         try:
-            self.client.drop_collection(collection_name=collection_name)
+            milvus.drop_collection(self.client, collection_name)
             logger.info(f"Dropped collection: {collection_name}")
         except Exception as e:
             logger.error(f"Failed to drop collection: {e}")
@@ -345,7 +299,7 @@ class MilvusHelper:
 
     def get_collection_stats(self, collection_name: str) -> dict:
         """Get collection statistics"""
-        return self.client.get_collection_stats(collection_name=collection_name)
+        return milvus.collection_stats(self.client, collection_name)
 
     def get_all_data(
         self,
@@ -366,21 +320,12 @@ class MilvusHelper:
         Returns:
             List of all matching records as dicts
         """
-        results: list[dict] = []
-        iterator = self.client.query_iterator(
-            collection_name=collection_name,
-            batch_size=batch_size,
-            filter=filter_expr,
+        results = milvus.query_all(
+            self.client,
+            collection_name,
+            filter_expr=filter_expr,
             output_fields=output_fields or ["*"],
+            batch_size=batch_size,
         )
-        try:
-            while True:
-                batch = iterator.next()
-                if not batch:
-                    break
-                results.extend(batch)
-        finally:
-            iterator.close()
-
         logger.info(f"Retrieved {len(results)} records from {collection_name}")
         return results

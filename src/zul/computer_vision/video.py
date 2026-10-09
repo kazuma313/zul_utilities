@@ -1,9 +1,10 @@
 """
-Membaca dan menulis video untuk analisis frame demi frame.
+Membaca dan menulis video serta gambar untuk analisis frame demi frame.
 
 Gunanya:
     Membaca potongan video dengan langkah frame, menulis video beranotasi
-    dengan durasi yang sama dengan sumbernya, dan mengukur kecepatan proses.
+    dengan durasi yang sama dengan sumbernya, menyimpan dan membaca file
+    gambar, dan mengukur kecepatan proses.
     Dengan `stride=3`, setiap frame ketiga diproses dan video hasil ditulis
     pada fps/3, jadi 10 detik video tetap menjadi 10 detik.
     Butuh extra vision: `pip install "zul[vision]"`.
@@ -29,8 +30,9 @@ from collections.abc import Iterator
 from dataclasses import dataclass, replace
 from pathlib import Path
 
-import cv2
 import numpy as np
+
+from ..adapters import opencv
 
 # --------------------------------------------------------------------------
 # Informasi Video
@@ -48,18 +50,9 @@ class VideoInfo:
 
     @classmethod
     def from_path(cls, path: str | Path) -> VideoInfo:
-        capture = cv2.VideoCapture(str(path))
-        if not capture.isOpened():
-            raise FileNotFoundError(f"video tidak bisa dibuka: {path}")
-        try:
-            return cls(
-                width=int(capture.get(cv2.CAP_PROP_FRAME_WIDTH)),
-                height=int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT)),
-                fps=float(capture.get(cv2.CAP_PROP_FPS)) or 30.0,
-                total_frames=int(capture.get(cv2.CAP_PROP_FRAME_COUNT)),
-            )
-        finally:
-            capture.release()
+        """Info dari file video; FileNotFoundError jika video tidak bisa dibuka."""
+        with opencv.VideoReader(path) as reader:
+            return cls(reader.width, reader.height, reader.fps, reader.frame_count)
 
     def slice(
         self, start: int = 0, end: int | None = None, stride: int = 1
@@ -75,24 +68,18 @@ def read_frames(
     path: str | Path, start: int = 0, end: int | None = None, stride: int = 1
 ) -> Iterator[tuple[int, float, np.ndarray]]:
     """Frame sebagai `(nomor_frame_asli, detik, frame)`, dari `start` sampai `end`."""
-    capture = cv2.VideoCapture(str(path))
-    if not capture.isOpened():
-        raise FileNotFoundError(f"video tidak bisa dibuka: {path}")
-    fps = float(capture.get(cv2.CAP_PROP_FPS)) or 30.0
     stride = max(int(stride), 1)
-    try:
+    with opencv.VideoReader(path) as reader:
         if start:
-            capture.set(cv2.CAP_PROP_POS_FRAMES, start)
+            reader.seek(start)
         frame_number = start
         while end is None or frame_number < end:
-            ok, frame = capture.read()
-            if not ok:
+            frame = reader.read()
+            if frame is None:
                 break
             if (frame_number - start) % stride == 0:
-                yield frame_number, frame_number / fps, frame
+                yield frame_number, frame_number / reader.fps, frame
             frame_number += 1
-    finally:
-        capture.release()
 
 
 # --------------------------------------------------------------------------
@@ -108,16 +95,13 @@ class VideoWriter:
         self.info = info
         self.codec = codec
         self.frames = 0
-        self._writer: cv2.VideoWriter | None = None
+        self._writer: opencv.VideoFileWriter | None = None
 
     def __enter__(self) -> VideoWriter:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        fourcc = cv2.VideoWriter_fourcc(*self.codec)
-        self._writer = cv2.VideoWriter(
-            str(self.path), fourcc, self.info.fps, (self.info.width, self.info.height)
+        self._writer = opencv.VideoFileWriter(
+            self.path, self.info.fps, self.info.width, self.info.height, self.codec
         )
-        if not self._writer.isOpened():
-            raise OSError(f"video tidak bisa ditulis: {self.path} (codec {self.codec})")
         return self
 
     def __exit__(self, *exc_info) -> bool:
@@ -130,6 +114,27 @@ class VideoWriter:
             raise RuntimeError("VideoWriter harus dipakai dengan `with`")
         self._writer.write(frame)
         self.frames += 1
+
+
+# --------------------------------------------------------------------------
+# File Gambar
+# --------------------------------------------------------------------------
+
+
+def save_image(path: str | Path, image: np.ndarray) -> Path:
+    """Simpan frame BGR sebagai gambar; formatnya mengikuti ekstensi, misalnya .png.
+
+    Folder tujuannya dibuat jika belum ada. Mengembalikan path file itu.
+    """
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    opencv.write_image(path, image)
+    return path
+
+
+def read_image(path: str | Path) -> np.ndarray:
+    """Baca file gambar sebagai frame BGR; FileNotFoundError jika tidak bisa dibaca."""
+    return opencv.read_image(path)
 
 
 # --------------------------------------------------------------------------
@@ -177,7 +182,7 @@ class Pacer:
         self._deadline = time.perf_counter() + self.period
 
     def wait_ms(self) -> int:
-        """Milidetik menunggu sebelum frame berikutnya, minimal 1 untuk cv2.waitKey."""
+        """Milidetik menunggu sebelum frame berikutnya, minimal 1 untuk waitKey."""
         remaining = max(int((self._deadline - time.perf_counter()) * 1000), 1)
         self._deadline += self.period
         return remaining

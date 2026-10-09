@@ -3,7 +3,8 @@ Versi ringkas AI service (dataclass + env var).
 
 Gunanya:
     Memanggil LLM dan model embedding lewat endpoint yang kompatibel
-    dengan OpenAI, dengan konfigurasi dari environment variable.
+    dengan OpenAI, dengan konfigurasi dari environment variable. Kedua
+    model dibuat dan dipanggil lewat zul.adapters.langchain_openai.
 
 Cara pakai (`pip install "zul[llm]"`):
     from zul.utilities.script_helper.ai_models import AIService
@@ -23,7 +24,7 @@ pakai `zul.utilities.embedding_service`.
 import os
 from dataclasses import dataclass, field
 
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from zul.adapters import langchain_openai as openai_adapter
 
 # --------------------------------------------------------------------------
 # Konfigurasi
@@ -82,6 +83,11 @@ class AIConfig:
 # --------------------------------------------------------------------------
 # AI Service
 # --------------------------------------------------------------------------
+#
+# Atribut llm dan embedding berisi ChatOpenAI dan OpenAIEmbeddings buatan
+# adapter. Keduanya tetap atribut publik agar kode lama yang memakainya
+# tidak rusak, tetapi cara yang dianjurkan ialah chat() dan embed().
+#
 
 
 class AIService:
@@ -90,7 +96,7 @@ class AIService:
         self.config = config or AIConfig()
 
         # Initialize LLM dengan konfigurasi terpisah
-        self.llm = ChatOpenAI(
+        self.llm = openai_adapter.create_chat_model(
             base_url=self.config.llm_config.base_url,
             api_key=self.config.llm_config.api_key,
             model=self.config.llm_config.model,
@@ -100,7 +106,7 @@ class AIService:
         # Initialize embedding dengan konfigurasi terpisah (optional)
         self.embedding = None
         if self.config.enable_embedding and self.config.embedding_config:
-            self.embedding = OpenAIEmbeddings(
+            self.embedding = openai_adapter.create_embeddings(
                 base_url=self.config.embedding_config.base_url,
                 api_key=self.config.embedding_config.api_key,
                 model=self.config.embedding_config.model,
@@ -109,8 +115,7 @@ class AIService:
     def chat(self, prompt: str) -> str:
         """Generate response text from LLM"""
         try:
-            response = self.llm.invoke(prompt)
-            return response.content
+            return openai_adapter.chat(self.llm, prompt).content
         except Exception as e:
             raise RuntimeError(f"Chat failed: {e}") from e
 
@@ -120,7 +125,7 @@ class AIService:
             raise ValueError("Embedding not enabled or configured")
 
         try:
-            return self.embedding.embed_query(text)
+            return openai_adapter.embed_query(self.embedding, text)
         except Exception as e:
             raise RuntimeError(f"Embedding failed: {e}") from e
 

@@ -3,7 +3,8 @@ OCR dokumen PDF dengan Google Gemini (butuh `pip install "zul[gemini]"`).
 
 Gunanya:
     Mengunggah PDF ke Gemini, meminta model mengekstrak isinya sesuai
-    prompt, lalu menghapus file dari server Gemini setelah selesai.
+    prompt, lalu menghapus file dari server Gemini setelah selesai. Semua
+    pemanggilan SDK google-genai lewat zul.adapters.gemini.
 
 Cara pakai:
     import os
@@ -23,13 +24,16 @@ Cara pakai:
     )
 
 Kedua fungsi mengembalikan None jika gagal (API key kosong, file tidak
-ada, atau request error); detailnya ditulis ke logger.
+ada, atau request error); detailnya ditulis ke logger. Client dari
+`create_gemini_client` adalah genai.Client milik google-genai, dibuat
+oleh zul.adapters.gemini.
 """
 
 import logging
 import os
+from typing import Any
 
-from google import genai
+from zul.adapters import gemini as gemini_adapter
 
 # --------------------------------------------------------------------------
 # Logger dan Client
@@ -44,7 +48,7 @@ def setup_logger():
     return logging.getLogger(__name__)
 
 
-def create_gemini_client(api_key: str, logger: logging.Logger) -> genai.Client | None:
+def create_gemini_client(api_key: str, logger: logging.Logger) -> Any | None:
     """
     Initializes and returns a Gemini client.
 
@@ -60,7 +64,7 @@ def create_gemini_client(api_key: str, logger: logging.Logger) -> genai.Client |
         return None
     try:
         logger.info("Initializing Gemini client...")
-        client = genai.Client(api_key=api_key)
+        client = gemini_adapter.create_client(api_key)
         logger.info("Gemini client initialized successfully.")
         return client
     except Exception:
@@ -79,7 +83,7 @@ def create_gemini_client(api_key: str, logger: logging.Logger) -> genai.Client |
 
 
 def process_pdf_with_gemini(
-    client: genai.Client,
+    client: Any,
     pdf_path: str,
     prompt: str,
     logger: logging.Logger,
@@ -107,16 +111,15 @@ def process_pdf_with_gemini(
     try:
         file_basename = os.path.basename(pdf_path)
         logger.info(f"Uploading file: '{file_basename}'...")
-        uploaded_file = client.files.upload(file=pdf_path)
+        uploaded_file = gemini_adapter.upload_file(client, pdf_path)
         logger.info(f"File uploaded successfully. URI: {uploaded_file.uri}")
 
         logger.info(f"Sending request to Gemini model '{model_name}'...")
-        response = client.models.generate_content(
-            model=model_name,
-            contents=[prompt, uploaded_file],
+        text = gemini_adapter.generate_text(
+            client, model=model_name, prompt=prompt, file=uploaded_file
         )
         logger.info("Response received successfully.")
-        return response.text
+        return text
 
     except Exception:
         logger.error(
@@ -128,7 +131,7 @@ def process_pdf_with_gemini(
         if uploaded_file:
             logger.info(f"Deleting uploaded file from server: {uploaded_file.name}...")
             try:
-                client.files.delete(name=uploaded_file.name)
+                gemini_adapter.delete_file(client, uploaded_file.name)
                 logger.info("File cleanup complete.")
             except Exception:
                 logger.error(
