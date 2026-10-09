@@ -176,6 +176,9 @@ nav:
           - Membuat mind map: panduan/membuat-mindmap.md
           - Membuat silabus dan materi belajar: panduan/membuat-silabus-dan-materi.md
           - Menyiapkan dokumen untuk RAG: panduan/menyiapkan-dokumen-untuk-rag.md
+      - Computer Vision:
+          - Mengukur perhatian ke rak: panduan/mengukur-perhatian-ke-rak.md
+          - Menghitung pengunjung masuk: panduan/menghitung-pengunjung-masuk.md
       - Proyek Zul:
           - Menerbitkan dokumentasi: panduan/menerbitkan-dokumentasi.md
           - Menulis tulisan blog: panduan/menulis-blog.md
@@ -199,6 +202,8 @@ nav:
           - Markdown converter: referensi/markdown-converter.md
           - ChartGenerator: referensi/grafik.md
           - Helper kecil: referensi/helper.md
+      - Computer Vision:
+          - Modul computer_vision: referensi/computer-vision.md
       - Situs dokumentasi:
           - Workflow dokumentasi: referensi/workflow-dokumentasi.md
           - Format tulisan blog: referensi/blog.md
@@ -213,6 +218,7 @@ nav:
       - Menguji tanpa LLM asli: konsep/pengujian.md
       - Cara situs dokumentasi diterbitkan: konsep/penerbitan-dokumentasi.md
       - Model lokal untuk skill belajar: konsep/model-lokal-untuk-skill-belajar.md
+      - Aturan perilaku di video: konsep/aturan-perilaku-di-video.md
       - Hexagonal dari nol: hexagonal.md
   - Playground: playground.md
   - Blog:

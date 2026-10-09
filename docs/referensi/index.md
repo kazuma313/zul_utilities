@@ -31,6 +31,12 @@ Fakta untuk dicari cepat: opsi sebuah perintah, bentuk request, parameter sebuah
 | [ChartGenerator](grafik.md) | Bentuk konfigurasi grafik dan hasil statistiknya. |
 | [Helper kecil](helper.md) | Logger, embedding palsu, pengukur waktu, dan pembaca PDF. |
 
+## Computer Vision
+
+| Halaman | Isi |
+|---|---|
+| [Computer Vision](computer-vision.md) | Semua modul `zul.computer_vision`: geometri, pose, garis, aturan, config, CSV, gambar, video, deteksi, dan bobot model. |
+
 ## Situs dokumentasi
 
 | Halaman | Isi |

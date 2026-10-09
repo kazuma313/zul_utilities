@@ -109,5 +109,6 @@ zul build hexa --name my-agent
 | LLM dan embedding | `AIService` | [Memanggil LLM dan embedding](panduan/memanggil-llm-dan-embedding.md) |
 | Dokumen | Markdown ke PDF dan PPTX | [Mengubah Markdown menjadi PDF dan PPTX](panduan/mengonversi-markdown.md) |
 | Analisis | `ChartGenerator` dengan uji statistik | [Membuat grafik perbandingan](panduan/membuat-grafik.md) |
+| Computer Vision | Deteksi orang, tracking, zona, arah hadap, dan aturan perilaku untuk video CCTV | [Mengukur perhatian pengunjung ke rak](panduan/mengukur-perhatian-ke-rak.md) |
 
 </div>

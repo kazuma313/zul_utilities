@@ -53,6 +53,15 @@ Kemampuan yang di dalamnya ada model AI yang bekerja, dengan model lokal lewat O
 | Membuat silabus dan materi belajar dari topik, PDF, gambar, atau dokumen, dengan model lokal | [Membuat silabus dan materi belajar](membuat-silabus-dan-materi.md) |
 | Memotong dokumen menjadi chunk berkonteks untuk vector database, dengan model lokal | [Menyiapkan dokumen untuk RAG](menyiapkan-dokumen-untuk-rag.md) |
 
+## Computer Vision
+
+Modul `zul.computer_vision` untuk menganalisis perilaku orang di video CCTV: deteksi, tracking, zona, arah hadap, dan aturan yang menghasilkan CSV.
+
+| Tugas | Panduan |
+|---|---|
+| Mengukur siapa memperhatikan rak mana, dan berapa lama | [Mengukur perhatian pengunjung ke rak](mengukur-perhatian-ke-rak.md) |
+| Menghitung orang yang berminat ke toko, dan berapa yang masuk | [Menghitung pengunjung yang berminat dan masuk](menghitung-pengunjung-masuk.md) |
+
 ## Proyek Zul
 
 | Tugas | Panduan |

@@ -13,6 +13,7 @@ Cara kerja setiap bagian Zul dan alasan di balik rancangannya.
 | [Menguji tanpa LLM asli](pengujian.md) | Apa yang dibuktikan test dengan model palsu, dan apa yang tetap harus diuji dengan model sungguhan? |
 | [Cara situs dokumentasi diterbitkan](penerbitan-dokumentasi.md) | Kenapa workflow penerbitan mengunci semua versi dan memeriksa hasilnya berlapis, dan apa yang tetap tidak dijamin? |
 | [Model lokal untuk skill belajar](model-lokal-untuk-skill-belajar.md) | Model Ollama mana yang paling cocok untuk skill silabus dan materi belajar, dan kesalahan apa yang tidak tertangkap oleh kode? |
+| [Cara kerja aturan perilaku di video](aturan-perilaku-di-video.md) | Bagaimana deteksi per frame menjadi kunjungan, perhatian, minat, dan kontak, dan kenapa aturannya dibuat begitu? |
 | [Hexagonal dari nol](../hexagonal.md) | Seperti apa arsitektur hexagonal dijelaskan dari awal, dengan contoh aplikasi toko online? |
 
 ## Halaman terkait
