@@ -16,7 +16,7 @@ Cara pakai:
     from zul.assistant.server import build_server
     server = build_server()
 
-Isinya: 9 tool baca-saja (lihat TOOLS), 4 resource Markdown, dan 2 prompt.
+Isinya: 9 tool baca-saja (lihat TOOLS), 4 resource Markdown, dan 3 prompt.
 """
 
 from __future__ import annotations
@@ -29,13 +29,15 @@ from . import knowledge, prompts
 
 INSTRUCTIONS = """\
 Server ini menjelaskan paket Python Zul: wrapper berbagai library (OpenCV,
-RF-DETR, LangChain, Docling, pymilvus, redisvl, dan lainnya) menjadi fungsi
-kecil yang bisa dirangkai, dengan dokumentasi berbahasa Indonesia.
+RF-DETR, LangChain, Docling, pymilvus, redisvl, ragas, dan lainnya) menjadi
+fungsi kecil yang bisa dirangkai, dengan dokumentasi berbahasa Indonesia.
 
 Untuk memakai Zul di proyek: search_docs, lalu find_examples, lalu
 module_guide untuk setiap modul yang dipakai.
 Untuk menulis kode di dalam Zul: conventions, list_modules, read_source
-modul yang mirip, lalu check_code untuk setiap file baru."""
+modul yang mirip, lalu check_code untuk setiap file baru.
+Untuk evaluasi retrieval dan RAG dengan ragas: prompt evaluasi_retrieval, atau
+read_doc panduan/mengevaluasi-retrieval lalu module_guide zul.evaluation."""
 
 TOOLS = [
     knowledge.list_modules,
@@ -84,7 +86,7 @@ RESOURCES = [
     ),
 ]
 
-PROMPTS = [prompts.tulis_modul_zul, prompts.pakai_zul]
+PROMPTS = [prompts.tulis_modul_zul, prompts.pakai_zul, prompts.evaluasi_retrieval]
 
 
 def _version() -> str:

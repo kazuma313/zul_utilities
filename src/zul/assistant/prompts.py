@@ -12,6 +12,7 @@ Cara pakai:
     from zul.assistant.prompts import tulis_modul_zul
 
     print(tulis_modul_zul("garis penghitung berbentuk lingkaran"))
+    print(evaluasi_retrieval("bandingkan Redis rrf dan hybrid"))
 """
 
 from __future__ import annotations
@@ -26,8 +27,9 @@ Ikuti langkah berikut dengan tool dari MCP server zul:
 2. Panggil `list_modules`. Jika fungsi yang dibutuhkan sudah ada, pakai
    fungsi itu dan jangan menulis ulang.
 3. Pilih modul yang paling mirip, lalu baca dengan `read_source`, misalnya
-   `zul.computer_vision.zones` untuk alat hitung atau `zul.adapters.opencv`
-   untuk adapter library.
+   `zul.computer_vision.zones` untuk alat hitung, `zul.evaluation.retrievers`
+   untuk antarmuka yang implementasinya bisa diganti, `zul.evaluation.judge`
+   untuk alur evaluasi, atau `zul.adapters.opencv` untuk adapter library.
 4. Jika butuh library pihak ketiga, periksa lisensinya (MIT, BSD, atau
    Apache 2.0), lalu impor library itu hanya di file baru zul/adapters/.
 5. Tulis modulnya dengan docstring Gunanya dan Cara pakai, blok komentar
@@ -48,4 +50,27 @@ Ikuti langkah berikut dengan tool dari MCP server zul:
    fungsi, argumen, dan nilai kembaliannya tepat.
 4. Tulis kode yang merangkai fungsi Zul itu. Jangan menulis ulang fungsi
    yang sudah ada di Zul, dan sebutkan extra Zul yang perlu di-install.
+"""
+
+
+def evaluasi_retrieval(tujuan: str) -> str:
+    """Langkah menulis script evaluasi retrieval dan RAG dengan zul.evaluation."""
+    return f"""Tulis script evaluasi retrieval dengan zul.evaluation untuk: {tujuan}
+
+Ikuti langkah berikut dengan tool dari MCP server zul:
+1. Panggil `read_doc` untuk `panduan/mengevaluasi-retrieval`, lalu
+   `module_guide` untuk setiap modul zul.evaluation yang akan dipakai.
+2. Susun script dengan urutan ini, satu fungsi Zul untuk setiap langkah:
+   `load_qa_dataset`, lalu retriever (`RedisRetriever`, `MilvusRetriever`, atau
+   `FunctionRetriever`), lalu `run_rag` dengan `out_path`, lalu
+   `retrieval_hit_stats`, lalu `evaluate_rag` dan `save_report`. Untuk beberapa
+   percobaan, bandingkan hasilnya dengan `compare_reports`.
+3. Baca kunci dan alamat server dari environment variable (`RAGAS_JUDGE_*`,
+   `REDIS_*`, `MILVUS_*`), jangan menulisnya di kode. Model penilai harus
+   berbeda dari model yang dinilai.
+4. Mulai dari `RETRIEVAL_METRICS`. Tambahkan `GENERATION_METRICS` hanya jika
+   `run_rag` diberi generator, misalnya `ChatGenerator`.
+5. Jangan mengimpor ragas langsung, karena ragas 0.4 hanya bisa diimpor lewat
+   `zul.adapters.ragas`. Sebutkan extra yang perlu di-install, misalnya
+   `zul[evaluation,redis,llm]`.
 """

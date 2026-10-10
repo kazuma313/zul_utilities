@@ -231,6 +231,14 @@ stats = measure_latency(
 print(stats)
 ```
 
+## Meminta code assistant menulis script evaluasi
+
+Jika code assistant-mu tersambung ke [MCP server Zul](../tutorial/code-assistant.md), prompt `evaluasi_retrieval` memintanya menulis script evaluasi dengan urutan di panduan ini. Di Claude Code, tulis tujuanmu di dalam tanda kutip:
+
+```text
+/mcp__zul__evaluasi_retrieval "bandingkan Redis rrf dan hybrid untuk dataset qa.xlsx"
+```
+
 ## Jika skornya bermasalah
 
 Tabel berikut mencantumkan masalah yang paling sering muncul beserta penyelesaiannya:

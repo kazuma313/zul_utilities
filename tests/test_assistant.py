@@ -42,6 +42,17 @@ def test_unknown_module_suggests_close_names():
     assert "zul.computer_vision.zones" in text
 
 
+def test_evaluation_modules_and_guide_are_reachable():
+    modules = knowledge.list_modules()
+    hits = knowledge.search_docs("evaluasi retrieval", limit=3)
+
+    assert "## evaluation" in modules
+    assert "| `zul.evaluation.judge` |" in modules
+    assert "### `evaluate_rag(" in knowledge.module_guide("evaluation.judge")
+    assert "panduan/mengevaluasi-retrieval" in hits
+    assert "zul.evaluation.retrievers" in prompts.tulis_modul_zul("retriever baru")
+
+
 def test_read_source_returns_the_whole_file():
     text = knowledge.read_source("zul.computer_vision.zones")
 
@@ -172,6 +183,10 @@ def test_prompts_name_the_tools_to_call():
     assert "`conventions`" in prompts.tulis_modul_zul("timer baru")
     assert "`check_code`" in prompts.tulis_modul_zul("timer baru")
     assert "`search_docs`" in prompts.pakai_zul("hitung orang")
+    template = prompts.evaluasi_retrieval("bandingkan rrf dan hybrid")
+    assert "bandingkan rrf dan hybrid" in template
+    assert "`evaluate_rag`" in template
+    assert "panduan/mengevaluasi-retrieval" in template
 
 
 # --------------------------------------------------------------------------
@@ -253,7 +268,11 @@ def test_server_registers_every_tool_resource_and_prompt():
         "zul://docs/{section}/{page}",
         "zul://source/{module}",
     }
-    assert set(result["prompts"]) == {"tulis_modul_zul", "pakai_zul"}
+    assert set(result["prompts"]) == {
+        "tulis_modul_zul",
+        "pakai_zul",
+        "evaluasi_retrieval",
+    }
     assert not result["sample_failed"]
     assert "Hasil pencarian" in result["sample"]
 
@@ -288,7 +307,7 @@ def test_cli_check_prints_a_summary():
     result = runner.invoke(app, ["mcp", "check"])
 
     assert result.exit_code == 0, result.output
-    assert "MCP server zul siap: 9 tool, 4 resource, 2 prompt." in result.output
+    assert "MCP server zul siap: 9 tool, 4 resource, 3 prompt." in result.output
 
 
 def test_serve_speaks_mcp_over_stdio():

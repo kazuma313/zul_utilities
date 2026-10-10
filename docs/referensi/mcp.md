@@ -98,6 +98,7 @@ Prompt berisi urutan tool yang perlu dipanggil untuk sebuah pekerjaan. Di Claude
 | Prompt | Argumen | Urutan kerja |
 |---|---|---|
 | `pakai_zul` | `tugas` | `search_docs`, `find_examples`, dan `module_guide`, lalu menulis kode yang merangkai fungsi Zul dan menyebut extra yang perlu di-install. |
+| `evaluasi_retrieval` | `tujuan` | `read_doc` panduan evaluasi dan `module_guide` modul `zul.evaluation`, lalu script dengan urutan `load_qa_dataset`, retriever, `run_rag`, `retrieval_hit_stats`, `evaluate_rag`, dan `save_report`. Kunci dibaca dari environment variable, dan ragas tidak diimpor langsung. |
 | `tulis_modul_zul` | `topik` | `conventions`, `list_modules`, dan `read_source` modul yang mirip. Library baru diperiksa lisensinya dan diletakkan di adapter. Modul dan test-nya ditulis, lalu setiap file baru diperiksa dengan `check_code`. |
 
 ## Sumber dokumentasi
