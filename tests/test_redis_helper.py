@@ -221,6 +221,23 @@ def test_hybrid_search_rrf_fuses_vector_and_text_results():
     }
 
 
+def test_text_search_runs_full_text_query_only():
+    db = RedisVectorDB()
+    db.create_index(SCHEMA)
+
+    hits = db.text_search("q", "content", return_fields=["content"], num_results=3)
+
+    assert hits == [{"content": "hasil"}]
+    (query,) = db.index.queries
+    assert query["text"] == {
+        "text": "q",
+        "text_field_name": "content",
+        "text_scorer": "BM25",
+        "num_results": 3,
+        "return_fields": ["content"],
+    }
+
+
 def test_delete_index_forgets_index_and_schema():
     db = RedisVectorDB()
     index = db.create_index(SCHEMA)

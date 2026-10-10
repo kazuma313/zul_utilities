@@ -29,6 +29,7 @@ Cara pakai RedisVectorDB:
     db.vector_search(query_vector, "embedding", return_fields=["content"])
     db.hybrid_search("teks", query_vector, "content", "embedding", alpha=0.7)
     db.hybrid_search_rrf("teks", query_vector, "content", "embedding")
+    db.text_search("teks", "content", return_fields=["content"])
 
 Catatan penting:
     - Untuk storage `hash`, vektor harus dikirim sebagai bytes float32:
@@ -43,13 +44,13 @@ Catatan penting:
 """
 
 import logging
-from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
 from zul.adapters import redis as redis_adapter
+from zul.utilities.ranking import reciprocal_rank_fusion
 
 from .config.config_loader_redis import ConfigLoader
 from .config.config_schema_redis import RedisConfig
@@ -85,28 +86,6 @@ def _to_vector_bytes(vector: Vector) -> bytes:
 
 def _decode(value: Any) -> Any:
     return value.decode() if isinstance(value, bytes) else value
-
-
-def reciprocal_rank_fusion(
-    *ranked_lists: list[Any], K: int = 100
-) -> tuple[list[tuple[Any, float]], list[Any]]:
-    """
-    Fuse rank from multiple IR systems using Reciprocal Rank Fusion.
-
-    Args:
-        *ranked_lists: Ranked results from different IR system.
-        K (int): A constant used in the RRF formula (default is 100).
-
-    Returns:
-        Tuple of list of (document, score) sorted by score, and the sorted documents
-    """
-    rrf_scores: dict[Any, float] = defaultdict(float)
-    for ranked_list in ranked_lists:
-        for rank, item in enumerate(ranked_list, 1):
-            rrf_scores[item] += 1 / (rank + K)
-
-    sorted_items = sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)
-    return sorted_items, [item for item, _score in sorted_items]
 
 
 # --------------------------------------------------------------------------
@@ -406,6 +385,39 @@ class RedisVectorDB:
             [res[text_field_name] for res in full_text_result],
             K=rrf_K,
         )
+
+    def text_search(
+        self,
+        text_query: str,
+        text_field_name: str,
+        text_scorer: str = "BM25",
+        return_fields: list[str] | None = None,
+        num_results: int = 10,
+    ) -> Any:
+        """
+        Melakukan full-text search, tanpa vektor.
+
+        Args:
+            text_query: Text query string
+            text_field_name: Field name untuk text search
+            text_scorer: Text scoring method (TFIDF, BM25, etc.)
+            return_fields: Fields to return in results
+            num_results: Number of results to return
+
+        Returns:
+            Search results
+        """
+        index = self._require_index()
+        results = redis_adapter.text_query(
+            index,
+            text=text_query,
+            text_field_name=text_field_name,
+            text_scorer=text_scorer,
+            return_fields=return_fields or [],
+            num_results=num_results,
+        )
+        self.logger.info(f"Text search completed: {len(results)} results found")
+        return results
 
     def vector_search(
         self,

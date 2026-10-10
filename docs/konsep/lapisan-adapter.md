@@ -49,7 +49,7 @@ Jika sebuah modul melanggar aturan pertama, pesan test-nya menyebut modul dan li
 | `opencv` | OpenCV (`cv2`) | `computer_vision.draw`, `masks`, `video`, `detection` | `vision` |
 | `lap` | lap | `computer_vision.tracking` | `tracking` |
 | `rfdetr` | RF-DETR, PyTorch | `computer_vision.detection`, `weights` | `detection` |
-| `milvus` | pymilvus | `MilvusHelper` | `milvus` |
+| `milvus` | pymilvus | `MilvusHelper`, `evaluation.milvus_store` | `milvus` |
 | `redis` | redis, redisvl | `RedisVectorDB`, `RedisHelper` | `redis` |
 | `docling` | Docling | `DoclingVLMConverter` | `ocr` |
 | `gemini` | google-genai (`google`) | OCR dengan Gemini | `gemini` |
@@ -64,6 +64,9 @@ Jika sebuah modul melanggar aturan pertama, pesan test-nya menyebut modul dan li
 | `scipy` | SciPy | `ChartGenerator` | `analysis` |
 | `pandas` | pandas | `create_chart_from_csv`, `save_latency_to_csv` | `analysis` |
 | `mcp` | SDK MCP (`mcp`) | MCP server di `assistant.server` | `mcp` |
+| `ragas` | ragas, client OpenAI (`openai`) | `evaluation.judge` | `evaluation` |
+| `openpyxl` | openpyxl | Membaca `.xlsx` di `evaluation.dataset` | `evaluation` |
+| `tqdm` | tqdm | Progress bar di `evaluation.indexing` dan `evaluation.runner` | `evaluation` |
 
 ## Library yang dipakai langsung
 
@@ -91,9 +94,16 @@ Di beberapa tempat, modul Zul bekerja dengan objek yang dibuat library, walaupun
 | `react_graph` | `builder` dan `graph` | Modul ini contoh LangGraph, jadi graph-nya memang objek LangGraph. |
 | `PDFProcessor` | Hasil `chunk_per_page` dan `chunk_recursive_character_splitter` | Berupa `Document` LangChain, karena dipakai langsung oleh vector store LangChain. |
 | `DynamicMarkdownToPPTXService` | Slide, shape, dan paragraf python-pptx, `RGBColor` di gaya bawaan | Penyusunan slide bekerja langsung dengan objek python-pptx di seluruh class. Warna juga boleh ditulis sebagai tuple atau `"#RRGGBB"`. |
+| `evaluation.judge` | Hasil `make_judge` dan `make_judge_embeddings` | Hanya untuk diteruskan ke `evaluate_rag`. |
 | `ChartGenerator` | `current_fig` dan `current_ax`, objek Figure dan Axes | Grafik digambar dengan banyak method Axes. Membungkus semuanya sama saja dengan menulis ulang Matplotlib. |
 
 Library-nya tetap hanya diimpor di adapter. Yang lewat hanya objek yang dibuat adapter, jadi mengganti versi atau perilaku library tetap dimulai dari satu file.
+
+## Penambal impor ragas
+
+ragas 0.4.x mengimpor modul `langchain_community.chat_models.vertexai`, yang sudah dihapus di langchain-community 0.4. Tanpa penyesuaian, `import ragas` gagal di atas LangChain 1.x. Sebelum mengimpor ragas, `zul.adapters.ragas` mendaftarkan modul pengganti berisi satu kelas kosong, karena ragas memakai kelas itu hanya untuk `isinstance`. Modul pengganti hanya didaftarkan jika modul aslinya tidak ada.
+
+Ini satu-satunya penyesuaian yang menyentuh `sys.modules` di Zul. Versi ragas dikunci ke `>=0.4.3,<0.5`, dan penambalnya bisa dihapus setelah ragas berhenti mengimpor modul itu. Adapter yang sama juga meredam peringatan usang dari `evaluate()` dan metrik lama ragas, yang baru dihapus di ragas 1.0.
 
 ## Lisensi library
 

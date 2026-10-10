@@ -112,10 +112,13 @@ class TimerDecorator:
 
         search("a"); search("b")
         search.get_average_time()
+
+        diam = TimerDecorator(search, verbose=False)   # tanpa print per panggilan
     """
 
-    def __init__(self, func):
+    def __init__(self, func, verbose=True):
         self.func = func
+        self.verbose = verbose
         self.times = []
         self.total_time = 0
         self.call_count = 0
@@ -133,7 +136,9 @@ class TimerDecorator:
         self.total_time += execution_time
         self.call_count += 1
 
-        print(f"Function {self.func.__name__!r} executed in {execution_time:.4f}s")
+        if self.verbose:
+            name = getattr(self.func, "__name__", repr(self.func))
+            print(f"Function {name!r} executed in {execution_time:.4f}s")
         return result
 
     def get_last_time(self):

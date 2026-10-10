@@ -185,15 +185,16 @@ Decorator pengukur waktu eksekusi. Lokasi: `zul.utilities.script_helper.eval_per
 
 Membungkus sebuah fungsi sehingga durasi setiap pemanggilannya dicetak dalam bentuk `Function 'NAMA' executed in 0.0000s`. Nilai kembalian fungsi asli diteruskan.
 
-### `TimerDecorator(func)`
+### `TimerDecorator(func, verbose=True)`
 
-Membungkus sebuah fungsi sehingga durasi setiap pemanggilannya dicetak dan disimpan. Nama dan docstring fungsi asli disalin ke objek pembungkus.
+Membungkus sebuah fungsi sehingga durasi setiap pemanggilannya disimpan, dan dicetak jika `verbose` bernilai `True`. Nama dan docstring fungsi asli disalin ke objek pembungkus. Untuk mencatat durasi tanpa mencetak apa pun, misalnya di dalam perulangan panjang, tulis `TimerDecorator(fungsi, verbose=False)`.
 
 **Atribut:**
 
 | Atribut | Tipe | Keterangan |
 |---|---|---|
 | `func` | fungsi | Fungsi asli. |
+| `verbose` | `bool` | Mencetak durasi setiap pemanggilan jika `True`. |
 | `times` | `list[float]` | Durasi setiap pemanggilan, dalam detik. |
 | `total_time` | `float` | Jumlah semua durasi. |
 | `call_count` | `int` | Jumlah pemanggilan. |

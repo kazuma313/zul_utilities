@@ -86,6 +86,17 @@ def test_timer_decorator_records_every_call():
     assert add.get_average_time() == pytest.approx(sum(add.get_all_times()) / 2)
 
 
+def test_timer_decorator_can_stay_quiet(capsys):
+    quiet = TimerDecorator(lambda: None, verbose=False)
+    loud = TimerDecorator(lambda: None)
+
+    quiet()
+    assert capsys.readouterr().out == ""
+    loud()
+    assert "executed in" in capsys.readouterr().out
+    assert quiet.call_count == 1
+
+
 def test_timer_decorator_reset_clears_history():
     @TimerDecorator
     def noop():

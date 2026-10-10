@@ -44,8 +44,19 @@ CORE_MODULES = [
     "zul.computer_vision.report",
     "zul.computer_vision.timers",
     "zul.computer_vision.zones",
+    "zul.evaluation._progress",
+    "zul.evaluation.config",
+    "zul.evaluation.dataset",
+    "zul.evaluation.generation",
+    "zul.evaluation.hits",
+    "zul.evaluation.indexing",
+    "zul.evaluation.latency",
+    "zul.evaluation.reports",
+    "zul.evaluation.retrievers",
+    "zul.evaluation.runner",
     "zul.utilities.fake_embedding",
     "zul.utilities.logger",
+    "zul.utilities.ranking",
     "zul.utilities.time",
     "zul.utilities.Prompts.ocr",
     "zul.utilities.script_helper.eval_performance",
@@ -58,7 +69,11 @@ CORE_MODULES = [
 ]
 
 EXTRA_MODULES = {
-    "milvus": ["zul.adapters.milvus", "zul.utilities.vector_DB.milvus_helper"],
+    "milvus": [
+        "zul.adapters.milvus",
+        "zul.evaluation.milvus_store",
+        "zul.utilities.vector_DB.milvus_helper",
+    ],
     "redis": [
         "zul.adapters.redis",
         "zul.utilities.vector_DB.redis_helper",
@@ -83,6 +98,7 @@ EXTRA_MODULES = {
     "pdf": [
         "zul.adapters.langchain_text_splitters",
         "zul.adapters.pypdf",
+        "zul.evaluation.documents",
         "zul.utilities.script_helper.read_pdf2",
     ],
     "ocr": [
@@ -112,6 +128,12 @@ EXTRA_MODULES = {
         "zul.adapters.rfdetr",
         "zul.computer_vision.detection",
         "zul.computer_vision.weights",
+    ],
+    "evaluation": [
+        "zul.adapters.openpyxl",
+        "zul.adapters.ragas",
+        "zul.adapters.tqdm",
+        "zul.evaluation.judge",
     ],
     "mcp": [
         "zul.adapters.mcp",

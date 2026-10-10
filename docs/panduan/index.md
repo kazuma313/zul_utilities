@@ -39,6 +39,7 @@ Alat bantu yang kamu panggil langsung dari kode atau terminal: helper dari paket
 | Memanggil LLM dan model embedding dengan konfigurasi tervalidasi | [LLM dan embedding](memanggil-llm-dan-embedding.md) |
 | Mengubah Markdown menjadi PDF atau PPTX | [Markdown ke PDF dan PPTX](mengonversi-markdown.md) |
 | Membandingkan hasil pengukuran dalam grafik | [Grafik perbandingan](membuat-grafik.md) |
+| Menilai retrieval dan jawaban RAG dengan ragas, dan membandingkan beberapa retriever | [Mengevaluasi retrieval dan RAG](mengevaluasi-retrieval.md) |
 | Memakai logger, pengukur waktu, dan helper lain | [Helper kecil](memakai-helper.md) |
 | Mengambil transcript dan metadata video YouTube, tanpa model AI | [Mengambil transcript YouTube](mengambil-transcript-youtube.md) |
 | Mengambil harga token crypto beserta EMA, Stochastic, dan volume, tanpa model AI | [Mengambil snapshot harga crypto](mengambil-snapshot-crypto.md) |

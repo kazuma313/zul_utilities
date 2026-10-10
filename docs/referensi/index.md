@@ -37,6 +37,7 @@ Fakta untuk dicari cepat: opsi sebuah perintah, bentuk request, parameter sebuah
 | [Markdown converter](markdown-converter.md) | Konverter Markdown ke PDF dan PPTX. |
 | [ChartGenerator](grafik.md) | Bentuk konfigurasi grafik dan hasil statistiknya. |
 | [Helper kecil](helper.md) | Logger, embedding palsu, pengukur waktu, dan pembaca PDF. |
+| [Evaluasi retrieval](evaluation.md) | Dataset, retriever, `run_rag`, hit rate, skor ragas, laporan, dan latensi di `zul.evaluation`. |
 
 ## Computer Vision
 

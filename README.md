@@ -73,6 +73,7 @@ Setiap modul di `src/zul/` dan di template juga diawali docstring **Gunanya / Ca
 | 📄 **Doc Converters** | Konversi Markdown → PDF & PPTX |
 | 🧩 **Agent Skills** | Kumpulan skill untuk agent AI di `research/agentic/algorithms/skills/` (mind map, slide, poster, dokumen, transcript YouTube), sudah diuji dengan model lokal 4B (`gemma3:4b`) |
 | 🎯 **Type-Safe** | Validasi & settings berbasis Pydantic v2 |
+| 📏 **Evaluasi retrieval** | `zul.evaluation` menilai retriever Redis, Milvus, atau buatan sendiri dengan [ragas](https://docs.ragas.io/), plus hit rate, MRR, dan latensi tanpa model penilai. Lihat [panduannya](docs/panduan/mengevaluasi-retrieval.md). |
 | 🧑‍💻 **MCP untuk code assistant** | `zul mcp serve` memberi Claude Code, Cursor, VS Code, dan Claude Desktop akses ke modul, dokumentasi, contoh, dan aturan gaya Zul, supaya kode yang ditulisnya memakai dan meniru Zul. Lihat [tutorialnya](docs/tutorial/code-assistant.md). |
 
 ---
@@ -90,6 +91,7 @@ Library yang dibungkus paket `zul`, dikelompokkan per extra. Rinciannya ada di [
 | **Analisis** | Matplotlib · pandas · SciPy | `analysis` |
 | **Computer Vision** | [OpenCV](https://opencv.org/) · [RF-DETR](https://github.com/roboflow/rf-detr) · `lap` | `vision`, `detection`, `tracking` |
 | **Code assistant** | [SDK MCP](https://github.com/modelcontextprotocol/python-sdk) | `mcp` |
+| **Evaluasi** | [ragas](https://docs.ragas.io/) · openpyxl · rapidfuzz · tqdm | `evaluation` |
 
 Proyek hasil `zul build hexa` memakai stack-nya sendiri: [FastAPI](https://fastapi.tiangolo.com/), Uvicorn, LangChain, LangGraph, OpenAI, python-dotenv, dan [Streamlit](https://streamlit.io/).
 

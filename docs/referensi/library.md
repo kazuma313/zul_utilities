@@ -45,6 +45,10 @@ Library berikut hanya ter-install jika extra-nya diminta, misalnya `pip install 
 | `tracking` | `lap` | Memasangkan track dengan deteksi di `ByteTracker` | `lap` | BSD-2-Clause | `>=0.5.12` |
 | `detection` | `rfdetr` | Mendeteksi orang dan 17 keypoint pose | `rfdetr` | Apache 2.0 | `>=1.11.2,<1.12` |
 | `mcp` | `mcp` | MCP server untuk code assistant: `zul mcp serve` | `mcp` | MIT | `>=2.3,<3` |
+| `evaluation` | `ragas` | Skor retrieval dan RAG dengan model penilai | `ragas` | Apache 2.0 | `>=0.4.3,<0.5` |
+| `evaluation` | `openpyxl` | Membaca dataset tanya-jawab dari file .xlsx | `openpyxl` | MIT | `>=3.1` |
+| `evaluation` | `rapidfuzz` | Kemiripan teks untuk metrik ragas tanpa LLM | Dipakai oleh ragas | MIT | `>=3.0` |
+| `evaluation` | `tqdm` | Progress bar saat embedding dan menjalankan RAG | `tqdm` | MPL 2.0 dan MIT | `>=4.66` |
 
 Extra `all` meng-install semua extra di atas sekaligus.
 
@@ -59,6 +63,7 @@ Beberapa library di atas membawa library besar lain. Zul tidak memakainya langsu
 | supervision | `rfdetr` | Format hasil deteksi RF-DETR, diubah adapter menjadi array NumPy. |
 | langchain-core | `langchain-openai`, `langchain-text-splitters` | Inti LangChain. |
 | Starlette dan Uvicorn | `mcp` | Transport HTTP untuk MCP. Zul hanya memakai transport stdio. |
+| datasets, instructor, langchain-community, scikit-network | `ragas` | Dipakai ragas untuk dataset, keluaran JSON penilai, dan metrik. |
 | `svglib`, `python-bidi` | `xhtml2pdf` | Berlisensi LGPL, boleh dipakai lewat import biasa. |
 | FFmpeg di dalam paket `av` | `supervision` | Berlisensi LGPL, boleh dipakai lewat import biasa. |
 
@@ -77,6 +82,9 @@ Tidak semua isi Zul adalah wrapper. Bagian berikut ditulis sendiri dengan NumPy 
 | `computer_vision.pose` | Arah hadap dari keypoint wajah dan bahu. |
 | `computer_vision.distance` | Jarak dalam meter dari tinggi kotak. |
 | `utilities.fake_embedding` | Embedding palsu untuk test. |
+| `utilities.ranking` | Reciprocal Rank Fusion untuk menggabungkan beberapa daftar peringkat. |
+| `evaluation.hits` | Hit rate dan MRR hasil retrieval tanpa model penilai. |
+| `evaluation.latency` | Latensi p50, p95, p99, dan QPS, termasuk saat paralel. |
 | `assistant.knowledge` | Daftar modul, cara pakai, pencarian dokumentasi, dan contoh kode untuk [MCP server](mcp.md). |
 | `assistant.comment_style` | Pemeriksa paragraf komentar anak tangga. |
 

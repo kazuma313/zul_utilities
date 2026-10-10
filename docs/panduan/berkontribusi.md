@@ -32,6 +32,7 @@ Mengubah Zul sendiri mencakup menambah perintah, memperbaiki helper, mengembangk
 | `src/zul/assistant/` | MCP server untuk code assistant. Rinciannya ada di [MCP server](../referensi/mcp.md). |
 | `src/zul/templates/hexa/` | Template proyek yang disalin `zul build hexa`. |
 | `src/zul/adapters/` | Satu-satunya tempat library pihak ketiga diimpor, satu file per library. Rinciannya ada di [Mengubah perilaku library pihak ketiga](mengubah-perilaku-library.md). |
+| `src/zul/evaluation/` | Evaluasi retrieval dan RAG dengan ragas. Rinciannya ada di [Mengevaluasi retrieval dan RAG](mengevaluasi-retrieval.md). |
 | `src/zul/computer_vision/` | Fungsi computer vision: deteksi, garis dan poligon penghitung, timer, gambar. |
 | `src/zul/utilities/` | Helper yang bisa diimpor. |
 | `tests/` | Test untuk CLI, utilities, template, dan aturan arsitektur (`test_architecture.py`). |

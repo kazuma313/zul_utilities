@@ -31,7 +31,14 @@ from __future__ import annotations
 
 from typing import Any
 
-from pymilvus import DataType, Function, FunctionType, MilvusClient
+from pymilvus import (
+    AnnSearchRequest,
+    DataType,
+    Function,
+    FunctionType,
+    MilvusClient,
+    RRFRanker,
+)
 
 # --------------------------------------------------------------------------
 # Pemetaan Tipe Data
@@ -201,6 +208,29 @@ def search(
         limit=limit,
         output_fields=output_fields,
         **options,
+    )
+
+
+def hybrid_search(
+    client: Any,
+    collection_name: str,
+    requests: list[dict[str, Any]],
+    limit: int,
+    output_fields: list[str],
+    rrf_k: int = 60,
+) -> list[list[dict]]:
+    """Jalankan beberapa pencarian sekaligus, lalu gabungkan peringkatnya dengan RRF.
+
+    Setiap dict di `requests` berisi `data`, `anns_field`, `limit`, dan
+    `param` milik `AnnSearchRequest` pymilvus, misalnya satu pencarian
+    vektor dense dan satu pencarian BM25 dari teks.
+    """
+    return client.hybrid_search(
+        collection_name=collection_name,
+        reqs=[AnnSearchRequest(**request) for request in requests],
+        ranker=RRFRanker(rrf_k),
+        limit=limit,
+        output_fields=output_fields,
     )
 
 

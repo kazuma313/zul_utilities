@@ -42,8 +42,16 @@ tracking = ["lap>=0.5.12"]
 detection = ["zul[vision,tracking]", "rfdetr>=1.11.2,<1.12"]
 # MCP server: kode dan dokumentasi Zul dibaca code assistant lewat MCP.
 mcp = ["mcp>=2.3,<3"]
+# Evaluasi retrieval dan RAG dengan ragas. ragas 0.4.x dikunci karena adapternya
+# menambal satu impor ragas yang rusak di langchain-community 0.4.
+evaluation = [
+    "ragas>=0.4.3,<0.5",
+    "openpyxl>=3.1",
+    "rapidfuzz>=3.0",
+    "tqdm>=4.66",
+]
 all = [
-    "zul[milvus,redis,converter,analysis,pdf,ocr,llm,gemini,vision,tracking,detection,mcp]",
+    "zul[milvus,redis,converter,analysis,pdf,ocr,llm,gemini,vision,tracking,detection,mcp,evaluation]",
 ]
 
 [project.scripts]

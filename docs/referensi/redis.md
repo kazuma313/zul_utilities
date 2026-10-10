@@ -27,7 +27,7 @@ Modul ini membutuhkan extra `redis` (`redis`, `redisvl`). Modul menulis log lewa
 
 ## `reciprocal_rank_fusion(*ranked_lists, K=100)`
 
-Menggabungkan beberapa daftar peringkat menjadi satu dengan Reciprocal Rank Fusion. Setiap item mendapat skor `1 / (peringkat + K)` dari setiap daftar yang memuatnya, dengan peringkat mulai dari 1, lalu skor itu dijumlahkan.
+Menggabungkan beberapa daftar peringkat menjadi satu dengan Reciprocal Rank Fusion. Fungsi ini juga bisa diimpor dari `zul.utilities.ranking` tanpa extra `redis`. Setiap item mendapat skor `1 / (peringkat + K)` dari setiap daftar yang memuatnya, dengan peringkat mulai dari 1, lalu skor itu dijumlahkan.
 
 | Parameter | Tipe | Default | Keterangan |
 |---|---|---|---|
@@ -192,6 +192,22 @@ Mencari record yang vektornya paling mirip dengan vektor query.
 **Mengembalikan:** hasil `SearchIndex.query`, berupa daftar hasil.
 
 **Melempar:** `ValueError` jika index belum dibuat. Exception dari RedisVL jika pencarian gagal.
+
+### `text_search(text_query, text_field_name, text_scorer="BM25", return_fields=None, num_results=10)`
+
+Mencari record dengan full-text search saja, tanpa vektor.
+
+| Parameter | Tipe | Default | Keterangan |
+|---|---|---|---|
+| `text_query` | `str` | Wajib | Teks query. |
+| `text_field_name` | `str` | Wajib | Field teks yang dicari. |
+| `text_scorer` | `str` | `"BM25"` | Cara menilai kecocokan teks, misalnya `"BM25"` atau `"TFIDF"`. |
+| `return_fields` | `list[str]` atau `None` | `None` | Field yang dikembalikan. `None` diganti daftar kosong. |
+| `num_results` | `int` | `10` | Jumlah hasil. |
+
+**Mengembalikan:** hasil `SearchIndex.query`, berupa daftar hasil.
+
+**Melempar:** `ValueError` jika index belum dibuat.
 
 ### `delete_index()`
 
