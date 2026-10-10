@@ -44,6 +44,7 @@ Library berikut hanya ter-install jika extra-nya diminta, misalnya `pip install 
 | `vision` | `opencv-python` | Menggambar di frame, masker, membaca dan menulis video | `opencv` | Apache 2.0 | `>=4.10` |
 | `tracking` | `lap` | Memasangkan track dengan deteksi di `ByteTracker` | `lap` | BSD-2-Clause | `>=0.5.12` |
 | `detection` | `rfdetr` | Mendeteksi orang dan 17 keypoint pose | `rfdetr` | Apache 2.0 | `>=1.11.2,<1.12` |
+| `mcp` | `mcp` | MCP server untuk code assistant: `zul mcp serve` | `mcp` | MIT | `>=2.3,<3` |
 
 Extra `all` meng-install semua extra di atas sekaligus.
 
@@ -57,6 +58,7 @@ Beberapa library di atas membawa library besar lain. Zul tidak memakainya langsu
 | transformers | `docling`, `rfdetr` | Model dari Hugging Face. |
 | supervision | `rfdetr` | Format hasil deteksi RF-DETR, diubah adapter menjadi array NumPy. |
 | langchain-core | `langchain-openai`, `langchain-text-splitters` | Inti LangChain. |
+| Starlette dan Uvicorn | `mcp` | Transport HTTP untuk MCP. Zul hanya memakai transport stdio. |
 | `svglib`, `python-bidi` | `xhtml2pdf` | Berlisensi LGPL, boleh dipakai lewat import biasa. |
 | FFmpeg di dalam paket `av` | `supervision` | Berlisensi LGPL, boleh dipakai lewat import biasa. |
 
@@ -64,7 +66,7 @@ Tidak ada library berlisensi AGPL. `test_no_dependency_uses_an_agpl_license` mem
 
 ## Yang ditulis sendiri di Zul
 
-Tidak semua isi Zul adalah wrapper. Bagian berikut ditulis sendiri dengan NumPy, tanpa library khusus:
+Tidak semua isi Zul adalah wrapper. Bagian berikut ditulis sendiri dengan NumPy atau library standar Python, tanpa library khusus:
 
 | Modul | Isi |
 |---|---|
@@ -75,6 +77,8 @@ Tidak semua isi Zul adalah wrapper. Bagian berikut ditulis sendiri dengan NumPy,
 | `computer_vision.pose` | Arah hadap dari keypoint wajah dan bahu. |
 | `computer_vision.distance` | Jarak dalam meter dari tinggi kotak. |
 | `utilities.fake_embedding` | Embedding palsu untuk test. |
+| `assistant.knowledge` | Daftar modul, cara pakai, pencarian dokumentasi, dan contoh kode untuk [MCP server](mcp.md). |
+| `assistant.comment_style` | Pemeriksa paragraf komentar anak tangga. |
 
 ## Template hexa
 

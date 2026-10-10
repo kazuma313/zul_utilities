@@ -10,6 +10,7 @@ Setiap panduan berisi langkah untuk menyelesaikan satu tugas dengan Zul.
 | Membuat proyek dari template | [Membuat proyek baru](membuat-proyek.md) |
 | Mengisi API key, mengganti model, memakai endpoint sendiri | [Mengatur model dan API key](mengatur-llm.md) |
 | Menjalankan server untuk pengembangan atau di container | [Menjalankan aplikasi](menjalankan-aplikasi.md) |
+| Menyambungkan Cursor, VS Code, Claude Desktop, atau Claude Code ke Zul lewat MCP | [Menghubungkan code assistant](menghubungkan-code-assistant.md) |
 
 ## Agent
 

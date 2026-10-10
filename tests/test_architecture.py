@@ -4,26 +4,12 @@ from pathlib import Path
 
 import pytest
 
+from zul.adapters import EMBEDDED
+
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "src" / "zul"
 ADAPTERS_DIR = SOURCE / "adapters"
 VENDOR_DIR = ADAPTERS_DIR / "_vendor"
-
-# --------------------------------------------------------------------------
-# Library Yang Dipakai Langsung
-# --------------------------------------------------------------------------
-#
-# Library pihak ketiga hanya diimpor di zul/adapters. Library di daftar ini
-# ialah pengecualian: dipakai langsung di modul lain karena ia bagian dari
-# bahasa Zul sendiri, bukan alat yang bisa diganti di balik satu adapter.
-#
-
-EMBEDDED = {
-    "numpy": "Tipe data array untuk kotak, titik, dan frame di semua modul.",
-    "pydantic": "Kelas config dan respons Zul sendiri adalah model pydantic.",
-    "typer": "Perintah `zul` dibangun dengan Typer; CLI adalah aplikasinya.",
-    "InquirerPy": "Pertanyaan interaktif `zul build`, bagian dari CLI.",
-}
 
 # --------------------------------------------------------------------------
 # Adapter Dan Library-nya
@@ -43,6 +29,7 @@ ADAPTERS = {
     "lap": {"lap"},
     "markdown": {"markdown"},
     "matplotlib": {"matplotlib"},
+    "mcp": {"mcp"},
     "milvus": {"pymilvus"},
     "opencv": {"cv2"},
     "pandas": {"pandas"},

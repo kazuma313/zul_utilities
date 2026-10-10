@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "zul": {
+      "command": "uv",
+      "args": ["run", "--no-dev", "--extra", "mcp", "zul", "mcp", "serve"]
+    }
+  }
+}

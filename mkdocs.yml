@@ -143,6 +143,7 @@ nav:
       - Membuat agent pertamamu: tutorial/agent-pertama.md
       - Meminta persetujuan manusia: tutorial/persetujuan-manusia.md
       - Membangun tim agent: tutorial/tim-agent.md
+      - Menghubungkan Zul ke code assistant: tutorial/code-assistant.md
   - Panduan:
       - panduan/index.md
       - Memulai:
@@ -150,6 +151,7 @@ nav:
           - Membuat proyek baru: panduan/membuat-proyek.md
           - Mengatur model dan API key: panduan/mengatur-llm.md
           - Menjalankan aplikasi: panduan/menjalankan-aplikasi.md
+          - Menghubungkan code assistant: panduan/menghubungkan-code-assistant.md
       - Agent:
           - Menambah tool: panduan/menambah-tool.md
           - Mengubah system prompt: panduan/mengubah-system-prompt.md
@@ -193,6 +195,7 @@ nav:
       - Library yang dipakai: referensi/library.md
       - Zul CLI:
           - Perintah zul: referensi/cli.md
+          - MCP server: referensi/mcp.md
       - Template hexa:
           - Struktur proyek: referensi/struktur-proyek.md
           - Environment variable: referensi/konfigurasi.md

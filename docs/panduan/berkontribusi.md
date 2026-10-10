@@ -28,17 +28,19 @@ Mengubah Zul sendiri mencakup menambah perintah, memperbaiki helper, mengembangk
 | Path | Isi |
 |---|---|
 | `src/zul/cli.py` | Entry point perintah `zul`. |
-| `src/zul/commands/` | Kelompok perintah: `build.py`, `install.py`. |
+| `src/zul/commands/` | Kelompok perintah: `build.py`, `install.py`, `mcp.py`. |
+| `src/zul/assistant/` | MCP server untuk code assistant. Rinciannya ada di [MCP server](../referensi/mcp.md). |
 | `src/zul/templates/hexa/` | Template proyek yang disalin `zul build hexa`. |
 | `src/zul/adapters/` | Satu-satunya tempat library pihak ketiga diimpor, satu file per library. Rinciannya ada di [Mengubah perilaku library pihak ketiga](mengubah-perilaku-library.md). |
 | `src/zul/computer_vision/` | Fungsi computer vision: deteksi, garis dan poligon penghitung, timer, gambar. |
 | `src/zul/utilities/` | Helper yang bisa diimpor. |
 | `tests/` | Test untuk CLI, utilities, template, dan aturan arsitektur (`test_architecture.py`). |
 | `research/agentic/algorithms/skills/` | Kumpulan skill untuk agent AI. Rinciannya ada di [Membuat mind map](membuat-mindmap.md). |
-| `scripts/comment_style.py` | Pemeriksa bentuk komentar. |
+| `scripts/comment_style.py` | Pemeriksa bentuk komentar. Isinya ada di `zul.assistant.comment_style`, yang juga dipakai tool MCP `check_code`. |
 | `scripts/new_post.py` | Pembuat tulisan blog baru dari template. Rinciannya ada di [Menulis tulisan blog](menulis-blog.md). |
 | `docs/` | Sumber dokumentasi ini. Blog ada di `docs/blog/`. |
 | `mkdocs.yml` | Susunan menu, tema, dan plugin situs dokumentasi. |
+| `.mcp.json` | MCP server `zul` untuk Claude Code yang dibuka di repository ini. Rinciannya ada di [Memakai Zul dari checkout repository](menghubungkan-code-assistant.md#memakai-zul-dari-checkout-repository). |
 | `.github/workflows/docs.yml` | Workflow yang membangun dan menerbitkan situs dokumentasi. |
 | `tutorial/` | Notebook contoh pemakaian utilities. |
 | `research/` | Latihan dan eksperimen; bukan bagian dari package. |

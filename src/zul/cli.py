@@ -10,6 +10,7 @@ Cara pakai:
     zul --version
     zul build hexa --name my-app
     zul install milvus-helper
+    zul mcp serve
 
 Cara menambah kelompok perintah baru (misal `zul deploy ...`):
     1. Buat `zul/commands/deploy.py` berisi `app = typer.Typer()` dan
@@ -23,7 +24,7 @@ from importlib.metadata import version as package_version
 
 import typer
 
-from zul.commands import build, install
+from zul.commands import build, install, mcp
 
 PACKAGE_NAME = "zul"
 
@@ -66,6 +67,7 @@ app = typer.Typer(
 
 app.add_typer(build.app, name="build")
 app.add_typer(install.app, name="install")
+app.add_typer(mcp.app, name="mcp")
 
 # --------------------------------------------------------------------------
 # Versi

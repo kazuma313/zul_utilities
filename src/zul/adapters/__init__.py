@@ -19,8 +19,24 @@ Aturan adapter:
 
 Aturan ini diperiksa oleh tests/test_architecture.py. Library yang memang
 dipakai langsung di luar adapter, misalnya NumPy sebagai tipe data, tercatat
-di daftar EMBEDDED di test itu beserta alasannya.
+di EMBEDDED di bawah ini beserta alasannya.
 
 Paket ini tidak mengimpor adapter apa pun saat diimpor, jadi library berat
 hanya dimuat ketika adapter-nya benar-benar dipakai.
 """
+
+# --------------------------------------------------------------------------
+# Library Yang Dipakai Langsung
+# --------------------------------------------------------------------------
+#
+# Library di daftar ini boleh diimpor di modul Zul mana pun, karena ia
+# bagian dari cara kerja Zul sendiri, bukan alat yang bisa diganti di
+# balik satu adapter. Library lain hanya boleh diimpor di adapter.
+#
+
+EMBEDDED = {
+    "numpy": "Tipe data array untuk kotak, titik, dan frame di semua modul.",
+    "pydantic": "Kelas config dan respons Zul sendiri adalah model pydantic.",
+    "typer": "Perintah `zul` dibangun dengan Typer; CLI adalah aplikasinya.",
+    "InquirerPy": "Pertanyaan interaktif `zul build`, bagian dari CLI.",
+}

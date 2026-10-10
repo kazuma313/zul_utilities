@@ -40,8 +40,10 @@ gemini = ["google-genai>=1.0.0"]
 vision = ["opencv-python>=4.10"]
 tracking = ["lap>=0.5.12"]
 detection = ["zul[vision,tracking]", "rfdetr>=1.11.2,<1.12"]
+# MCP server: kode dan dokumentasi Zul dibaca code assistant lewat MCP.
+mcp = ["mcp>=2.3,<3"]
 all = [
-    "zul[milvus,redis,converter,analysis,pdf,ocr,llm,gemini,vision,tracking,detection]",
+    "zul[milvus,redis,converter,analysis,pdf,ocr,llm,gemini,vision,tracking,detection,mcp]",
 ]
 
 [project.scripts]
@@ -50,6 +52,14 @@ zul = "zul.cli:app"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+# Dokumentasi Markdown ikut masuk wheel sebagai zul/_docs, supaya MCP server
+# Zul tetap bisa mencari dan membaca dokumentasi saat Zul di-install dari pip.
+[tool.hatch.build.targets.wheel.force-include]
+"docs/tutorial" = "zul/_docs/tutorial"
+"docs/panduan" = "zul/_docs/panduan"
+"docs/referensi" = "zul/_docs/referensi"
+"docs/konsep" = "zul/_docs/konsep"
 
 [dependency-groups]
 dev = [

@@ -1,6 +1,6 @@
 # Perintah zul
 
-`zul` adalah perintah baris yang ter-install bersama package Zul. Perintah ini membuat proyek baru dari template dan menulis file config awal untuk helper vector database.
+`zul` adalah perintah baris yang ter-install bersama package Zul. Perintah ini membuat proyek baru dari template, menulis file config awal untuk helper vector database, dan menjalankan MCP server untuk code assistant.
 
 Bentuk lengkap setiap perintah adalah sebagai berikut:
 
@@ -10,9 +10,12 @@ zul version
 zul build hexa --name NAMA --yes
 zul install milvus-helper --config-name FILE --force
 zul install redis-helper --config-name FILE --force
+zul mcp serve
+zul mcp check
+zul mcp config CLIENT --repo PATH
 ```
 
-`NAMA` adalah nama proyek, yang juga menjadi nama folder yang dibuat. `FILE` adalah nama file config yang ditulis. Semua opsi boleh dihilangkan.
+`NAMA` adalah nama proyek, yang juga menjadi nama folder yang dibuat. `FILE` adalah nama file config yang ditulis. `CLIENT` adalah nama code assistant, dan `PATH` adalah checkout repository Zul. Semua opsi boleh dihilangkan.
 
 Tabel berikut merangkum perintah yang tersedia:
 
@@ -23,8 +26,11 @@ Tabel berikut merangkum perintah yang tersedia:
 | [`zul build hexa`](#zul-build-hexa) | Membuat proyek hexagonal baru dari template. |
 | [`zul install milvus-helper`](#zul-install-milvus-helper) | Menulis file config awal untuk `MilvusHelper`. |
 | [`zul install redis-helper`](#zul-install-redis-helper) | Menulis file config awal untuk `RedisHelper`. |
+| [`zul mcp serve`](#zul-mcp) | Menjalankan MCP server Zul untuk code assistant. |
+| [`zul mcp check`](#zul-mcp) | Menguji MCP server tanpa code assistant. |
+| [`zul mcp config`](#zul-mcp) | Mencetak config MCP untuk sebuah code assistant. |
 
-Perintah `zul` didaftarkan oleh `[project.scripts]` di `pyproject.toml` sebagai `zul = "zul.cli:app"`. Kelompok perintah `build` ada di `src/zul/commands/build.py`, dan kelompok `install` ada di `src/zul/commands/install.py`.
+Perintah `zul` didaftarkan oleh `[project.scripts]` di `pyproject.toml` sebagai `zul = "zul.cli:app"`. Kelompok perintah `build` ada di `src/zul/commands/build.py`, kelompok `install` ada di `src/zul/commands/install.py`, dan kelompok `mcp` ada di `src/zul/commands/mcp.py`.
 
 ## Opsi global
 
@@ -35,7 +41,7 @@ Opsi berikut berlaku pada perintah `zul` itu sendiri:
 | `--version` | `-V` | Mencetak versi, lalu keluar dengan kode `0`. |
 | `--help` | Tidak ada | Menampilkan bantuan. Opsi ini tersedia di `zul`, di setiap kelompok perintah, dan di setiap subperintah. |
 
-`zul`, `zul build`, dan `zul install` yang dijalankan tanpa subperintah menampilkan layar bantuan masing-masing. Opsi pelengkap otomatis shell bawaan Typer (`--install-completion`) dimatikan.
+`zul`, `zul build`, `zul install`, dan `zul mcp` yang dijalankan tanpa subperintah menampilkan layar bantuan masing-masing. Opsi pelengkap otomatis shell bawaan Typer (`--install-completion`) dimatikan.
 
 Keluaran `zul --version` berbentuk seperti ini:
 
@@ -203,6 +209,10 @@ Format file, pertanyaan saat file sudah ada, pesan, dan kode keluar sama dengan 
 📦 Butuh dependency: pip install 'zul[redis]'
 ```
 
+## `zul mcp`
+
+Menjalankan, menguji, dan mencetak config MCP server Zul. `zul mcp serve` dan `zul mcp check` butuh extra `mcp`. Opsi, keluaran, dan kode keluar ketiga subperintah ada di [MCP server](mcp.md#perintah).
+
 ## Nama lama bergaris bawah
 
 Kedua perintah `install` terdaftar dengan dua nama. Nama bertanda hubung adalah nama resminya. Nama bergaris bawah adalah nama lama yang tetap diterima, tetapi tidak ditampilkan di layar bantuan.
@@ -222,7 +232,8 @@ Tabel berikut merangkum kode keluar semua perintah:
 |---|---|---|
 | `0` | Berhasil, atau kamu membatalkan di pertanyaan konfirmasi. | Semua perintah |
 | `1` | Nama proyek kosong, atau folder proyek sudah ada. | `zul build hexa` |
-| `2` | Kesalahan pemakaian: perintah atau opsi tidak dikenal, atau ekstensi `--config-name` tidak didukung. | Semua perintah |
+| `1` | Extra `mcp` belum ter-install, atau panggilan contoh `search_docs` gagal. | `zul mcp serve`, `zul mcp check` |
+| `2` | Kesalahan pemakaian: perintah atau opsi tidak dikenal, ekstensi `--config-name` tidak didukung, atau client `zul mcp config` tidak dikenal. | Semua perintah |
 
 ## Pesan error
 
@@ -304,3 +315,4 @@ Mengembalikan versi Zul yang ter-install sebagai `str`, atau `"unknown"` jika me
 - [Referensi: Struktur proyek hexa](struktur-proyek.md)
 - [Referensi: MilvusHelper](milvus.md)
 - [Referensi: RedisHelper dan RedisVectorDB](redis.md)
+- [Referensi: MCP server](mcp.md)

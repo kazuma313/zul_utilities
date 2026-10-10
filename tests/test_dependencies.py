@@ -30,9 +30,13 @@ PROJECT = tomllib.loads(PYPROJECT.read_text(encoding="utf-8"))["project"]
 
 CORE_MODULES = [
     "zul.adapters.yaml",
+    "zul.assistant.comment_style",
+    "zul.assistant.knowledge",
+    "zul.assistant.prompts",
     "zul.cli",
     "zul.commands.build",
     "zul.commands.install",
+    "zul.commands.mcp",
     "zul.computer_vision.config",
     "zul.computer_vision.distance",
     "zul.computer_vision.geometry",
@@ -108,6 +112,11 @@ EXTRA_MODULES = {
         "zul.adapters.rfdetr",
         "zul.computer_vision.detection",
         "zul.computer_vision.weights",
+    ],
+    "mcp": [
+        "zul.adapters.mcp",
+        "zul.assistant.__main__",
+        "zul.assistant.server",
     ],
 }
 

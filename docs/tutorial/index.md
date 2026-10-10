@@ -1,6 +1,6 @@
 # Tutorial
 
-Tiga tutorial untuk mulai memakai Zul. Urutannya penting, karena tutorial kedua dan ketiga melanjutkan proyek dari tutorial sebelumnya.
+Empat tutorial untuk mulai memakai Zul. Urutan tiga tutorial pertama penting, karena tutorial kedua dan ketiga melanjutkan proyek dari tutorial sebelumnya. Tutorial keempat berdiri sendiri.
 
 1. **[Membuat agent pertamamu](agent-pertama.md)**
 
@@ -14,10 +14,15 @@ Tiga tutorial untuk mulai memakai Zul. Urutannya penting, karena tutorial kedua 
 
     Supervisor membagi tugas ke beberapa subagent, lalu kamu menambahkan satu subagent baru. Sekitar 15 menit.
 
+4. **[Menghubungkan Zul ke code assistant](code-assistant.md)**
+
+    Sambungkan Zul ke Claude Code lewat MCP, lalu minta Claude Code menulis kode yang memakai fungsi Zul dan mengikuti gaya Zul. Sekitar 10 menit.
+
 ## Yang kamu butuhkan
 
 - Python 3.11 atau lebih baru, dan Zul yang sudah ter-install ([Instalasi Zul](../panduan/instalasi-zul.md)).
-- API key OpenAI, atau endpoint lain yang kompatibel dengan OpenAI.
+- API key OpenAI, atau endpoint lain yang kompatibel dengan OpenAI, untuk tiga tutorial pertama.
+- Claude Code, untuk tutorial keempat.
 
 ## Setelah tutorial
 

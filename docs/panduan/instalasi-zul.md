@@ -42,6 +42,7 @@ Setiap kelompok utilities punya extra sendiri. Tabel berikut memetakan extra ke 
 | `vision` | [`draw`, `masks`, dan `video` dari Computer Vision](menggambar-di-frame.md) | `opencv-python` |
 | `tracking` | [`ByteTracker` dari Computer Vision](mendeteksi-dan-melacak-orang.md) | `lap` |
 | `detection` | [Deteksi orang dengan RF-DETR](mendeteksi-dan-melacak-orang.md) | `vision`, `tracking`, dan `rfdetr`, yang ikut meng-install PyTorch, transformers, dan supervision |
+| `mcp` | [MCP server untuk code assistant](menghubungkan-code-assistant.md) | `mcp` |
 | `all` | Semua di atas | Semua di atas |
 
 ## Instalasi sebagian utilities
@@ -167,6 +168,7 @@ Pesan seperti `No module named 'pymilvus'` berarti extra untuk utility itu belum
 | `cv2` | `vision` |
 | `lap` | `tracking` |
 | `rfdetr` | `detection` |
+| `mcp` | `mcp` |
 
 Install extra itu dengan perintah di [Instalasi sebagian utilities](#instalasi-sebagian-utilities), langkah 2.
 

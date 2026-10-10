@@ -63,6 +63,7 @@ Jika sebuah modul melanggar aturan pertama, pesan test-nya menyebut modul dan li
 | `matplotlib` | Matplotlib | `ChartGenerator` | `analysis` |
 | `scipy` | SciPy | `ChartGenerator` | `analysis` |
 | `pandas` | pandas | `create_chart_from_csv`, `save_latency_to_csv` | `analysis` |
+| `mcp` | SDK MCP (`mcp`) | MCP server di `assistant.server` | `mcp` |
 
 ## Library yang dipakai langsung
 

@@ -13,6 +13,7 @@ Fakta untuk dicari cepat: opsi sebuah perintah, bentuk request, parameter sebuah
 | Halaman | Isi |
 |---|---|
 | [Perintah zul](cli.md) | Semua perintah `zul`, opsinya, keluarannya, dan kode keluarnya. |
+| [MCP server](mcp.md) | Tool, resource, dan prompt MCP server Zul, serta perintah `zul mcp`. |
 
 ## Template hexa
 
