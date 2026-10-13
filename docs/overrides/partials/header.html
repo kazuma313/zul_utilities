@@ -1,7 +1,7 @@
 {#-
   Salinan partials/header.html dari Material for MkDocs 9.7.7, dengan satu
   tambahan: versi Zul di samping nama situs. Nilainya diisi
-  scripts/docs_hooks.py dari pyproject.toml. Saat Material diperbarui,
+  docs/tools/docs_hooks.py dari pyproject.toml. Saat Material diperbarui,
   salin ulang file aslinya dan pasang kembali blok zul-version.
 -#}
 {% set class = "md-header" %}
@@ -25,7 +25,7 @@
           <span class="md-ellipsis">
             {{ config.site_name }}
           </span>
-          {#- Versi Zul, dari pyproject.toml lewat scripts/docs_hooks.py. -#}
+          {#- Versi Zul, dari pyproject.toml lewat docs/tools/docs_hooks.py. -#}
           {% if config.extra.zul_version %}
             <span class="zul-version" title="Versi Zul">v{{ config.extra.zul_version }}</span>
           {% endif %}

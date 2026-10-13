@@ -16,9 +16,7 @@ Path yang memicu workflow:
 
 | Path | Isi |
 |---|---|
-| `docs/**` | Semua halaman, gambar, dan blog. |
-| `overrides/**` | Template yang menimpa bawaan Material, yaitu header. |
-| `scripts/docs_hooks.py` | Hook yang membaca versi Zul untuk header. |
+| `docs/**` | Semua halaman, gambar, blog, template header di `docs/overrides/`, dan hook versi di `docs/tools/docs_hooks.py`. |
 | `mkdocs.yml` | Menu, tema, dan plugin. |
 | `pyproject.toml` | Grup dependency `docs`, dan versi Zul yang tampil di header. |
 | `uv.lock` | Versi persis setiap paket. |

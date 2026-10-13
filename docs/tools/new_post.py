@@ -8,9 +8,9 @@ Gunanya:
     folder untuk gambar dan file pendukung tulisan itu.
 
 Cara pakai:
-    uv run python scripts/new_post.py "Judul tulisan"
-    uv run python scripts/new_post.py "Judul tulisan" --kategori RAG --kategori Python
-    uv run python scripts/new_post.py "Judul tulisan" --tanggal 2026-10-01
+    uv run python docs/tools/new_post.py "Judul tulisan"
+    uv run python docs/tools/new_post.py "Judul tulisan" --kategori RAG --kategori AI
+    uv run python docs/tools/new_post.py "Judul tulisan" --tanggal 2026-10-01
 
 Hasil:
     docs/blog/posts/2026-10-07-judul-tulisan.md      tulisan baru
@@ -27,7 +27,7 @@ import unicodedata
 from datetime import date
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 BLOG_DIR = ROOT / "docs" / "blog"
 DEFAULT_CATEGORY = "Catatan"
 MAX_SLUG_LENGTH = 60

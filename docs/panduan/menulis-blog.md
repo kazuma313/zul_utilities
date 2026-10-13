@@ -21,7 +21,7 @@ Semua file blog ada di folder `docs/blog/`:
 1. Buat tulisan dari template:
 
     ```shell
-    uv run python scripts/new_post.py "JUDUL" --kategori KATEGORI
+    uv run python docs/tools/new_post.py "JUDUL" --kategori KATEGORI
     ```
 
     Ganti `JUDUL` dengan judul tulisanmu dan `KATEGORI` dengan topiknya, misalnya `RAG`. Untuk lebih dari satu kategori, ulangi `--kategori`. Tanpa `--kategori`, tulisan masuk kategori `Catatan`.
@@ -126,6 +126,6 @@ Untuk menyimpan tulisan yang belum selesai tanpa menerbitkannya, tambahkan `draf
 
 ## Halaman terkait
 
-- [Format tulisan blog](../referensi/blog.md) untuk semua kunci header, alamat halaman, dan opsi `scripts/new_post.py`.
+- [Format tulisan blog](../referensi/blog.md) untuk semua kunci header, alamat halaman, dan opsi `docs/tools/new_post.py`.
 - [Menerbitkan dokumentasi](menerbitkan-dokumentasi.md) untuk cara kerja workflow penerbitan.
 - [Berkontribusi](berkontribusi.md) untuk gaya penulisan di situs ini.

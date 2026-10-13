@@ -38,9 +38,9 @@ uv run pytest framework/agentic
 Paket `zul`, test-nya, dan boilerplate di `project/` mengikuti gaya kode Zul:
 
 ```bash
-uv run black framework scripts
-uv run ruff check framework scripts
-uv run python scripts/comment_style.py framework/src framework/tests framework/project scripts
+uv run black framework docs/tools
+uv run ruff check framework docs/tools
+uv run python framework/scripts/comment_style.py
 ```
 
 Skill pool, notebook, dan studi punya gaya sendiri, jadi tidak ikut diperiksa. Aturannya ada di [Berkontribusi](../docs/panduan/berkontribusi.md).

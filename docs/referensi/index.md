@@ -50,4 +50,4 @@ Fakta untuk dicari cepat: opsi sebuah perintah, bentuk request, parameter sebuah
 | Halaman | Isi |
 |---|---|
 | [Workflow dokumentasi](workflow-dokumentasi.md) | Pemicu, job, langkah, pemeriksaan, dan versi yang dikunci di workflow penerbitan. |
-| [Format tulisan blog](blog.md) | Header tulisan, alamat halaman, pengaturan plugin blog, dan opsi `scripts/new_post.py`. |
+| [Format tulisan blog](blog.md) | Header tulisan, alamat halaman, pengaturan plugin blog, dan opsi `docs/tools/new_post.py`. |

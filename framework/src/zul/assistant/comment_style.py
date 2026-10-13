@@ -8,8 +8,8 @@ Gunanya:
     berbentuk begitu, lalu melipat ulang barisnya jika memungkinkan.
 
 Cara pakai:
-    python scripts/comment_style.py src tests           # periksa saja
-    python scripts/comment_style.py src tests --fix     # lipat ulang barisnya
+    python framework/scripts/comment_style.py src tests           # periksa saja
+    python framework/scripts/comment_style.py src tests --fix     # lipat ulang barisnya
 
     from zul.assistant.comment_style import check_source
     check_source(kode_python)      # daftar paragraf yang belum anak tangga

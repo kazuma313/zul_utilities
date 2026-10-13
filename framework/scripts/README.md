@@ -1,24 +1,20 @@
-# Tool repository
+# Script framework
 
-Script untuk merawat repository ini. Semuanya dijalankan dari root repository.
+Alat untuk merawat kode framework. Semuanya dijalankan dari root repository.
 
 | Script | Gunanya |
 |---|---|
-| `comment_style.py` | Memeriksa paragraf komentar berbentuk anak tangga. Isinya ada di `zul.assistant.comment_style`. |
-| `new_post.py` | Membuat tulisan blog baru di `docs/blog/posts/`. |
-| `docs_hooks.py` | Hook MkDocs yang menaruh versi Zul di header situs. Dipanggil oleh `mkdocs.yml`. |
-| `mask_api_keys.py` | Menyamarkan API key yang tidak sengaja tertulis di file repository. |
+| `comment_style.py` | Memeriksa paragraf komentar berbentuk anak tangga. Tanpa argumen, semua folder yang mengikuti gaya kode Zul ikut diperiksa. Logikanya ada di `zul.assistant.comment_style`, yang juga dipakai tool MCP `check_code`. |
+| `mask_api_keys.py` | Menyamarkan API key yang tidak sengaja tertulis di file, misalnya di notebook, sebelum commit. |
 
 Contoh pemakaian:
 
 ```bash
-uv run python scripts/comment_style.py framework/src framework/tests framework/project scripts --fix
-uv run python scripts/new_post.py "Judul tulisan" --kategori RAG
-uv run python scripts/mask_api_keys.py --dry-run
+uv run python framework/scripts/comment_style.py
+uv run python framework/scripts/comment_style.py --fix
+uv run python framework/scripts/mask_api_keys.py --dry-run
 ```
 
-Test untuk `new_post.py` dan `docs_hooks.py`:
+`--fix` melipat ulang paragraf yang bisa dilipat. Jika pemeriksa menyebut "ubah kalimatnya", ganti satu atau dua kata sampai lolos.
 
-```bash
-uv run pytest scripts/tests
-```
+Script untuk dokumentasi dan blog ada di [`docs/tools/`](../../docs/tools/).

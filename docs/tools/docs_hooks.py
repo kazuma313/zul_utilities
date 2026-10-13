@@ -9,7 +9,7 @@ Gunanya:
 Cara pakai:
     Hook ini didaftarkan di mkdocs.yml (`hooks:`) dan berjalan sendiri
     saat `mkdocs build` atau `mkdocs serve`. Template header di
-    overrides/partials/header.html membaca nilainya dari
+    docs/overrides/partials/header.html membaca nilainya dari
     `config.extra.zul_version`.
 """
 

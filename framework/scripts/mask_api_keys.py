@@ -2,8 +2,8 @@
 mask_api_keys.py — Samarkan API key yang tak sengaja tertulis di repo.
 
 Cara pakai:
-    python mask_api_keys.py            # samarkan (buat backup .bak dulu)
-    python mask_api_keys.py --dry-run  # hanya tampilkan yang akan diubah
+    python framework/scripts/mask_api_keys.py            # samarkan, backup .bak
+    python framework/scripts/mask_api_keys.py --dry-run  # tampilkan saja
 
 Menyasar file .py, .ipynb, .md, .json, .yaml, .yml (kecuali .venv/.git).
 Pola yang disamarkan: OpenAI-style key (sk-...), Google (AIza...),

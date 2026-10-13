@@ -28,7 +28,30 @@ Repository ini dibagi menjadi tiga kategori. Setiap folder punya README sendiri:
 | **Dokumentasi** | [`docs/`](docs/), `mkdocs.yml` | Situs dokumentasi framework dan blog, terbit di https://zulkit.my.id/. |
 | **Pengembangan diri** | [`research/`](research/) | Latihan coding manual, proyek mandiri, dan arsip. Bukan bagian dari paket `zul`. |
 
-File di root, yaitu `pyproject.toml`, `uv.lock`, dan `.venv`, dipakai bersama oleh semua kategori. [`scripts/`](scripts/) berisi tool untuk merawat repository ini.
+File di root, yaitu `pyproject.toml`, `uv.lock`, `mkdocs.yml`, dan `.venv`, dipakai bersama oleh semua kategori. Tool setiap kategori ada di folder kategorinya: `framework/scripts/` untuk gaya kode dan kunci API, `docs/tools/` untuk blog dan situs.
+
+## Kembali setelah lama ditinggal
+
+Lima langkah untuk mengingat kembali proyek ini:
+
+1. Lihat apa yang terakhir dikerjakan: `git log --oneline -20`.
+2. Siapkan lingkungan: `uv sync --inexact`. Jangan memakai `uv sync` tanpa `--inexact`, karena library skill pool yang tidak tercatat di `uv.lock` akan terhapus.
+3. Pastikan semuanya masih jalan: `uv run pytest`, lalu perintah test lain di bagian [Pengembangan](#pengembangan).
+4. Baca README folder yang akan dikerjakan; setiap folder kategori punya satu.
+5. Baca aturan menulis kode dan dokumentasi di [Berkontribusi](https://zulkit.my.id/panduan/berkontribusi/).
+
+| Saya mau... | Buka |
+|---|---|
+| Menambah atau mengubah fungsi di paket `zul` | `framework/src/zul/`, test di `framework/tests/` |
+| Menambah library pihak ketiga | `framework/src/zul/adapters/`, satu file per library |
+| Menambah skill untuk agent | `framework/agentic/skills/` (pakai model) atau `framework/agentic/utilities/` (script saja) |
+| Memulai aplikasi computer vision baru | `framework/project/computer_vision/` |
+| Membandingkan model atau cara kerja | Folder baru di `framework/studies/` |
+| Mengubah template `zul build hexa` | `framework/src/zul/templates/hexa/` |
+| Menulis halaman dokumentasi | `docs/tutorial/`, `docs/panduan/`, `docs/referensi/`, atau `docs/konsep/`, lalu daftarkan di `mkdocs.yml` |
+| Menulis tulisan blog | `uv run python docs/tools/new_post.py "Judul"` |
+| Latihan coding | `research/latihan/` |
+| Memakai code assistant dengan konteks Zul | MCP server: `.mcp.json` di root, atau [tutorialnya](https://zulkit.my.id/tutorial/code-assistant/) |
 
 ## Mulai cepat
 
@@ -76,7 +99,7 @@ Setiap kategori diuji dengan perintahnya sendiri:
 |---|---|
 | `uv run pytest` | Paket `zul` di `framework/tests/`. |
 | `uv run pytest framework/agentic` | Skill pool. |
-| `uv run pytest scripts/tests` | Tool dokumentasi. |
+| `uv run pytest docs/tools/tests` | Tool dokumentasi. |
 | `uv run mkdocs build --strict` | Situs dokumentasi. |
 | `uv run pytest research/latihan` | Latihan; sebagian sengaja gagal sampai soalnya dikerjakan. |
 

@@ -21,7 +21,7 @@ Pilih kernel dari `.venv` di root repository, lalu jalankan sel dari atas. Extra
 Kunci API dibaca dari `.env` di root repository. Jangan menulis kunci langsung di sel notebook. Jika sempat tertulis, samarkan sebelum commit:
 
 ```bash
-uv run python scripts/mask_api_keys.py --dry-run
+uv run python framework/scripts/mask_api_keys.py --dry-run
 ```
 
 ## Dokumentasi

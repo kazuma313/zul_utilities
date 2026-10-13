@@ -66,7 +66,7 @@ Setiap pemeriksaan menangkap kesalahan yang tidak tertangkap oleh pemeriksaan se
 
 ## Tanggal dan draf di blog
 
-Plugin blog mengurutkan tulisan, menyusun arsip per bulan, dan membentuk alamat halaman dari tanggal tulisan. Karena itu tanggal wajib ada: tulisan tanpa tanggal tidak punya tempat di urutan, arsip, maupun alamatnya, dan build menolaknya. `scripts/new_post.py` mengisi tanggal ini otomatis.
+Plugin blog mengurutkan tulisan, menyusun arsip per bulan, dan membentuk alamat halaman dari tanggal tulisan. Karena itu tanggal wajib ada: tulisan tanpa tanggal tidak punya tempat di urutan, arsip, maupun alamatnya, dan build menolaknya. `docs/tools/new_post.py` mengisi tanggal ini otomatis.
 
 Ringkasan di atas `<!-- more -->` juga diwajibkan, supaya halaman daftar tulisan tidak menampilkan seluruh isi tulisan yang panjang.
 

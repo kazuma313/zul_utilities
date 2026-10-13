@@ -30,7 +30,7 @@ Repository ini dibagi menjadi tiga kategori. Setiap folder kategori punya `READM
 | Kategori | Folder | Isi |
 |---|---|---|
 | Framework | [`framework/`](https://github.com/kazuma313/zul_utilities/tree/main/framework) | Paket `zul`, test-nya, skill pool, notebook contoh, boilerplate proyek, dan studi. |
-| Dokumentasi | `docs/`, `mkdocs.yml`, `overrides/` | Sumber situs dokumentasi ini dan blog-nya. |
+| Dokumentasi | `docs/`, `mkdocs.yml` | Sumber situs dokumentasi ini dan blog-nya, template tema di `docs/overrides/`, dan script dokumentasi di `docs/tools/`. |
 | Pengembangan diri | `research/` | Latihan coding, proyek mandiri, dan arsip. Bukan bagian dari package. |
 
 Isi folder framework:
@@ -49,6 +49,7 @@ Isi folder framework:
 | `framework/agentic/` | Skill pool untuk agent AI: `skills/` dengan model di dalamnya, `utilities/` berupa script. Rinciannya ada di [Membuat mind map](membuat-mindmap.md). |
 | `framework/notebooks/` | Notebook contoh pemakaian utilities. |
 | `framework/project/` | Boilerplate aplikasi yang dibangun di atas `zul`, misalnya `computer_vision/`. |
+| `framework/scripts/` | Pemeriksa komentar anak tangga (`comment_style.py`) dan penyamar API key (`mask_api_keys.py`). |
 | `framework/studies/` | Studi yang membandingkan model atau cara kerja, beserta data dan laporannya. |
 
 File lain di root:
@@ -56,7 +57,6 @@ File lain di root:
 | Path | Isi |
 |---|---|
 | `pyproject.toml`, `uv.lock` | Dependency dan pengaturan tool untuk seluruh repository. `.venv` dibuat di root. |
-| `scripts/` | Tool repository: `comment_style.py`, `new_post.py`, `docs_hooks.py`, `mask_api_keys.py`, beserta test-nya di `scripts/tests/`. |
 | `.mcp.json` | MCP server `zul` untuk Claude Code yang dibuka di repository ini. Rinciannya ada di [Memakai Zul dari checkout repository](menghubungkan-code-assistant.md#memakai-zul-dari-checkout-repository). |
 | `.github/workflows/docs.yml` | Workflow yang membangun dan menerbitkan situs dokumentasi. |
 
@@ -86,7 +86,7 @@ Perintah `pytest` tanpa argumen hanya menguji paket `zul`. Kategori lain diuji d
 
 ```shell
 uv run pytest framework/agentic
-uv run pytest scripts/tests
+uv run pytest docs/tools/tests
 ```
 
 > [!NOTE]
@@ -97,9 +97,9 @@ uv run pytest scripts/tests
 Sebelum mengirim perubahan, jalankan tiga pemeriksa berikut. Ketiganya harus lolos tanpa temuan:
 
 ```shell
-uv run black framework scripts
-uv run ruff check framework scripts
-uv run python scripts/comment_style.py framework/src framework/tests framework/project scripts
+uv run black framework docs/tools
+uv run ruff check framework docs/tools
+uv run python framework/scripts/comment_style.py
 ```
 
 Aturannya ada di `pyproject.toml`. Skill pool, notebook, studi, dan `research/` tidak ikut diperiksa, karena masing-masing punya gaya sendiri.
@@ -150,7 +150,7 @@ STEPS_PER_TOOL_ROUND = 2
 Paragraf komentar yang lebih dari satu baris berbentuk anak tangga: setiap baris lebih pendek satu sampai enam karakter dari baris di atasnya. Bentuk ini mengikuti gaya komentar Laravel. Untuk memeriksanya dan melipat ulang baris yang belum pas:
 
 ```shell
-uv run python scripts/comment_style.py framework/src framework/tests framework/project scripts --fix
+uv run python framework/scripts/comment_style.py --fix
 ```
 
 Jika pemeriksa melaporkan "ubah kalimatnya", tidak ada pelipatan yang pas untuk kalimat itu. Ganti satu atau dua kata sampai pemeriksa lolos.

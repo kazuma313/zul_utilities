@@ -31,7 +31,7 @@ flowchart TB
     F --> G["Situs terbit di zulkit.my.id"]
 ```
 
-Workflow hanya berjalan jika push atau pull request mengubah salah satu path berikut: `docs/**`, `overrides/**`, `scripts/docs_hooks.py`, `mkdocs.yml`, `pyproject.toml`, `uv.lock`, `.python-version`, dan `.github/workflows/docs.yml`. Perubahan yang hanya menyentuh `src/` tidak menerbitkan ulang situs.
+Workflow hanya berjalan jika push atau pull request mengubah salah satu path berikut: `docs/**`, `overrides/**`, `docs/tools/docs_hooks.py`, `mkdocs.yml`, `pyproject.toml`, `uv.lock`, `.python-version`, dan `.github/workflows/docs.yml`. Perubahan yang hanya menyentuh `src/` tidak menerbitkan ulang situs.
 
 ### Job build
 
@@ -60,8 +60,8 @@ Penerbitan berjalan satu per satu dalam grup concurrency `pages` dan tidak perna
 | `.github/dependabot.yml` | Dependabot membuka satu pull request sebulan sekali jika ada versi action baru, dengan awalan commit `ci`. |
 | `mkdocs.yml` | Pengaturan situs: `site_url`, menu, tema, plugin `search` dan `blog`, file yang dikecualikan, dan tombol sunting (`edit_uri` dan `content.action.edit`). |
 | `pyproject.toml` | Grup dependency `docs`: `mkdocs`, `mkdocs-material`, dan `markdown-callouts`. Versi Zul di header situs juga dibaca dari sini. |
-| `overrides/partials/header.html` | Header Material dengan tambahan versi Zul di samping nama situs. |
-| `scripts/docs_hooks.py` | Hook MkDocs yang membaca versi Zul dari `pyproject.toml`. |
+| `docs/overrides/partials/header.html` | Header Material dengan tambahan versi Zul di samping nama situs. |
+| `docs/tools/docs_hooks.py` | Hook MkDocs yang membaca versi Zul dari `pyproject.toml`. |
 | `uv.lock` | Versi persis setiap paket, sehingga build di GitHub dan di komputer saya memakai versi yang sama. |
 | `.python-version` | Versi Python, yaitu 3.11. |
 | `docs/` | Isi situs, termasuk CSS dan JavaScript di `docs/assets/`. |
@@ -69,7 +69,7 @@ Penerbitan berjalan satu per satu dalam grup concurrency `pages` dan tidak perna
 | `docs/blog/resources/` | Gambar dan file pendukung, satu folder per tulisan. |
 | `docs/blog/_template.md` | Template tulisan. File ini dikecualikan dari situs. |
 | `docs/blog/.authors.yml` | Data penulis yang tampil di setiap tulisan. |
-| `scripts/new_post.py` | Membuat tulisan baru dari template beserta tanggalnya. Skrip ini diuji di `scripts/tests/test_new_post.py`. |
+| `docs/tools/new_post.py` | Membuat tulisan baru dari template beserta tanggalnya. Skrip ini diuji di `docs/tools/tests/test_new_post.py`. |
 | `.gitignore` | Folder `site/` hasil build lokal tidak ikut di-commit. |
 
 ## Pengaturan di GitHub yang tidak ada di file

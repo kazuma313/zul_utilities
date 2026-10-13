@@ -11,7 +11,7 @@ Semua file blog ada di `docs/blog/`:
 | `docs/blog/index.md` | Pengantar di atas daftar tulisan. | Ya, sebagai halaman `blog/`. |
 | `docs/blog/posts/` | Satu file Markdown untuk setiap tulisan. Nama file tidak memengaruhi alamat halaman. | Ya, kecuali draf. |
 | `docs/blog/resources/` | Gambar dan file pendukung, satu subfolder untuk setiap tulisan. | Ya, disalin apa adanya ke `blog/resources/`. |
-| `docs/blog/_template.md` | Template yang dipakai `scripts/new_post.py`. | Tidak. Dikecualikan lewat `exclude_docs` di `mkdocs.yml`. |
+| `docs/blog/_template.md` | Template yang dipakai `docs/tools/new_post.py`. | Tidak. Dikecualikan lewat `exclude_docs` di `mkdocs.yml`. |
 | `docs/blog/.authors.yml` | Data penulis. | Tidak. Dibaca plugin saat build. |
 
 ## Header tulisan
@@ -155,12 +155,12 @@ authors:
 | `avatar` | URL atau path gambar foto penulis. |
 | `url` | Tautan pada nama penulis. |
 
-## `scripts/new_post.py`
+## `docs/tools/new_post.py`
 
 Membuat file tulisan dari `docs/blog/_template.md` dan folder resources-nya:
 
 ```shell
-uv run python scripts/new_post.py JUDUL [--tanggal TANGGAL] [--kategori KATEGORI]...
+uv run python docs/tools/new_post.py JUDUL [--tanggal TANGGAL] [--kategori KATEGORI]...
 ```
 
 | Argumen | Wajib | Bawaan | Keterangan |

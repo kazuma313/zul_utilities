@@ -119,15 +119,15 @@ docs = [
 # `uv run pytest` hanya menguji framework. Kategori lain punya perintahnya
 # sendiri, lihat README.md di folder masing-masing:
 #   uv run pytest framework/agentic        skill pool
-#   uv run pytest scripts/tests            tool dokumentasi
+#   uv run pytest docs/tools/tests            tool dokumentasi
 #   uv run pytest research/latihan         latihan (sebagian gagal, disengaja)
 testpaths = ["framework/tests"]
 addopts = "-ra"
 
 # Gaya kode framework dan tool repo:
-#   uv run black framework scripts
-#   uv run ruff check framework scripts
-#   uv run python scripts/comment_style.py framework/src framework/tests framework/project scripts
+#   uv run black framework docs/tools
+#   uv run ruff check framework docs/tools
+#   uv run python framework/scripts/comment_style.py
 # Skill pool, notebook, dan studi punya gaya sendiri; research/ berisi
 # latihan. Keempatnya tidak ikut diperiksa.
 [tool.black]
