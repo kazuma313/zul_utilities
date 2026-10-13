@@ -127,7 +127,7 @@ Setiap item `events`:
 
 ```json
 {
-  "thread_id": "playground-3f9a1c2e",
+  "thread_id": "playground-3f9a1c2e7b5d4e6a9c8b1f0d2e4a6c8b",
   "answer": "It's sunny in San Francisco.",
   "pending_review": null,
   "error": null,

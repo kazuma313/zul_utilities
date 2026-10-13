@@ -1,6 +1,7 @@
 import asyncio
 import json
 import sys
+from pathlib import Path
 
 import pytest
 from typer.testing import CliRunner
@@ -72,6 +73,38 @@ def test_read_project_stays_inside_the_boilerplate():
     )
     assert "tidak ada" in knowledge.read_project("computer_vision", "README-hilang.md")
     assert "Yang tersedia: computer_vision" in knowledge.read_project("hexa")
+
+
+def test_read_project_skips_secrets_and_outputs(tmp_path, monkeypatch):
+    app = tmp_path / "app"
+    for name in ("README.md", ".env", ".gitignore", "outputs/hasil.csv", "src/main.py"):
+        (app / name).parent.mkdir(parents=True, exist_ok=True)
+        (app / name).write_text("# App\n\nIsi.\n", encoding="utf-8")
+    monkeypatch.setattr(knowledge, "project_root", lambda: tmp_path)
+
+    overview = knowledge.read_project("app")
+
+    assert "- `src/main.py`" in overview and "- `.gitignore`" in overview
+    assert ".env`" not in overview and "outputs/" not in overview
+    assert "tidak ada" in knowledge.read_project("app", ".env")
+    assert "tidak ada" in knowledge.read_project("app", "outputs/hasil.csv")
+    assert knowledge.read_project("app", ".gitignore").startswith("# app/.gitignore")
+
+
+def test_every_boilerplate_is_listed_file_by_file_in_the_wheel():
+    import tomllib
+
+    root = Path(__file__).resolve().parents[2]
+    pyproject = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
+    included = pyproject["tool"]["hatch"]["build"]["targets"]["wheel"]["force-include"]
+    for folder in (root / "framework" / "project").iterdir():
+        if not (folder / "README.md").is_file():
+            continue
+        base = f"framework/project/{folder.name}"
+        assert base not in included, "folder utuh ikut membawa video dan .env lokal"
+        for part in ("README.md", "pyproject.toml", "src", "tests"):
+            if (folder / part).exists():
+                assert f"{base}/{part}" in included
 
 
 def test_read_source_returns_the_whole_file():

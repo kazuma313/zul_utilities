@@ -377,6 +377,7 @@ def find_examples(topic: str, limit: int = 5) -> str:
 #
 
 SKIPPED_PROJECT_PARTS = {"__pycache__", ".venv", "outputs", "videos", "models"}
+READABLE_DOTFILES = {".gitignore", ".dockerignore"}
 FENCE_LANGUAGES = {".py": "python", ".yaml": "yaml", ".yml": "yaml", ".toml": "toml"}
 
 
@@ -424,18 +425,28 @@ def read_project(project: str, path: str = "") -> str:
         files = [
             item.relative_to(folder).as_posix()
             for item in sorted(folder.rglob("*"))
-            if item.is_file()
-            and not SKIPPED_PROJECT_PARTS & set(item.relative_to(folder).parts)
+            if item.is_file() and _readable(item.relative_to(folder).parts)
         ]
         readme = (folder / "README.md").read_text(encoding="utf-8")
         listing = "\n".join(f"- `{name}`" for name in files)
         return f"{readme.rstrip()}\n\n## File\n\n{listing}\n"
     target = (folder / path).resolve()
-    if not target.is_relative_to(folder) or not target.is_file():
+    inside = target.is_relative_to(folder)
+    if (
+        not inside
+        or not target.is_file()
+        or not _readable(target.relative_to(folder).parts)
+    ):
         return f"File '{path}' tidak ada di boilerplate '{project}'."
     language = FENCE_LANGUAGES.get(target.suffix, "")
     body = target.read_text(encoding="utf-8")
     return f"# {project}/{path}\n\n```{language}\n{body.rstrip()}\n```\n"
+
+
+def _readable(parts: tuple[str, ...]) -> bool:
+    # File rahasia seperti .env dan folder video atau keluaran tidak dibaca.
+    hidden = any(p.startswith(".") and p not in READABLE_DOTFILES for p in parts)
+    return not hidden and not SKIPPED_PROJECT_PARTS & set(parts)
 
 
 def _first_paragraph(readme: Path) -> str:

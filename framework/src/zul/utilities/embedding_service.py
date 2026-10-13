@@ -343,8 +343,11 @@ class AIConfig(BaseModel):
         """
         config_path = Path(path)
         raw = _load_config_file(config_path)  # returns a plain dict
-        logger.debug("Loaded config from '%s': %s", config_path, raw)
-        return cls.model_validate(raw)  # Pydantic validates the dict
+        config = cls.model_validate(raw)  # Pydantic validates the dict
+        # Only the masked summary is logged:
+        # the raw dict holds the API keys.
+        logger.debug("Loaded config from '%s': %s", config_path, config.safe_summary())
+        return config
 
     @classmethod
     def from_env(cls) -> "AIConfig":

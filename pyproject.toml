@@ -63,7 +63,9 @@ build-backend = "hatchling.build"
 
 # Dokumentasi Markdown dan boilerplate proyek ikut masuk wheel sebagai
 # zul/_docs dan zul/_project, supaya MCP server Zul tetap bisa membacanya
-# saat Zul di-install dari pip.
+# saat Zul di-install dari pip. Boilerplate disebut per file dan folder,
+# karena force-include tidak membaca .gitignore: video, bobot, keluaran,
+# dan .env di checkout lokal tidak boleh ikut masuk wheel.
 # Kode framework ada di framework/; repository ini juga berisi dokumentasi
 # dan research/, yang tidak ikut masuk package.
 [tool.hatch.build.targets.wheel]
@@ -74,7 +76,15 @@ packages = ["framework/src/zul"]
 "docs/panduan" = "zul/_docs/panduan"
 "docs/referensi" = "zul/_docs/referensi"
 "docs/konsep" = "zul/_docs/konsep"
-"framework/project" = "zul/_project"
+"framework/project/README.md" = "zul/_project/README.md"
+"framework/project/computer_vision/README.md" = "zul/_project/computer_vision/README.md"
+"framework/project/computer_vision/pyproject.toml" = "zul/_project/computer_vision/pyproject.toml"
+"framework/project/computer_vision/Dockerfile" = "zul/_project/computer_vision/Dockerfile"
+"framework/project/computer_vision/docker-compose.yml" = "zul/_project/computer_vision/docker-compose.yml"
+"framework/project/computer_vision/docker-compose.cpu.yml" = "zul/_project/computer_vision/docker-compose.cpu.yml"
+"framework/project/computer_vision/configs" = "zul/_project/computer_vision/configs"
+"framework/project/computer_vision/src" = "zul/_project/computer_vision/src"
+"framework/project/computer_vision/tests" = "zul/_project/computer_vision/tests"
 
 [dependency-groups]
 dev = [

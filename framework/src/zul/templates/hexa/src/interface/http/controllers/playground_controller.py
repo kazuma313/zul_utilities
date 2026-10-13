@@ -12,7 +12,7 @@ Contoh request:
 
 Contoh respons:
     {
-        "thread_id": "playground-3f9a1c2e",
+        "thread_id": "playground-3f9a1c2e7b5d4e6a9c8b1f0d2e4a6c8b",
         "answer": "It's sunny in San Francisco.",
         "pending_review": null,
         "error": null,
@@ -34,7 +34,8 @@ Contoh respons:
 
 Melanjutkan agent yang menunggu keputusan:
     POST /playground/resume
-    {"feature": "Human-in-the-loop", "thread_id": "playground-3f9a1c2e",
+    {"feature": "Human-in-the-loop",
+     "thread_id": "playground-3f9a1c2e7b5d4e6a9c8b1f0d2e4a6c8b",
      "value": {"decisions": [{"type": "approve"}]}}
 """
 
@@ -146,7 +147,7 @@ def send_message(request: MessageRequest) -> PlaygroundTurn:
         raise EmptyMessageError()
 
     agent = _build_agent(request.feature)
-    thread_id = request.thread_id or f"playground-{uuid4().hex[:8]}"
+    thread_id = request.thread_id or f"playground-{uuid4().hex}"
 
     # Pesan baru di thread yang sedang menunggu keputusan akan meninggalkan
     # tool call tanpa jawaban di riwayat. Thread baru belum punya state
