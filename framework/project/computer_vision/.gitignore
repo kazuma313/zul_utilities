@@ -1,0 +1,6 @@
+# Rekaman, bobot model, dan hasil proses tidak ikut git.
+videos/
+models/
+outputs/
+.venv/
+__pycache__/

@@ -1,0 +1,39 @@
+# base.yaml: pengaturan yang sama untuk semua kamera. Config kamera di
+# configs/<kamera>.yaml menimpa yang berbeda dan menambahkan geometri scene.
+# Setiap kunci wajib ada dan tipenya diperiksa oleh src/cctv/settings.py.
+
+settings:
+
+  # -- model --
+  MODEL: keypoint          # keypoint: kotak + 17 keypoint; nano/small/medium/large: kotak saja
+  WEIGHTS: ""              # kosong: diunduh ke cache RF-DETR saat pertama dipakai
+  PERSON_CLASS_ID: 1       # id kelas orang di model RF-DETR
+  CONFIDENCE: 0.2
+  DETECT_SIZE: 640
+  HALF: true               # float16 di GPU
+  DEVICE: ""               # kosong: GPU jika ada, selain itu CPU
+
+  # -- pelacakan --
+  TRACK_HIGH_THRESHOLD: 0.35
+  TRACK_NEW_THRESHOLD: 0.25
+  LOST_TRACK_BUFFER: 30
+
+  # -- aturan --
+  ANCHOR_RATIO: 1.0        # titik orang untuk zona dan garis: 1.0 kaki, 0.5 tengah kotak
+  MIN_CROSSING_FRAMES: 3   # frame di sisi baru sebelum lintasan garis dihitung
+  ZONE_GRACE_S: 1.0        # jeda terlama sebelum kunjungan zona dianggap selesai
+  DWELL_THRESHOLD_S: 2.0   # lama di zona agar seseorang dihitung "berhenti"
+  FACING_CONE_DEG: 90.0
+  ATTENTION_MINIMUM_S: 3.0 # lama menghadap target zona agar dihitung "memperhatikan"
+  PROXIMITY_METRES: 0.0    # jarak kontak antar orang; 0 mematikan
+  CONTACT_MINIMUM_S: 1.0
+  PERSON_HEIGHT_METRES: 1.7
+
+  # -- tampilan --
+  TRACE_LENGTH: 40
+  SHOW_SKELETON: true
+  ZONE_COLOR: "#00d4ff"
+  LINE_COLOR: "#FF4081"
+  IGNORE_COLOR: "#9E9E9E"
+  ATTENTION_COLOR: "#FFC400"
+  CONTACT_COLOR: "#FF6D00"

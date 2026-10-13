@@ -1,6 +1,6 @@
 # Lapisan adapter
 
-Zul memakai banyak library pihak ketiga: OpenCV untuk gambar, RF-DETR untuk mendeteksi orang, pymilvus untuk vector database, dan lainnya. Halaman ini menjelaskan bagaimana Zul memakai library itu, dan kenapa: setiap library hanya diimpor di satu file di `src/zul/adapters/`, dan modul Zul lain memakai library itu lewat file tersebut.
+Zul memakai banyak library pihak ketiga: OpenCV untuk gambar, RF-DETR untuk mendeteksi orang, pymilvus untuk vector database, dan lainnya. Halaman ini menjelaskan bagaimana Zul memakai library itu, dan kenapa: setiap library hanya diimpor di satu file di `framework/src/zul/adapters/`, dan modul Zul lain memakai library itu lewat file tersebut.
 
 ## Library sebagai induk, Zul sebagai anak
 
@@ -32,7 +32,7 @@ Dengan lapisan adapter:
 
 ## Aturan adapter
 
-Aturan berikut diperiksa oleh `tests/test_architecture.py` setiap kali test dijalankan:
+Aturan berikut diperiksa oleh `framework/tests/test_architecture.py` setiap kali test dijalankan:
 
 1. Library pihak ketiga hanya diimpor di `zul/adapters/`, termasuk import di dalam fungsi. Pengecualiannya hanya library di daftar [yang dipakai langsung](#library-yang-dipakai-langsung).
 2. Satu file adapter per library, dinamai sesuai library-nya. Daftar adapter dan library yang boleh diimpornya ada di `ADAPTERS` di test itu.

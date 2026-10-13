@@ -61,13 +61,20 @@ zul = "zul.cli:app"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-# Dokumentasi Markdown ikut masuk wheel sebagai zul/_docs, supaya MCP server
-# Zul tetap bisa mencari dan membaca dokumentasi saat Zul di-install dari pip.
+# Dokumentasi Markdown dan boilerplate proyek ikut masuk wheel sebagai
+# zul/_docs dan zul/_project, supaya MCP server Zul tetap bisa membacanya
+# saat Zul di-install dari pip.
+# Kode framework ada di framework/; repository ini juga berisi dokumentasi
+# dan research/, yang tidak ikut masuk package.
+[tool.hatch.build.targets.wheel]
+packages = ["framework/src/zul"]
+
 [tool.hatch.build.targets.wheel.force-include]
 "docs/tutorial" = "zul/_docs/tutorial"
 "docs/panduan" = "zul/_docs/panduan"
 "docs/referensi" = "zul/_docs/referensi"
 "docs/konsep" = "zul/_docs/konsep"
+"framework/project" = "zul/_project"
 
 [dependency-groups]
 dev = [
@@ -99,29 +106,34 @@ docs = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = [
-    "tests",
-    "research/sorting_algorithm",
-    "research/image_processing",
-    "research/probability_simulation",
-    "research/string_algorithms",
-]
+# `uv run pytest` hanya menguji framework. Kategori lain punya perintahnya
+# sendiri, lihat README.md di folder masing-masing:
+#   uv run pytest framework/agentic        skill pool
+#   uv run pytest scripts/tests            tool dokumentasi
+#   uv run pytest research/latihan         latihan (sebagian gagal, disengaja)
+testpaths = ["framework/tests"]
 addopts = "-ra"
 
-# Gaya kode untuk tools (src/, tests/, scripts/):
-#   uv run black src tests scripts
-#   uv run ruff check src tests scripts
-#   uv run python scripts/comment_style.py src tests scripts
-# research/ dan tutorial/ berisi latihan, jadi tidak ikut diperiksa.
+# Gaya kode framework dan tool repo:
+#   uv run black framework scripts
+#   uv run ruff check framework scripts
+#   uv run python scripts/comment_style.py framework/src framework/tests framework/project scripts
+# Skill pool, notebook, dan studi punya gaya sendiri; research/ berisi
+# latihan. Keempatnya tidak ikut diperiksa.
 [tool.black]
 line-length = 88
 target-version = ["py311"]
-extend-exclude = "/(research|tutorial)/"
+extend-exclude = "/(research|framework/agentic|framework/notebooks|framework/studies)/"
 
 [tool.ruff]
 line-length = 88
 target-version = "py311"
-extend-exclude = ["research", "tutorial"]
+extend-exclude = [
+    "research",
+    "framework/agentic",
+    "framework/notebooks",
+    "framework/studies",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM"]
@@ -131,7 +143,7 @@ ignore = ["B008", "UP042"]
 
 # Isi prompt adalah teks untuk model; memotong barisnya mengubah prompt-nya.
 [tool.ruff.lint.per-file-ignores]
-"src/zul/utilities/Prompts/*.py" = ["E501"]
+"framework/src/zul/utilities/Prompts/*.py" = ["E501"]
 
 # "src" adalah package proyek hasil `zul build hexa`, jadi di dalam template
 # impor `src.*` dikelompokkan sebagai kode sendiri, terpisah dari library.

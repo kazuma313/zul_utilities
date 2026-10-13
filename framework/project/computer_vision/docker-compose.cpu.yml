@@ -1,0 +1,13 @@
+# CPU saja, untuk mesin tanpa GPU NVIDIA. Jauh lebih lambat; pakai --stride.
+#   docker compose -f docker-compose.cpu.yml run --rm cctv run configs/interior.yaml --stride 3
+services:
+  cctv:
+    build: .
+    volumes:
+      - ./videos:/app/videos:ro
+      - ./outputs:/app/outputs
+      - ./configs:/app/configs:ro
+      - model-cache:/root/.roboflow
+
+volumes:
+  model-cache:

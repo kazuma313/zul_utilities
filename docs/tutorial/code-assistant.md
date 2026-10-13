@@ -29,8 +29,8 @@ zul mcp check
 Perintah itu menyalakan server di proses yang sama, membaca semua isinya, dan mencoba satu pencarian. Keluarannya seperti ini:
 
 ```text
-MCP server zul siap: 9 tool, 4 resource, 3 prompt.
-Tool: list_modules, module_guide, read_source, list_docs, read_doc, search_docs, find_examples, conventions, check_code
+MCP server zul siap: 11 tool, 4 resource, 3 prompt.
+Tool: list_modules, module_guide, read_source, list_docs, read_doc, search_docs, find_examples, list_projects, read_project, conventions, check_code
 Resource: zul://conventions, zul://modules, zul://docs/{section}/{page}, zul://source/{module}
 Prompt: tulis_modul_zul, pakai_zul, evaluasi_retrieval
 Contoh search_docs: ## panduan/menghitung-dengan-garis-dan-poligon > Menghitung lintasan dengan garis

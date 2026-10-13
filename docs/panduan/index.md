@@ -29,7 +29,7 @@ Setiap panduan berisi langkah untuk menyelesaikan satu tugas dengan Zul.
 
 ## Utilities
 
-Alat bantu yang kamu panggil langsung dari kode atau terminal: helper dari paket `zul`, dan script di `research/agentic/algorithms/utilities/` yang bekerja tanpa model AI.
+Alat bantu yang kamu panggil langsung dari kode atau terminal: helper dari paket `zul`, dan script di `framework/agentic/utilities/` yang bekerja tanpa model AI.
 
 | Tugas | Panduan |
 |---|---|
@@ -47,7 +47,7 @@ Alat bantu yang kamu panggil langsung dari kode atau terminal: helper dari paket
 
 ## Skill
 
-Kemampuan yang di dalamnya ada model AI yang bekerja, dengan model lokal lewat Ollama atau model lain. Kodenya ada di `research/agentic/algorithms/skills/`.
+Kemampuan yang di dalamnya ada model AI yang bekerja, dengan model lokal lewat Ollama atau model lain. Kodenya ada di `framework/agentic/skills/`.
 
 | Tugas | Panduan |
 |---|---|
@@ -67,6 +67,7 @@ Fungsi-fungsi kecil di `zul.computer_vision` untuk video, yang kamu rangkai send
 | Mengukur lama setiap orang di zona, atau lama sebuah kondisi benar | [Mengukur durasi per orang](mengukur-durasi.md) |
 | Membaca ke mana orang menghadap, dan jarak antar orang dalam meter | [Membaca arah hadap dan jarak](membaca-arah-hadap-dan-jarak.md) |
 | Menghitamkan area sebelum deteksi, atau mengaburkan wajah dan badan | [Menghitamkan dan menyamarkan area](menghitamkan-dan-menyamarkan-area.md) |
+| Memulai aplikasi analitik CCTV lengkap dari boilerplate, dengan config per kamera, CSV, dan Docker | [Memulai proyek dari boilerplate](memulai-proyek-computer-vision.md) |
 
 ## Proyek Zul
 

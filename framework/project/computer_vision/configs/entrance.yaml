@@ -1,0 +1,21 @@
+# Kamera pintu masuk: berapa orang lewat yang berhenti di depan toko, berapa
+# yang masuk, dan berapa yang berinteraksi. Koordinat piksel, video 1280x720.
+
+SOURCE_VIDEO_PATH: videos/entrance.mp4
+
+# Area yang dihitamkan sebelum deteksi, misalnya pantulan kaca atau poster.
+IGNORE_POLYGONS:
+  - [[1270, 5], [1276, 354], [1230, 175], [301, 63], [8, 1]]
+
+ZONES:
+  - name: depan_toko
+    polygon: [[1221, 180], [1268, 494], [311, 220], [279, 67]]
+
+# Sisi kiri dari start ke end adalah sisi "masuk".
+LINES:
+  - name: pintu
+    start: [1257, 497]
+    end: [225, 203]
+
+settings:
+  PROXIMITY_METRES: 2.0

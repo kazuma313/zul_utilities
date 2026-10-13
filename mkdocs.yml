@@ -25,13 +25,11 @@ copyright: Dirilis di bawah lisensi MIT.
 # halaman dokumentasi bisa memanggil API itu.
 dev_addr: 127.0.0.1:8001
 
-# Catatan lama di docs/ yang bukan bagian dari situs dokumentasi, dan
-# template tulisan blog (dipakai scripts/new_post.py, bukan halaman).
+# Template tulisan blog dipakai scripts/new_post.py, dan README.md
+# menjelaskan folder docs/ untuk pembaca repository; keduanya bukan
+# halaman situs. Catatan lama sekarang di research/arsip/catatan_docs.
 exclude_docs: |
-  /commands.md
-  /hexagonal_base.md
-  /Tutorial Membuat Boilerplate Proyek CLI dengan Python.md
-  /*.pdf
+  /README.md
   /blog/_template.md
 
 validation:
@@ -186,6 +184,7 @@ nav:
           - Mengukur durasi per orang: panduan/mengukur-durasi.md
           - Membaca arah hadap dan jarak: panduan/membaca-arah-hadap-dan-jarak.md
           - Menghitamkan dan menyamarkan area: panduan/menghitamkan-dan-menyamarkan-area.md
+          - Memulai proyek dari boilerplate: panduan/memulai-proyek-computer-vision.md
       - Proyek Zul:
           - Menerbitkan dokumentasi: panduan/menerbitkan-dokumentasi.md
           - Menulis tulisan blog: panduan/menulis-blog.md

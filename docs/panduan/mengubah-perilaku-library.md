@@ -1,6 +1,6 @@
 # Mengubah perilaku library pihak ketiga
 
-Zul memakai library seperti OpenCV, RF-DETR, dan pymilvus lewat satu lapisan: `src/zul/adapters/`. Setiap library hanya diimpor di satu file adapter. Jika kamu atau kolaboratormu perlu mengubah perilaku sebuah library untuk kebutuhan proyek, perubahannya ditulis di adapter itu, bukan di dalam paket library yang ter-install.
+Zul memakai library seperti OpenCV, RF-DETR, dan pymilvus lewat satu lapisan: `framework/src/zul/adapters/`. Setiap library hanya diimpor di satu file adapter. Jika kamu atau kolaboratormu perlu mengubah perilaku sebuah library untuk kebutuhan proyek, perubahannya ditulis di adapter itu, bukan di dalam paket library yang ter-install.
 
 Panduan ini untuk orang yang mengubah Zul sendiri. Alasan di balik lapisan ini ada di [Lapisan adapter](../konsep/lapisan-adapter.md).
 
@@ -23,9 +23,9 @@ Ketiga cara pertama hidup di repository Zul, jadi kolaborator mendapat perubahan
 
 ## Mencari adapter sebuah library
 
-1. Cari file adapter untuk library itu di `src/zul/adapters/`. Nama file mengikuti nama library, misalnya `opencv.py` untuk OpenCV dan `rfdetr.py` untuk RF-DETR.
+1. Cari file adapter untuk library itu di `framework/src/zul/adapters/`. Nama file mengikuti nama library, misalnya `opencv.py` untuk OpenCV dan `rfdetr.py` untuk RF-DETR.
 
-2. Pastikan library itu memang ditangani di file tersebut. Daftar lengkapnya ada di `ADAPTERS` di `tests/test_architecture.py`:
+2. Pastikan library itu memang ditangani di file tersebut. Daftar lengkapnya ada di `ADAPTERS` di `framework/tests/test_architecture.py`:
 
     ```python
     ADAPTERS = {
@@ -48,7 +48,7 @@ Contohnya, `half` di `load_model` diteruskan ke `load_model` di adapter, yang me
 
 Untuk mengubah sebagian kecil perilaku sebuah kelas library, turunkan kelas itu di adapter. Contoh berikut mengubah hasil model keypoint RF-DETR, dengan menurunkan method `predict` milik `RFDETRKeypointPreview`:
 
-1. Buka `src/zul/adapters/rfdetr.py`.
+1. Buka `framework/src/zul/adapters/rfdetr.py`.
 
 2. Tambahkan kelas turunan di bawah import:
 
@@ -71,21 +71,21 @@ Untuk mengubah sebagian kecil perilaku sebuah kelas library, turunkan kelas itu 
         ...
     ```
 
-4. Tulis test yang membuktikan perilaku barunya, misalnya di `tests/test_computer_vision.py`, dengan model palsu seperti `FakeRFDETR`.
+4. Tulis test yang membuktikan perilaku barunya, misalnya di `framework/tests/test_computer_vision.py`, dengan model palsu seperti `FakeRFDETR`.
 
 5. Jalankan test arsitektur dan test modul itu:
 
     ```shell
-    uv run pytest tests/test_architecture.py tests/test_computer_vision.py
+    uv run pytest framework/tests/test_architecture.py framework/tests/test_computer_vision.py
     ```
 
 Kelas turunan tetap memakai kode library yang ter-install, jadi ia ikut rusak jika method induknya berubah di versi library berikutnya. Karena itu Zul mengunci versi library yang API-nya belum stabil, misalnya `rfdetr>=1.11.2,<1.12`. Test `test_rfdetr_api_used_by_the_adapter_still_exists` gagal lebih dulu jika bagian yang dipakai berubah.
 
 ## Menyalin kode library ke Zul
 
-Jika perubahannya terlalu besar untuk kelas turunan, salin file library yang perlu diubah ke `src/zul/adapters/_vendor/`:
+Jika perubahannya terlalu besar untuk kelas turunan, salin file library yang perlu diubah ke `framework/src/zul/adapters/_vendor/`:
 
-1. Buat folder untuk library itu, misalnya `src/zul/adapters/_vendor/rfdetr/`.
+1. Buat folder untuk library itu, misalnya `framework/src/zul/adapters/_vendor/rfdetr/`.
 
 2. Salin file yang perlu diubah ke folder itu, beserta file lisensi asli library-nya sebagai `LICENSE`. Test `test_vendored_libraries_keep_their_license` gagal jika file lisensi tidak ada.
 
@@ -118,18 +118,18 @@ Paket di PyPI tidak boleh bergantung pada URL git. Jika Zul nanti diterbitkan ke
 
 Untuk memakai library yang belum dipakai Zul:
 
-1. Buat file adapter baru di `src/zul/adapters/`, dinamai sesuai library-nya. Hanya file ini yang mengimpor library itu.
+1. Buat file adapter baru di `framework/src/zul/adapters/`, dinamai sesuai library-nya. Hanya file ini yang mengimpor library itu.
 
 2. Tulis fungsi adapter yang menerima dan mengembalikan tipe Python biasa atau array NumPy, bukan objek library.
 
-3. Tambahkan satu baris ke `ADAPTERS` di `tests/test_architecture.py`, berisi nama adapter dan nama paket teratas yang diimpornya.
+3. Tambahkan satu baris ke `ADAPTERS` di `framework/tests/test_architecture.py`, berisi nama adapter dan nama paket teratas yang diimpornya.
 
-4. Tambahkan library ke extra yang sesuai di `pyproject.toml`, lalu tambahkan adapter itu ke `EXTRA_MODULES` di `tests/test_dependencies.py`.
+4. Tambahkan library ke extra yang sesuai di `pyproject.toml`, lalu tambahkan adapter itu ke `EXTRA_MODULES` di `framework/tests/test_dependencies.py`.
 
 5. Jalankan semua test:
 
     ```shell
-    uv run pytest tests
+    uv run pytest
     ```
 
 `test_third_party_libraries_are_imported_only_in_adapters` gagal jika modul Zul lain mengimpor library itu langsung, dan pesannya menyebut modul serta library-nya.

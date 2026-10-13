@@ -69,7 +69,7 @@ Penerbitan berjalan satu per satu dalam grup concurrency `pages` dan tidak perna
 | `docs/blog/resources/` | Gambar dan file pendukung, satu folder per tulisan. |
 | `docs/blog/_template.md` | Template tulisan. File ini dikecualikan dari situs. |
 | `docs/blog/.authors.yml` | Data penulis yang tampil di setiap tulisan. |
-| `scripts/new_post.py` | Membuat tulisan baru dari template beserta tanggalnya. Skrip ini diuji di `tests/test_new_post.py`. |
+| `scripts/new_post.py` | Membuat tulisan baru dari template beserta tanggalnya. Skrip ini diuji di `scripts/tests/test_new_post.py`. |
 | `.gitignore` | Folder `site/` hasil build lokal tidak ikut di-commit. |
 
 ## Pengaturan di GitHub yang tidak ada di file

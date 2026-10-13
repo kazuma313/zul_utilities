@@ -30,7 +30,7 @@ Tabel berikut merangkum perintah yang tersedia:
 | [`zul mcp check`](#zul-mcp) | Menguji MCP server tanpa code assistant. |
 | [`zul mcp config`](#zul-mcp) | Mencetak config MCP untuk sebuah code assistant. |
 
-Perintah `zul` didaftarkan oleh `[project.scripts]` di `pyproject.toml` sebagai `zul = "zul.cli:app"`. Kelompok perintah `build` ada di `src/zul/commands/build.py`, kelompok `install` ada di `src/zul/commands/install.py`, dan kelompok `mcp` ada di `src/zul/commands/mcp.py`.
+Perintah `zul` didaftarkan oleh `[project.scripts]` di `pyproject.toml` sebagai `zul = "zul.cli:app"`. Kelompok perintah `build` ada di `framework/src/zul/commands/build.py`, kelompok `install` ada di `framework/src/zul/commands/install.py`, dan kelompok `mcp` ada di `framework/src/zul/commands/mcp.py`.
 
 ## Opsi global
 

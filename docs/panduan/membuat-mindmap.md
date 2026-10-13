@@ -6,10 +6,10 @@ Skill `mind_map` mengubah topik, catatan, atau dokumen menjadi mind map. Skill i
 
 Gambar di atas dibuat dari outline `assets/examples/zul.md` di folder skill. [Versi interaktifnya](../assets/mindmap/zul.html) bisa digeser dan diperbesar.
 
-**Sebelum mulai:** `uv` atau Python 3.9 ke atas ter-install, dan kamu berada di root repository Zul. Skill `mind_map` ada di `research/agentic/algorithms/skills/mind_map/`. Perintah di halaman ini dijalankan dari folder itu:
+**Sebelum mulai:** `uv` atau Python 3.9 ke atas ter-install, dan kamu berada di root repository Zul. Skill `mind_map` ada di `framework/agentic/skills/mind_map/`. Perintah di halaman ini dijalankan dari folder itu:
 
 ```shell
-cd research/agentic/algorithms/skills/mind_map
+cd framework/agentic/skills/mind_map
 ```
 
 ## Membuat mind map dari outline
@@ -111,7 +111,7 @@ from skills.mind_map.mind_map_skill import create_mind_map
 tools = [create_mind_map]
 ```
 
-Model menulis outline sebagai argumen `outline`, dan tool mengembalikan baris hasil yang sama dengan skrip. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `skills` bisa diimpor.
+Model menulis outline sebagai argumen `outline`, dan tool mengembalikan baris hasil yang sama dengan skrip. Folder `framework/agentic/` harus ada di `sys.path` supaya `skills` bisa diimpor.
 
 > [!WARNING]
 > Ollama tidak menyediakan tool calling untuk `gemma3`, jadi `bind_tools` gagal dengan model itu. Minta model menjawab dengan satu objek JSON, dan kirim skema argumen tool sebagai `format` supaya server menjaga bentuknya. Dengan cara itu `gemma3:4b` memanggil `create_mind_map` dengan benar dalam 6 detik. Contohnya ada di `evals/small_model_check.py` di folder `skills/`.

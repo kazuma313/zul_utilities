@@ -4,7 +4,7 @@ Skill `contextual_retrieval` memotong dokumen menjadi chunk dan memberi setiap c
 
 Sebuah chunk sering tidak bisa dipahami sendirian. Kalimat "Kenapa sih orang-orang masih mengharapkan harganya akan turun lagi?" tidak menyebut siapa yang bicara, di acara apa, dan tentang harga apa. Contextual retrieval menaruh keterangan itu di depan chunk sebelum chunk di-embed dan diindeks, sehingga pertanyaan seperti "apa kata KJo soal harga Bitcoin" bisa menemukannya.
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan Ollama berjalan dengan model yang disarankan di bagian [Memilih model](#memilih-model). Skill ini ada di `research/agentic/algorithms/skills/contextual_retrieval/` dan tidak membutuhkan paket tambahan.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan Ollama berjalan dengan model yang disarankan di bagian [Memilih model](#memilih-model). Skill ini ada di `framework/agentic/skills/contextual_retrieval/` dan tidak membutuhkan paket tambahan.
 
 ## Cara skill ini menjaga hasilnya tetap bisa dipercaya
 
@@ -23,7 +23,7 @@ Kalimat dari model diperiksa kode sebelum dipakai. Kalimat yang memuat angka ata
 1. Pindah ke folder skill:
 
     ```shell
-    cd research/agentic/algorithms/skills/contextual_retrieval
+    cd framework/agentic/skills/contextual_retrieval
     ```
 
 2. Jalankan skrip pada satu atau beberapa file:
@@ -83,7 +83,7 @@ write_jsonl(records, "chunks.jsonl")
 records = contextualize_file("catatan.md", use_model=False)   # header saja, tanpa model
 ```
 
-Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `skills` bisa diimpor. Untuk agent, skill ini juga menyediakan tool LangChain bernama `contextualize_document`.
+Folder `framework/agentic/` harus ada di `sys.path` supaya `skills` bisa diimpor. Untuk agent, skill ini juga menyediakan tool LangChain bernama `contextualize_document`.
 
 ## Memilih model
 
@@ -107,6 +107,6 @@ Dua hal yang perlu kamu ketahui dari pengujian itu:
 ## Halaman terkait
 
 - `SKILL.md` di folder skill untuk semua kolom record dan opsi skrip.
-- `research/contextual_retrieval_assessment/README.md` untuk laporan lengkap penilaian model, beserta dokumen, hasil, dan catatan penilaiannya.
+- `framework/studies/contextual_retrieval_assessment/README.md` untuk laporan lengkap penilaian model, beserta dokumen, hasil, dan catatan penilaiannya.
 - [Mengambil transcript YouTube](mengambil-transcript-youtube.md) untuk menyiapkan transcript video sebagai bahan.
 - [Menyimpan dan mencari vektor di Milvus](memakai-milvus.md) untuk memasukkan hasilnya ke Milvus.

@@ -1,0 +1,7 @@
+# data mentah (PDF, dataset tanya-jawab) dan keluaran percobaan tak ikut repo;
+# contoh pertanyaan latensi tetap disertakan.
+data/*
+!data/latency_questions.example.json
+outputs/
+__pycache__/
+_arsip_rag_eval/

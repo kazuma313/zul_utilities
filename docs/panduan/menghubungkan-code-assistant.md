@@ -52,7 +52,7 @@ Periksa hasilnya dengan `claude mcp list`, atau dengan `/mcp` di dalam sesi Clau
 
 2. Tempel keluarannya ke `~/.cursor/mcp.json` untuk semua proyek, atau ke `.cursor/mcp.json` di root proyek untuk satu proyek saja.
 
-3. Buka pengaturan MCP di Cursor. Server `zul` tampil beserta sembilan tool-nya.
+3. Buka pengaturan MCP di Cursor. Server `zul` tampil beserta sebelas tool-nya.
 
 ## VS Code
 

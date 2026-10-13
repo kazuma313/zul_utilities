@@ -125,7 +125,7 @@ Cara memperbaiki isi yang salah lalu membangun ulang halamannya tanpa memanggil 
 
 ## File perbandingan
 
-Semua file ada di `research/learning_skills_comparison/`:
+Semua file ada di `framework/studies/learning_skills_comparison/`:
 
 | File | Isi |
 |---|---|
@@ -139,8 +139,8 @@ Semua file ada di `research/learning_skills_comparison/`:
 Perbandingan bisa diulang dengan dua perintah ini. Perintah pertama memanggil ketiga model; perintah kedua menghitung `metrics.json`:
 
 ```shell
-uv run python research/learning_skills_comparison/run_comparison.py
-uv run python research/learning_skills_comparison/score_outputs.py
+uv run python framework/studies/learning_skills_comparison/run_comparison.py
+uv run python framework/studies/learning_skills_comparison/score_outputs.py
 ```
 
 ## Halaman terkait

@@ -2,7 +2,7 @@
 
 MCP server Zul memberi code assistant akses baca ke modul, source code, dokumentasi, dan aturan gaya Zul lewat Model Context Protocol. Server berjalan lewat stdin dan stdout, dan dijalankan oleh code assistant dengan `zul mcp serve`. Server butuh extra `mcp`, yang meng-install SDK MCP resmi (`mcp`, berlisensi MIT).
 
-Kode server ada di `src/zul/assistant/`. `zul.assistant.server` merakit server lewat adapter `zul.adapters.mcp`, dan isi setiap tool ada di `zul.assistant.knowledge`, yang hanya memakai library standar Python.
+Kode server ada di `framework/src/zul/assistant/`. `zul.assistant.server` merakit server lewat adapter `zul.adapters.mcp`, dan isi setiap tool ada di `zul.assistant.knowledge`, yang hanya memakai library standar Python.
 
 ## Perintah
 
@@ -53,6 +53,8 @@ Semua tool hanya membaca: tidak ada yang menulis file atau menjalankan kode. Set
 | `read_doc` | `page: str` | Isi lengkap satu halaman, misalnya `panduan/menggambar-di-frame`. |
 | `search_docs` | `query: str`, `limit: int = 8` | Bagian dokumentasi dan docstring modul yang paling cocok, dengan potongan isinya. |
 | `find_examples` | `topic: str`, `limit: int = 5` | Blok kode Python dari dokumentasi yang cocok dengan topik. |
+| `list_projects` | Tidak ada | Boilerplate aplikasi di `framework/project/`, dengan paragraf pertama README-nya. |
+| `read_project` | `project: str`, `path: str = ""` | Tanpa `path`: README dan daftar file boilerplate. Dengan `path`: isi satu file, misalnya `src/cctv/pipeline.py`. |
 | `conventions` | Tidak ada | Aturan menulis kode di dalam Zul. |
 | `check_code` | `code: str`, `inside_zul: bool = True` | Daftar masalah bernomor, atau `Tidak ada masalah` jika kode lolos. |
 
@@ -106,9 +108,11 @@ Prompt berisi urutan tool yang perlu dipanggil untuk sebuah pekerjaan. Di Claude
 Tool dokumentasi membaca file Markdown dari folder pertama yang ditemukan:
 
 1. `zul/_docs` di dalam paket yang ter-install. Saat wheel dibuat, folder `docs/tutorial`, `docs/panduan`, `docs/referensi`, dan `docs/konsep` disalin ke sana oleh `[tool.hatch.build.targets.wheel.force-include]` di `pyproject.toml`.
-2. Folder `docs` di sebelah `src`, saat Zul dipakai dari checkout repository, termasuk instalasi editable.
+2. Folder `docs` di root repository, saat Zul dipakai dari checkout repository, termasuk instalasi editable.
 
 Jika keduanya tidak ada, tool dokumentasi menjawab bahwa dokumentasi tidak ikut ter-install dan menyebut alamat situsnya. Tool modul tetap berjalan, karena membaca source code paket.
+
+`list_projects` dan `read_project` membaca boilerplate dengan urutan yang sama: `zul/_project` di dalam paket yang ter-install, lalu folder `framework/project` di checkout repository. `read_project` hanya membaca file di dalam folder boilerplate yang diminta; path yang keluar dari folder itu dijawab sebagai file yang tidak ada. Folder `outputs/`, `videos/`, `models/`, dan `__pycache__/` tidak ikut didaftar.
 
 ## Python API
 

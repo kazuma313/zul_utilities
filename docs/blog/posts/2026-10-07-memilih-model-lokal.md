@@ -59,5 +59,5 @@ Di lima dokumen ini, BM25 sudah menemukan 95% jawaban di lima hasil teratas tanp
 ## Sumber
 
 - [Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval), Anthropic.
-- [Laporan lengkap penilaian model](https://github.com/kazuma313/zul_utilities/tree/main/research/contextual_retrieval_assessment), berisi data, skor, dan catatan judge.
+- [Laporan lengkap penilaian model](https://github.com/kazuma313/zul_utilities/tree/main/framework/studies/contextual_retrieval_assessment), berisi data, skor, dan catatan judge.
 - [Menyiapkan dokumen untuk RAG](../../panduan/menyiapkan-dokumen-untuk-rag.md), cara memakai skill-nya.

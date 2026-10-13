@@ -94,4 +94,4 @@ BM25 menemukan jawaban di lima hasil teratas untuk 95% pertanyaan, sedangkan emb
 - [Mengambil transcript YouTube](../../panduan/mengambil-transcript-youtube.md) untuk skill `youtube_transcript`.
 - [Menyiapkan dokumen untuk RAG](../../panduan/menyiapkan-dokumen-untuk-rag.md) untuk skill `contextual_retrieval`.
 - [Menyimpan dan mencari vektor di Milvus](../../panduan/memakai-milvus.md) untuk tahap penyimpanan.
-- [Laporan penilaian model](https://github.com/kazuma313/zul_utilities/tree/main/research/contextual_retrieval_assessment) untuk data lengkap pengukurannya.
+- [Laporan penilaian model](https://github.com/kazuma313/zul_utilities/tree/main/framework/studies/contextual_retrieval_assessment) untuk data lengkap pengukurannya.

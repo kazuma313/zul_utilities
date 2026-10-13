@@ -2,7 +2,7 @@
 
 Zul adalah wrapper dari berbagai library Python. Zul tidak membuat ulang model deteksi, vector database, atau konverter dokumen. Zul merangkai library yang sudah ada menjadi alat yang siap dipakai, dengan cara pakai yang seragam: pengaturan lewat argumen atau file config, hasil berupa tipe Python biasa dan array NumPy, dan dokumentasi berbahasa Indonesia.
 
-Setiap library hanya diimpor di satu file di `src/zul/adapters/`. Modul Zul lain memakai library lewat adapter itu, jadi mengganti, mengunci, atau mengubah perilaku sebuah library cukup di satu tempat. Alasannya ada di [Lapisan adapter](../konsep/lapisan-adapter.md).
+Setiap library hanya diimpor di satu file di `framework/src/zul/adapters/`. Modul Zul lain memakai library lewat adapter itu, jadi mengganti, mengunci, atau mengubah perilaku sebuah library cukup di satu tempat. Alasannya ada di [Lapisan adapter](../konsep/lapisan-adapter.md).
 
 Halaman ini mendaftar setiap library yang di-install bersama Zul. Kolom **Versi** adalah syarat versi di `pyproject.toml`.
 

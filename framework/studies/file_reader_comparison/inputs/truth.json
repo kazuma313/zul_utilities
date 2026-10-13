@@ -1,0 +1,113 @@
+{
+  "mediawiki.webp": {
+    "expected": [
+      "Users & Developers",
+      "Register for the conference",
+      "registration is now open until October 9",
+      "MediaWiki is a collaboration and documentation platform",
+      "vibrant community",
+      "Main Page",
+      "Discussion",
+      "Read",
+      "View source",
+      "View history",
+      "tens of thousands of websites",
+      "thousands of companies and organisations",
+      "It powers Wikipedia",
+      "Find out more",
+      "Set up and run MediaWiki",
+      "Edit and use MediaWiki",
+      "Download, install and configure",
+      "Add functionality by installing",
+      "extensions",
+      "Learn how to navigate",
+      "Learn how to edit a page",
+      "Learn more about reading, editing",
+      "Photo of participants of the Wikimedia Hackathon 2026",
+      "Appearance",
+      "Automatic"
+    ]
+  },
+  "slide.png": {
+    "expected": [
+      "Survei dalam angka",
+      "350",
+      "72%",
+      "310.000",
+      "64%",
+      "Responden dari 500 yang diundang",
+      "Belanja online minimal sebulan sekali",
+      "Rata-rata belanja per bulan",
+      "Membayar dengan e-wallet"
+    ]
+  },
+  "halaman-pdf.png": {
+    "reference": "Rekomendasi Stack untuk zul CLI Tool\r\nBerdasarkan analisis di atas, inilah recommended stack untuk membuat tool seperti zul:\r\n\r\n# pyproject.toml [build-system] requires = [\"hatchling\"] build-backend = \"hatchling.build\"\r\n\r\n[project]\r\n\r\ndependencies = [\r\n\r\n\"typer[all]>=0.9.0\",\r\n\r\n# CLI framework (includes\r\n\r\n\"copier>=9.0.0\",\r\n\r\n# Template engine\r\n\r\n\"inquirerpy>=0.3.4\",\r\n\r\n# Interactive prompts\r\n\r\n\"jinja2>=3.1.0\",\r\n\r\n# Template rendering\r\n\r\n\"pydantic-settings>=2.0.0\", # Config management\r\n\r\n]\r\n\r\nRich)\r\n\r\nWhy this stack?\r\nModern: Semua tools actively maintained dan follow latest standards[4] [10] [19] [25] [43] Type-safe: Typer + Pydantic Settings memberikan full type safety [3] [4] [37] Beautiful: Rich (via Typer) + InquirerPy = professional CLI UX [24] [26] [27] Future-proof: Copier support template updates, critical untuk long-term maintenance[8] [10]\r\n[12]\r\nIndustry standard: Jinja2 + Hatch widely adopted di industri[43] [44] [32] Hindari: PyInquirer (unmaintained), Cookiecutter (no updates), Argparse (too verbose), Colorama (too basic), Setuptools (too complex)[19] [43] [28] .\r\n⁂\r\n1. https://realpython.com/python-click/ 2. https://dev.to/drcloudycoder/develop-python-cli-with-subcommands-using-click-4892 3. https://www.linkedin.com/pulse/comparative-guide-argparse-click-typer-python-parsing-luís-condado\r\ns-mrzjf 4. https://github.com/AkhileshMalthi/CodePG/issues/3 5. https://towardsdatascience.com/typer-probably-the-simplest-to-use-python-command-line-interface-l\r\nibrary-17abf1a5fd3e/ 6. https://www.pythonsnacks.com/p/click-vs-argparse-python 7. https://realpython.com/command-line-interfaces-python-argparse/ 8. https://dev.to/cloudnative_eng/copier-vs-cookiecutter-1jno 9. https://www.reddit.com/r/Python/comments/1gsohk7/what_cookiecutter_templates_do_you_use/ 10. https://copier.readthedocs.io/en/stable/comparisons/ 11. https://www.linkedin.com/pulse/copier-simplifying-project-bootstrapping-python-amjad-raza-ph-d--c\r\nrt6f\r\n\r\n\f"
+  },
+  "tabel.png": {
+    "expected": [
+      "Reksa dana",
+      "Jenis",
+      "NAB per unit",
+      "Biaya beli",
+      "Risiko",
+      "Dana Kas Prima",
+      "Pasar uang",
+      "Rp1.250",
+      "0%",
+      "Rendah",
+      "Obligasi Nusantara",
+      "Pendapatan tetap",
+      "Rp1.875",
+      "1%",
+      "Sedang",
+      "Saham Andalas",
+      "Saham",
+      "Rp2.430",
+      "2%",
+      "Tinggi",
+      "Campuran Sejahtera",
+      "Campuran",
+      "Rp1.610",
+      "1,5%",
+      "Sedang"
+    ],
+    "rows": [
+      [
+        "Reksa dana",
+        "Jenis",
+        "NAB per unit",
+        "Biaya beli",
+        "Risiko"
+      ],
+      [
+        "Dana Kas Prima",
+        "Pasar uang",
+        "Rp1.250",
+        "0%",
+        "Rendah"
+      ],
+      [
+        "Obligasi Nusantara",
+        "Pendapatan tetap",
+        "Rp1.875",
+        "1%",
+        "Sedang"
+      ],
+      [
+        "Saham Andalas",
+        "Saham",
+        "Rp2.430",
+        "2%",
+        "Tinggi"
+      ],
+      [
+        "Campuran Sejahtera",
+        "Campuran",
+        "Rp1.610",
+        "1,5%",
+        "Sedang"
+      ]
+    ]
+  }
+}

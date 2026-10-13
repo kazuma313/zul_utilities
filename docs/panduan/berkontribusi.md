@@ -20,68 +20,89 @@ Mengubah Zul sendiri mencakup menambah perintah, memperbaiki helper, mengembangk
 
     ```shell
     uv run zul --version
-    uv run pytest tests
+    uv run pytest
     ```
 
 ## Mengenali isi repository
 
+Repository ini dibagi menjadi tiga kategori. Setiap folder kategori punya `README.md` sendiri yang menjelaskan isi dan cara menjalankannya.
+
+| Kategori | Folder | Isi |
+|---|---|---|
+| Framework | [`framework/`](https://github.com/kazuma313/zul_utilities/tree/main/framework) | Paket `zul`, test-nya, skill pool, notebook contoh, boilerplate proyek, dan studi. |
+| Dokumentasi | `docs/`, `mkdocs.yml`, `overrides/` | Sumber situs dokumentasi ini dan blog-nya. |
+| Pengembangan diri | `research/` | Latihan coding, proyek mandiri, dan arsip. Bukan bagian dari package. |
+
+Isi folder framework:
+
 | Path | Isi |
 |---|---|
-| `src/zul/cli.py` | Entry point perintah `zul`. |
-| `src/zul/commands/` | Kelompok perintah: `build.py`, `install.py`, `mcp.py`. |
-| `src/zul/assistant/` | MCP server untuk code assistant. Rinciannya ada di [MCP server](../referensi/mcp.md). |
-| `src/zul/templates/hexa/` | Template proyek yang disalin `zul build hexa`. |
-| `src/zul/adapters/` | Satu-satunya tempat library pihak ketiga diimpor, satu file per library. Rinciannya ada di [Mengubah perilaku library pihak ketiga](mengubah-perilaku-library.md). |
-| `src/zul/evaluation/` | Evaluasi retrieval dan RAG dengan ragas. Rinciannya ada di [Mengevaluasi retrieval dan RAG](mengevaluasi-retrieval.md). |
-| `src/zul/computer_vision/` | Fungsi computer vision: deteksi, garis dan poligon penghitung, timer, gambar. |
-| `src/zul/utilities/` | Helper yang bisa diimpor. |
-| `tests/` | Test untuk CLI, utilities, template, dan aturan arsitektur (`test_architecture.py`). |
-| `research/agentic/algorithms/skills/` | Kumpulan skill untuk agent AI. Rinciannya ada di [Membuat mind map](membuat-mindmap.md). |
-| `scripts/comment_style.py` | Pemeriksa bentuk komentar. Isinya ada di `zul.assistant.comment_style`, yang juga dipakai tool MCP `check_code`. |
-| `scripts/new_post.py` | Pembuat tulisan blog baru dari template. Rinciannya ada di [Menulis tulisan blog](menulis-blog.md). |
-| `docs/` | Sumber dokumentasi ini. Blog ada di `docs/blog/`. |
-| `mkdocs.yml` | Susunan menu, tema, dan plugin situs dokumentasi. |
+| `framework/src/zul/cli.py` | Entry point perintah `zul`. |
+| `framework/src/zul/commands/` | Kelompok perintah: `build.py`, `install.py`, `mcp.py`. |
+| `framework/src/zul/assistant/` | MCP server untuk code assistant. Rinciannya ada di [MCP server](../referensi/mcp.md). |
+| `framework/src/zul/templates/hexa/` | Template proyek yang disalin `zul build hexa`. |
+| `framework/src/zul/adapters/` | Satu-satunya tempat library pihak ketiga diimpor, satu file per library. Rinciannya ada di [Mengubah perilaku library pihak ketiga](mengubah-perilaku-library.md). |
+| `framework/src/zul/evaluation/` | Evaluasi retrieval dan RAG dengan ragas. Rinciannya ada di [Mengevaluasi retrieval dan RAG](mengevaluasi-retrieval.md). |
+| `framework/src/zul/computer_vision/` | Fungsi computer vision: deteksi, garis dan poligon penghitung, timer, gambar. |
+| `framework/src/zul/utilities/` | Helper yang bisa diimpor. |
+| `framework/tests/` | Test paket `zul`: CLI, utilities, template, dan aturan arsitektur (`test_architecture.py`). |
+| `framework/agentic/` | Skill pool untuk agent AI: `skills/` dengan model di dalamnya, `utilities/` berupa script. Rinciannya ada di [Membuat mind map](membuat-mindmap.md). |
+| `framework/notebooks/` | Notebook contoh pemakaian utilities. |
+| `framework/project/` | Boilerplate aplikasi yang dibangun di atas `zul`, misalnya `computer_vision/`. |
+| `framework/studies/` | Studi yang membandingkan model atau cara kerja, beserta data dan laporannya. |
+
+File lain di root:
+
+| Path | Isi |
+|---|---|
+| `pyproject.toml`, `uv.lock` | Dependency dan pengaturan tool untuk seluruh repository. `.venv` dibuat di root. |
+| `scripts/` | Tool repository: `comment_style.py`, `new_post.py`, `docs_hooks.py`, `mask_api_keys.py`, beserta test-nya di `scripts/tests/`. |
 | `.mcp.json` | MCP server `zul` untuk Claude Code yang dibuka di repository ini. Rinciannya ada di [Memakai Zul dari checkout repository](menghubungkan-code-assistant.md#memakai-zul-dari-checkout-repository). |
 | `.github/workflows/docs.yml` | Workflow yang membangun dan menerbitkan situs dokumentasi. |
-| `tutorial/` | Notebook contoh pemakaian utilities. |
-| `research/` | Latihan dan eksperimen; bukan bagian dari package. |
 
 ## Menjalankan test
 
-Test di `tests/` tidak membutuhkan server atau API key. LLM diganti model palsu, dan Milvus serta Redis diganti client tiruan.
+Test di `framework/tests/` tidak membutuhkan server atau API key. LLM diganti model palsu, dan Milvus serta Redis diganti client tiruan.
 
 ```shell
-uv run pytest tests
+uv run pytest
 ```
 
 Untuk menjalankan satu file:
 
 ```shell
-uv run pytest tests/test_template_hexa.py
+uv run pytest framework/tests/test_template_hexa.py
 ```
 
 Satu test integrasi membutuhkan server Milvus di `localhost:19530` dan dilewati secara bawaan. Untuk menjalankannya:
 
 ```shell
-ZUL_RUN_INTEGRATION=1 uv run pytest tests/test_utilities.py
+ZUL_RUN_INTEGRATION=1 uv run pytest framework/tests/test_utilities.py
 ```
 
-Test template bekerja dengan membuat proyek sungguhan dari template ke folder sementara, lalu mengimpor dan menjalankan kodenya. Setiap perubahan di `src/zul/templates/hexa/` langsung teruji.
+Test template bekerja dengan membuat proyek sungguhan dari template ke folder sementara, lalu mengimpor dan menjalankan kodenya. Setiap perubahan di `framework/src/zul/templates/hexa/` langsung teruji.
+
+Perintah `pytest` tanpa argumen hanya menguji paket `zul`. Kategori lain diuji dengan perintahnya sendiri:
+
+```shell
+uv run pytest framework/agentic
+uv run pytest scripts/tests
+```
 
 > [!NOTE]
-> Perintah `pytest` tanpa argumen juga menjalankan test di `research/`. Folder itu berisi latihan yang sebagian sengaja belum diimplementasikan, jadi kegagalan di sana bukan regresi.
+> Test di `research/latihan/` sebagian sengaja gagal, karena latihannya belum diselesaikan. Kegagalan di sana bukan regresi.
 
 ## Mengikuti gaya kode
 
 Sebelum mengirim perubahan, jalankan tiga pemeriksa berikut. Ketiganya harus lolos tanpa temuan:
 
 ```shell
-uv run black src tests scripts
-uv run ruff check src tests scripts
-uv run python scripts/comment_style.py src tests scripts
+uv run black framework scripts
+uv run ruff check framework scripts
+uv run python scripts/comment_style.py framework/src framework/tests framework/project scripts
 ```
 
-Aturannya ada di `pyproject.toml`. Folder `research/` dan `tutorial/` tidak ikut diperiksa.
+Aturannya ada di `pyproject.toml`. Skill pool, notebook, studi, dan `research/` tidak ikut diperiksa, karena masing-masing punya gaya sendiri.
 
 Pedoman yang dipakai di repository ini:
 
@@ -129,7 +150,7 @@ STEPS_PER_TOOL_ROUND = 2
 Paragraf komentar yang lebih dari satu baris berbentuk anak tangga: setiap baris lebih pendek satu sampai enam karakter dari baris di atasnya. Bentuk ini mengikuti gaya komentar Laravel. Untuk memeriksanya dan melipat ulang baris yang belum pas:
 
 ```shell
-uv run python scripts/comment_style.py src tests scripts --fix
+uv run python scripts/comment_style.py framework/src framework/tests framework/project scripts --fix
 ```
 
 Jika pemeriksa melaporkan "ubah kalimatnya", tidak ada pelipatan yang pas untuk kalimat itu. Ganti satu atau dua kata sampai pemeriksa lolos.

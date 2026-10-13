@@ -7,14 +7,14 @@ Utility ini tidak memakai model AI. Semua angka dan pembacaannya dihitung oleh k
 > [!NOTE]
 > Pembacaan seperti `bullish` atau `overbought` hanya menggambarkan posisi indikator, bukan saran beli atau jual.
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka `api.binance.com` atau `data-api.binance.vision`. Utility ini ada di `research/agentic/algorithms/utilities/crypto_snapshot/`. Tidak ada package yang perlu di-install, karena skripnya hanya memakai standard library Python.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka `api.binance.com` atau `data-api.binance.vision`. Utility ini ada di `framework/agentic/utilities/crypto_snapshot/`. Tidak ada package yang perlu di-install, karena skripnya hanya memakai standard library Python.
 
 ## Mengambil snapshot dari terminal
 
 1. Pindah ke folder utility:
 
     ```shell
-    cd research/agentic/algorithms/utilities/crypto_snapshot
+    cd framework/agentic/utilities/crypto_snapshot
     ```
 
 2. Jalankan skripnya dengan nama token:
@@ -175,7 +175,7 @@ Contoh keluarannya pada 8 Oktober 2026 pukul 05.43 UTC:
 }
 ```
 
-`summary` sama dengan baris ringkasan di log skrip. `document` berisi teks file `.txt` yang sama dengan hasil skrip. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Jika gagal, fungsi ini melempar `SnapshotError` dengan alasannya, misalnya symbol yang tidak ada di Binance.
+`summary` sama dengan baris ringkasan di log skrip. `document` berisi teks file `.txt` yang sama dengan hasil skrip. Folder `framework/agentic/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Jika gagal, fungsi ini melempar `SnapshotError` dengan alasannya, misalnya symbol yang tidak ada di Binance.
 
 ## Memakai utility di agent
 
@@ -273,7 +273,7 @@ Periode indikator dan pengaturan lain adalah konstanta di bagian atas `scripts/c
 Test utility ini berjalan tanpa jaringan dan tanpa model:
 
 ```shell
-uv run pytest research/agentic/algorithms/utilities/crypto_snapshot/tests -q -p no:cacheprovider
+uv run pytest framework/agentic/utilities/crypto_snapshot/tests -q -p no:cacheprovider
 ```
 
 ## Halaman terkait

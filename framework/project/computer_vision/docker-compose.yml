@@ -1,0 +1,20 @@
+# GPU NVIDIA. Butuh NVIDIA Container Toolkit di mesin host.
+#   docker compose run --rm cctv run configs/interior.yaml --mode save
+services:
+  cctv:
+    build: .
+    volumes:
+      - ./videos:/app/videos:ro
+      - ./outputs:/app/outputs
+      - ./configs:/app/configs:ro
+      - model-cache:/root/.roboflow
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  model-cache:

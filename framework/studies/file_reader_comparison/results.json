@@ -1,0 +1,67 @@
+{
+  "gemma3:4b/mediawiki.webp": {
+    "seconds": 58.5,
+    "error": "",
+    "found": 22,
+    "of": 25,
+    "missing": [
+      "MediaWiki is a collaboration and documentation platform",
+      "View source",
+      "View history"
+    ]
+  },
+  "gemma3:4b/slide.png": {
+    "seconds": 37.8,
+    "error": "",
+    "found": 9,
+    "of": 9,
+    "missing": []
+  },
+  "gemma3:4b/halaman-pdf.png": {
+    "seconds": 94.8,
+    "error": "",
+    "word_recall": 0.773,
+    "word_precision": 0.799
+  },
+  "gemma3:4b/tabel.png": {
+    "seconds": 36.3,
+    "error": "",
+    "found": 25,
+    "of": 25,
+    "missing": [],
+    "rows_kept": 4
+  },
+  "qwen3-vl:4b/mediawiki.webp": {
+    "seconds": 314.3,
+    "error": "",
+    "found": 0,
+    "of": 25,
+    "missing": [
+      "Users & Developers",
+      "Register for the conference",
+      "registration is now open until October 9",
+      "MediaWiki is a collaboration and documentation platform",
+      "vibrant community",
+      "Main Page",
+      "Discussion",
+      "Read",
+      "View source",
+      "View history",
+      "tens of thousands of websites",
+      "thousands of companies and organisations",
+      "It powers Wikipedia",
+      "Find out more",
+      "Set up and run MediaWiki",
+      "Edit and use MediaWiki",
+      "Download, install and configure",
+      "Add functionality by installing",
+      "extensions",
+      "Learn how to navigate",
+      "Learn how to edit a page",
+      "Learn more about reading, editing",
+      "Photo of participants of the Wikimedia Hackathon 2026",
+      "Appearance",
+      "Automatic"
+    ]
+  }
+}

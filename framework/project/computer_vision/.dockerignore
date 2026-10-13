@@ -1,0 +1,6 @@
+videos/
+outputs/
+models/
+tests/
+.venv/
+**/__pycache__/

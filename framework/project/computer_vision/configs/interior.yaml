@@ -1,0 +1,21 @@
+# Kamera di dalam toko: rak mana yang diperhatikan pengunjung, dan berapa lama.
+# Koordinat piksel, video 1280x720.
+
+SOURCE_VIDEO_PATH: videos/interior.mp4
+
+IGNORE_POLYGONS: []
+
+# `anchor` adalah titik yang harus dihadapi orang di zona itu. Tanpa anchor,
+# yang dipakai titik tengah poligon, yang hanya tepat jika poligonnya
+# menutupi raknya sendiri, bukan lantai di depannya.
+ZONES:
+  - name: rak_a
+    polygon: [[12, 222], [200, 261], [446, 719], [25, 719]]
+  - name: rak_b
+    polygon: [[624, 304], [1220, 719], [450, 717], [305, 451]]
+  - name: rak_c
+    polygon: [[586, 137], [716, 253], [305, 436], [206, 259]]
+  - name: rak_d
+    polygon: [[842, 184], [1160, 327], [964, 532], [621, 294]]
+
+LINES: []

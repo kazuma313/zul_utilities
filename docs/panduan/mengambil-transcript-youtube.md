@@ -4,7 +4,7 @@ Utility `youtube_transcript` mengambil transcript video YouTube beserta metadata
 
 Utility ini hanya mengambil caption yang sudah ada di YouTube. Video tanpa caption tidak punya transcript, karena utility ini tidak mengubah suara menjadi teks.
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka youtube.com. Utility ini ada di `research/agentic/algorithms/utilities/youtube_transcript/`.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan komputermu bisa membuka youtube.com. Utility ini ada di `framework/agentic/utilities/youtube_transcript/`.
 
 ## Instalasi kebutuhannya
 
@@ -21,7 +21,7 @@ uv pip install "youtube-transcript-api>=1.2" yt-dlp
 1. Pindah ke folder utility:
 
     ```shell
-    cd research/agentic/algorithms/utilities/youtube_transcript
+    cd framework/agentic/utilities/youtube_transcript
     ```
 
 2. Tulis URL video di file teks, satu URL per baris. Baris kosong dan baris yang diawali `#` diabaikan:
@@ -131,7 +131,7 @@ Isi `record`:
 | `transcript` | Transcript dalam paragraf, dengan subjudul per bab. |
 | `document` | Semuanya sebagai teks satu file `.txt`, sama dengan hasil skrip. |
 
-Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Untuk link yang bukan video, fungsi ini menimbulkan `ValueError`.
+Folder `framework/agentic/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Untuk link yang bukan video, fungsi ini menimbulkan `ValueError`.
 
 ## Memakai utility di agent
 

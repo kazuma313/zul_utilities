@@ -7,14 +7,14 @@ Keduanya bisa dibuat dari sebuah topik, atau dari bahan milikmu sendiri: PDF, fo
 > [!WARNING]
 > Kode tidak bisa memeriksa apakah fakta di dalam materi benar, dan hanya bisa memeriksa hitungan yang ditulis lengkap. Dalam perbandingan model, kesalahan paling sering ada di angka dan di konsep yang tertukar. Baca angka di bab, kuis, dan latihan sebelum materi dipakai belajar. Rinciannya ada di [Model lokal untuk skill belajar](../konsep/model-lokal-untuk-skill-belajar.md).
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan Ollama berjalan dengan minimal satu model chat, misalnya `gemma3:4b` atau `qwen3:8b`. Kedua skill ada di `research/agentic/algorithms/skills/silabus_belajar/` dan `research/agentic/algorithms/skills/materi_belajar/`. Tidak ada package yang perlu di-install. Untuk membaca gambar dan PDF hasil scan, Ollama juga perlu `gemma3:4b` atau model vision lain.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, dan Ollama berjalan dengan minimal satu model chat, misalnya `gemma3:4b` atau `qwen3:8b`. Kedua skill ada di `framework/agentic/skills/silabus_belajar/` dan `framework/agentic/skills/materi_belajar/`. Tidak ada package yang perlu di-install. Untuk membaca gambar dan PDF hasil scan, Ollama juga perlu `gemma3:4b` atau model vision lain.
 
 ## Membuat silabus dari terminal
 
 1. Pindah ke folder skill silabus:
 
     ```shell
-    cd research/agentic/algorithms/skills/silabus_belajar
+    cd framework/agentic/skills/silabus_belajar
     ```
 
 2. Jalankan skripnya dengan topik, tujuan pelajar, dan jam belajar per minggu:
@@ -260,7 +260,7 @@ print(materi["path"], materi["warnings"])
 dari_pdf = generate_silabus(files=["catatan-build-system.pdf", "foto-papan-tulis.jpg"], hours_per_week=3)
 ```
 
-Parameter `files` berisi bahan sendiri, sama dengan `--file`. Hasil silabus berisi `ok`, `path`, `json`, `warnings`, `modules`, `stages`, `hours`, `weeks`, `model`, dan `stats`. Hasil materi berisi `ok`, `path`, `warnings`, `chapters`, `diagrams`, `demo`, `questions`, `exercises`, `terms`, `model`, dan `stats`. Jika gagal, `ok` bernilai `False` dan alasannya ada di `error`. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `skills` bisa diimpor.
+Parameter `files` berisi bahan sendiri, sama dengan `--file`. Hasil silabus berisi `ok`, `path`, `json`, `warnings`, `modules`, `stages`, `hours`, `weeks`, `model`, dan `stats`. Hasil materi berisi `ok`, `path`, `warnings`, `chapters`, `diagrams`, `demo`, `questions`, `exercises`, `terms`, `model`, dan `stats`. Jika gagal, `ok` bernilai `False` dan alasannya ada di `error`. Folder `framework/agentic/` harus ada di `sys.path` supaya `skills` bisa diimpor.
 
 Jika JSON-nya ditulis oleh model lain, misalnya Claude, pakai `build_silabus(spec, "silabus.html")` dan `build_materi(spec, "materi.html", silabus_json, module)`. Bentuk JSON-nya ada di `assets/silabus.schema.json` dan `assets/materi.schema.json` di folder setiap skill.
 
@@ -296,7 +296,7 @@ Kode keluar `0` berarti halaman dibuat. Jika gagal, skrip menulis satu baris `GA
 Test kedua skill berjalan tanpa model:
 
 ```shell
-uv run pytest research/agentic/algorithms/skills/silabus_belajar/tests research/agentic/algorithms/skills/materi_belajar/tests -q -p no:cacheprovider
+uv run pytest framework/agentic/skills/silabus_belajar/tests framework/agentic/skills/materi_belajar/tests -q -p no:cacheprovider
 ```
 
 ## Halaman terkait

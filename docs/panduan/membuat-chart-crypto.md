@@ -7,14 +7,14 @@ Utility ini tidak memakai model AI. Rumus indikator dan jumlah candle-nya sama d
 > [!NOTE]
 > Chart dan indikatornya menggambarkan posisi harga, bukan saran beli atau jual.
 
-**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, komputermu bisa membuka `api.binance.com` atau `data-api.binance.vision`, dan matplotlib sudah ter-install. matplotlib ikut ter-install bersama extra `analysis` atau `all` milik Zul; jika belum ada, install dengan `uv pip install matplotlib`. Utility ini ada di `research/agentic/algorithms/utilities/crypto_chart/`.
+**Sebelum mulai:** `uv` ter-install, kamu berada di root repository Zul, komputermu bisa membuka `api.binance.com` atau `data-api.binance.vision`, dan matplotlib sudah ter-install. matplotlib ikut ter-install bersama extra `analysis` atau `all` milik Zul; jika belum ada, install dengan `uv pip install matplotlib`. Utility ini ada di `framework/agentic/utilities/crypto_chart/`.
 
 ## Membuat chart dari terminal
 
 1. Pindah ke folder utility:
 
     ```shell
-    cd research/agentic/algorithms/utilities/crypto_chart
+    cd framework/agentic/utilities/crypto_chart
     ```
 
 2. Jalankan skripnya dengan nama token:
@@ -129,7 +129,7 @@ Contoh keluarannya pada 8 Oktober 2026 pukul 06.04 UTC:
 }
 ```
 
-Indikator yang tidak digambar bernilai `null` (`None` di Python), seperti Stochastic pada contoh ini. Gambar disimpan di `output_dir` jika diisi, lalu di folder dari environment variable `CRYPTO_CHART_DIR`, lalu di `./charts`. Folder `research/agentic/algorithms/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Jika gagal, fungsi ini melempar `ChartError` dengan alasannya.
+Indikator yang tidak digambar bernilai `null` (`None` di Python), seperti Stochastic pada contoh ini. Gambar disimpan di `output_dir` jika diisi, lalu di folder dari environment variable `CRYPTO_CHART_DIR`, lalu di `./charts`. Folder `framework/agentic/` harus ada di `sys.path` supaya `utilities` bisa diimpor. Jika gagal, fungsi ini melempar `ChartError` dengan alasannya.
 
 ## Memakai utility di agent
 
@@ -181,7 +181,7 @@ Pengaturan gambar adalah konstanta di bagian atas `scripts/crypto_chart.py`:
 Test utility ini berjalan tanpa jaringan dan tanpa model. Salah satunya memastikan nilai indikator di gambar sama dengan nilai di utility snapshot:
 
 ```shell
-uv run pytest research/agentic/algorithms/utilities/crypto_chart/tests -q -p no:cacheprovider
+uv run pytest framework/agentic/utilities/crypto_chart/tests -q -p no:cacheprovider
 ```
 
 ## Halaman terkait

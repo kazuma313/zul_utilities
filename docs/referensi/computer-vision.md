@@ -412,6 +412,29 @@ Membuka `VideoWriter` melempar `OSError` jika OpenCV tidak bisa menulis file den
 
 `Pacer` menahan pratinjau agar tidak lebih cepat dari video aslinya. `wait_ms()` mengembalikan milidetik yang perlu ditunggu sebelum frame berikutnya, minimal 1, untuk `waitKey` milik OpenCV.
 
+### `Preview(window, fps)`
+
+Jendela pratinjau satu video, dengan kecepatan yang sama dengan sumbernya lewat `Pacer`. Pakai dengan `with`; jendelanya ditutup saat keluar dari blok itu.
+
+| Anggota | Keterangan |
+|---|---|
+| `show(frame)` | Menampilkan satu frame. Mengembalikan False jika `q` atau Esc ditekan, sehingga perulangan frame bisa berhenti. |
+| `close()` | Menutup jendela, jika masih terbuka. |
+
+Contoh berikut memutar video sampai selesai atau sampai `q` ditekan:
+
+```python
+from zul.computer_vision.video import Preview, VideoInfo, read_frames
+
+info = VideoInfo.from_path("videos/toko.mp4")
+with Preview("toko", info.fps) as preview:
+    for _, _, frame in read_frames("videos/toko.mp4"):
+        if not preview.show(frame):
+            break
+```
+
+`Preview` butuh layar, jadi tidak bisa dipakai di dalam container atau server tanpa layar.
+
 ## tracking
 
 Lokasi: `zul.computer_vision.tracking`. Membutuhkan extra `tracking`.

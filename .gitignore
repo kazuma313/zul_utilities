@@ -229,3 +229,8 @@ weights/
 
 # Local Claude Code settings (preview servers, permissions); each machine keeps its own
 .claude/
+
+# Pengembangan diri: buku PDF hanya disimpan lokal (hak cipta), dan proyek
+# computer vision dengan video dan bobotnya tetap di luar git.
+research/arsip/books/
+research/computer_vision/
