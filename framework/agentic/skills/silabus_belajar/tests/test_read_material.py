@@ -260,6 +260,38 @@ def test_an_argument_wins_over_the_environment(monkeypatch, clean_reader_env):
     assert rm.VisionReader(model="qwen3-vl:4b").model == "qwen3-vl:4b"
 
 
+def test_a_key_is_never_sent_to_an_address_from_another_source(monkeypatch, clean_reader_env):
+    # The key is in the environment; a .env in another folder names its own address.
+    monkeypatch.setenv("READER_API_KEY", "kunci-asli")
+    (clean_reader_env / ".env").write_text("READER_BASE_URL=https://server-asing.example/v1\n", encoding="utf-8")
+
+    with pytest.raises(rm.MaterialError, match="same .env, or both in the environment"):
+        rm.VisionReader()
+
+
+def test_a_key_and_an_address_from_the_same_env_file_are_used_together(clean_reader_env):
+    (clean_reader_env / ".env").write_text(
+        "READER_BASE_URL=https://ocr.contoh.id/v1\nREADER_API_KEY=kunci-uji\n", encoding="utf-8")
+
+    reader = rm.VisionReader()
+
+    assert (reader.base_url, reader.api_key) == ("https://ocr.contoh.id/v1", "kunci-uji")
+
+
+def test_an_address_from_a_file_without_a_key_does_not_leak_anything(clean_reader_env):
+    (clean_reader_env / ".env").write_text("READER_BASE_URL=https://ocr.contoh.id/v1\n", encoding="utf-8")
+
+    reader = rm.VisionReader()
+
+    assert (reader.base_url, reader.api_key) == ("https://ocr.contoh.id/v1", "local")
+
+
+def test_an_argument_address_may_pair_with_a_key_from_the_environment(monkeypatch, clean_reader_env):
+    monkeypatch.setenv("READER_API_KEY", "kunci-uji")
+
+    assert rm.VisionReader(base_url="https://ocr.contoh.id/v1").api_key == "kunci-uji"
+
+
 # ---------------------------------------------------------------------------
 # Links and errors
 # ---------------------------------------------------------------------------

@@ -141,9 +141,10 @@ def _html(text: str) -> str:
 # today and with a model deployed behind vLLM tomorrow.  Arguments win over the environment, the
 # environment over the nearest .env (the folder the command runs in, or one of the six above it).
 
-def _env(name: str) -> str | None:
+def _env_with_source(name: str) -> tuple[str | None, str]:
+    """The value and where it came from: "environment", or the path of the .env that holds it."""
     if os.environ.get(name):
-        return os.environ[name]
+        return os.environ[name], "environment"
     folder = Path.cwd()
     for _ in range(7):
         env = folder / ".env"
@@ -151,10 +152,14 @@ def _env(name: str) -> str | None:
             for line in env.read_text(encoding="utf-8-sig", errors="replace").splitlines():
                 key, _, value = line.partition("=")
                 if key.strip() == name and value.strip():
-                    return value.strip().strip("'\"")
-            return None                         # only the nearest .env counts
+                    return value.strip().strip("'\""), str(env)
+            return None, ""                     # only the nearest .env counts
         folder = folder.parent
-    return None
+    return None, ""
+
+
+def _env(name: str) -> str | None:
+    return _env_with_source(name)[0]
 
 
 class VisionReader:
@@ -163,8 +168,17 @@ class VisionReader:
     def __init__(self, api: str | None = None, base_url: str | None = None, model: str | None = None,
                  api_key: str | None = None, prompt: str | None = None):
         self.api = api or _env("READER_API") or "ollama"
-        self.base_url = base_url or _env("READER_BASE_URL")
-        self.api_key = api_key or _env("READER_API_KEY") or "local"
+        self.base_url, url_source = (base_url, "argument") if base_url else _env_with_source("READER_BASE_URL")
+        self.api_key, key_source = (api_key, "argument") if api_key else _env_with_source("READER_API_KEY")
+        # The key goes to whatever address is configured, and .env is searched upward from the folder the
+        # command runs in.  A .env found in some other folder must not be able to point the address at
+        # its own server while the key comes from somewhere else, so the two must come from one source.
+        # An argument is the caller's own choice and is trusted.
+        if self.api_key and self.base_url and "argument" not in (url_source, key_source) and url_source != key_source:
+            raise MaterialError(
+                f"READER_BASE_URL comes from {url_source} but READER_API_KEY from {key_source}.  "
+                "The key is sent to that address, so set both in the same .env, or both in the environment.")
+        self.api_key = self.api_key or "local"
         self._model = model or _env("READER_MODEL") or _env("VISION_MODEL_ID")
         self._prompt = prompt or _env("READER_PROMPT")
 
