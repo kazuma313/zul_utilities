@@ -1,6 +1,6 @@
 """Tests without a model or a network for read_material.py (the learner's own files and links).
 
-    python -m pytest research/agentic/algorithms/skills/silabus_belajar/tests -q -p no:cacheprovider
+    python -m pytest framework/agentic/skills/silabus_belajar/tests -q -p no:cacheprovider
 """
 
 import io
@@ -182,6 +182,18 @@ def test_the_vision_reader_sends_the_image_to_the_model(monkeypatch):
     assert sent["model"] == "gemma3:4b" and sent["images"] == [PNG] and "Salin semua teks" in sent["user"]
 
 
+def test_a_table_written_twice_becomes_one_table_of_cells():
+    answer = ("Jenis NAB per unit\nPasar uang Rp1.250\n"
+              "<table border=\"1\"><tr><td>Jenis</td><td>NAB per unit</td></tr>"
+              "<tr><td>Pasar uang</td><td>Rp1.250</td></tr></table>")   # glm-ocr's answer for a table
+
+    assert rm._tidy(answer) == "Jenis | NAB per unit\nPasar uang | Rp1.250"
+
+
+def test_special_tokens_of_the_model_are_dropped():
+    assert rm._tidy("<start_of_image> Teks <|ref|>di gambar<end_of_image>") == "Teks di gambar"
+
+
 def test_the_vision_reader_drops_the_models_opening_line(monkeypatch):
     answer = "Berikut adalah teks yang terbaca dari gambar, dalam urutan baca:\n\nSurvei dalam angka\n350 | 72%"
     monkeypatch.setattr(rm, "ask_model", lambda *a, **k: (answer, {}))
@@ -189,11 +201,63 @@ def test_the_vision_reader_drops_the_models_opening_line(monkeypatch):
     assert rm.VisionReader(model="gemma3:4b")(PNG, "slide.png") == "Survei dalam angka\n350 | 72%"
 
 
-def test_a_text_model_is_never_chosen_to_read_pictures(monkeypatch):
-    monkeypatch.delenv("VISION_MODEL_ID", raising=False)
+@pytest.fixture
+def clean_reader_env(monkeypatch, tmp_path):
+    """No READER_* or VISION_MODEL_ID from the machine, and no .env above the test folder."""
+    for name in ("READER_MODEL", "READER_API", "READER_BASE_URL", "READER_API_KEY", "READER_PROMPT", "VISION_MODEL_ID"):
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.chdir(tmp_path)
+    return tmp_path
+
+
+def test_a_text_model_is_never_chosen_to_read_pictures(monkeypatch, clean_reader_env):
     monkeypatch.setattr(rm, "choose_model", lambda *a, **k: "qwen3:8b")
 
     assert rm.VisionReader().model == "gemma3:4b"
+
+
+@pytest.mark.parametrize("model, prompt", [
+    ("glm-ocr:latest", "Text Recognition:"), ("PaddlePaddle/PaddleOCR-VL-1.6", "OCR:"),
+    ("deepseek-ocr:3b", "Free OCR."), ("qwen3-vl:4b", rm.VISION_PROMPT), ("gemma3:4b", rm.VISION_PROMPT),
+])
+def test_the_prompt_follows_the_model(clean_reader_env, model, prompt):
+    assert rm.VisionReader(model=model).prompt == prompt
+
+
+def test_the_reader_is_configured_from_the_environment(monkeypatch, clean_reader_env):
+    monkeypatch.setenv("READER_API", "openai")
+    monkeypatch.setenv("READER_BASE_URL", "https://ocr.contoh.id/v1")
+    monkeypatch.setenv("READER_MODEL", "PaddlePaddle/PaddleOCR-VL-1.6")
+    monkeypatch.setenv("READER_API_KEY", "kunci-uji")
+    sent = {}
+
+    def fake_ask(settings, system, user, schema, images=None):
+        sent.update(api=settings.api, base=settings.base, key=settings.api_key, model=settings.model, user=user)
+        return "teks", {}
+
+    monkeypatch.setattr(rm, "ask_model", fake_ask)
+    rm.VisionReader()(PNG, "scan.png")
+
+    assert sent == {"api": "openai", "base": "https://ocr.contoh.id/v1", "key": "kunci-uji",
+                    "model": "PaddlePaddle/PaddleOCR-VL-1.6", "user": "OCR:"}
+
+
+def test_the_nearest_env_file_configures_the_reader(monkeypatch, clean_reader_env):
+    (clean_reader_env / ".env").write_text("# model pembaca\nREADER_MODEL=glm-ocr\nREADER_PROMPT='Table Recognition:'\n",
+                                           encoding="utf-8")
+    deeper = clean_reader_env / "skill" / "scripts"
+    deeper.mkdir(parents=True)
+    monkeypatch.chdir(deeper)
+
+    reader = rm.VisionReader()
+
+    assert (reader.model, reader.prompt) == ("glm-ocr", "Table Recognition:")
+
+
+def test_an_argument_wins_over_the_environment(monkeypatch, clean_reader_env):
+    monkeypatch.setenv("READER_MODEL", "glm-ocr")
+
+    assert rm.VisionReader(model="qwen3-vl:4b").model == "qwen3-vl:4b"
 
 
 # ---------------------------------------------------------------------------

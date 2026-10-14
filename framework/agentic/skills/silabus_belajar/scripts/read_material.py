@@ -9,9 +9,10 @@ in isolation).
 
 .txt .md .csv .json .html .docx .pptx .xlsx need only the standard library.  .pdf uses `pdftotext`
 (poppler) when it is installed, else `pypdf`.  Images (.png .jpg .jpeg .webp .gif .bmp) and PDF pages
-without text (a scan) are read by a local vision model through Ollama: gemma3:4b unless VISION_MODEL_ID
-names another.  Reading a scanned page needs `pypdfium2`; .webp .gif .bmp need Pillow.  `notes` says
-what a model read, so names and numbers from pictures get checked.
+without text (a scan) are read by a vision or OCR model: gemma3:4b through Ollama unless READER_MODEL,
+READER_API (ollama or openai), READER_BASE_URL and READER_API_KEY name another, in the environment or
+the nearest .env.  Reading a scanned page needs `pypdfium2`; .webp .gif .bmp need Pillow.  `notes`
+says what a model read, so names and numbers from pictures get checked.
 """
 
 from __future__ import annotations
@@ -35,11 +36,15 @@ from local_model import Settings, ask_model, choose_model  # noqa: E402
 TEXT_EXT = {".txt", ".md", ".markdown", ".csv", ".tsv", ".json", ".rst", ".log"}
 IMAGE_EXT = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp"}
 SUPPORTED = TEXT_EXT | IMAGE_EXT | {".html", ".htm", ".docx", ".pptx", ".xlsx", ".pdf"}
-VISION_RECOMMENDED = ("gemma3:4b", "gemma3", "qwen2.5vl", "llama3.2-vision", "minicpm-v", "llava")
+VISION_RECOMMENDED = ("gemma3:4b", "qwen3-vl", "glm-ocr", "gemma3", "qwen2.5vl", "llama3.2-vision", "minicpm-v")
+SEEING_MODELS = ("gemma3", "gemma4", "vl", "vision", "ocr", "llava", "minicpm")      # parts of names that can see
 MAX_SCANNED_PAGES = 10          # a vision model reads one page in 10-60 s
 VISION_PROMPT = ("Salin semua teks yang terbaca di gambar ini apa adanya, dalam urutan baca. Tabel ditulis "
                  "per baris dengan pemisah |. Diagram, grafik, atau foto tanpa teks dijelaskan isinya dalam "
                  "2-4 kalimat. Jangan menambah apa pun yang tidak ada di gambar.")
+# Dedicated OCR models answer only their own task prompt (from each model card); the first part of the
+# model's name that matches wins, and every other model gets VISION_PROMPT.  READER_PROMPT overrides both.
+READER_PROMPTS = (("glm-ocr", "Text Recognition:"), ("paddleocr-vl", "OCR:"), ("deepseek-ocr", "Free OCR."))
 
 
 class MaterialError(ValueError):
@@ -130,33 +135,81 @@ def _html(text: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Pictures: a local vision model reads them
+# Pictures: a vision or OCR model reads them
 # ---------------------------------------------------------------------------
+# Which model reads is configuration, not code, so the same skill reads with gemma3:4b on a laptop
+# today and with a model deployed behind vLLM tomorrow.  Arguments win over the environment, the
+# environment over the nearest .env (the folder the command runs in, or one of the six above it).
+
+def _env(name: str) -> str | None:
+    if os.environ.get(name):
+        return os.environ[name]
+    folder = Path.cwd()
+    for _ in range(7):
+        env = folder / ".env"
+        if env.is_file():
+            for line in env.read_text(encoding="utf-8-sig", errors="replace").splitlines():
+                key, _, value = line.partition("=")
+                if key.strip() == name and value.strip():
+                    return value.strip().strip("'\"")
+            return None                         # only the nearest .env counts
+        folder = folder.parent
+    return None
+
 
 class VisionReader:
-    """Image bytes -> the text a local vision model reads in them.  The model is chosen on first use."""
+    """Image bytes -> the text a vision or OCR model reads in them.  The model is chosen on first use."""
 
-    def __init__(self, api: str = "ollama", base_url: str | None = None, model: str | None = None):
-        self.api, self.base_url, self._model = api, base_url, model or os.environ.get("VISION_MODEL_ID")
+    def __init__(self, api: str | None = None, base_url: str | None = None, model: str | None = None,
+                 api_key: str | None = None, prompt: str | None = None):
+        self.api = api or _env("READER_API") or "ollama"
+        self.base_url = base_url or _env("READER_BASE_URL")
+        self.api_key = api_key or _env("READER_API_KEY") or "local"
+        self._model = model or _env("READER_MODEL") or _env("VISION_MODEL_ID")
+        self._prompt = prompt or _env("READER_PROMPT")
 
     @property
     def model(self) -> str:
         if not self._model:
-            self._model = choose_model(self.api, self.base_url, VISION_RECOMMENDED)
-            if not any(want in self._model for want in ("gemma3", "vl", "vision", "llava", "minicpm")):
+            self._model = choose_model(self.api, self.base_url, VISION_RECOMMENDED, self.api_key)
+            if not any(part in self._model.lower() for part in SEEING_MODELS):
                 self._model = VISION_RECOMMENDED[0]      # a text model cannot see; the request names what to pull
         return self._model
 
+    @property
+    def prompt(self) -> str:
+        name = self.model.lower()
+        return self._prompt or next((p for part, p in READER_PROMPTS if part in name), VISION_PROMPT)
+
     def __call__(self, image: bytes, name: str) -> str:
-        settings = Settings(model=self.model, api=self.api, base_url=self.base_url, temperature=0.1,
-                            max_tokens=2048, num_ctx=4096)
+        # think off: qwen3-vl otherwise spends all 2048 tokens reasoning and returns no text
+        settings = Settings(model=self.model, api=self.api, base_url=self.base_url, api_key=self.api_key,
+                            temperature=0.1, max_tokens=2048, num_ctx=4096, think="off")
         try:
-            text, _ = ask_model(settings, "", VISION_PROMPT, None, images=[_as_png_or_jpeg(image, name)])
+            text, _ = ask_model(settings, "", self.prompt, None, images=[_as_png_or_jpeg(image, name)])
         except OSError as error:
-            raise MaterialError(f"{name}: the vision model {self.model} could not read it ({error}). "
-                                f"Is Ollama running and {self.model} downloaded (ollama pull {self.model})?") from error
-        # gemma3:4b opens with "Berikut adalah teks yang terbaca dari gambar ...:" although the prompt says not to
-        return re.sub(r"^\s*(berikut|ini adalah|here is|here are)[^\n]*:\s*\n", "", text, flags=re.I).strip()
+            hint = (f"Is Ollama running and {self.model} downloaded (ollama pull {self.model})?" if self.api == "ollama"
+                    else "Check READER_BASE_URL, READER_API_KEY and READER_MODEL.")
+            raise MaterialError(f"{name}: the vision model {self.model} could not read it ({error}). {hint}") from error
+        return _tidy(text)
+
+
+def _tidy(text: str) -> str:
+    """What a reading model wrote, without its extras: an opening line, special tokens, a table written twice."""
+    # gemma3:4b opens with "Berikut adalah teks yang terbaca dari gambar ...:" although the prompt says not to
+    text = re.sub(r"^\s*(berikut|ini adalah|here is|here are)[^\n]*:\s*\n", "", text, flags=re.I)
+    text = re.sub(r"<\|[^|>]{1,40}\|>|<(?:start|end)_of_image>", "", text)
+
+    def rows(table):
+        cells = [[_xml_text(c) for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", tr, re.S | re.I)]
+                 for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", table.group(0), re.S | re.I)]
+        return "\n".join(" | ".join(row) for row in cells if row)
+
+    text = re.sub(r"<table.*?</table>", rows, text, flags=re.S | re.I)
+    # glm-ocr writes a table as plain lines and again as <table>; the version with cells stays
+    in_table = {" ".join(line.replace("|", " ").split()) for line in text.splitlines() if " | " in line}
+    lines = [line for line in text.splitlines() if " | " in line or " ".join(line.split()) not in in_table]
+    return "\n".join(lines).strip()
 
 
 def _as_png_or_jpeg(image: bytes, name: str) -> bytes:

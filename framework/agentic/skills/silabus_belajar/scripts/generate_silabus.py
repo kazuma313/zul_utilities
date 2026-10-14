@@ -68,7 +68,7 @@ def generate(topic: str, output: str | None = None, level: str = "Pemula", goal:
     settings = settings or Settings(model=choose_model("ollama", None, RECOMMENDED))
     if files and not from_json:
         try:
-            text, notes = read_material(files, VisionReader(settings.api, settings.base_url))
+            text, notes = read_material(files, VisionReader())        # READER_* chooses the reading model
         except MaterialError as error:
             return {"ok": False, "error": str(error)}
         context = (context + "\n\n" + text).strip()

@@ -82,7 +82,7 @@ def generate(topic: str = "", output: str | None = None, contract: dict | None =
     settings = settings or Settings(model=choose_model("ollama", None, RECOMMENDED), max_tokens=MAX_TOKENS)
     if files and not from_json:
         try:
-            text, notes = read_material(files, VisionReader(settings.api, settings.base_url))
+            text, notes = read_material(files, VisionReader())        # READER_* chooses the reading model
         except MaterialError as error:
             return {"ok": False, "error": str(error)}
         context = (context + "\n\n" + text).strip()
