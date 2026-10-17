@@ -121,7 +121,7 @@ zul --version
 Perintah itu mencetak versi yang ter-install:
 
 ```text
-zul version 0.0.1
+zul version 0.1.0
 ```
 
 Untuk memastikan library bisa diimpor, jalankan:

@@ -1,7 +1,7 @@
 [project]
 name = "zul"
-version = "0.0.1"
-description = "CLI tool untuk membuat template proyek dan utilities"
+version = "0.1.0"
+description = "Python toolkit for AI apps: RAG evaluation, a computer-vision boilerplate, library adapters, and an MCP server for code assistants"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]

@@ -12,6 +12,39 @@
 
 </div>
 
+## In English
+
+Zul is a Python toolkit for AI and data applications. It wraps libraries such as LangChain, OpenCV, RF-DETR, Docling, pymilvus, redisvl, and ragas into small composable functions, and ships four things on top of them:
+
+- a retrieval evaluation module built on ragas (`zul.evaluation`),
+- a complete computer-vision app boilerplate with RF-DETR detection and tracking,
+- an MCP server that lets code assistants read Zul's modules, docs, and examples, and
+- a hexagonal project generator (`zul build hexa`).
+
+Each third-party library is imported in exactly one file under `framework/src/zul/adapters/`, and a test enforces it. The code is MIT-licensed. The documentation at [zulkit.my.id](https://zulkit.my.id/) is written in Indonesian.
+
+Try it in under a minute, with no API key. Install Zul as a library:
+
+```bash
+pip install git+https://github.com/kazuma313/zul_utilities.git
+```
+
+Then run:
+
+```python
+from zul.evaluation.hits import retrieval_hit_stats
+
+results = [
+    {"reference": "Paris", "retrieved_contexts": ["Berlin is in Germany.", "The capital of France is Paris."]},
+    {"reference": "Tokyo", "retrieved_contexts": ["Tokyo is the capital of Japan."]},
+    {"reference": "Cairo", "retrieved_contexts": ["Rome is in Italy."]},
+]
+print(retrieval_hit_stats(results))
+# {'n': 3, 'hit_rate': 0.6667, 'mrr': 0.5, 'threshold': 0.6, 'sumber': 'reference'}
+```
+
+The first question was answered at rank 2, the second at rank 1, and the third not at all, so the hit rate is 2/3 and the mean reciprocal rank is (1/2 + 1 + 0) / 3 = 0.5. For model-based scoring with ragas, see [Mengevaluasi retrieval](https://zulkit.my.id/panduan/mengevaluasi-retrieval/).
+
 ## Apa itu Zul?
 
 Zul adalah perintah baris sekaligus library Python. `zul build hexa` membuat kerangka aplikasi AI berarsitektur hexagonal (FastAPI, LangChain, Streamlit), dan paket `zul` berisi fungsi siap pakai untuk vector database, OCR, LLM, computer vision, evaluasi retrieval, dan konversi dokumen.
