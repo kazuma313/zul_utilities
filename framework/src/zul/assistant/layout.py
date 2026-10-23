@@ -21,6 +21,13 @@ Yang dibaca:
     Nama file dan folder, isi `package.json` (hanya nama dependency), dan
     baris impor di file kode. Isi `.env` tidak pernah dibaca; hanya
     keberadaannya yang diperiksa. Symlink tidak diikuti.
+
+Batasnya:
+    Hanya folder di dalam folder kerja server, atau di dalam folder yang
+    terdaftar di environment variable ZUL_PROJECT_ROOTS (dipisah `os.pathsep`),
+    yang diperiksa. Root drive dan folder home ditolak. Nama file dianggap
+    data tidak tepercaya: nama berkarakter khusus tidak dibuatkan perintah
+    `git mv` dan ditampilkan ber-escape.
 """
 
 from __future__ import annotations
@@ -144,6 +151,23 @@ MAX_LISTED = 20
 SCANNED_CODE = {".py", ".js", ".jsx", ".ts", ".tsx", ".vue", ".svelte", ".dart"}
 IMPORT_PATH = re.compile(r"""(?:from|import|require\()\s*['"](\.{1,2}/[^'"]+)['"]""")
 PYTHON_IMPORT = re.compile(r"^\s*(?:from|import)\s+(backend|frontend|mobile)\b")
+
+# --------------------------------------------------------------------------
+# Batas Aman
+# --------------------------------------------------------------------------
+#
+# Nama file berasal dari folder yang diperiksa, jadi dianggap data yang
+# tidak tepercaya. Nama berkarakter khusus tidak dibuatkan perintah
+# `git mv` dan ditampilkan ber-escape. Yang aman hanya huruf,
+# angka, spasi, titik, minus, garis bawah, dan garis miring.
+#
+# Folder yang boleh diperiksa dibatasi ke folder kerja server,
+# ditambah daftar di environment variable ZUL_PROJECT_ROOTS.
+#
+
+SAFE_TEXT = re.compile(r"[\w ./-]{1,200}")
+MAX_LABEL = 80
+ROOTS_ENV = "ZUL_PROJECT_ROOTS"
 
 
 def layout_rules() -> str:
@@ -294,6 +318,28 @@ def _is_root_allowed(name: str) -> bool:
     return name.startswith(".") or name in ROOT_NAMES or name.startswith(ROOT_PREFIXES)
 
 
+def _is_safe(text: str) -> bool:
+    return bool(SAFE_TEXT.fullmatch(text))
+
+
+def _label(text: str) -> str:
+    """Nama untuk ditampilkan: nama asli jika aman, jika tidak versi ber-escape."""
+    if _is_safe(text):
+        return text
+    parts = []
+    for char in text:
+        code = ord(char)
+        if SAFE_TEXT.fullmatch(char):
+            parts.append(char)
+        elif code < 0x100:
+            parts.append(f"\\x{code:02x}")
+        elif code < 0x10000:
+            parts.append(f"\\u{code:04x}")
+        else:
+            parts.append(f"\\U{code:08x}")
+    return "".join(parts)[:MAX_LABEL]
+
+
 def _quote(name: str) -> str:
     return f'"{name}"' if " " in name else name
 
@@ -328,6 +374,12 @@ def _misplaced(root: Path) -> tuple[list[str], list[str]]:
         name = entry.name
         if name in PARENTS or name in IGNORED_DIRS or _is_root_allowed(name):
             continue
+        if not _is_safe(name):
+            decisions.append(
+                f"`{_label(name)}`: nama mengandung karakter khusus atau terlalu "
+                "panjang, jadi tidak dibuatkan perintah. Ganti namanya dulu."
+            )
+            continue
         if entry.is_symlink():
             decisions.append(f"`{name}` adalah symlink; tidak diperiksa.")
             continue
@@ -351,7 +403,7 @@ def _misplaced(root: Path) -> tuple[list[str], list[str]]:
                 continue
             moves.append(
                 f"`{entry.name}` termasuk {parent} ({verdict.reason()}).\n"
-                f"   `git mv {_quote(entry.name)} {_quote(target)}`"
+                f"   `git mv -- {_quote(entry.name)} {_quote(target)}`"
             )
     return moves, decisions
 
@@ -382,7 +434,7 @@ def _crossings(root: Path, present: list[str]) -> list[str]:
             for number, line in enumerate(lines, 1):
                 target = _crossed_parent(root, parent, path, line)
                 if target:
-                    where = path.relative_to(root).as_posix()
+                    where = _label(path.relative_to(root).as_posix())
                     findings.append(
                         f"`{where}:{number}` ({parent}) mengimpor {target}."
                     )
@@ -404,7 +456,7 @@ def _crossed_parent(root: Path, parent: str, path: Path, line: str) -> str | Non
         return None
     top = relative.parts[0] if relative.parts else ""
     if top in CODE_PARENTS and top != parent:
-        return f"`{found.group(1)}` (induk {top})"
+        return f"`{_label(found.group(1))}` (induk {top})"
     return None
 
 
@@ -423,7 +475,7 @@ def _missing(root: Path, present: list[str]) -> list[str]:
         for current, _, files in _walk(root / "assets", depth=8):
             for name in files:
                 if Path(name).suffix.lower() in CODE_IN_ASSETS:
-                    where = (current / name).relative_to(root).as_posix()
+                    where = _label((current / name).relative_to(root).as_posix())
                     findings.append(f"`{where}` adalah kode, bukan asset.")
     return findings
 
@@ -438,7 +490,7 @@ def _has_manifest(folder: Path, parent: str) -> bool:
 
 
 def _env_findings(root: Path, folder: Path) -> list[str]:
-    where = folder.relative_to(root).as_posix() if folder != root else "."
+    where = _label(folder.relative_to(root).as_posix()) if folder != root else "."
     findings = []
     ignored = False
     for ignore in {root / ".gitignore", folder / ".gitignore"}:
@@ -452,6 +504,31 @@ def _env_findings(root: Path, folder: Path) -> list[str]:
     if not (folder / ".env.example").is_file():
         findings.append(f"`{where}/.env` ada tanpa `.env.example` di sebelahnya.")
     return findings
+
+
+def _allowed_roots() -> list[Path]:
+    roots = [Path.cwd()]
+    for item in os.environ.get(ROOTS_ENV, "").split(os.pathsep):
+        if item.strip():
+            roots.append(Path(item).expanduser())
+    return [root.resolve() for root in roots]
+
+
+def _refusal(root: Path, requested: str) -> str | None:
+    """Alasan menolak memeriksa folder ini, atau None jika boleh."""
+    if root == Path(root.anchor) or root == Path.home().resolve():
+        return (
+            f"Folder `{_label(requested)}` terlalu luas untuk satu proyek. "
+            "Pilih folder root proyeknya."
+        )
+    if any(root.is_relative_to(allowed) for allowed in _allowed_roots()):
+        return None
+    return (
+        f"Folder `{_label(requested)}` berada di luar folder kerja server. "
+        "Jalankan code assistant dari folder proyek itu, atau daftarkan folder "
+        f"tersebut di environment variable {ROOTS_ENV} (pisahkan dengan "
+        f"`{os.pathsep}`) sebelum server dinyalakan."
+    )
 
 
 def _numbered(items: list[str]) -> list[str]:
@@ -471,11 +548,15 @@ def check_layout(path: str = ".") -> str:
     file hanya setelah pemilik proyek setuju, lalu panggil lagi sampai bersih.
 
     Args:
-        path: Folder root proyek. Default: folder kerja server.
+        path: Folder root proyek, di dalam folder kerja server atau di dalam
+            folder yang terdaftar di ZUL_PROJECT_ROOTS. Default: folder kerja.
     """
     root = Path(path).expanduser().resolve()
+    refusal = _refusal(root, path)
+    if refusal:
+        return refusal
     if not root.is_dir():
-        return f"Folder `{path}` tidak ditemukan atau bukan folder."
+        return f"Folder `{_label(path)}` tidak ditemukan atau bukan folder."
 
     present = [parent for parent in PARENTS if (root / parent).is_dir()]
     absent = [parent for parent in PARENTS if parent not in present]
@@ -484,7 +565,7 @@ def check_layout(path: str = ".") -> str:
     missing = _missing(root, present)
 
     lines = [
-        f"# Pemeriksaan struktur: {root.name}",
+        f"# Pemeriksaan struktur: {_label(root.name)}",
         "",
         f"Induk yang ada: {', '.join(present) or 'belum ada'}.",
         f"Induk yang belum ada: {', '.join(absent) or 'tidak ada'}. "

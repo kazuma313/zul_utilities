@@ -107,11 +107,16 @@ Langkahnya:
 5. Assistant memperbarui path di Dockerfile, `docker-compose`, konfigurasi CI, dan README, lalu menjalankan test di setiap induk.
 6. Assistant memanggil `check_layout` lagi sampai hasilnya "Struktur sudah sesuai".
 
-Sebuah folder yang berisi satu aplikasi utuh diganti namanya menjadi induknya. Misalnya, `web/` yang berisi `package.json` dengan `react-dom` menjadi `frontend/` lewat `git mv web frontend`. Jika ada dua aplikasi sejenis, misalnya `api/` dan `worker/`, keduanya dipindahkan ke dalam induknya: `backend/api` dan `backend/worker`.
+Sebuah folder yang berisi satu aplikasi utuh diganti namanya menjadi induknya. Misalnya, `web/` yang berisi `package.json` dengan `react-dom` menjadi `frontend/` lewat `git mv -- web frontend`. Jika ada dua aplikasi sejenis, misalnya `api/` dan `worker/`, keduanya dipindahkan ke dalam induknya: `backend/api` dan `backend/worker`.
 
 ### Yang dibaca dan tidak dibaca
 
 `check_layout` membaca nama file dan folder, nama dependency di `package.json`, dan baris impor di file kode. Isi `.env` tidak pernah dibaca; hanya keberadaannya yang diperiksa. Symlink tidak diikuti, dan pemeriksaan berhenti di 4.000 file kode.
+
+### Batas keamanan
+
+- **Folder yang boleh diperiksa.** Hanya folder di dalam folder kerja server, yaitu folder tempat code assistant dibuka, dan folder yang terdaftar di environment variable `ZUL_PROJECT_ROOTS`. Pisahkan beberapa folder dengan `;` di Windows atau `:` di Linux dan macOS. Root drive dan folder home ditolak, karena terlalu luas untuk satu proyek.
+- **Nama file adalah data, bukan perintah.** Nama file berasal dari folder yang diperiksa, yang bisa saja berasal dari repository orang lain. Nama yang berisi karakter selain huruf, angka, spasi, titik, minus, garis bawah, dan garis miring tidak dibuatkan perintah `git mv`; namanya ditampilkan dalam bentuk ber-escape (misalnya `\x24` untuk `$`) dan folder itu masuk "Perlu keputusan". Semua perintah memakai `git mv --`, supaya nama berawalan `-` tidak dibaca sebagai opsi.
 
 ### Yang belum diperiksa
 

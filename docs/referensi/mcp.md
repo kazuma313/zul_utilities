@@ -95,7 +95,23 @@ Contoh dari `find_examples` yang berjudul file, misalnya `garis_penghitung.py`, 
 | Impor yang melompati batas induk | Impor berpath relatif antarinduk, dan `import backend`, `import frontend`, atau `import mobile` di Python, dengan nama file dan nomor barisnya. |
 | Kekurangan di tiap induk | Induk tanpa `README.md` atau manifest dependency, file `.env` yang belum diabaikan `.gitignore` atau tanpa `.env.example`, dan file kode di dalam `assets`. |
 
-Jika tidak ada temuan, jawabannya `Struktur sudah sesuai`. Tool ini tidak memindahkan atau mengubah file; yang memindahkannya adalah code assistant setelah pemilik proyek setuju. Isi `.env` tidak pernah dibaca. Aturan dan cara mengenali induk dijelaskan di [Struktur proyek berinduk](../konsep/struktur-proyek-berinduk.md).
+Jika tidak ada temuan, jawabannya `Struktur sudah sesuai`. Tool ini tidak memindahkan atau mengubah file; yang memindahkannya adalah code assistant setelah pemilik proyek setuju. Isi `.env` tidak pernah dibaca.
+
+`path` harus berada di dalam folder kerja server atau di dalam salah satu folder di environment variable `ZUL_PROJECT_ROOTS` (dipisah `;` di Windows, `:` di Linux dan macOS). Root drive dan folder home ditolak. Nama file yang berisi karakter khusus tidak dibuatkan perintah `git mv` dan ditampilkan ber-escape; semua perintah memakai `git mv --`. Contoh config yang mendaftarkan folder:
+
+```json
+{
+  "mcpServers": {
+    "zul": {
+      "command": "zul",
+      "args": ["mcp", "serve"],
+      "env": { "ZUL_PROJECT_ROOTS": "C:\\proyek\\toko;C:\\proyek\\blog" }
+    }
+  }
+}
+```
+
+Aturan dan cara mengenali induk dijelaskan di [Struktur proyek berinduk](../konsep/struktur-proyek-berinduk.md).
 
 ## Resource
 

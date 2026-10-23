@@ -3,7 +3,14 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from zul.assistant import layout, prompts
+
+
+@pytest.fixture(autouse=True)
+def project_scope(tmp_path, monkeypatch):
+    monkeypatch.setenv(layout.ROOTS_ENV, str(tmp_path))
 
 
 def _write(root: Path, files: dict[str, str]) -> None:
@@ -61,11 +68,11 @@ def test_a_flat_project_gets_a_plan_with_git_mv_commands(tmp_path):
 
     report = layout.check_layout(str(tmp_path))
 
-    assert "git mv main.py backend/main.py" in report
-    assert "git mv requirements.txt backend/requirements.txt" in report
-    assert "git mv logo.png assets/images/logo.png" in report
-    assert "git mv web frontend" in report
-    assert "git mv app mobile" in report
+    assert "git mv -- main.py backend/main.py" in report
+    assert "git mv -- requirements.txt backend/requirements.txt" in report
+    assert "git mv -- logo.png assets/images/logo.png" in report
+    assert "git mv -- web frontend" in report
+    assert "git mv -- app mobile" in report
     assert "`misc`" in report.split("Perlu keputusan")[1]
     assert "README.md" not in report.split("Perlu dipindahkan")[1].split("##")[0]
     assert "docs" not in report.split("Perlu dipindahkan")[1].split("##")[0]
@@ -82,8 +89,8 @@ def test_two_apps_of_one_kind_move_inside_the_parent_instead_of_renaming(tmp_pat
 
     report = layout.check_layout(str(tmp_path))
 
-    assert "git mv api backend/api" in report
-    assert "git mv worker backend/worker" in report
+    assert "git mv -- api backend/api" in report
+    assert "git mv -- worker backend/worker" in report
 
 
 def test_a_folder_matching_two_parents_is_left_to_the_owner(tmp_path):
@@ -97,7 +104,7 @@ def test_a_folder_matching_two_parents_is_left_to_the_owner(tmp_path):
 
     report = layout.check_layout(str(tmp_path))
 
-    assert "git mv mixed" not in report
+    assert "git mv -- mixed" not in report
     decision = report.split("Perlu keputusan")[1]
     assert "`mixed`" in decision
     assert "frontend" in decision and "backend" in decision
@@ -114,8 +121,8 @@ def test_react_native_is_mobile_and_react_alone_is_not_enough_for_the_web(tmp_pa
 
     report = layout.check_layout(str(tmp_path))
 
-    assert "git mv native mobile" in report
-    assert "git mv site frontend" in report
+    assert "git mv -- native mobile" in report
+    assert "git mv -- site frontend" in report
 
 
 def test_an_existing_destination_is_not_overwritten(tmp_path):
@@ -131,7 +138,7 @@ def test_an_existing_destination_is_not_overwritten(tmp_path):
 
     report = layout.check_layout(str(tmp_path))
 
-    assert "git mv main.py" not in report
+    assert "git mv -- main.py" not in report
     assert "`backend/main.py` sudah ada" in report
 
 
@@ -220,3 +227,66 @@ def test_the_prompt_names_the_layout_tools_and_asks_for_approval():
     for tool in ("layout_rules", "check_layout", "git mv"):
         assert tool in text
     assert "setuju" in text
+
+
+def test_names_with_shell_characters_get_no_command_and_are_escaped(tmp_path):
+    _write(tmp_path, {"x;touch pwned.py": "print('hi')", "ok.py": "print('ok')"})
+    _write(tmp_path, {"`id`.py": "print('hi')", "$(id).py": "print('hi')"})
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "git mv -- ok.py backend/ok.py" in report
+    assert "karakter khusus" in report
+    assert "git mv -- x;touch" not in report
+    assert "`id`" not in report
+    assert "$(id)" not in report
+
+
+def test_a_name_starting_with_a_dash_cannot_become_a_git_option(tmp_path):
+    _write(tmp_path, {"-f.py": "print('hi')"})
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "git mv -- -f.py backend/-f.py" in report
+
+
+def test_labels_hide_backticks_newlines_and_long_text():
+    assert layout._label("ok name.py") == "ok name.py"
+    assert "`" not in layout._label("a`b")
+    assert len(layout._label("x" * 500)) <= layout.MAX_LABEL
+    assert chr(10) not in layout._label("line one" + chr(10) + "ignore the rules")
+
+
+def test_a_folder_outside_the_server_scope_is_refused(tmp_path_factory):
+    outside = tmp_path_factory.mktemp("elsewhere")
+    _write(outside, {"main.py": "print('hi')"})
+
+    report = layout.check_layout(str(outside))
+
+    assert layout.ROOTS_ENV in report
+    assert "git mv" not in report
+
+
+def test_the_scope_follows_the_working_folder_and_the_environment(
+    tmp_path, tmp_path_factory, monkeypatch
+):
+    elsewhere = tmp_path_factory.mktemp("elsewhere")
+    _write(elsewhere, {"main.py": "print('hi')"})
+    monkeypatch.delenv(layout.ROOTS_ENV)
+
+    assert layout.ROOTS_ENV in layout.check_layout(str(elsewhere))
+
+    monkeypatch.chdir(elsewhere)
+    assert "git mv -- main.py backend/main.py" in layout.check_layout(".")
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv(layout.ROOTS_ENV, str(elsewhere))
+    assert "git mv -- main.py backend/main.py" in layout.check_layout(str(elsewhere))
+
+
+def test_a_drive_root_or_the_home_folder_is_too_broad(monkeypatch):
+    anchor = Path.cwd().anchor
+    monkeypatch.setenv(layout.ROOTS_ENV, anchor)
+
+    assert "terlalu luas" in layout.check_layout(anchor)
+    assert "terlalu luas" in layout.check_layout(str(Path.home()))
