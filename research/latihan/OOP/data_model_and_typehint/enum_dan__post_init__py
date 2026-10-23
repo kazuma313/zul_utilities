@@ -1,0 +1,32 @@
+""" 
+enum memberikan opsi untuk nilai yang hanya boleh dari beberapa opsi
+__post_init memvalidasi nilai dari suatu atribut
+"""
+
+
+from dataclasses import dataclass
+from enum import Enum
+
+class Barang(Enum):
+    KOPI = "kopi"
+    SATE = "sate"
+    APPLE = "apple"
+
+
+@dataclass
+class Money:
+    amount: int = 0
+    
+    def __post_init__(self):
+        if self.amount < 0:
+            raise ValueError("amount must greater then 0")
+    
+    
+if __name__ == "__main__":
+    bayar = Money(-8000)
+    pilih_barang = Barang("sate")
+    
+    print(bayar)
+    print(pilih_barang)
+        
+    

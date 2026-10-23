@@ -1,6 +1,6 @@
 """ 
 properti dan invariation ini berguna untuk mendefine data model.
-prperti ini mendefinisiakn suatu atribut sebagai suatu yang bisa di modifikasi
+properti ini mendefinisiakn suatu atribut sebagai suatu yang bisa di modifikasi
 invariation memastikan atribut sesuai dengan aturannya
 """
 
