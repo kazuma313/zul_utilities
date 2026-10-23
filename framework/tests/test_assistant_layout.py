@@ -1,0 +1,222 @@
+"""Tes struktur proyek berinduk: aturan dan pemeriksa check_layout."""
+
+import json
+from pathlib import Path
+
+from zul.assistant import layout, prompts
+
+
+def _write(root: Path, files: dict[str, str]) -> None:
+    for name, content in files.items():
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+
+
+def _package(*dependencies: str) -> str:
+    return json.dumps({"dependencies": {name: "1.0.0" for name in dependencies}})
+
+
+def _organized(root: Path) -> None:
+    _write(
+        root,
+        {
+            "README.md": "# proyek",
+            ".gitignore": ".env\n",
+            "backend/README.md": "# backend",
+            "backend/pyproject.toml": "[project]\nname = 'api'\n",
+            "backend/main.py": "print('api')\n",
+            "frontend/README.md": "# frontend",
+            "frontend/package.json": _package("react-dom"),
+            "frontend/src/app.ts": "export const app = 1\n",
+            "assets/images/logo.png": "png",
+        },
+    )
+
+
+def test_layout_rules_come_from_the_concept_page():
+    text = layout.layout_rules()
+
+    for parent in layout.PARENTS:
+        assert f"`{parent}`" in text
+    assert text.startswith("# ")
+
+
+def test_a_flat_project_gets_a_plan_with_git_mv_commands(tmp_path):
+    _write(
+        tmp_path,
+        {
+            "README.md": "# toko",
+            "main.py": "print('hi')\n",
+            "requirements.txt": "fastapi\n",
+            "logo.png": "png",
+            "web/package.json": _package("react-dom"),
+            "web/index.html": "<html></html>",
+            "app/pubspec.yaml": "name: toko\n",
+            "app/lib/main.dart": "void main() {}\n",
+            "misc/catatan.txt": "bebas\n",
+            "docs/index.md": "# docs\n",
+        },
+    )
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "git mv main.py backend/main.py" in report
+    assert "git mv requirements.txt backend/requirements.txt" in report
+    assert "git mv logo.png assets/images/logo.png" in report
+    assert "git mv web frontend" in report
+    assert "git mv app mobile" in report
+    assert "`misc`" in report.split("Perlu keputusan")[1]
+    assert "README.md" not in report.split("Perlu dipindahkan")[1].split("##")[0]
+    assert "docs" not in report.split("Perlu dipindahkan")[1].split("##")[0]
+
+
+def test_two_apps_of_one_kind_move_inside_the_parent_instead_of_renaming(tmp_path):
+    _write(
+        tmp_path,
+        {
+            "api/pyproject.toml": "[project]\nname = 'api'\n",
+            "worker/pyproject.toml": "[project]\nname = 'worker'\n",
+        },
+    )
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "git mv api backend/api" in report
+    assert "git mv worker backend/worker" in report
+
+
+def test_a_folder_matching_two_parents_is_left_to_the_owner(tmp_path):
+    _write(
+        tmp_path,
+        {
+            "mixed/package.json": _package("react-dom"),
+            "mixed/requirements.txt": "fastapi\n",
+        },
+    )
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "git mv mixed" not in report
+    decision = report.split("Perlu keputusan")[1]
+    assert "`mixed`" in decision
+    assert "frontend" in decision and "backend" in decision
+
+
+def test_react_native_is_mobile_and_react_alone_is_not_enough_for_the_web(tmp_path):
+    _write(
+        tmp_path,
+        {
+            "native/package.json": _package("react", "react-native"),
+            "site/package.json": _package("react", "react-dom"),
+        },
+    )
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "git mv native mobile" in report
+    assert "git mv site frontend" in report
+
+
+def test_an_existing_destination_is_not_overwritten(tmp_path):
+    _write(
+        tmp_path,
+        {
+            "backend/pyproject.toml": "[project]\nname = 'api'\n",
+            "backend/README.md": "# backend",
+            "main.py": "print('hi')\n",
+            "backend/main.py": "print('already here')\n",
+        },
+    )
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "git mv main.py" not in report
+    assert "`backend/main.py` sudah ada" in report
+
+
+def test_an_organized_project_has_no_findings(tmp_path):
+    _organized(tmp_path)
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "Struktur sudah sesuai" in report
+    assert "Induk yang ada: backend, frontend, assets." in report
+    assert "Induk yang belum ada: mobile." in report
+
+
+def test_imports_across_parents_are_reported_with_file_and_line(tmp_path):
+    _organized(tmp_path)
+    _write(
+        tmp_path,
+        {
+            "frontend/src/api.ts": (
+                "import { x } from './local'\n"
+                "import { db } from '../../backend/db'\n"
+            ),
+            "backend/service.py": "from frontend import widgets\n",
+            "backend/clean.py": "from .main import app\n",
+        },
+    )
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "`frontend/src/api.ts:2` (frontend)" in report
+    assert "`backend/service.py:1` (backend)" in report
+    assert "clean.py" not in report
+    assert "local" not in report.split("melompati batas induk")[1]
+
+
+def test_each_parent_needs_a_readme_and_a_manifest(tmp_path):
+    _write(tmp_path, {"backend/main.py": "print('api')\n", "frontend/src/a.ts": ""})
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "`backend` belum punya README.md." in report
+    assert "`backend` belum punya manifest dependency sendiri." in report
+    assert "`frontend` belum punya manifest dependency sendiri." in report
+
+
+def test_env_files_are_flagged_by_name_and_never_read(tmp_path):
+    _organized(tmp_path)
+    (tmp_path / ".gitignore").write_text("node_modules\n", encoding="utf-8")
+    _write(tmp_path, {"backend/.env": "SECRET_TOKEN=rahasia-banget\n"})
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "`backend/.env` ada, tetapi `.gitignore` belum mengabaikannya." in report
+    assert "`backend/.env` ada tanpa `.env.example`" in report
+    assert "rahasia-banget" not in report
+
+
+def test_code_inside_assets_is_reported(tmp_path):
+    _organized(tmp_path)
+    _write(tmp_path, {"assets/scripts/resize.py": "print('resize')\n"})
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "`assets/scripts/resize.py` adalah kode, bukan asset." in report
+
+
+def test_a_missing_folder_gets_a_plain_message(tmp_path):
+    report = layout.check_layout(str(tmp_path / "tidak-ada"))
+
+    assert "tidak ditemukan" in report
+
+
+def test_the_checker_does_not_change_the_project(tmp_path):
+    _write(tmp_path, {"main.py": "print('hi')\n", "logo.png": "png"})
+    before = sorted(path.name for path in tmp_path.rglob("*"))
+
+    layout.check_layout(str(tmp_path))
+
+    assert sorted(path.name for path in tmp_path.rglob("*")) == before
+
+
+def test_the_prompt_names_the_layout_tools_and_asks_for_approval():
+    text = prompts.rapikan_arsitektur("C:/proyek/toko")
+
+    assert "C:/proyek/toko" in text
+    for tool in ("layout_rules", "check_layout", "git mv"):
+        assert tool in text
+    assert "setuju" in text

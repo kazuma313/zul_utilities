@@ -308,6 +308,8 @@ EXPECTED_TOOLS = {
     "read_project",
     "conventions",
     "check_code",
+    "layout_rules",
+    "check_layout",
 }
 
 
@@ -321,6 +323,7 @@ def test_server_registers_every_tool_resource_and_prompt():
     assert set(result["resources"]) == {
         "zul://conventions",
         "zul://modules",
+        "zul://layout",
         "zul://docs/{section}/{page}",
         "zul://source/{module}",
     }
@@ -328,6 +331,7 @@ def test_server_registers_every_tool_resource_and_prompt():
         "tulis_modul_zul",
         "pakai_zul",
         "evaluasi_retrieval",
+        "rapikan_arsitektur",
     }
     assert not result["sample_failed"]
     assert "Hasil pencarian" in result["sample"]
@@ -363,7 +367,7 @@ def test_cli_check_prints_a_summary():
     result = runner.invoke(app, ["mcp", "check"])
 
     assert result.exit_code == 0, result.output
-    assert "MCP server zul siap: 11 tool, 4 resource, 3 prompt." in result.output
+    assert "MCP server zul siap: 13 tool, 5 resource, 4 prompt." in result.output
 
 
 def test_serve_speaks_mcp_over_stdio():

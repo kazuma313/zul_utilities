@@ -76,3 +76,26 @@ Ikuti langkah berikut dengan tool dari MCP server zul:
    `zul.adapters.ragas`. Sebutkan extra yang perlu di-install, misalnya
    `zul[evaluation,redis,llm]`.
 """
+
+
+def rapikan_arsitektur(path: str = ".") -> str:
+    """Langkah merapikan proyek menjadi induk backend, frontend, mobile, dan assets."""
+    return f"""Rapikan struktur proyek di folder `{path}` menjadi empat induk:
+backend, frontend, mobile, dan assets.
+
+Ikuti langkah berikut dengan tool dari MCP server zul. Jangan memindahkan
+apa pun sebelum pemilik proyek setuju pada rencananya.
+1. Panggil `layout_rules` dan ikuti semua aturannya.
+2. Panggil `check_layout` dengan path proyek. Hasilnya hanya rencana; tool itu
+   tidak mengubah file.
+3. Tunjukkan rencana itu kepada pemilik proyek. Untuk setiap folder di bagian
+   "Perlu keputusan", tanyakan induk tujuannya; jangan menebak.
+4. Setelah disetujui, jalankan perintah `git mv` dari rencana satu per satu,
+   supaya riwayat file tetap terjaga.
+5. Perbarui semua path yang berubah: Dockerfile, docker-compose, konfigurasi
+   CI, README, dan skrip. Jika ada impor yang melompati batas induk, ganti
+   dengan panggilan HTTP ke backend, jangan memindahkan kodenya.
+6. Jalankan test di setiap induk, lalu panggil `check_layout` lagi sampai
+   hasilnya bersih. Laporkan apa yang dipindahkan dan apa yang masih perlu
+   keputusan.
+"""

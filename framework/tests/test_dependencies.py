@@ -32,6 +32,7 @@ CORE_MODULES = [
     "zul.adapters.yaml",
     "zul.assistant.comment_style",
     "zul.assistant.knowledge",
+    "zul.assistant.layout",
     "zul.assistant.prompts",
     "zul.cli",
     "zul.commands.build",

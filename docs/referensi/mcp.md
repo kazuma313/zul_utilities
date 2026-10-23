@@ -57,6 +57,8 @@ Semua tool hanya membaca: tidak ada yang menulis file atau menjalankan kode. Set
 | `read_project` | `project: str`, `path: str = ""` | Tanpa `path`: README dan daftar file boilerplate. Dengan `path`: isi satu file, misalnya `src/cctv/pipeline.py`. |
 | `conventions` | Tidak ada | Aturan menulis kode di dalam Zul. |
 | `check_code` | `code: str`, `inside_zul: bool = True` | Daftar masalah bernomor, atau `Tidak ada masalah` jika kode lolos. |
+| `layout_rules` | Tidak ada | Aturan struktur proyek berinduk: halaman [Struktur proyek berinduk](../konsep/struktur-proyek-berinduk.md). |
+| `check_layout` | `path: str = "."` | Rencana merapikan folder proyek menjadi induk `backend`, `frontend`, `mobile`, dan `assets`. |
 
 `module` boleh ditulis lengkap, seperti `zul.computer_vision.zones`, atau tanpa awalan `zul`, seperti `computer_vision.zones`. Nama modul atau halaman yang tidak ditemukan dijawab dengan sampai tiga nama yang mirip.
 
@@ -82,6 +84,19 @@ Contoh dari `find_examples` yang berjudul file, misalnya `garis_penghitung.py`, 
 | Docstring modul tanpa bagian `Gunanya:` atau `Cara pakai:`. | `inside_zul=True` |
 | Library pihak ketiga yang diimpor langsung. Jika sudah ada adapter yang mengimpornya, adapter itu disebut, misalnya `zul.adapters.opencv` untuk `cv2`. | `inside_zul=True` |
 
+### Pemeriksaan `check_layout`
+
+`check_layout` memeriksa folder proyek di `path` dan mengembalikan teks Markdown dengan bagian yang berisi temuan saja:
+
+| Bagian | Isi |
+|---|---|
+| Perlu dipindahkan | File atau folder di root yang jelas milik satu induk, beserta alasannya dan perintah `git mv`. |
+| Perlu keputusan pemilik proyek | Folder yang cocok dengan lebih dari satu induk, yang tidak punya tanda, yang tujuannya sudah ada, atau yang berupa symlink. |
+| Impor yang melompati batas induk | Impor berpath relatif antarinduk, dan `import backend`, `import frontend`, atau `import mobile` di Python, dengan nama file dan nomor barisnya. |
+| Kekurangan di tiap induk | Induk tanpa `README.md` atau manifest dependency, file `.env` yang belum diabaikan `.gitignore` atau tanpa `.env.example`, dan file kode di dalam `assets`. |
+
+Jika tidak ada temuan, jawabannya `Struktur sudah sesuai`. Tool ini tidak memindahkan atau mengubah file; yang memindahkannya adalah code assistant setelah pemilik proyek setuju. Isi `.env` tidak pernah dibaca. Aturan dan cara mengenali induk dijelaskan di [Struktur proyek berinduk](../konsep/struktur-proyek-berinduk.md).
+
 ## Resource
 
 Resource berisi teks yang sama dengan tool, untuk client yang melampirkan konteks lewat resource. Di Claude Code, sebut resource dengan `@zul:URI`, misalnya `@zul:zul://conventions`. Semua resource bertipe `text/markdown`.
@@ -90,6 +105,7 @@ Resource berisi teks yang sama dengan tool, untuk client yang melampirkan kontek
 |---|---|---|
 | `zul://conventions` | Aturan gaya Zul. | `conventions` |
 | `zul://modules` | Daftar semua modul. | `list_modules` |
+| `zul://layout` | Aturan struktur proyek berinduk. | `layout_rules` |
 | `zul://docs/{section}/{page}` | Satu halaman dokumentasi, misalnya `zul://docs/panduan/mengukur-durasi`. | `read_doc` |
 | `zul://source/{module}` | Source code satu modul, misalnya `zul://source/zul.computer_vision.zones`. | `read_source` |
 
@@ -102,6 +118,7 @@ Prompt berisi urutan tool yang perlu dipanggil untuk sebuah pekerjaan. Di Claude
 | `pakai_zul` | `tugas` | `search_docs`, `find_examples`, dan `module_guide`, lalu menulis kode yang merangkai fungsi Zul dan menyebut extra yang perlu di-install. |
 | `evaluasi_retrieval` | `tujuan` | `read_doc` panduan evaluasi dan `module_guide` modul `zul.evaluation`, lalu script dengan urutan `load_qa_dataset`, retriever, `run_rag`, `retrieval_hit_stats`, `evaluate_rag`, dan `save_report`. Kunci dibaca dari environment variable, dan ragas tidak diimpor langsung. |
 | `tulis_modul_zul` | `topik` | `conventions`, `list_modules`, dan `read_source` modul yang mirip. Library baru diperiksa lisensinya dan diletakkan di adapter. Modul dan test-nya ditulis, lalu setiap file baru diperiksa dengan `check_code`. |
+| `rapikan_arsitektur` | `path` | `layout_rules`, lalu `check_layout`. Rencananya ditunjukkan ke pemilik proyek, dan folder yang perlu keputusan ditanyakan. Setelah disetujui, `git mv` dijalankan satu per satu, path di Dockerfile, docker-compose, CI, dan README diperbarui, test dijalankan di setiap induk, dan `check_layout` dipanggil lagi sampai bersih. |
 
 ## Sumber dokumentasi
 

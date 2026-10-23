@@ -29,10 +29,10 @@ zul mcp check
 Perintah itu menyalakan server di proses yang sama, membaca semua isinya, dan mencoba satu pencarian. Keluarannya seperti ini:
 
 ```text
-MCP server zul siap: 11 tool, 4 resource, 3 prompt.
-Tool: list_modules, module_guide, read_source, list_docs, read_doc, search_docs, find_examples, list_projects, read_project, conventions, check_code
-Resource: zul://conventions, zul://modules, zul://docs/{section}/{page}, zul://source/{module}
-Prompt: tulis_modul_zul, pakai_zul, evaluasi_retrieval
+MCP server zul siap: 13 tool, 5 resource, 4 prompt.
+Tool: list_modules, module_guide, read_source, list_docs, read_doc, search_docs, find_examples, list_projects, read_project, conventions, check_code, layout_rules, check_layout
+Resource: zul://conventions, zul://modules, zul://layout, zul://docs/{section}/{page}, zul://source/{module}
+Prompt: tulis_modul_zul, pakai_zul, evaluasi_retrieval, rapikan_arsitektur
 Contoh search_docs: ## panduan/menghitung-dengan-garis-dan-poligon > Menghitung lintasan dengan garis
 ```
 
@@ -87,6 +87,16 @@ Kamu juga bisa melampirkan aturan gaya ke prompt mana pun dengan menyebut resour
 ```text
 @zul:zul://conventions rapikan komentar di file ini.
 ```
+
+## Merapikan struktur proyek
+
+Untuk proyek aplikasi yang folder-foldernya belum tertata, prompt `rapikan_arsitektur` meminta Claude Code membagi proyek menjadi induk `backend`, `frontend`, `mobile`, dan `assets`. Buka Claude Code di folder proyek itu, lalu ketik:
+
+```text
+/mcp__zul__rapikan_arsitektur
+```
+
+Claude Code memeriksa folder dengan `check_layout`, menunjukkan rencana pemindahan lengkap dengan perintah `git mv`, dan bertanya untuk folder yang tujuannya belum jelas. Ia memindahkan file hanya setelah kamu setuju. Aturan strukturnya dijelaskan di [Struktur proyek berinduk](../konsep/struktur-proyek-berinduk.md).
 
 ## Yang sudah kamu kerjakan
 

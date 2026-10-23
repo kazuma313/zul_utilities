@@ -16,7 +16,7 @@ Cara pakai:
     from zul.assistant.server import build_server
     server = build_server()
 
-Isinya: 11 tool baca-saja (lihat TOOLS), 4 resource Markdown, dan 3 prompt.
+Isinya: 13 tool baca-saja (lihat TOOLS), 5 resource Markdown, dan 4 prompt.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from importlib.metadata import PackageNotFoundError, version
 
 from zul.adapters import mcp as mcp_adapter
 
-from . import knowledge, prompts
+from . import knowledge, layout, prompts
 
 INSTRUCTIONS = """\
 Server ini menjelaskan paket Python Zul: wrapper berbagai library (OpenCV,
@@ -39,7 +39,10 @@ modul yang mirip, lalu check_code untuk setiap file baru.
 Untuk evaluasi retrieval dan RAG dengan ragas: prompt evaluasi_retrieval, atau
 read_doc panduan/mengevaluasi-retrieval lalu module_guide zul.evaluation.
 Untuk aplikasi lengkap, misalnya analitik CCTV: list_projects, lalu
-read_project untuk boilerplate yang paling mirip, dan tiru strukturnya."""
+read_project untuk boilerplate yang paling mirip, dan tiru strukturnya.
+Untuk merapikan proyek menjadi induk backend, frontend, mobile, dan assets:
+prompt rapikan_arsitektur, atau layout_rules lalu check_layout. Tool ini hanya
+menyusun rencana; pindahkan file setelah pemilik proyek setuju."""
 
 TOOLS = [
     knowledge.list_modules,
@@ -53,6 +56,8 @@ TOOLS = [
     knowledge.read_project,
     knowledge.conventions,
     knowledge.check_code,
+    layout.layout_rules,
+    layout.check_layout,
 ]
 
 # --------------------------------------------------------------------------
@@ -76,6 +81,7 @@ def _source_resource(module: str) -> str:
 RESOURCES = [
     ("zul://conventions", knowledge.conventions, "conventions", "Aturan gaya Zul."),
     ("zul://modules", knowledge.list_modules, "modules", "Daftar semua modul Zul."),
+    ("zul://layout", layout.layout_rules, "layout", "Aturan struktur proyek berinduk."),
     (
         "zul://docs/{section}/{page}",
         _doc_resource,
@@ -90,7 +96,12 @@ RESOURCES = [
     ),
 ]
 
-PROMPTS = [prompts.tulis_modul_zul, prompts.pakai_zul, prompts.evaluasi_retrieval]
+PROMPTS = [
+    prompts.tulis_modul_zul,
+    prompts.pakai_zul,
+    prompts.evaluasi_retrieval,
+    prompts.rapikan_arsitektur,
+]
 
 
 def _version() -> str:

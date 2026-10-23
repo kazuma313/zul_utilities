@@ -232,6 +232,7 @@ nav:
       - Model lokal untuk skill belajar: konsep/model-lokal-untuk-skill-belajar.md
       - Cara kerja Computer Vision: konsep/cara-kerja-computer-vision.md
       - Lapisan adapter: konsep/lapisan-adapter.md
+      - Struktur proyek berinduk: konsep/struktur-proyek-berinduk.md
       - Hexagonal dari nol: hexagonal.md
   - Playground: playground.md
   - Blog:
