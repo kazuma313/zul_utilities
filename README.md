@@ -192,7 +192,7 @@ Setiap topik punya halaman dengan peran berbeda: tutorial dan panduan untuk meng
 |---|---|---|---|
 | **Mind map** | Skill yang membuat mind map dari sebuah topik. | Python saja (stdlib) | [Membuat mind map](https://zulkit.my.id/panduan/membuat-mindmap/) |
 | **Silabus dan materi belajar** | Skill yang menyusun silabus dan materi, dengan model lokal atau API. | Dari checkout repository; kebutuhannya ada di halamannya | [Membuat silabus dan materi](https://zulkit.my.id/panduan/membuat-silabus-dan-materi/), [Model lokal untuk skill belajar](https://zulkit.my.id/konsep/model-lokal-untuk-skill-belajar/) |
-| **Infografis satu lembar** | Skill yang membuat infografis 4:5 dalam dua susunan, produk dan linimasa sejarah; model hanya mengisi JSON. | Node.js 18+ tanpa paket; Edge atau Chrome untuk PNG dan PDF | [Membuat infografis satu lembar](https://zulkit.my.id/panduan/membuat-infografis/) |
+| **Infografis satu lembar** | Skill yang membuat infografis 4:5 dalam tiga susunan (produk, adaptif, dan linimasa sejarah); pada susunan adaptif, blok dipilih menurut bentuk informasinya. Model hanya mengisi JSON. | Node.js 18+ tanpa paket; Edge atau Chrome untuk PNG dan PDF | [Membuat infografis satu lembar](https://zulkit.my.id/panduan/membuat-infografis/) |
 | **Transcript YouTube** | Skill yang mengambil transcript video YouTube. | `youtube-transcript-api`, lihat halamannya | [Mengambil transcript YouTube](https://zulkit.my.id/panduan/mengambil-transcript-youtube/) |
 
 ### Berkontribusi dan menerbitkan

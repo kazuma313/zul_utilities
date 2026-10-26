@@ -1,6 +1,6 @@
 # Membuat infografis satu lembar
 
-Skill `infografis_satu_lembar` membuat infografis 4:5 (1080×1350, siap diunggah ke Instagram) dalam dua susunan: **produk**, yang menjelaskan sebuah produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga, dan **linimasa**, yang menceritakan satu periode sejarah atau proses yang terbagi tiga masa. Model hanya mengisi satu berkas JSON berisi teks pendek. Skrip yang memeriksa dan menggambarnya, jadi model kecil pun bisa memakainya.
+Skill `infografis_satu_lembar` membuat infografis 4:5 (1080×1350, siap diunggah ke Instagram) dalam tiga susunan: **produk**, yang menjelaskan sebuah produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga, **adaptif**, yang menyusun lembar dari blok visual yang dipilih menurut bentuk informasinya, dan **linimasa**, rakitan siap pakai untuk satu periode sejarah yang terbagi tiga masa. Model hanya mengisi satu berkas JSON berisi teks pendek. Skrip yang memeriksa dan menggambarnya, jadi model kecil pun bisa memakainya.
 
 ![Infografis contoh untuk produk fiktif Tanam Kota: masalah dengan dua cincin angka, empat langkah solusi, contoh tanya jawab, dan tiga paket harga](../assets/infografis/tanam-kota.png)
 
@@ -18,14 +18,15 @@ Pembagian tugasnya yang membuat hasilnya terjaga:
 | `cek.mjs` | Skrip | Batas huruf tiap isian. Menolak kata kabur, emoji, kalimat ambigu, angka tanpa sumber, dan arti angka yang terlalu singkat. Pesannya pendek dan menyebut perbaikannya |
 | `bangun.mjs` | Skrip | Tata letak tetap. Setelah digambar, memeriksa apakah ada teks yang bertumpuk atau keluar lembar |
 
-Ada dua susunan, dan masing-masing tetap:
+Ada tiga susunan:
 
 | Susunan | Untuk | Bagian | Cetakan |
 |---|---|---|---|
-| `produk` (bawaan) | Produk atau jasa | Kepala, masalah (dua cincin angka dan tiga hal yang dilakukan orang), solusi (empat simpul), contoh tanya jawab, dan paket harga (2 sampai 4) | `contoh/kosong.json` |
-| `linimasa` | Satu periode sejarah atau proses | Judul dengan angka besar, pita waktu berskala, peristiwa penting, tiga kartu masa, dan diagram dari satu pusat ke tiga tujuan | `contoh/kosong_linimasa.json` |
+| `produk` (bawaan) | Produk atau jasa | Kepala, masalah (dua cincin angka dan tiga hal yang dilakukan orang), solusi (empat simpul), contoh tanya jawab, dan paket harga (2 sampai 4). Bagiannya tetap | `contoh/kosong.json` |
+| `adaptif` | Informasi dengan bentuk apa pun: urutan tahun, tahapan, aliran, perbandingan, langkah, angka persen | Kepala dan 2 sampai 4 blok yang kamu pilih. Tinggi tiap blok menyesuaikan isinya | `contoh/kosong_adaptif.json` |
+| `linimasa` | Satu periode sejarah yang terbagi tiga masa | Judul dengan angka besar, pita waktu berskala, peristiwa penting, tiga kartu masa, dan diagram dari satu pusat ke tiga tujuan. Di dalamnya memakai blok adaptif | `contoh/kosong_linimasa.json` |
 
-Susunan dipilih lewat isian `"susunan"` di `isi.json`. Tanpa isian itu, yang dipakai adalah `produk`. Bagian di bawah memakai susunan produk; susunan linimasa dijelaskan di [Susunan linimasa](#susunan-linimasa).
+Susunan dipilih lewat isian `"susunan"` di `isi.json`. Tanpa isian itu, yang dipakai adalah `produk`. Bagian di bawah memakai susunan produk; susunan adaptif dijelaskan di [Susunan adaptif](#susunan-adaptif) dan linimasa di [Susunan linimasa](#susunan-linimasa).
 
 ## Membuat infografis dari terminal
 
@@ -63,6 +64,68 @@ Susunan dipilih lewat isian `"susunan"` di `isi.json`. Tanpa isian itu, yang dip
 
 > [!NOTE]
 > Huruf Geist dimuat dari Google Fonts saat menggambar, jadi butuh internet. Tanpa itu, huruf pengganti dipakai, dan pemeriksa tumpang tindih memberi tahu bila teks tidak muat.
+
+## Susunan adaptif
+
+Susunan produk dan linimasa memaksa isinya masuk ke satu cetakan. Susunan adaptif membalik urutannya: kamu melihat dulu bentuk informasinya, lalu memilih blok yang cocok, dan skrip menyusun lembarnya dari blok itu. Dua contoh di bawah dibuat dari bentuk isi yang berbeda, bukan dari satu cetakan yang sama:
+
+![Infografis Panen di rumah: angka sorotan 4 langkah, jalur empat langkah menanam kangkung, perbandingan pot dan tanah langsung, dan dua cincin angka fiktif](../assets/infografis/adaptif-cara-menanam.png)
+
+![Infografis Dua Kota Sama-sama Hancur: angka sorotan 426 tahun, pita waktu berskala tiga masa, dan perbandingan Ayutthaya dengan Trowulan](../assets/infografis/adaptif-dua-kota.png)
+
+Gambar pertama dari `contoh/adaptif_cara_menanam.json` (langkah, perbandingan, dan angka; semua isinya fiktif) dan gambar kedua dari `contoh/adaptif_dua_kota.json` (pita waktu dan perbandingan).
+
+### Memilih blok
+
+Pilih blok menurut bentuk informasinya:
+
+| Bentuk informasi | Blok | Yang digambar |
+|---|---|---|
+| Berjalan dari tahun ke tahun, dengan masa dan peristiwa | `pita_waktu` | Pita berskala dengan lebar sebanding lama masa, dan peristiwa di atas dan di bawahnya |
+| Tahapan berurutan yang masing-masing punya ciri | `tahap` | Kartu yang turun seperti anak tangga (2 sampai 3 tahap) atau baris yang menjorok (4 sampai 5 tahap) |
+| Satu pusat mengalir ke beberapa tujuan | `alur` | Lingkaran pusat dengan panah ke 2 sampai 4 tujuan, panah tebal untuk yang paling banyak dituju |
+| Dua pihak dibandingkan pada beberapa hal | `banding` | Dua kepala berhadapan, 3 sampai 5 baris sepanjang satu garis tengah, dan tanda centang pada pihak yang unggul |
+| Cara melakukan sesuatu, urut dari awal | `langkah` | 3 sampai 5 langkah bernomor di sepanjang jalur berkelok yang berujung panah |
+| Dua sampai empat angka persen | `angka` | Cincin yang terisi sesuai angkanya, dengan arti di bawahnya |
+
+Aturannya:
+
+- Pakai 2 sampai 4 blok, dan satu jenis paling banyak sekali. Urutan di `blok` adalah urutan dari atas ke bawah.
+- Blok pertama menentukan angka sorotan di kepala bila `kepala.sorot` tidak diisi: jumlah tahun untuk pita waktu, dan jumlah langkah, tahap, tujuan, atau pembanding untuk blok lain. Angka itu dihitung skrip.
+- Warna mengikuti jumlah butir: pita dengan lima masa memakai lima warna dari palet merek, dan tiga tahap memakai tiga.
+- Tinggi blok menyesuaikan jumlah butirnya, lalu sisa ruang lembar dibagi ke blok yang masih bisa melebar. Sebelum menggambar, `cek.mjs` menghitung apakah semua blok muat. Jika tidak, ia melapor `terlalu padat` beserta tinggi tiap blok.
+- Bagian informasi yang tidak cocok dengan satu pun bentuk jangan dipaksakan ke blok yang salah. Buang atau persingkat bagian itu.
+
+Bentuk lengkap tiap blok, batas hurufnya, dan contoh yang sudah lolos pemeriksaan ada di `references/katalog_blok.md` di folder skill.
+
+### Membuat infografis adaptif
+
+1. Salin cetakannya. Cetakan hanya berisi dua blok sebagai contoh bentuk:
+
+    ```shell
+    cp framework/agentic/skills/infografis_satu_lembar/contoh/kosong_adaptif.json isi.json
+    ```
+
+2. Ganti, tambah, atau buang blok sesuai bentuk informasimu, dengan potongan dari `references/katalog_blok.md`. Ganti setiap teks di antara `[ ... ]`. Semua tahun dan semua `nilai` ditulis sebagai angka tanpa tanda kutip.
+
+3. Periksa dan gambar dengan dua perintah yang sama dengan susunan lain:
+
+    ```shell
+    node framework/agentic/skills/infografis_satu_lembar/scripts/cek.mjs isi.json
+    node framework/agentic/skills/infografis_satu_lembar/scripts/bangun.mjs isi.json
+    ```
+
+    Contoh keluaran `cek.mjs` untuk `contoh/adaptif_cara_menanam.json`:
+
+    ```text
+    LOLOS: 0 gagal, 0 peringatan, 88 kata.
+    ```
+
+Pesan `GAGAL` khusus susunan adaptif ada di [Memperbaiki pesan GAGAL](#memperbaiki-pesan-gagal).
+
+### Hubungan dengan susunan linimasa
+
+Susunan `linimasa` sekarang adalah rakitan siap pakai dari blok adaptif: pita waktu, tahap yang mengikuti pita, dan alur. Isian lamanya tetap berlaku, jadi berkas `isi.json` linimasa yang sudah ada menghasilkan gambar yang sama. Pakai `adaptif` bila isinya tidak persis berbentuk tiga masa dan satu sebaran.
 
 ## Susunan linimasa
 
@@ -109,7 +172,7 @@ Bentuk yang sudah benar ada di `contoh/majapahit_masa_pudar.json`. Pesan `GAGAL`
 
 Skill memakai format yang sama dengan skill lain di [skill pool](https://github.com/kazuma313/zul_utilities/tree/main/framework/agentic): `SKILL.md` berisi langkah untuk agent, dan `METADATA.md` berisi kebutuhan dan batasnya. Agent yang membaca `SKILL.md` akan:
 
-1. Menanyakan faktamu dalam satu pesan berisi daftar bernomor: nama produk dan tujuannya, masalah dengan dua angka beserta sumbernya, tiga hal yang dilakukan orang sekarang, empat fitur, satu contoh tanya jawab, harga paket, dan batasan produk.
+1. Menanyakan faktamu dalam satu pesan berisi daftar bernomor. Untuk produk: nama produk dan tujuannya, masalah dengan dua angka beserta sumbernya, tiga hal yang dilakukan orang sekarang, empat fitur, satu contoh tanya jawab, harga paket, dan batasan produk. Untuk informasi lain, agent memilih blok dari bentuk isinya dan menanyakan bahan tiap blok: misalnya tahun mulai dan selesai tiap masa, atau langkah berurutan, atau dua pihak yang dibandingkan.
 2. Berhenti dan menyebut apa yang kurang jika ada yang belum kamu jawab. Agent tidak boleh mengisinya dengan karangan.
 3. Mengisi `isi.json`, memeriksa, memperbaiki, menggambar, lalu menyebut lokasi hasilnya dan angka yang perlu kamu periksa.
 
@@ -133,7 +196,7 @@ print(buat_infografis(isi_json, "produkku"))
 
 ## Memakai model tanpa fitur skill
 
-Untuk AI yang tidak mengenal folder skill, termasuk model kecil, pakai `references/prompt_satu_tempelan.md` di folder skill. Tempel bagian A, lalu isi `contoh/kosong.json`, lalu fakta produkmu. Model cukup menjawab dengan JSON. Simpan jawabannya sebagai `isi.json`, jalankan `cek.mjs`, dan jika ada `GAGAL`, tempel pesannya ke model dengan permintaan "Perbaiki JSON ini sesuai pesan, jawab hanya JSON."
+Untuk AI yang tidak mengenal folder skill, termasuk model kecil, pakai `references/prompt_satu_tempelan.md` di folder skill. Tempel bagian A, lalu isi `contoh/kosong.json`, lalu fakta produkmu. Berkas itu juga punya bagian A sendiri untuk susunan adaptif dan linimasa. Model cukup menjawab dengan JSON. Simpan jawabannya sebagai `isi.json`, jalankan `cek.mjs`, dan jika ada `GAGAL`, tempel pesannya ke model dengan permintaan "Perbaiki JSON ini sesuai pesan, jawab hanya JSON."
 
 ## Memperbaiki pesan GAGAL
 
@@ -161,7 +224,21 @@ Pesan khusus susunan linimasa:
 | `di dalam pita waktu (1389 sampai 1815)` | Tahun peristiwa harus berada di antara tahun mulai masa pertama dan tahun selesai masa terakhir. |
 | `masing-masing di antara tahun dan sampai` | Setiap tahun di `titik` harus berada di dalam rentang peristiwanya. |
 | `harus 0, 1, atau 2` | `utama` adalah nomor tujuan yang paling banyak dituju, dimulai dari 0. Hapus isian ini jika tidak ada yang dominan. |
-| `harus salah satu dari: produk, linimasa` | Nama susunan salah. Hapus isian `susunan` untuk memakai susunan produk. |
+| `harus salah satu dari: produk, linimasa, adaptif` | Nama susunan salah. Hapus isian `susunan` untuk memakai susunan produk. |
+
+Pesan khusus susunan adaptif:
+
+| Pesan | Perbaikan |
+|---|---|
+| `harus berisi 2 sampai 4 blok` | Pilih 2 sampai 4 blok menurut bentuk informasinya. |
+| `harus salah satu dari: pita_waktu, tahap, alur, banding, langkah, angka` | Nama `jenis` blok salah. Pilih salah satu dari enam itu. |
+| `blok langkah sudah dipakai` | Satu jenis blok paling banyak sekali. Pilih jenis lain atau gabungkan isinya. |
+| `terlalu padat: isinya butuh N piksel dari 970 yang tersedia` | Kurangi satu blok, atau kurangi butirnya. Pesannya menyebut tinggi tiap blok. |
+| `label peristiwa ... tidak punya tempat` | Dua peristiwa terlalu dekat di pita waktu. Gabungkan menjadi satu butir dengan `sampai` dan `titik`, atau hapus salah satu. |
+| `harus ... sama dengan jumlah masa di pita_waktu` | Blok `tahap` dengan `ikuti_pita` harus punya tahap sebanyak masa di pita waktu. |
+| `jangan diisi: dengan "ikuti_pita"` | `angka`, `satuan`, dan `rentang` dihitung dari pita waktu. Hapus isiannya. |
+| `butuh blok pita_waktu yang sah` | `ikuti_pita` atau `"lama_pita"` butuh blok pita waktu. Tambahkan blok itu, atau tulis angkanya sendiri. |
+| `harus "kiri" atau "kanan"` | `unggul` di blok banding hanya boleh `"kiri"` atau `"kanan"`. Hapus bila tidak ada yang unggul. |
 
 ## Memakai merek sendiri
 
@@ -177,7 +254,8 @@ Warna, huruf, dan logo disimpan per merek di `merek/`. Merek bawaan adalah `tana
 
 ## Batas skill
 
-- Satu lembar 4:5 dengan dua susunan tetap, `produk` dan `linimasa`. Rasio lain, lebih dari satu lembar, dan susunan lain butuh kode baru: susunan produk digambar di `scripts/bangun.mjs`, susunan linimasa di `scripts/linimasa.mjs`.
+- Satu lembar 4:5 dengan tiga susunan: `produk`, `adaptif`, dan `linimasa`. Rasio lain dan lebih dari satu lembar butuh kode baru. Susunan produk digambar di `scripts/bangun.mjs`, dan susunan adaptif dan linimasa di `scripts/adaptif.mjs` dengan satu berkas `scripts/blok_*.mjs` per jenis blok.
+- Susunan adaptif punya enam jenis blok. Bentuk informasi di luar itu, misalnya daftar tips atau peta, belum punya blok. Menambah satu jenis berarti satu berkas `blok_*.mjs` baru yang mengekspor `periksa`, `tinggi`, dan `gambar`, dan didaftarkan di `scripts/adaptif.mjs`.
 - Bagian rencana (roadmap) dan tangkapan layar aplikasi sengaja tidak ada.
 - **Belum diuji dengan model sungguhan.** Skrip dan pemeriksanya sudah diuji (`uv run pytest framework/agentic/skills/infografis_satu_lembar`), tetapi klaim bahwa model kecil bisa mengisi JSON-nya dalam satu sampai tiga putaran perbaikan belum dibuktikan. Sebelum mengandalkannya, jalankan sekali dengan model yang akan kamu pakai.
 - Instruksi ditulis dalam bahasa Indonesia. Jika modelmu lemah berbahasa Indonesia, terjemahkan prompt satu tempelan ke bahasa yang dikuasainya. Isi JSON tetap berbahasa Indonesia.

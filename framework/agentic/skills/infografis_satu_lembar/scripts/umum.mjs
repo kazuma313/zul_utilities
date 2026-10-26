@@ -74,3 +74,40 @@ window.addEventListener('load', async () => {
   const pre = document.createElement('pre'); pre.id = 'qa'; pre.style.display = 'none'; pre.textContent = JSON.stringify(hasil); document.body.appendChild(pre);
 });
 </script>`;
+
+// ── warna yang menyesuaikan jumlah butir
+
+const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const hexDari = (v) => `#${v.map((n) => Math.round(Math.max(0, Math.min(255, n))).toString(16).padStart(2, '0')).join('')}`;
+
+/** Campuran dua warna hex: t = 0 menghasilkan a, t = 1 menghasilkan b. */
+export const campur = (a, b, t) => {
+  const [x, y] = [rgb(a), rgb(b)];
+  return hexDari(x.map((n, i) => n + (y[i] - n) * t));
+};
+
+/** n warna yang berjalan dari fase1 lewat fase2 ke fase3 pada merek (atau aksen, koin3, biru1). */
+export function paletKe(w, n) {
+  const awal = w.fase1 ?? w.aksen;
+  const tengah = w.fase2 ?? w.koin3;
+  const akhir = w.fase3 ?? w.biru1;
+  if (n <= 1) return [awal];
+  return Array.from({ length: n }, (_, i) => {
+    const t = i / (n - 1);
+    return t <= 0.5 ? campur(awal, tengah, t * 2) : campur(tengah, akhir, (t - 0.5) * 2);
+  });
+}
+
+/** Warna teks yang terbaca di atas warna latar hex: gelap untuk latar terang, terang untuk latar gelap. */
+export function kontras(hex, w) {
+  const [r, g, b] = rgb(hex).map((n) => n / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.55 ? w.aksen_teks : w.teks;
+}
+
+/** Pembuat paragraf berposisi mutlak dan label bagian, dengan id untuk pemeriksa tumpang tindih. */
+export const pembuatP = (w) => {
+  const P = (id, kiri, atas, lebar, gaya, isi) =>
+    `<p data-teks="${id}" style="position:absolute;left:${kiri}px;top:${atas}px;${lebar ? `width:${lebar}px;` : ''}margin:0;${gaya}">${isi}</p>`;
+  const label = (id, kiri, atas, isi) => P(id, kiri, atas, 0, `font-size:20px;font-weight:600;letter-spacing:3px;color:${w.aksen}`, isi);
+  return { P, label };
+};

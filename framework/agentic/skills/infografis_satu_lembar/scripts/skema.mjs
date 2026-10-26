@@ -114,3 +114,56 @@ export const BATAS_LINIMASA = {
 export const JUMLAH_LINIMASA = { periode: 3, poin: 2, peristiwa_min: 3, peristiwa_maks: 7, tujuan: 3, titik_maks: 5 };
 export const TAHUN_MIN = 1;
 export const TAHUN_MAKS = 2100;
+
+// ── susunan "adaptif": lembar disusun dari blok visual yang dipilih menurut bentuk informasinya.
+
+/** Panjang maksimum isian teks susunan adaptif. */
+export const BATAS_ADAPTIF = {
+  'kepala.judul_1': 16,
+  'kepala.judul_2': 20,
+  'kepala.tujuan': 54,
+  'kepala.sorot.nilai': 6,
+  'kepala.sorot.arti': 16,
+  'pita.masa.nama': 16,
+  'pita.peristiwa.teks': 30,
+  'tahap.nama': 16,
+  'tahap.poin': 36,
+  'tahap.angka': 5,
+  'tahap.satuan': 8,
+  'tahap.rentang': 12,
+  'alur.judul': 30,
+  'alur.pusat': 9,
+  'alur.nama': 22,
+  'alur.arti': 34,
+  'alur.arah': 9,
+  'banding.judul': 30,
+  'banding.nama': 14,
+  'banding.topik': 11,
+  'banding.sisi': 28,
+  'langkah.judul': 30,
+  'langkah.nama': 12,
+  'langkah.rincian': 30,
+  'angka.judul': 30,
+  'angka.tampil': 7,
+  'angka.arti': 30,
+  sumber: 90,
+  kaki: 40,
+};
+
+/** Jumlah butir yang boleh dipakai tiap blok. */
+export const JUMLAH_ADAPTIF = {
+  blok: [2, 4],
+  masa: [2, 5],
+  peristiwa: [2, 7],
+  tahap: [2, 5],
+  poin: [1, 2],
+  alur: [2, 4],
+  baris: [3, 5],
+  langkah: [3, 5],
+  angka: [2, 4],
+  titik_maks: 5,
+};
+
+/** Area lembar untuk blok (px dari atas), jarak antarblok, dan jenis blok yang dikenal. */
+export const AREA_BLOK = { atas: 336, bawah: 1306, jarak: 22 };
+export const JENIS_BLOK = ['pita_waktu', 'tahap', 'alur', 'banding', 'langkah', 'angka'];

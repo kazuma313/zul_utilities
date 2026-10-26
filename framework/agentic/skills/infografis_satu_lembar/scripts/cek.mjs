@@ -13,8 +13,9 @@ import { fileURLToPath } from 'node:url';
 import { IKON, BATAS, BATAS_LINIMASA, JUMLAH, KATA_MAKS } from './skema.mjs';
 import { buatTeks } from './umum.mjs';
 import { periksaLinimasa } from './linimasa.mjs';
+import { periksaAdaptif, BATAS_ADAPTIF } from './adaptif.mjs';
 
-export const SUSUNAN = ['produk', 'linimasa'];
+export const SUSUNAN = ['produk', 'linimasa', 'adaptif'];
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const MEREK_DIR = path.join(HERE, '..', 'merek');
@@ -26,18 +27,20 @@ export function periksa(c) {
   const P = (lokasi, pesan) => peringatan.push(`PERINGATAN ${lokasi}: ${pesan}`);
   const semuaTeks = [];
 
+  const susunan = c.susunan ?? 'produk';
+  const cetakan = susunan === 'produk' ? 'kosong' : `kosong_${susunan}`;
+
   const objek = (v, lokasi) => {
     if (v && typeof v === 'object' && !Array.isArray(v)) return true;
-    G(lokasi, 'bagian ini harus ada dan berupa objek { ... }. Salin dari contoh/kosong.json.');
+    G(lokasi, `bagian ini harus ada dan berupa objek { ... }. Salin dari contoh/${cetakan}.json.`);
     return false;
   };
 
-  const susunan = c.susunan ?? 'produk';
   if (!SUSUNAN.includes(susunan)) {
     G('susunan', `harus salah satu dari: ${SUSUNAN.join(', ')}. Hapus isian ini untuk memakai susunan produk.`);
     return { gagal, peringatan, kata: 0 };
   }
-  const teks = buatTeks(G, P, semuaTeks, susunan === 'linimasa' ? BATAS_LINIMASA : BATAS);
+  const teks = buatTeks(G, P, semuaTeks, susunan === 'linimasa' ? BATAS_LINIMASA : susunan === 'adaptif' ? BATAS_ADAPTIF : BATAS);
 
   // ── merek
   if (typeof c.merek !== 'string' || !/^[\w-]+$/.test(c.merek) || !fs.existsSync(path.join(MEREK_DIR, `${c.merek}.json`))) {
@@ -47,6 +50,8 @@ export function periksa(c) {
 
   if (susunan === 'linimasa') {
     periksaLinimasa(c, { G, teks, objek });
+  } else if (susunan === 'adaptif') {
+    periksaAdaptif(c, { G, teks, objek });
   } else {
   // ── kepala
   if (objek(c.kepala, 'kepala')) {

@@ -44,6 +44,32 @@ Aturan:
 9. "sumber" wajib: penulis dan tahun, atau lembaga.
 ```
 
+## Susunan adaptif
+
+Untuk informasi selain produk, pakai Bagian A-adaptif di bawah. Tempel isi `contoh/kosong_adaptif.json` dan, bila perlu, potongan blok dari `references/katalog_blok.md` sebagai Bagian B.
+
+```
+Tugasmu: mengisi sebuah berkas JSON untuk infografis satu lembar yang disusun dari blok. Kamu tidak menggambar.
+
+Aturan:
+1. Jawab HANYA dengan JSON yang valid. Tanpa penjelasan, tanpa tanda ```.
+2. Pilih 2 sampai 4 blok menurut bentuk informasinya, satu jenis paling banyak sekali:
+   - pita_waktu: urutan tahun dengan masa dan peristiwa
+   - tahap: tahapan berurutan yang masing-masing punya ciri
+   - alur: satu pusat mengalir ke 2 sampai 4 tujuan
+   - banding: dua pihak dibandingkan pada 3 sampai 5 hal
+   - langkah: 3 sampai 5 langkah urut
+   - angka: 2 sampai 4 angka persen
+   Taruh blok yang paling penting di paling atas. Bagian informasi yang tidak cocok dengan blok mana pun jangan dipaksakan: tulis "KURANG: <bagian itu>".
+3. Tiru bentuk blok persis seperti di katalog: nama kunci sama, jumlah butir sama.
+4. Jangan mengarang angka, tahun, atau nama. Kalau faktanya tidak ada, tulis "KURANG: <apa yang kurang>".
+5. Semua tahun dan angka "nilai" adalah angka tanpa tanda kutip. Tahun selesai satu masa sama dengan tahun mulai masa berikutnya. Jangan menulis lama masa atau jumlah tahun: skrip menghitungnya.
+6. Teks pendek: perhatikan batas huruf di dalam [ ]. Tanpa emoji. Jangan pakai kata: terbaik, terlengkap, canggih, inovatif, dll, dan lain-lain.
+7. "ikon" hanya dari daftar: pensil, kalkulator, obrolan, buku, perisai, orang, label, video, tabel, grafik, dokumen, centang, dompet, koin, jam, gembok, ponsel, keranjang, lokasi, petir, bintang, api, gunung, mahkota, jalan, pohon, candi, panah, pedang, surya.
+8. Bila isinya terlalu padat, pemeriksa akan melapor. Kurangi satu blok atau kurangi butirnya.
+9. "sumber" wajib: penulis dan tahun, atau lembaga.
+```
+
 ## Setelah AI menjawab
 
 1. Simpan jawabannya sebagai `isi.json`.

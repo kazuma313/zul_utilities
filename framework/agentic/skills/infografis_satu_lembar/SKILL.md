@@ -1,6 +1,6 @@
 ---
 name: infografis-satu-lembar
-description: Membuat infografis satu lembar rasio 4:5 (1080x1350, siap diunggah ke Instagram) dalam dua susunan. Susunan produk menjelaskan produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga. Susunan linimasa memvisualisasikan satu periode sejarah atau proses yang terbagi tiga masa, dengan pita waktu berskala dan peristiwa penting. Pakai saat pengguna meminta infografis, poster ringkasan, atau konten Instagram penjelas. Model hanya mengisi satu berkas JSON berisi teks pendek, lalu skrip memeriksa dan menggambarnya, jadi aman dipakai model kecil.
+description: Membuat infografis satu lembar rasio 4:5 (1080x1350, siap diunggah ke Instagram) dalam tiga susunan. Susunan adaptif menyusun lembar dari 2 sampai 4 blok yang dipilih menurut bentuk informasinya (pita waktu, tahap, alur, perbandingan, langkah, angka persen), dan tinggi tiap blok menyesuaikan isinya. Susunan produk menjelaskan produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga. Susunan linimasa adalah rakitan siap pakai untuk satu periode sejarah yang terbagi tiga masa. Pakai saat pengguna meminta infografis, poster ringkasan, atau konten Instagram penjelas. Model hanya mengisi satu berkas JSON berisi teks pendek, lalu skrip memeriksa dan menggambarnya, jadi aman dipakai model kecil.
 ---
 
 # Infografis satu lembar 4:5
@@ -17,9 +17,31 @@ description: Membuat infografis satu lembar rasio 4:5 (1080x1350, siap diunggah 
 | Isi dari pengguna | Susunan | Isian `susunan` | Cetakan |
 | --- | --- | --- | --- |
 | Produk atau jasa: masalah, solusi, contoh cara kerja, harga | produk | tidak perlu diisi | `contoh/kosong.json` |
-| Satu periode sejarah atau proses yang terbagi **tiga masa** dengan tahun, peristiwa penting, dan ke mana akibatnya mengalir | linimasa | `"susunan": "linimasa"` | `contoh/kosong_linimasa.json` |
+| Informasi lain yang bentuknya berbeda-beda: urutan tahun, tahapan, aliran, dua hal yang dibandingkan, cara melakukan sesuatu, angka persen | **adaptif** | `"susunan": "adaptif"` | `contoh/kosong_adaptif.json` |
+| Satu periode sejarah yang terbagi **tiga masa** dengan peristiwa dan ke mana akibatnya mengalir | linimasa (rakitan siap pakai dari blok adaptif) | `"susunan": "linimasa"` | `contoh/kosong_linimasa.json` |
 
-Jika pengguna belum jelas, tanyakan: "Apakah ini menjelaskan produk, atau menceritakan satu periode yang berjalan dari tahun ke tahun?" Susunan linimasa menghitung sendiri lama tiap masa dan jumlah tahun seluruhnya dari tahun yang diberikan. Jangan menulis angka-angka itu sendiri.
+Jika pengguna belum jelas, tanyakan: "Apakah ini menjelaskan produk, atau informasi lain?" Selain produk, pakai **adaptif**: kamu tidak memaksa isinya masuk ke satu cetakan, tetapi memilih blok yang cocok dengan bentuk informasinya.
+
+### Memilih blok untuk susunan adaptif
+
+Baca dulu isi yang diberikan pengguna, lalu tanyakan pada tiap bagiannya: bentuk informasi apa ini?
+
+| Bentuk informasi | Blok |
+| --- | --- |
+| Berjalan dari tahun ke tahun, ada masa dan peristiwa | `pita_waktu` |
+| Tahapan berurutan, masing-masing punya ciri | `tahap` |
+| Satu pusat mengalir ke beberapa tujuan | `alur` |
+| Dua pihak dibandingkan pada beberapa hal | `banding` |
+| Cara melakukan sesuatu, urut dari awal | `langkah` |
+| Dua sampai empat angka persen | `angka` |
+
+Aturannya:
+
+- Pakai 2 sampai 4 blok, satu jenis paling banyak sekali. Urutan di `blok` adalah urutan dari atas ke bawah. Taruh blok yang paling penting di paling atas, karena blok pertama juga menentukan angka sorotan di kepala.
+- Bila bagian informasi tidak cocok dengan satu pun bentuk, **jangan dipaksakan** ke blok yang salah. Sebutkan bagian itu ke pengguna dan tanyakan apakah boleh dibuang atau dipersingkat.
+- Tinggi blok menyesuaikan jumlah butir dan sisa ruang. Bila `cek.mjs` melapor `terlalu padat`, kurangi satu blok atau kurangi butirnya. Jangan memperkecil teks.
+- Lama masa, jumlah tahun, dan angka sorotan di kepala dihitung skrip. Jangan menulisnya sendiri.
+- Bentuk lengkap tiap blok, batas huruf, dan contoh yang sudah lolos pemeriksaan ada di `references/katalog_blok.md`. Salin potongan blok dari sana.
 
 ## Di mana menjalankan perintah
 
@@ -44,6 +66,13 @@ Perintah di bawah ditulis singkat (`node scripts/...`). Ganti `scripts/` dengan 
 6. Harga paket (2 sampai 4), urut dari termurah.
 7. Batasan produk yang perlu dinyatakan (misalnya "Tidak menjual bibit").
 
+Untuk susunan adaptif, tanyakan dalam satu pesan:
+
+1. Judul dua baris (maksimal 16 dan 20 huruf) dan satu kalimat tentang isinya.
+2. Untuk tiap bagian informasi yang ingin ditampilkan, tanyakan sesuai bentuknya (daftar lengkapnya di `references/katalog_blok.md`): tahun mulai dan selesai tiap masa beserta peristiwanya, tahap beserta cirinya, tujuan aliran, dua pihak beserta hal yang dibandingkan, langkah berurutan, atau angka persen beserta artinya.
+3. Bagian mana yang paling penting. Bagian itu menjadi blok pertama.
+4. Sumber (penulis dan tahun, atau lembaga).
+
 Untuk susunan linimasa, tanyakan:
 
 1. Judul dua baris (maksimal 13 dan 16 huruf) dan satu kalimat tentang periodenya.
@@ -54,7 +83,14 @@ Untuk susunan linimasa, tanyakan:
 
 Bila ada yang belum dijawab, tulis apa yang kurang dan berhenti. **Jangan mengisinya dengan karanganmu.**
 
-**2. Isi `isi.json`.** Salin cetakan susunannya (`contoh/kosong.json` atau `contoh/kosong_linimasa.json`) menjadi `isi.json`. Ganti setiap teks di antara `[ ... ]` dengan isi sebenarnya. `contoh/tanam_kota.json` (produk, semua angkanya fiktif) dan `contoh/majapahit_masa_pudar.json` (linimasa, dari uraian sejarah dengan sumbernya) adalah contoh yang sudah benar dan lolos pemeriksaan; tirulah bentuknya.
+**2. Isi `isi.json`.** Salin cetakan susunannya (`contoh/kosong.json`, `contoh/kosong_adaptif.json`, atau `contoh/kosong_linimasa.json`) menjadi `isi.json`. Ganti setiap teks di antara `[ ... ]` dengan isi sebenarnya. Pada susunan adaptif, cetakannya hanya berisi dua blok sebagai contoh: ganti, tambah, atau buang blok sesuai bentuk informasinya, dengan potongan dari `references/katalog_blok.md`. Contoh yang sudah benar dan lolos pemeriksaan:
+
+- `contoh/tanam_kota.json` (produk, semua angkanya fiktif)
+- `contoh/adaptif_cara_menanam.json` (adaptif: langkah, perbandingan, angka)
+- `contoh/adaptif_dua_kota.json` (adaptif: pita waktu dan perbandingan)
+- `contoh/majapahit_masa_pudar.json` (linimasa, dari uraian sejarah dengan sumbernya)
+
+Tirulah bentuknya.
 
 **3. Periksa.**
 
@@ -108,6 +144,8 @@ Pilih ikon yang artinya paling dekat dengan isiannya. Nama di luar daftar ini di
 ## Bentuk isian
 
 Lihat `contoh/tanam_kota.json`. Ringkasnya: `kepala` (judul dua baris dan tujuan), `masalah` (kalimat, dua ukuran bergambar cincin, sumber, tiga hal yang dilakukan orang sekarang), `solusi` (empat simpul), `contoh` (satu tanya jawab dengan tiga label), `paket` (2 sampai 4 harga), dan `kaki` (catatan penutup). Jumlah butir di tiap daftar harus persis seperti contoh.
+
+Susunan adaptif: `kepala` (`judul_1`, `judul_2`, `tujuan`, dan boleh `sorot`), `blok` (2 sampai 4 blok, tiap blok punya `jenis`), `sumber`, dan `kaki`. `sorot` boleh dihapus (dibuat otomatis dari blok pertama), `"tanpa"` (diganti huruf pertama merek), atau `{ "nilai", "arti" }`; `"nilai": "lama_pita"` memakai jumlah tahun dari blok `pita_waktu`. Isi tiap blok ada di `references/katalog_blok.md`. Pada blok `tahap` dengan `"ikuti_pita": true`, kartunya mengikuti masa di `pita_waktu` dan angkanya dihitung dari sana.
 
 Susunan linimasa: `kepala` (judul dua baris, tujuan, dan arti jumlah tahun), `periode` (tepat 3 masa dengan `nama`, `mulai`, `selesai`, `ikon`, dan 2 `poin`), `peristiwa` (3 sampai 7 butir dengan `tahun`, `teks`, `ikon`, dan boleh `sampai` serta `titik`), `sebaran` (`judul`, `pusat`, tepat 3 `tujuan`, dan `utama` 0 sampai 2), `sumber`, dan `kaki`. Semua tahun ditulis sebagai angka tanpa tanda kutip.
 

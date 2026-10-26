@@ -1,0 +1,39 @@
+{
+  "susunan": "adaptif",
+  "merek": "jejak",
+  "kepala": {
+    "judul_1": "Dua Kota",
+    "judul_2": "Sama-sama Hancur",
+    "tujuan": "Kenapa Ayutthaya masih terawat, Trowulan tidak.",
+    "sorot": { "nilai": "lama_pita", "arti": "tahun memudar" }
+  },
+  "blok": [
+    {
+      "jenis": "pita_waktu",
+      "masa": [
+        { "nama": "Masa Surut", "mulai": 1389, "selesai": 1478 },
+        { "nama": "Masa Kehancuran", "mulai": 1478, "selesai": 1527 },
+        { "nama": "Masa Sunyi", "mulai": 1527, "selesai": 1815 }
+      ],
+      "peristiwa": [
+        { "tahun": 1389, "teks": "Hayam Wuruk wafat", "ikon": "mahkota" },
+        { "tahun": 1478, "teks": "Trowulan dibakar, pusat pindah", "ikon": "api" },
+        { "tahun": 1527, "teks": "Demak menyerang Kediri", "ikon": "pedang" }
+      ]
+    },
+    {
+      "jenis": "banding",
+      "judul": "Trowulan dan Ayutthaya",
+      "kiri": { "nama": "Ayutthaya", "ikon": "candi" },
+      "kanan": { "nama": "Trowulan", "ikon": "candi" },
+      "baris": [
+        { "topik": "Kehancuran", "kiri": "Diserang Burma, 1760–1767", "kanan": "Dibakar perang, 1478" },
+        { "topik": "Penyerang", "kiri": "Kerajaan Burma", "kanan": "Saudara sendiri, lalu Demak" },
+        { "topik": "Ideologi", "kiri": "Tradisi Buddha berlanjut", "kanan": "Berubah ke Islam", "unggul": "kiri" },
+        { "topik": "Bangunan", "kiri": "Dirawat dan dipakai", "kanan": "Terbengkalai", "unggul": "kiri" }
+      ]
+    }
+  ],
+  "sumber": "kajian masa pudar Trowulan; Seekins 2017; Baker dan Phongpaichit 2017",
+  "kaki": "Ringkasan, bukan kajian lengkap."
+}

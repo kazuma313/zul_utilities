@@ -191,7 +191,7 @@ def test_events_are_drawn_in_year_order_whatever_the_input_order(folder_hasil):
 
     html = html_dari(ubah(balik), folder_hasil)
 
-    urutan = [int(t) for t in re.findall(r'data-teks="peristiwa-\d+-tahun"[^>]*>(\d{4})', html)]
+    urutan = [int(t) for t in re.findall(r'data-teks="b0-p\d+-tahun"[^>]*>(\d{4})', html)]
     assert urutan == sorted(urutan)
     assert len(urutan) == 6
 

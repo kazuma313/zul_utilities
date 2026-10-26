@@ -1,0 +1,33 @@
+{
+  "susunan": "adaptif",
+  "merek": "tanam_kota",
+  "kepala": {
+    "judul_1": "[Judul 1, maks 16 huruf]",
+    "judul_2": "[Judul 2, maks 20 huruf]",
+    "tujuan": "[Satu kalimat tentang isinya, maks 54 huruf]"
+  },
+  "blok": [
+    {
+      "jenis": "langkah",
+      "judul": "[Judul blok, maks 30 huruf]",
+      "langkah": [
+        { "ikon": "keranjang", "nama": "[Nama 1, maks 12]", "rincian": "[rincian langkah 1, maks 30 huruf]" },
+        { "ikon": "pensil", "nama": "[Nama 2]", "rincian": "[rincian langkah 2]" },
+        { "ikon": "centang", "nama": "[Nama 3]", "rincian": "[rincian langkah 3]" }
+      ]
+    },
+    {
+      "jenis": "banding",
+      "judul": "[Judul blok, maks 30 huruf]",
+      "kiri": { "nama": "[Pihak kiri, maks 14]", "ikon": "orang" },
+      "kanan": { "nama": "[Pihak kanan, maks 14]", "ikon": "orang" },
+      "baris": [
+        { "topik": "[Topik 1, maks 11]", "kiri": "[sisi kiri, maks 28 huruf]", "kanan": "[sisi kanan, maks 28 huruf]" },
+        { "topik": "[Topik 2]", "kiri": "[sisi kiri]", "kanan": "[sisi kanan]", "unggul": "kiri" },
+        { "topik": "[Topik 3]", "kiri": "[sisi kiri]", "kanan": "[sisi kanan]" }
+      ]
+    }
+  ],
+  "sumber": "[penulis dan tahun, atau lembaga]",
+  "kaki": "[catatan penutup, maks 40]"
+}

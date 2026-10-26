@@ -9,7 +9,8 @@ File ini hanya menjalankannya dari Python dan dari agent LangChain:
     laporan = periksa_infografis(isi_json)          # LOLOS atau GAGAL beserta perbaikannya
     hasil = buat_infografis(isi_json, "produkku")   # hasil/produkku/infografis.png, .pdf, .html
 
-Susunan dipilih dari isian "susunan" di dalam JSON: "produk" (bawaan) atau "linimasa".
+Susunan dipilih dari isian "susunan" di dalam JSON: "produk" (bawaan), "adaptif" (blok yang
+dipilih menurut bentuk informasinya), atau "linimasa" (rakitan blok untuk satu periode sejarah).
 `isi_json` boleh berupa teks JSON, teks JSON yang dibungkus tanda ``` atau diberi kalimat
 pembuka (model kecil sering begitu), atau dict. Semua fungsi mengembalikan teks pendek
 yang bisa dibaca model, dan tidak pernah melempar exception.

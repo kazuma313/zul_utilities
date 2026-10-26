@@ -1,0 +1,42 @@
+{
+  "susunan": "adaptif",
+  "merek": "tanam_kota",
+  "kepala": {
+    "judul_1": "Panen di rumah",
+    "judul_2": "Mulai dari pot",
+    "tujuan": "Empat langkah menanam kangkung di balkon."
+  },
+  "blok": [
+    {
+      "jenis": "langkah",
+      "judul": "Cara menanam kangkung",
+      "langkah": [
+        { "ikon": "keranjang", "nama": "Siapkan", "rincian": "pot, tanah, dan biji kangkung" },
+        { "ikon": "pensil", "nama": "Semai", "rincian": "tabur biji, tutup tanah tipis" },
+        { "ikon": "jam", "nama": "Rawat", "rincian": "siram pagi dan sore" },
+        { "ikon": "centang", "nama": "Panen", "rincian": "potong saat setinggi 25 cm" }
+      ]
+    },
+    {
+      "jenis": "banding",
+      "judul": "Pot atau tanah langsung",
+      "kiri": { "nama": "Pot", "ikon": "keranjang" },
+      "kanan": { "nama": "Tanah langsung", "ikon": "lokasi" },
+      "baris": [
+        { "topik": "Tempat", "kiri": "Balkon sempit pun bisa", "kanan": "Butuh halaman" },
+        { "topik": "Perawatan", "kiri": "Mudah dipindah", "kanan": "Tetap di tempat", "unggul": "kiri" },
+        { "topik": "Hasil", "kiri": "Lebih sedikit", "kanan": "Lebih banyak", "unggul": "kanan" }
+      ]
+    },
+    {
+      "jenis": "angka",
+      "judul": "Contoh angka fiktif",
+      "angka": [
+        { "nilai": 78, "tampil": "78%", "arti": "ingin menanam sayur sendiri" },
+        { "nilai": 41, "tampil": "41%", "arti": "berhasil panen sayurnya" }
+      ]
+    }
+  ],
+  "sumber": "angka fiktif untuk contoh, bukan hasil survei, 2026",
+  "kaki": "Contoh fiktif untuk demonstrasi skill."
+}
