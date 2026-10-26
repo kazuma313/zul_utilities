@@ -1,0 +1,28 @@
+{
+  "nama": "JEJAK NUSANTARA",
+  "font": "Geist",
+  "font_url": "https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap",
+  "logo_kata": null,
+  "logo_lambang": null,
+  "simbol_koin": "Rp",
+  "warna": {
+    "latar": "#120e0b",
+    "latar2": "#1b1511",
+    "kartu": "#261d17",
+    "teks": "#f5ecda",
+    "teks2": "#d8c8ab",
+    "redup": "#a09580",
+    "aksen": "#ecaa43",
+    "aksen_teks": "#1a1208",
+    "lingkar": "#2c2219",
+    "fase1": "#ecaa43",
+    "fase2": "#d0583e",
+    "fase3": "#7586a3",
+    "biru1": "#7586a3",
+    "koin1": "#3a2c22",
+    "koin2": "#5a4332",
+    "koin3": "#8a5a3c",
+    "pusat": "#3a2418",
+    "balon": "#5a4332"
+  }
+}

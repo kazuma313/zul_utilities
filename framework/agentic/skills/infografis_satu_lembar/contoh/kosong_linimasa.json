@@ -1,0 +1,32 @@
+{
+  "susunan": "linimasa",
+  "merek": "jejak",
+  "kepala": {
+    "judul_1": "[Judul 1, maks 13 huruf]",
+    "judul_2": "[Judul 2, maks 16 huruf]",
+    "tujuan": "[Satu kalimat tentang periodenya, maks 54 huruf]",
+    "angka_arti": "[arti jumlah tahun, maks 16]"
+  },
+  "periode": [
+    { "nama": "[Masa 1]", "mulai": 0, "selesai": 0, "ikon": "mahkota", "poin": ["[ciri masa 1, maks 36 huruf]", "[ciri kedua masa 1]"] },
+    { "nama": "[Masa 2]", "mulai": 0, "selesai": 0, "ikon": "api", "poin": ["[ciri masa 2]", "[ciri kedua masa 2]"] },
+    { "nama": "[Masa 3]", "mulai": 0, "selesai": 0, "ikon": "pohon", "poin": ["[ciri masa 3]", "[ciri kedua masa 3]"] }
+  ],
+  "peristiwa": [
+    { "tahun": 0, "teks": "[peristiwa 1, maks 30 huruf]", "ikon": "mahkota" },
+    { "tahun": 0, "teks": "[peristiwa 2]", "ikon": "api" },
+    { "tahun": 0, "teks": "[peristiwa 3]", "ikon": "pedang" }
+  ],
+  "sebaran": {
+    "judul": "[Ke mana atau akibatnya, maks 30]",
+    "pusat": "[Pusat, maks 9]",
+    "tujuan": [
+      { "ikon": "lokasi", "nama": "[Tujuan 1, maks 22]", "arti": "[artinya, maks 34 huruf]", "arah": "[Barat]" },
+      { "ikon": "gunung", "nama": "[Tujuan 2]", "arti": "[artinya]", "arah": "[Timur]" },
+      { "ikon": "candi", "nama": "[Tujuan 3]", "arti": "[artinya]", "arah": "[Seberang]" }
+    ],
+    "utama": 1
+  },
+  "sumber": "[penulis dan tahun, atau lembaga]",
+  "kaki": "[catatan penutup, maks 40]"
+}

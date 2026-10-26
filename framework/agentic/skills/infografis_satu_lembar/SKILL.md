@@ -1,6 +1,6 @@
 ---
 name: infografis-satu-lembar
-description: Membuat infografis satu lembar rasio 4:5 (1080x1350, siap diunggah ke Instagram) untuk menjelaskan sebuah produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga. Pakai saat pengguna meminta infografis, poster ringkasan produk, atau konten Instagram penjelas. Model hanya mengisi satu berkas JSON berisi teks pendek, lalu skrip memeriksa dan menggambarnya, jadi aman dipakai model kecil.
+description: Membuat infografis satu lembar rasio 4:5 (1080x1350, siap diunggah ke Instagram) dalam dua susunan. Susunan produk menjelaskan produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga. Susunan linimasa memvisualisasikan satu periode sejarah atau proses yang terbagi tiga masa, dengan pita waktu berskala dan peristiwa penting. Pakai saat pengguna meminta infografis, poster ringkasan, atau konten Instagram penjelas. Model hanya mengisi satu berkas JSON berisi teks pendek, lalu skrip memeriksa dan menggambarnya, jadi aman dipakai model kecil.
 ---
 
 # Infografis satu lembar 4:5
@@ -11,6 +11,15 @@ description: Membuat infografis satu lembar rasio 4:5 (1080x1350, siap diunggah 
 - **Sedikit teks, banyak gambar.** Setiap isian punya batas huruf. Kalimat pendek, satu ide.
 - **Jangan mengarang angka.** Angka dan nama harus datang dari pengguna atau dokumen yang diberikan, dan angka masalah harus punya sumber.
 - Jangan mengubah isi folder `scripts/`.
+
+## Pilih susunan dulu
+
+| Isi dari pengguna | Susunan | Isian `susunan` | Cetakan |
+| --- | --- | --- | --- |
+| Produk atau jasa: masalah, solusi, contoh cara kerja, harga | produk | tidak perlu diisi | `contoh/kosong.json` |
+| Satu periode sejarah atau proses yang terbagi **tiga masa** dengan tahun, peristiwa penting, dan ke mana akibatnya mengalir | linimasa | `"susunan": "linimasa"` | `contoh/kosong_linimasa.json` |
+
+Jika pengguna belum jelas, tanyakan: "Apakah ini menjelaskan produk, atau menceritakan satu periode yang berjalan dari tahun ke tahun?" Susunan linimasa menghitung sendiri lama tiap masa dan jumlah tahun seluruhnya dari tahun yang diberikan. Jangan menulis angka-angka itu sendiri.
 
 ## Di mana menjalankan perintah
 
@@ -25,7 +34,7 @@ Perintah di bawah ditulis singkat (`node scripts/...`). Ganti `scripts/` dengan 
 
 ## Langkah (kerjakan berurutan)
 
-**1. Kumpulkan fakta.** Kalau belum ada, tanyakan ke pengguna dalam satu pesan berisi daftar bernomor:
+**1. Kumpulkan fakta.** Kalau belum ada, tanyakan ke pengguna dalam satu pesan berisi daftar bernomor. Untuk susunan produk:
 
 1. Nama produk dan satu kalimat tujuannya.
 2. Masalah yang dipecahkan, dua angka pendukung beserta sumbernya (lembaga dan tahun), dan arti tiap angka dalam kata sehari-hari.
@@ -35,9 +44,17 @@ Perintah di bawah ditulis singkat (`node scripts/...`). Ganti `scripts/` dengan 
 6. Harga paket (2 sampai 4), urut dari termurah.
 7. Batasan produk yang perlu dinyatakan (misalnya "Tidak menjual bibit").
 
+Untuk susunan linimasa, tanyakan:
+
+1. Judul dua baris (maksimal 13 dan 16 huruf) dan satu kalimat tentang periodenya.
+2. Tiga masa berurutan: nama, tahun mulai, tahun selesai, dan dua ciri pendek tiap masa. Tahun selesai satu masa sama dengan tahun mulai masa berikutnya.
+3. Tiga sampai tujuh peristiwa penting: tahun dan satu frasa pendek tiap peristiwa. Peristiwa yang berulang (misalnya beberapa letusan) cukup satu butir dengan `sampai` dan `titik`.
+4. Dari satu pusat ke tiga tujuan: ke mana orangnya pergi, atau ke mana akibatnya mengalir. Beri tahu tujuan mana yang paling banyak dituju.
+5. Sumber (penulis dan tahun, atau lembaga).
+
 Bila ada yang belum dijawab, tulis apa yang kurang dan berhenti. **Jangan mengisinya dengan karanganmu.**
 
-**2. Isi `isi.json`.** Salin `contoh/kosong.json` menjadi `isi.json`. Ganti setiap teks di antara `[ ... ]` dengan isi sebenarnya. `contoh/tanam_kota.json` adalah contoh yang sudah benar dan lolos pemeriksaan; tirulah bentuknya. Semua angka dan nama di contoh itu fiktif.
+**2. Isi `isi.json`.** Salin cetakan susunannya (`contoh/kosong.json` atau `contoh/kosong_linimasa.json`) menjadi `isi.json`. Ganti setiap teks di antara `[ ... ]` dengan isi sebenarnya. `contoh/tanam_kota.json` (produk, semua angkanya fiktif) dan `contoh/majapahit_masa_pudar.json` (linimasa, dari uraian sejarah dengan sumbernya) adalah contoh yang sudah benar dan lolos pemeriksaan; tirulah bentuknya.
 
 **3. Periksa.**
 
@@ -84,13 +101,15 @@ Aturan umum: satu ide per isian, kalimat paling banyak 10 kata, angka selalu dis
 
 ## Ikon yang boleh dipakai
 
-`pensil`, `kalkulator`, `obrolan`, `buku`, `perisai`, `orang`, `label`, `video`, `tabel`, `grafik`, `dokumen`, `centang`, `dompet`, `koin`, `jam`, `gembok`, `ponsel`, `keranjang`, `lokasi`, `petir`, `bintang`.
+`pensil`, `kalkulator`, `obrolan`, `buku`, `perisai`, `orang`, `label`, `video`, `tabel`, `grafik`, `dokumen`, `centang`, `dompet`, `koin`, `jam`, `gembok`, `ponsel`, `keranjang`, `lokasi`, `petir`, `bintang`, `api`, `gunung`, `mahkota`, `jalan`, `pohon`, `candi`, `panah`, `pedang`, `surya`.
 
 Pilih ikon yang artinya paling dekat dengan isiannya. Nama di luar daftar ini ditolak oleh `cek.mjs`.
 
 ## Bentuk isian
 
 Lihat `contoh/tanam_kota.json`. Ringkasnya: `kepala` (judul dua baris dan tujuan), `masalah` (kalimat, dua ukuran bergambar cincin, sumber, tiga hal yang dilakukan orang sekarang), `solusi` (empat simpul), `contoh` (satu tanya jawab dengan tiga label), `paket` (2 sampai 4 harga), dan `kaki` (catatan penutup). Jumlah butir di tiap daftar harus persis seperti contoh.
+
+Susunan linimasa: `kepala` (judul dua baris, tujuan, dan arti jumlah tahun), `periode` (tepat 3 masa dengan `nama`, `mulai`, `selesai`, `ikon`, dan 2 `poin`), `peristiwa` (3 sampai 7 butir dengan `tahun`, `teks`, `ikon`, dan boleh `sampai` serta `titik`), `sebaran` (`judul`, `pusat`, tepat 3 `tujuan`, dan `utama` 0 sampai 2), `sumber`, dan `kaki`. Semua tahun ditulis sebagai angka tanpa tanda kutip.
 
 ## Kalau ada kendala
 

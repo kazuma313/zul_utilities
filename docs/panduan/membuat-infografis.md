@@ -1,6 +1,6 @@
 # Membuat infografis satu lembar
 
-Skill `infografis_satu_lembar` membuat infografis 4:5 (1080×1350, siap diunggah ke Instagram) yang menjelaskan sebuah produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga. Model hanya mengisi satu berkas JSON berisi teks pendek. Skrip yang memeriksa dan menggambarnya, jadi model kecil pun bisa memakainya.
+Skill `infografis_satu_lembar` membuat infografis 4:5 (1080×1350, siap diunggah ke Instagram) dalam dua susunan: **produk**, yang menjelaskan sebuah produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga, dan **linimasa**, yang menceritakan satu periode sejarah atau proses yang terbagi tiga masa. Model hanya mengisi satu berkas JSON berisi teks pendek. Skrip yang memeriksa dan menggambarnya, jadi model kecil pun bisa memakainya.
 
 ![Infografis contoh untuk produk fiktif Tanam Kota: masalah dengan dua cincin angka, empat langkah solusi, contoh tanya jawab, dan tiga paket harga](../assets/infografis/tanam-kota.png)
 
@@ -18,7 +18,14 @@ Pembagian tugasnya yang membuat hasilnya terjaga:
 | `cek.mjs` | Skrip | Batas huruf tiap isian. Menolak kata kabur, emoji, kalimat ambigu, angka tanpa sumber, dan arti angka yang terlalu singkat. Pesannya pendek dan menyebut perbaikannya |
 | `bangun.mjs` | Skrip | Tata letak tetap. Setelah digambar, memeriksa apakah ada teks yang bertumpuk atau keluar lembar |
 
-Susunannya satu dan tetap: kepala, masalah (dua cincin angka dan tiga hal yang dilakukan orang), solusi (empat simpul), contoh tanya jawab, dan paket harga (2 sampai 4).
+Ada dua susunan, dan masing-masing tetap:
+
+| Susunan | Untuk | Bagian | Cetakan |
+|---|---|---|---|
+| `produk` (bawaan) | Produk atau jasa | Kepala, masalah (dua cincin angka dan tiga hal yang dilakukan orang), solusi (empat simpul), contoh tanya jawab, dan paket harga (2 sampai 4) | `contoh/kosong.json` |
+| `linimasa` | Satu periode sejarah atau proses | Judul dengan angka besar, pita waktu berskala, peristiwa penting, tiga kartu masa, dan diagram dari satu pusat ke tiga tujuan | `contoh/kosong_linimasa.json` |
+
+Susunan dipilih lewat isian `"susunan"` di `isi.json`. Tanpa isian itu, yang dipakai adalah `produk`. Bagian di bawah memakai susunan produk; susunan linimasa dijelaskan di [Susunan linimasa](#susunan-linimasa).
 
 ## Membuat infografis dari terminal
 
@@ -56,6 +63,47 @@ Susunannya satu dan tetap: kepala, masalah (dua cincin angka dan tiga hal yang d
 
 > [!NOTE]
 > Huruf Geist dimuat dari Google Fonts saat menggambar, jadi butuh internet. Tanpa itu, huruf pengganti dipakai, dan pemeriksa tumpang tindih memberi tahu bila teks tidak muat.
+
+## Susunan linimasa
+
+Susunan ini dibuat untuk isi yang berjalan dari tahun ke tahun, dan visualnya mengikuti isinya, bukan tabel. Contohnya dari uraian tentang Masa Pudar Majapahit, dengan sumber yang disebut di uraian itu:
+
+![Infografis Masa Pudar Majapahit: pita waktu 1389 sampai 1815 yang lebarnya mengikuti lama tiap masa, peristiwa penting, tiga kartu masa yang menurun seperti tangga, dan diagram ke mana penduduk Trowulan pergi](../assets/infografis/majapahit-masa-pudar.png)
+
+Apa yang digambar dari datanya:
+
+| Bagian | Dari mana | Visualnya |
+|---|---|---|
+| Angka besar (426) | Dihitung: tahun selesai terakhir dikurangi tahun mulai pertama | Menjadi pusat cincin matahari yang makin redup ke luar |
+| Pita waktu | Tiga masa dan tahunnya | Lebar tiap potongan sebanding dengan lama masanya (89, 49, dan 288 tahun), dan warnanya memudar dari emas, bara, ke abu |
+| Peristiwa | Tahun, teks, dan ikon | Penanda berselang-seling di atas dan di bawah pita. `sampai` menggambar kurung rentang, dan `titik` menggambar ikon di dalam pita |
+| Kartu masa | Nama, lama (dihitung), dan dua poin | Turun seperti anak tangga, mengikuti arah memudar |
+| Diagram sebaran | Satu pusat dan tiga tujuan | Panah dari pusat ke tiga tujuan, dengan panah tebal untuk tujuan yang paling banyak (`utama`) |
+| Latar | Tetap | Pola bata yang menghilang ke bawah |
+
+Lama tiap masa dan jumlah tahun seluruhnya tidak ditulis oleh model. Skrip menghitungnya dari tahun, sehingga tidak ada angka yang bisa salah ketik.
+
+Cara membuatnya sama dengan susunan produk. Bedanya hanya cetakan dan pertanyaan yang diajukan ke pengguna:
+
+1. Salin cetakannya:
+
+    ```shell
+    cp framework/agentic/skills/infografis_satu_lembar/contoh/kosong_linimasa.json isi.json
+    ```
+
+2. Isi dengan fakta dari uraianmu. Yang dibutuhkan: judul dua baris dan satu kalimat tentang periodenya, tiga masa berurutan (nama, tahun mulai, tahun selesai, dan dua ciri pendek), tiga sampai tujuh peristiwa, tiga tujuan dari satu pusat, dan sumber. Tahun selesai satu masa harus sama dengan tahun mulai masa berikutnya, dan semua tahun ditulis sebagai angka tanpa tanda kutip.
+
+3. Periksa dan gambar dengan dua perintah yang sama:
+
+    ```shell
+    node framework/agentic/skills/infografis_satu_lembar/scripts/cek.mjs isi.json
+    node framework/agentic/skills/infografis_satu_lembar/scripts/bangun.mjs isi.json
+    ```
+
+Bentuk yang sudah benar ada di `contoh/majapahit_masa_pudar.json`. Pesan `GAGAL` khusus linimasa ada di [Memperbaiki pesan GAGAL](#memperbaiki-pesan-gagal). Untuk model tanpa fitur skill, `references/prompt_satu_tempelan.md` punya bagian A sendiri untuk linimasa.
+
+> [!NOTE]
+> Peristiwa yang tahunnya berdekatan bisa membuat labelnya bertumpuk. Jika `bangun.mjs` melaporkan `BERTUMPUK` pada peristiwa, perpendek teksnya, atau gabungkan peristiwa yang berdekatan menjadi satu butir dengan `sampai` dan `titik`.
 
 ## Membuat infografis lewat agent
 
@@ -102,6 +150,19 @@ Untuk AI yang tidak mengenal folder skill, termasuk model kecil, pakai `referenc
 | `tanda * hanya boleh dipakai` | Tanda `*` hanya untuk menyorot angka di `contoh.jawab_utama`, tepat sepasang. |
 | `nama merek tidak ditemukan` | Isi `"merek"` dengan nama berkas di `merek/`, tanpa `.json`. |
 
+Pesan khusus susunan linimasa:
+
+| Pesan | Perbaikan |
+|---|---|
+| `harus 1478, sama dengan akhir masa sebelumnya` | Tahun mulai sebuah masa harus sama dengan tahun selesai masa sebelumnya, supaya pita waktu tidak berlubang. |
+| `harus lebih besar dari mulai` | Tahun selesai sebuah masa harus lebih besar dari tahun mulainya. |
+| `harus tahun berupa bilangan bulat` | Tulis tahun sebagai angka tanpa tanda kutip, misalnya `1389`. |
+| `harus berisi tepat 3 masa berurutan` | Susunan ini selalu tiga masa. |
+| `di dalam pita waktu (1389 sampai 1815)` | Tahun peristiwa harus berada di antara tahun mulai masa pertama dan tahun selesai masa terakhir. |
+| `masing-masing di antara tahun dan sampai` | Setiap tahun di `titik` harus berada di dalam rentang peristiwanya. |
+| `harus 0, 1, atau 2` | `utama` adalah nomor tujuan yang paling banyak dituju, dimulai dari 0. Hapus isian ini jika tidak ada yang dominan. |
+| `harus salah satu dari: produk, linimasa` | Nama susunan salah. Hapus isian `susunan` untuk memakai susunan produk. |
+
 ## Memakai merek sendiri
 
 Warna, huruf, dan logo disimpan per merek di `merek/`. Merek bawaan adalah `tanam_kota`, yang fiktif.
@@ -116,7 +177,7 @@ Warna, huruf, dan logo disimpan per merek di `merek/`. Merek bawaan adalah `tana
 
 ## Batas skill
 
-- Satu lembar 4:5 dengan susunan tetap. Rasio lain, lebih dari satu lembar, dan susunan lain butuh mengubah `scripts/bangun.mjs`.
+- Satu lembar 4:5 dengan dua susunan tetap, `produk` dan `linimasa`. Rasio lain, lebih dari satu lembar, dan susunan lain butuh kode baru: susunan produk digambar di `scripts/bangun.mjs`, susunan linimasa di `scripts/linimasa.mjs`.
 - Bagian rencana (roadmap) dan tangkapan layar aplikasi sengaja tidak ada.
 - **Belum diuji dengan model sungguhan.** Skrip dan pemeriksanya sudah diuji (`uv run pytest framework/agentic/skills/infografis_satu_lembar`), tetapi klaim bahwa model kecil bisa mengisi JSON-nya dalam satu sampai tiga putaran perbaikan belum dibuktikan. Sebelum mengandalkannya, jalankan sekali dengan model yang akan kamu pakai.
 - Instruksi ditulis dalam bahasa Indonesia. Jika modelmu lemah berbahasa Indonesia, terjemahkan prompt satu tempelan ke bahasa yang dikuasainya. Isi JSON tetap berbahasa Indonesia.

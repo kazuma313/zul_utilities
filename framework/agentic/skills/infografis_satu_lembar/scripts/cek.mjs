@@ -10,7 +10,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { IKON, BATAS, KATA_KABUR, AMBIGU, JUMLAH, KATA_MAKS } from './skema.mjs';
+import { IKON, BATAS, BATAS_LINIMASA, JUMLAH, KATA_MAKS } from './skema.mjs';
+import { buatTeks } from './umum.mjs';
+import { periksaLinimasa } from './linimasa.mjs';
+
+export const SUSUNAN = ['produk', 'linimasa'];
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const MEREK_DIR = path.join(HERE, '..', 'merek');
@@ -28,30 +32,12 @@ export function periksa(c) {
     return false;
   };
 
-  /** Isian teks: wajib ada, tidak melebihi batas, tidak kabur, tidak ambigu. */
-  const teks = (lokasi, nilai, kunciBatas, { satuan = true, sorot = false } = {}) => {
-    if (typeof nilai !== 'string' || !nilai.trim()) {
-      G(lokasi, 'isian ini kosong atau bukan teks. Tulis kalimat pendek di antara tanda kutip.');
-      return;
-    }
-    const polos = nilai.replace(/\*/g, '');
-    semuaTeks.push(polos);
-    const batas = BATAS[kunciBatas];
-    if (batas && polos.length > batas) {
-      G(lokasi, `terlalu panjang (${polos.length} huruf, maksimal ${batas}). Perpendek, buang kata yang tidak perlu. Teks sekarang: "${polos}"`);
-    }
-    if (/\p{Extended_Pictographic}/u.test(nilai)) G(lokasi, 'jangan pakai emoji. Pakai kata biasa, gambarnya sudah disediakan oleh ikon.');
-    if (!sorot && nilai.includes('*')) G(lokasi, 'tanda * hanya boleh dipakai di contoh.jawab_utama untuk menyorot angka. Hapus tanda *.');
-    for (const k of KATA_KABUR) {
-      if (new RegExp(`(^|\\W)${k.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}(\\W|$)`, 'i').test(polos)) {
-        G(lokasi, `kata "${k}" tidak jelas. Ganti dengan fakta yang bisa diperiksa (angka, nama, atau contoh).`);
-      }
-    }
-    for (const a of AMBIGU) if (a.re.test(polos)) G(lokasi, a.pesan);
-    if (satuan && /\d[\d.,–-]*\s*[.!?]?\s*$/.test(polos)) {
-      P(lokasi, 'kalimat berakhir pada angka tanpa satuan. Tambahkan satuannya (juta, ribu, %, kali, bulan, orang).');
-    }
-  };
+  const susunan = c.susunan ?? 'produk';
+  if (!SUSUNAN.includes(susunan)) {
+    G('susunan', `harus salah satu dari: ${SUSUNAN.join(', ')}. Hapus isian ini untuk memakai susunan produk.`);
+    return { gagal, peringatan, kata: 0 };
+  }
+  const teks = buatTeks(G, P, semuaTeks, susunan === 'linimasa' ? BATAS_LINIMASA : BATAS);
 
   // ── merek
   if (typeof c.merek !== 'string' || !/^[\w-]+$/.test(c.merek) || !fs.existsSync(path.join(MEREK_DIR, `${c.merek}.json`))) {
@@ -59,6 +45,9 @@ export function periksa(c) {
     G('merek', `nama merek tidak ditemukan. Pilih salah satu: ${ada.join(', ') || '(belum ada)'}.`);
   }
 
+  if (susunan === 'linimasa') {
+    periksaLinimasa(c, { G, teks, objek });
+  } else {
   // ── kepala
   if (objek(c.kepala, 'kepala')) {
     teks('kepala.judul_1', c.kepala.judul_1, 'kepala.judul_1', { satuan: false });
@@ -158,6 +147,7 @@ export function periksa(c) {
   }
 
   teks('kaki', c.kaki, 'kaki', { satuan: false });
+  }
 
   const kata = semuaTeks.join(' ').split(/\s+/).filter(Boolean).length;
   if (kata > KATA_MAKS) P('seluruh isi', `${kata} kata, terlalu banyak untuk infografis. Targetnya di bawah ${KATA_MAKS}. Buang kalimat yang tidak penting.`);

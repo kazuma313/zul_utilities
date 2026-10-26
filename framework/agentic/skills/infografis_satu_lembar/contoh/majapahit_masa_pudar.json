@@ -1,0 +1,53 @@
+{
+  "susunan": "linimasa",
+  "merek": "jejak",
+  "kepala": {
+    "judul_1": "Masa Pudar",
+    "judul_2": "Majapahit",
+    "tujuan": "Dari Trowulan yang berjaya sampai sunyi.",
+    "angka_arti": "tahun memudar"
+  },
+  "periode": [
+    {
+      "nama": "Masa Surut",
+      "mulai": 1389,
+      "selesai": 1478,
+      "ikon": "mahkota",
+      "poin": ["Pamor pemerintahan mulai surut", "Saudara berebut takhta dan kuasa"]
+    },
+    {
+      "nama": "Masa Kehancuran",
+      "mulai": 1478,
+      "selesai": 1527,
+      "ikon": "api",
+      "poin": ["Trowulan dibakar perang saudara", "Ibu kota pindah ke Daha (Kediri)"]
+    },
+    {
+      "nama": "Masa Sunyi",
+      "mulai": 1527,
+      "selesai": 1815,
+      "ikon": "pohon",
+      "poin": ["Hutan sepi, penuh macan hitam", "Hanya raja Bali yang berziarah"]
+    }
+  ],
+  "peristiwa": [
+    { "tahun": 1389, "teks": "Hayam Wuruk wafat", "ikon": "mahkota" },
+    { "tahun": 1395, "sampai": 1462, "titik": [1395, 1421, 1450, 1462], "teks": "Gunung Kelud meletus", "ikon": "gunung" },
+    { "tahun": 1478, "teks": "Trowulan dibakar, pusat pindah", "ikon": "api" },
+    { "tahun": 1527, "teks": "Demak menyerang Kediri", "ikon": "pedang" },
+    { "tahun": 1708, "teks": "Amangkurat III ditangkap", "ikon": "orang" },
+    { "tahun": 1809, "sampai": 1810, "teks": "Jalan Raya Pos dibangun", "ikon": "jalan" }
+  ],
+  "sebaran": {
+    "judul": "Ke mana penduduk pergi",
+    "pusat": "Trowulan",
+    "tujuan": [
+      { "ikon": "lokasi", "nama": "Jawa Tengah", "arti": "berbaur, menjadi Mataram Islam", "arah": "Barat" },
+      { "ikon": "gunung", "nama": "Tengger dan Banyuwangi", "arti": "Kejawen: Hindu bertemu Islam", "arah": "Timur" },
+      { "ikon": "candi", "nama": "Bali", "arti": "pulang, melanjutkan Hindu Bali", "arah": "Seberang" }
+    ],
+    "utama": 1
+  },
+  "sumber": "kajian masa pudar Trowulan; Ricklefs 2010; Cahyono 2012",
+  "kaki": "Ringkasan, bukan kajian lengkap."
+}

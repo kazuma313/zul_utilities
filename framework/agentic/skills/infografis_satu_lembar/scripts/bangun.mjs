@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
  * Menggambar infografis satu lembar 4:5 (1080×1350) dari isi.json.
+ * Susunannya dipilih dari isian "susunan": produk (bawaan) atau linimasa.
  *
  *   node scripts/bangun.mjs isi.json                 # hasil di ./hasil/
  *   node scripts/bangun.mjs isi.json --keluar folder # folder lain
@@ -16,6 +17,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { IKON } from './skema.mjs';
 import { bacaJson, periksa, MEREK_DIR } from './cek.mjs';
+import { bangunLinimasa } from './linimasa.mjs';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -32,6 +34,7 @@ const ikon = (nama, ukuran, warna, tebal = 1.8) =>
 const sorot = (s, warna) => esc(s).replace(/\*([^*]+)\*/g, `<span style="color:${warna}">$1</span>`);
 
 export function bangunHtml(c, m) {
+  if (c.susunan === 'linimasa') return bangunLinimasa(c, m);
   const w = m.warna;
   const f = `'${m.font}', Arial, sans-serif`;
   const logoKata = m.logo_kata && fs.existsSync(path.join(MEREK_DIR, m.logo_kata.berkas)) ? m.logo_kata : null;

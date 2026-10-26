@@ -59,7 +59,8 @@ def test_no_brand_from_the_owner_is_in_the_public_skill():
             isi = berkas.read_text(encoding="utf-8").lower()
             if berkas.name != "test_infografis.py":
                 assert "nestor" not in isi, berkas.name
-    assert not list(SKILL.rglob("*.png"))
+    # Folder hasil/ berisi keluaran lokal yang diabaikan git; yang diperiksa hanya sumbernya.
+    assert not [p for p in SKILL.rglob("*.png") if "hasil" not in p.parts]
 
 
 def test_the_example_says_that_its_numbers_are_fictional():

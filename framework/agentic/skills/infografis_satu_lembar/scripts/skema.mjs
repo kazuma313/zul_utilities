@@ -29,6 +29,16 @@ export const IKON = {
   lokasi: '<path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   petir: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
   bintang: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+  // Ikon untuk susunan linimasa.
+  api: '<path d="M12 3c.5 3 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 2.5-5 0 2 .8 3 1.7 3 .2-3-.4-5 .8-8z"/>',
+  gunung: '<path d="M3 20l5.5-10h4L17 17l4 3z"/><path d="M11 6c-1-1.5 1-2 .3-3.5M15 7c-.8-1 .8-1.6.2-2.8"/>',
+  mahkota: '<path d="M4 18h16l1-10-5 4-4-6-4 6-5-4z"/>',
+  jalan: '<path d="M9 3L5 21M15 3l4 18M12 5v3M12 11v3M12 17v3"/>',
+  pohon: '<path d="M12 21v-5"/><path d="M12 16c-5 0-6-4-3.5-6C7 7 10 4 12 5c2-1 5 2 3.5 5C18 12 17 16 12 16z"/>',
+  candi: '<path d="M4 21h16M6 21v-6h12v6M8.5 15v-4h7v4M10.5 11V8h3v3M12 8V4"/>',
+  panah: '<path d="M4 12h15M13.5 6.5L19 12l-5.5 5.5"/>',
+  pedang: '<path d="M5 19L18 6M14 4h6v6M8 16l-3 3M10 14l-2-2"/>',
+  surya: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>',
 };
 
 /** Panjang maksimum (jumlah huruf) tiap isian teks. */
@@ -80,3 +90,27 @@ export const AMBIGU = [
 
 export const JUMLAH = { ukuran: 2, tambal: 3, simpul: 4, label: 3, paket_min: 2, paket_maks: 4 };
 export const KATA_MAKS = 260;
+
+// ── susunan "linimasa": satu periode sejarah, dibagi tiga masa, dengan peristiwa di pita waktu.
+
+/** Panjang maksimum isian teks susunan linimasa. */
+export const BATAS_LINIMASA = {
+  'kepala.judul_1': 13,
+  'kepala.judul_2': 16,
+  'kepala.tujuan': 54,
+  'kepala.angka_arti': 16,
+  'periode.nama': 16,
+  'periode.poin': 36,
+  'peristiwa.teks': 30,
+  'sebaran.judul': 30,
+  'sebaran.pusat': 9,
+  'sebaran.tujuan.nama': 22,
+  'sebaran.tujuan.arti': 34,
+  'sebaran.tujuan.arah': 9,
+  sumber: 90,
+  kaki: 40,
+};
+
+export const JUMLAH_LINIMASA = { periode: 3, poin: 2, peristiwa_min: 3, peristiwa_maks: 7, tujuan: 3, titik_maks: 5 };
+export const TAHUN_MIN = 1;
+export const TAHUN_MAKS = 2100;
