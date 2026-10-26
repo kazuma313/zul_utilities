@@ -1,0 +1,51 @@
+{
+  "merek": "tanam_kota",
+  "kepala": {
+    "judul_1": "Tanam sayur.",
+    "judul_2": "Panen di balkon.",
+    "tujuan": "Rencana tanam yang pas untuk rumahmu."
+  },
+  "masalah": {
+    "kalimat_awal": "Banyak yang ingin menanam,",
+    "kalimat_akhir": "sedikit yang berhasil panen.",
+    "ukuran": [
+      { "nilai": 78, "tampil": "78%", "arti": "ingin menanam sayur sendiri" },
+      { "nilai": 41, "tampil": "41%", "arti": "berhasil panen sayurnya" }
+    ],
+    "sumber": "angka fiktif untuk contoh, bukan hasil survei, 2026",
+    "judul_tambal": "Akibatnya orang mencoba sendiri:",
+    "tambal": [
+      { "ikon": "video", "teks": "Video tutorial di internet" },
+      { "ikon": "obrolan", "teks": "Tanya di grup tetangga" },
+      { "ikon": "tabel", "teks": "Jadwal di buku catatan" }
+    ]
+  },
+  "solusi": {
+    "simpul": [
+      { "ikon": "lokasi", "nama": "Pilih", "rincian": "tanaman yang cocok dengan tempatmu" },
+      { "ikon": "jam", "nama": "Jadwalkan", "rincian": "siram, pupuk, dan panen" },
+      { "ikon": "obrolan", "nama": "Tanya AI", "rincian": "dijawab sesuai kondisi kebunmu" },
+      { "ikon": "buku", "nama": "Pelajari", "rincian": "panduan singkat tiap tanaman" }
+    ]
+  },
+  "contoh": {
+    "judul": "CARA KERJANYA",
+    "tanya": "Balkonku teduh. Sayur apa yang cocok?",
+    "jawab_utama": "Cocok: *kangkung dan bayam*",
+    "jawab_rinci": "tahan teduh, panen sekitar 30 hari",
+    "label": [
+      { "ikon": "perisai", "teks": "Panduan teruji" },
+      { "ikon": "orang", "teks": "Sesuai balkonmu" },
+      { "ikon": "label", "teks": "Tidak menjual bibit" }
+    ]
+  },
+  "paket": {
+    "catatan": "harga per bulan, bulan pertama gratis",
+    "isi": [
+      { "nama": "Gratis", "harga": "Rp 0" },
+      { "nama": "Tumbuh", "harga": "Rp 15.000" },
+      { "nama": "Kebun", "harga": "Rp 39.000" }
+    ]
+  },
+  "kaki": "Contoh fiktif untuk demonstrasi skill."
+}

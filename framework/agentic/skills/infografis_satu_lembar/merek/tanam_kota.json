@@ -1,0 +1,25 @@
+{
+  "nama": "TANAM KOTA",
+  "font": "Geist",
+  "font_url": "https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap",
+  "logo_kata": null,
+  "logo_lambang": null,
+  "simbol_koin": "Rp",
+  "warna": {
+    "latar": "#0b1a12",
+    "latar2": "#102a1c",
+    "kartu": "#1d4a31",
+    "teks": "#f2efe4",
+    "teks2": "#cfe3d2",
+    "redup": "#93b09b",
+    "aksen": "#f2c14e",
+    "aksen_teks": "#0b1a12",
+    "lingkar": "#1a3a29",
+    "biru1": "#6fa98a",
+    "koin1": "#245c3d",
+    "koin2": "#2f7a50",
+    "koin3": "#3e9a66",
+    "pusat": "#14432b",
+    "balon": "#2f7a50"
+  }
+}

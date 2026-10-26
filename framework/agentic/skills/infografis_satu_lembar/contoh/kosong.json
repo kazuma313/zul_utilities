@@ -1,0 +1,51 @@
+{
+  "merek": "tanam_kota",
+  "kepala": {
+    "judul_1": "[Judul baris 1, maks 18 huruf]",
+    "judul_2": "[Judul baris 2, maks 22 huruf]",
+    "tujuan": "[Satu kalimat tujuan produk, maks 48 huruf]"
+  },
+  "masalah": {
+    "kalimat_awal": "[Awal kalimat masalah,]",
+    "kalimat_akhir": "[akhir kalimat masalah.]",
+    "ukuran": [
+      { "nilai": 0, "tampil": "[angka%]", "arti": "[arti angka pertama, minimal 3 kata]" },
+      { "nilai": 0, "tampil": "[angka%]", "arti": "[arti angka kedua, minimal 3 kata]" }
+    ],
+    "sumber": "[lembaga dan tahun sumber angka]",
+    "judul_tambal": "[Akibatnya orang melakukan apa sekarang:]",
+    "tambal": [
+      { "ikon": "video", "teks": "[hal yang dilakukan orang 1]" },
+      { "ikon": "obrolan", "teks": "[hal yang dilakukan orang 2]" },
+      { "ikon": "tabel", "teks": "[hal yang dilakukan orang 3]" }
+    ]
+  },
+  "solusi": {
+    "simpul": [
+      { "ikon": "pensil", "nama": "[Kata kerja 1]", "rincian": "[isinya, maks 38 huruf]" },
+      { "ikon": "kalkulator", "nama": "[Kata kerja 2]", "rincian": "[isinya]" },
+      { "ikon": "obrolan", "nama": "[Kata kerja 3]", "rincian": "[isinya]" },
+      { "ikon": "buku", "nama": "[Kata kerja 4]", "rincian": "[isinya]" }
+    ]
+  },
+  "contoh": {
+    "judul": "[CARA KERJANYA]",
+    "tanya": "[Pertanyaan contoh dari pengguna?]",
+    "jawab_utama": "[Jawaban dengan *angka disorot*]",
+    "jawab_rinci": "[penjelasan angka itu]",
+    "label": [
+      { "ikon": "perisai", "teks": "[label pembeda 1]" },
+      { "ikon": "orang", "teks": "[label pembeda 2]" },
+      { "ikon": "label", "teks": "[label pembeda 3]" }
+    ]
+  },
+  "paket": {
+    "catatan": "[harga per bulan atau keterangan lain]",
+    "isi": [
+      { "nama": "[Paket 1]", "harga": "[harga]" },
+      { "nama": "[Paket 2]", "harga": "[harga]" },
+      { "nama": "[Paket 3]", "harga": "[harga]" }
+    ]
+  },
+  "kaki": "[Catatan penutup, misalnya batasan produk.]"
+}

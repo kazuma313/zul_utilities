@@ -131,7 +131,7 @@ Semua extra kecuali `ocr` dan `detection` sekitar 650 MB. `zul[all]` sekitar 3,8
 | 👁️ **OCR dan dokumen** | Docling VLM, Gemini, Markdown ke PDF dan PPTX. |
 | 🎥 **Computer vision** | Fungsi kecil untuk video: deteksi RF-DETR, ByteTrack, garis dan poligon penghitung, timer, dan gambar. |
 | 📏 **Evaluasi retrieval** | `zul.evaluation` menilai retriever dengan ragas, plus hit rate, MRR, dan latensi tanpa model penilai. |
-| 🧩 **Skill pool** | Skill untuk agent AI di `framework/agentic/`: mind map, silabus dan materi belajar, contextual retrieval, transcript YouTube, crypto. |
+| 🧩 **Skill pool** | Skill untuk agent AI di `framework/agentic/`: mind map, silabus dan materi belajar, infografis satu lembar, contextual retrieval, transcript YouTube, crypto. |
 | 🧑‍💻 **MCP untuk code assistant** | `zul mcp serve` memberi Claude Code, Cursor, VS Code, dan Claude Desktop akses ke modul, dokumentasi, dan boilerplate Zul. |
 
 ## Dokumentasi
@@ -192,6 +192,7 @@ Setiap topik punya halaman dengan peran berbeda: tutorial dan panduan untuk meng
 |---|---|---|---|
 | **Mind map** | Skill yang membuat mind map dari sebuah topik. | Python saja (stdlib) | [Membuat mind map](https://zulkit.my.id/panduan/membuat-mindmap/) |
 | **Silabus dan materi belajar** | Skill yang menyusun silabus dan materi, dengan model lokal atau API. | Dari checkout repository; kebutuhannya ada di halamannya | [Membuat silabus dan materi](https://zulkit.my.id/panduan/membuat-silabus-dan-materi/), [Model lokal untuk skill belajar](https://zulkit.my.id/konsep/model-lokal-untuk-skill-belajar/) |
+| **Infografis satu lembar** | Skill yang membuat infografis 4:5 untuk menjelaskan produk; model hanya mengisi JSON. | Node.js 18+ tanpa paket; Edge atau Chrome untuk PNG dan PDF | [Membuat infografis satu lembar](https://zulkit.my.id/panduan/membuat-infografis/) |
 | **Transcript YouTube** | Skill yang mengambil transcript video YouTube. | `youtube-transcript-api`, lihat halamannya | [Mengambil transcript YouTube](https://zulkit.my.id/panduan/mengambil-transcript-youtube/) |
 
 ### Berkontribusi dan menerbitkan

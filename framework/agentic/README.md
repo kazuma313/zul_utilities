@@ -4,7 +4,7 @@ Alat untuk agent AI, dipisah menurut ada atau tidaknya model di dalamnya:
 
 | Folder | Isi | Contoh |
 |---|---|---|
-| [`skills/`](skills/) | Skill yang di dalamnya ada model AI yang bekerja, dengan model lokal lewat Ollama atau model lain. | `mind_map`, `silabus_belajar`, `materi_belajar`, `contextual_retrieval`, `pptx_research` |
+| [`skills/`](skills/) | Skill yang di dalamnya ada model AI yang bekerja, dengan model lokal lewat Ollama atau model lain. | `mind_map`, `silabus_belajar`, `materi_belajar`, `contextual_retrieval`, `pptx_research`, `infografis_satu_lembar` |
 | [`utilities/`](utilities/) | Script tanpa model. | `youtube_transcript`, `crypto_snapshot`, `crypto_chart`, `calculator`, `web_search` |
 
 Setiap folder skill memakai format yang sama:

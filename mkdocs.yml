@@ -180,6 +180,7 @@ nav:
       - Skill:
           - Membuat mind map: panduan/membuat-mindmap.md
           - Membuat silabus dan materi belajar: panduan/membuat-silabus-dan-materi.md
+          - Membuat infografis satu lembar: panduan/membuat-infografis.md
           - Menyiapkan dokumen untuk RAG: panduan/menyiapkan-dokumen-untuk-rag.md
       - Computer Vision:
           - Mendeteksi dan melacak orang: panduan/mendeteksi-dan-melacak-orang.md

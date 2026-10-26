@@ -1,0 +1,127 @@
+# Membuat infografis satu lembar
+
+Skill `infografis_satu_lembar` membuat infografis 4:5 (1080×1350, siap diunggah ke Instagram) yang menjelaskan sebuah produk atau jasa lewat masalah, solusi, contoh cara kerja, dan harga. Model hanya mengisi satu berkas JSON berisi teks pendek. Skrip yang memeriksa dan menggambarnya, jadi model kecil pun bisa memakainya.
+
+![Infografis contoh untuk produk fiktif Tanam Kota: masalah dengan dua cincin angka, empat langkah solusi, contoh tanya jawab, dan tiga paket harga](../assets/infografis/tanam-kota.png)
+
+Gambar di atas dibuat dari `contoh/tanam_kota.json` di folder skill. Produknya, angkanya, dan sumbernya fiktif, dan gambarnya sendiri menyebut itu di bagian bawah.
+
+**Sebelum mulai:** kamu butuh [Node.js](https://nodejs.org) 18 atau lebih baru (periksa dengan `node --version`) dan kamu berada di root repository Zul. Skill ada di `framework/agentic/skills/infografis_satu_lembar/`. Tidak ada paket yang perlu di-install. PNG dan PDF butuh Edge, Chrome, atau Chromium. Tanpa itu, kamu tetap mendapat `infografis.html` yang bisa dibuka di peramban.
+
+## Cara kerja
+
+Pembagian tugasnya yang membuat hasilnya terjaga:
+
+| Tahap | Dikerjakan oleh | Cara menjaga hasilnya |
+|---|---|---|
+| Mengisi `isi.json` | Model | Bentuk tetap (`contoh/kosong.json`), jumlah butir tetap, dan nama ikon dipilih dari daftar |
+| `cek.mjs` | Skrip | Batas huruf tiap isian. Menolak kata kabur, emoji, kalimat ambigu, angka tanpa sumber, dan arti angka yang terlalu singkat. Pesannya pendek dan menyebut perbaikannya |
+| `bangun.mjs` | Skrip | Tata letak tetap. Setelah digambar, memeriksa apakah ada teks yang bertumpuk atau keluar lembar |
+
+Susunannya satu dan tetap: kepala, masalah (dua cincin angka dan tiga hal yang dilakukan orang), solusi (empat simpul), contoh tanya jawab, dan paket harga (2 sampai 4).
+
+## Membuat infografis dari terminal
+
+1. Salin cetakan ke folder kerjamu sebagai `isi.json`:
+
+    ```shell
+    cp framework/agentic/skills/infografis_satu_lembar/contoh/kosong.json isi.json
+    ```
+
+    Di Windows PowerShell, pakai `Copy-Item` sebagai ganti `cp`.
+
+2. Ganti setiap teks di antara `[ ... ]` dengan isi sebenarnya. Angka dan nama harus datang dari faktamu, dan dua angka di bagian masalah harus punya sumber (lembaga dan tahun). Bentuk yang sudah benar ada di `contoh/tanam_kota.json`.
+
+3. Periksa isinya:
+
+    ```shell
+    node framework/agentic/skills/infografis_satu_lembar/scripts/cek.mjs isi.json
+    ```
+
+    Perintah itu mencetak `LOLOS` atau `BELUM LOLOS`. Untuk setiap baris `GAGAL`, perbaiki persis seperti pesannya, lalu jalankan lagi. Contoh keluaran untuk `contoh/tanam_kota.json`:
+
+    ```text
+    LOLOS: 0 gagal, 0 peringatan, 119 kata.
+    ```
+
+4. Gambar:
+
+    ```shell
+    node framework/agentic/skills/infografis_satu_lembar/scripts/bangun.mjs isi.json
+    ```
+
+    Hasilnya ada di folder `hasil/`: `infografis.png` (2160×2700), `infografis.pdf`, dan `infografis.html`. Jika ada baris `BERTUMPUK`, perpendek teks yang disebut lalu jalankan lagi. Tanpa Chrome atau Edge, tambahkan `--tanpa-gambar` untuk hanya membuat `infografis.html`.
+
+5. Buka `hasil/infografis.png` dan periksa tiga hal: setiap angka punya arti yang bisa dipahami orang awam, tidak ada kata yang membuat pembaca bertanya "maksudnya apa?", dan tidak ada teks yang terpotong.
+
+> [!NOTE]
+> Huruf Geist dimuat dari Google Fonts saat menggambar, jadi butuh internet. Tanpa itu, huruf pengganti dipakai, dan pemeriksa tumpang tindih memberi tahu bila teks tidak muat.
+
+## Membuat infografis lewat agent
+
+Skill memakai format yang sama dengan skill lain di [skill pool](https://github.com/kazuma313/zul_utilities/tree/main/framework/agentic): `SKILL.md` berisi langkah untuk agent, dan `METADATA.md` berisi kebutuhan dan batasnya. Agent yang membaca `SKILL.md` akan:
+
+1. Menanyakan faktamu dalam satu pesan berisi daftar bernomor: nama produk dan tujuannya, masalah dengan dua angka beserta sumbernya, tiga hal yang dilakukan orang sekarang, empat fitur, satu contoh tanya jawab, harga paket, dan batasan produk.
+2. Berhenti dan menyebut apa yang kurang jika ada yang belum kamu jawab. Agent tidak boleh mengisinya dengan karangan.
+3. Mengisi `isi.json`, memeriksa, memperbaiki, menggambar, lalu menyebut lokasi hasilnya dan angka yang perlu kamu periksa.
+
+Dari Python, dua fungsi pembungkusnya mengembalikan teks pendek dan tidak pernah melempar exception:
+
+```python
+import sys
+
+sys.path.insert(0, "framework/agentic")
+
+from skills.infografis_satu_lembar.infografis_satu_lembar_skill import (
+    buat_infografis,
+    periksa_infografis,
+)
+
+print(periksa_infografis(isi_json))
+print(buat_infografis(isi_json, "produkku"))
+```
+
+`isi_json` boleh berupa teks JSON, JSON yang dibungkus tanda ``` atau diberi kalimat pembuka (model kecil sering begitu), atau dict. Berkas hasil ditulis di `hasil/produkku/`. Folder dasarnya bisa diganti lewat environment variable `INFOGRAFIS_OUTPUT_DIR`, dan nama subfoldernya tidak bisa keluar dari folder itu. Jika `langchain-core` ter-install, `periksa_infografis_tool` dan `buat_infografis_tool` tersedia sebagai tool LangChain.
+
+## Memakai model tanpa fitur skill
+
+Untuk AI yang tidak mengenal folder skill, termasuk model kecil, pakai `references/prompt_satu_tempelan.md` di folder skill. Tempel bagian A, lalu isi `contoh/kosong.json`, lalu fakta produkmu. Model cukup menjawab dengan JSON. Simpan jawabannya sebagai `isi.json`, jalankan `cek.mjs`, dan jika ada `GAGAL`, tempel pesannya ke model dengan permintaan "Perbaiki JSON ini sesuai pesan, jawab hanya JSON."
+
+## Memperbaiki pesan GAGAL
+
+| Pesan | Perbaikan |
+|---|---|
+| `terlalu panjang (N huruf, maksimal M)` | Perpendek isian itu. Pesannya menyebut teks sekarang. |
+| `kata "terbaik" tidak jelas` | Ganti dengan fakta: angka, nama, atau contoh. Kata terlarang lain: terlengkap, canggih, inovatif, dll, dan sebagainya. |
+| `nama ikon "..." tidak ada` | Pilih dari daftar ikon. Pesannya mencetak seluruh daftarnya. |
+| `harus berisi tepat 4 simpul` | Jumlah butir di tiap daftar harus persis seperti contoh. |
+| `harus angka 0 sampai 100` | Tulis `nilai` tanpa tanda kutip dan tanpa `%`, misalnya `78`. |
+| `angkanya harus sama dengan nilai` | `tampil` ("78%") harus sama dengan `nilai` (78). |
+| `terlalu singkat` | Arti angka butuh minimal 3 kata, misalnya "tahu dan terampil merawatnya", bukan "paham". |
+| `kalimat ini ambigu` | "Tanpa jual produk" membuat pembaca mengira kamu tidak menjual apa pun. Tulis "Tidak menjual bibit". |
+| `tanda * hanya boleh dipakai` | Tanda `*` hanya untuk menyorot angka di `contoh.jawab_utama`, tepat sepasang. |
+| `nama merek tidak ditemukan` | Isi `"merek"` dengan nama berkas di `merek/`, tanpa `.json`. |
+
+## Memakai merek sendiri
+
+Warna, huruf, dan logo disimpan per merek di `merek/`. Merek bawaan adalah `tanam_kota`, yang fiktif.
+
+1. Salin `merek/tanam_kota.json` menjadi `merek/<nama>.json`.
+2. Ganti `nama`, `font`, `font_url`, dan nilai di `warna`. Ubah `simbol_koin` jika mata uangmu bukan rupiah.
+3. Letakkan logo (PNG) di `merek/<nama>/`, lalu isi `logo_kata` dan `logo_lambang` dengan nama berkas, lebar, dan tingginya. Logo boleh dikosongkan (`null`): nama merek ditulis sebagai teks, dan lingkaran logo diisi huruf pertamanya.
+4. Isi `"merek": "<nama>"` di `isi.json`.
+
+> [!WARNING]
+> Repository Zul bersifat publik. Jangan meng-commit logo atau data merek yang tidak boleh dipublikasikan. Nama merek hanya boleh huruf, angka, `_`, dan `-`.
+
+## Batas skill
+
+- Satu lembar 4:5 dengan susunan tetap. Rasio lain, lebih dari satu lembar, dan susunan lain butuh mengubah `scripts/bangun.mjs`.
+- Bagian rencana (roadmap) dan tangkapan layar aplikasi sengaja tidak ada.
+- **Belum diuji dengan model sungguhan.** Skrip dan pemeriksanya sudah diuji (`uv run pytest framework/agentic/skills/infografis_satu_lembar`), tetapi klaim bahwa model kecil bisa mengisi JSON-nya dalam satu sampai tiga putaran perbaikan belum dibuktikan. Sebelum mengandalkannya, jalankan sekali dengan model yang akan kamu pakai.
+- Instruksi ditulis dalam bahasa Indonesia. Jika modelmu lemah berbahasa Indonesia, terjemahkan prompt satu tempelan ke bahasa yang dikuasainya. Isi JSON tetap berbahasa Indonesia.
+
+## Langkah berikutnya
+
+- [Membuat mind map](membuat-mindmap.md) dan [Membuat silabus dan materi belajar](membuat-silabus-dan-materi.md) untuk skill lain yang memakai model kecil dengan cara yang sama: model menulis isi, kode menggambar.
+- [Model lokal untuk skill belajar](../konsep/model-lokal-untuk-skill-belajar.md) untuk cara memilih model Ollama yang cukup kecil untuk laptop.

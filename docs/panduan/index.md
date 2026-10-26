@@ -55,6 +55,7 @@ Kemampuan yang di dalamnya ada model AI yang bekerja, dengan model lokal lewat O
 |---|---|
 | Mengubah topik, catatan, atau dokumen menjadi mind map, juga dengan model lokal | [Membuat mind map](membuat-mindmap.md) |
 | Membuat silabus dan materi belajar dari topik, PDF, gambar, atau dokumen, dengan model lokal | [Membuat silabus dan materi belajar](membuat-silabus-dan-materi.md) |
+| Membuat infografis satu lembar 4:5 untuk menjelaskan produk, dengan model yang hanya mengisi JSON | [Membuat infografis satu lembar](membuat-infografis.md) |
 | Memotong dokumen menjadi chunk berkonteks untuk vector database, dengan model lokal | [Menyiapkan dokumen untuk RAG](menyiapkan-dokumen-untuk-rag.md) |
 
 ## Computer Vision
