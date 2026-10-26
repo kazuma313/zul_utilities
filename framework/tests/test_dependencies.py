@@ -269,8 +269,26 @@ def test_core_modules_import_without_any_extra():
     import_with_only(CORE_MODULES, allowed_distributions())
 
 
+def uninstalled_in_extra(extra: str) -> list[str]:
+    missing = []
+    for requirement in zul_requirements(extra):
+        if canonicalize_name(requirement.name) == "zul":
+            continue
+        try:
+            distribution(requirement.name)
+        except PackageNotFoundError:
+            missing.append(requirement.name)
+    return missing
+
+
 @pytest.mark.parametrize("extra", sorted(EXTRA_MODULES))
 def test_each_extra_is_enough_for_its_modules(extra):
+    # Extra yang belum ter-install di environment ini, misalnya ocr dan
+    # detection di CI, tidak bisa diuji; modulnya memang butuh librarynya.
+    missing = uninstalled_in_extra(extra)
+    if missing:
+        pytest.skip(f"extra {extra} belum ter-install: {', '.join(missing)}")
+
     import_with_only(EXTRA_MODULES[extra], allowed_distributions(extra))
 
 
