@@ -334,6 +334,7 @@ def test_server_registers_every_tool_resource_and_prompt():
         "pakai_zul",
         "evaluasi_retrieval",
         "rapikan_arsitektur",
+        "pasang_zul",
     }
     assert not result["sample_failed"]
     assert "Hasil pencarian" in result["sample"]
@@ -369,7 +370,7 @@ def test_cli_check_prints_a_summary():
     result = runner.invoke(app, ["mcp", "check"])
 
     assert result.exit_code == 0, result.output
-    assert "MCP server zul siap: 13 tool, 5 resource, 4 prompt." in result.output
+    assert "MCP server zul siap: 13 tool, 5 resource, 5 prompt." in result.output
 
 
 def test_serve_speaks_mcp_over_stdio():

@@ -16,7 +16,7 @@ Cara pakai:
     from zul.assistant.server import build_server
     server = build_server()
 
-Isinya: 13 tool baca-saja (lihat TOOLS), 5 resource Markdown, dan 4 prompt.
+Isinya: 13 tool baca-saja (lihat TOOLS), 5 resource Markdown, dan 5 prompt.
 """
 
 from __future__ import annotations
@@ -42,7 +42,9 @@ Untuk aplikasi lengkap, misalnya analitik CCTV: list_projects, lalu
 read_project untuk boilerplate yang paling mirip, dan tiru strukturnya.
 Untuk merapikan proyek menjadi induk backend, frontend, mobile, dan assets:
 prompt rapikan_arsitektur, atau layout_rules lalu check_layout. Tool ini hanya
-menyusun rencana; pindahkan file setelah pemilik proyek setuju."""
+menyusun rencana; pindahkan file setelah pemilik proyek setuju.
+Untuk memasang Zul: prompt pasang_zul. Tanyakan dulu apa yang pengguna
+butuhkan, lalu pasang hanya extra untuk jawabannya."""
 
 TOOLS = [
     knowledge.list_modules,
@@ -101,6 +103,7 @@ PROMPTS = [
     prompts.pakai_zul,
     prompts.evaluasi_retrieval,
     prompts.rapikan_arsitektur,
+    prompts.pasang_zul,
 ]
 
 

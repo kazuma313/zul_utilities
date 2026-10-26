@@ -118,6 +118,8 @@ pip install "zul[milvus,llm] @ git+https://github.com/kazuma313/zul_utilities.gi
 | `mcp` | MCP server untuk code assistant | 33 MB |
 | `ocr`, `detection` | OCR dengan Docling, deteksi orang dengan RF-DETR | 3,4 GB masing-masing, karena membawa PyTorch |
 
+Atau minta code assistant memasangnya. Tempel teks dari [Memasang Zul lewat code assistant](https://zulkit.my.id/panduan/memasang-zul-dengan-code-assistant/#prompt-untuk-ditempel), dan assistant bertanya dulu apa yang kamu butuhkan (MCP, OCR, evaluasi retrieval, atau semuanya), meminta persetujuanmu, lalu memasang hanya extra untuk jawabanmu.
+
 Semua extra kecuali `ocr` dan `detection` sekitar 650 MB. `zul[all]` sekitar 3,8 GB. Ukuran diukur di Windows dengan PyTorch build CUDA 13, dan cara menghitungnya ada di [Seberapa besar tiap pilihan](https://zulkit.my.id/panduan/instalasi-zul/#seberapa-besar-tiap-pilihan). Resep per topik ada di [Memasang per topik](https://zulkit.my.id/panduan/instalasi-zul/#memasang-per-topik), dan kolom Install di tabel [Dokumentasi](#dokumentasi) di bawah.
 
 ## Fitur utama
@@ -142,7 +144,7 @@ Setiap topik punya halaman dengan peran berbeda: tutorial dan panduan untuk meng
 
 | Topik | Isi | Install | Halaman |
 |---|---|---|---|
-| **Instalasi** | Memasang perintah `zul`, memilih extra, dan mengisi environment variable. | Dasar | [Instalasi Zul](https://zulkit.my.id/panduan/instalasi-zul/), [Perintah zul](https://zulkit.my.id/referensi/cli/), [Environment variable](https://zulkit.my.id/referensi/konfigurasi/), [Library yang dipakai](https://zulkit.my.id/referensi/library/) |
+| **Instalasi** | Memasang perintah `zul`, memilih extra, dan mengisi environment variable. | Dasar | [Instalasi Zul](https://zulkit.my.id/panduan/instalasi-zul/), [Memasang lewat code assistant](https://zulkit.my.id/panduan/memasang-zul-dengan-code-assistant/), [Perintah zul](https://zulkit.my.id/referensi/cli/), [Environment variable](https://zulkit.my.id/referensi/konfigurasi/), [Library yang dipakai](https://zulkit.my.id/referensi/library/) |
 | **Proyek pertama** | Membuat proyek dari template, mengatur model, dan menjalankannya. | Dasar. Proyek hasil `zul build hexa` punya `requirements.txt` sendiri. | [Membuat agent pertamamu](https://zulkit.my.id/tutorial/agent-pertama/), [Membuat proyek baru](https://zulkit.my.id/panduan/membuat-proyek/), [Mengatur model dan API key](https://zulkit.my.id/panduan/mengatur-llm/), [Menjalankan aplikasi](https://zulkit.my.id/panduan/menjalankan-aplikasi/) |
 
 ### Agent dan template hexagonal

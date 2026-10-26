@@ -4,6 +4,8 @@ Zul berlisensi MIT, dan ter-install sebagai perintah `zul` di terminal dan sebag
 
 **Sebelum mulai:** kamu butuh Python 3.11 atau lebih baru (periksa dengan `python --version`), Git, dan [uv](https://github.com/astral-sh/uv) atau `pip`.
 
+Jika kamu lebih suka code assistant yang memasangnya, tempel teks dari [Memasang Zul lewat code assistant](memasang-zul-dengan-code-assistant.md). Assistant bertanya dulu apa yang kamu butuhkan, lalu memasang hanya extra untuk jawabanmu.
+
 > [!NOTE]
 > Contoh perintah di dokumentasi ini memakai sintaks shell Unix. Di Windows, perintah `zul`, `uv`, `pip`, dan `pytest` sama persis. Yang berbeda hanya perintah sistem seperti `cp`, dan perbedaannya disebut di tempatnya.
 

@@ -135,6 +135,7 @@ Prompt berisi urutan tool yang perlu dipanggil untuk sebuah pekerjaan. Di Claude
 | `evaluasi_retrieval` | `tujuan` | `read_doc` panduan evaluasi dan `module_guide` modul `zul.evaluation`, lalu script dengan urutan `load_qa_dataset`, retriever, `run_rag`, `retrieval_hit_stats`, `evaluate_rag`, dan `save_report`. Kunci dibaca dari environment variable, dan ragas tidak diimpor langsung. |
 | `tulis_modul_zul` | `topik` | `conventions`, `list_modules`, dan `read_source` modul yang mirip. Library baru diperiksa lisensinya dan diletakkan di adapter. Modul dan test-nya ditulis, lalu setiap file baru diperiksa dengan `check_code`. |
 | `rapikan_arsitektur` | `path` | `layout_rules`, lalu `check_layout`. Rencananya ditunjukkan ke pemilik proyek, dan folder yang perlu keputusan ditanyakan. Setelah disetujui, `git mv` dijalankan satu per satu, path di Dockerfile, docker-compose, CI, dan README diperbarui, test dijalankan di setiap induk, dan `check_layout` dipanggil lagi sampai bersih. |
+| `pasang_zul` | `kebutuhan` (opsional) | Tidak memanggil tool. Isinya sama dengan blok "Prompt untuk ditempel" di [Memasang Zul lewat code assistant](../panduan/memasang-zul-dengan-code-assistant.md): assistant bertanya dulu apa yang kamu butuhkan (MCP, OCR, evaluasi, dan lainnya), meminta persetujuan atas rencananya, memasang hanya extra yang dipilih, lalu memeriksa setiap extra. |
 
 ## Sumber dokumentasi
 

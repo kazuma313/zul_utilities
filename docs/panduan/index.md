@@ -7,6 +7,7 @@ Setiap panduan berisi langkah untuk menyelesaikan satu tugas dengan Zul.
 | Tugas | Panduan |
 |---|---|
 | Instalasi perintah `zul` dan library-nya | [Instalasi Zul](instalasi-zul.md) |
+| Meminta code assistant memasang Zul, dengan pertanyaan tentang kebutuhanmu lebih dulu | [Memasang Zul lewat code assistant](memasang-zul-dengan-code-assistant.md) |
 | Membuat proyek dari template | [Membuat proyek baru](membuat-proyek.md) |
 | Mengisi API key, mengganti model, memakai endpoint sendiri | [Mengatur model dan API key](mengatur-llm.md) |
 | Menjalankan server untuk pengembangan atau di container | [Menjalankan aplikasi](menjalankan-aplikasi.md) |

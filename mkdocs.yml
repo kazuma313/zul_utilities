@@ -148,6 +148,7 @@ nav:
       - panduan/index.md
       - Memulai:
           - Instalasi Zul: panduan/instalasi-zul.md
+          - Memasang Zul lewat code assistant: panduan/memasang-zul-dengan-code-assistant.md
           - Membuat proyek baru: panduan/membuat-proyek.md
           - Mengatur model dan API key: panduan/mengatur-llm.md
           - Menjalankan aplikasi: panduan/menjalankan-aplikasi.md
