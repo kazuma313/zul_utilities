@@ -59,6 +59,9 @@ File lain di root:
 | `pyproject.toml`, `uv.lock` | Dependency dan pengaturan tool untuk seluruh repository. `.venv` dibuat di root. |
 | `.mcp.json` | MCP server `zul` untuk Claude Code yang dibuka di repository ini. Rinciannya ada di [Memakai Zul dari checkout repository](menghubungkan-code-assistant.md#memakai-zul-dari-checkout-repository). |
 | `.github/workflows/docs.yml` | Workflow yang membangun dan menerbitkan situs dokumentasi. |
+| `.github/workflows/ci.yml` | Workflow yang menjalankan black, ruff, pemeriksa komentar, dan test di setiap pull request. Rinciannya ada di [Pemeriksaan otomatis](#pemeriksaan-otomatis). |
+| `.github/pull_request_template.md` | Templat deskripsi pull request. |
+| `AGENTS.md`, `CLAUDE.md` | Petunjuk untuk code assistant yang bekerja di repository ini. |
 
 ## Menjalankan test
 
@@ -206,6 +209,22 @@ Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi.
 </div>
 ```
 
+## Pemeriksaan otomatis
+
+Setiap pull request, dan setiap push ke `main`, menjalankan workflow **Pemeriksaan kode** (`.github/workflows/ci.yml`). Urutannya:
+
+1. `black --check framework docs/tools`
+2. `ruff check framework docs/tools`
+3. `comment_style.py`
+4. `pytest framework/tests`
+5. `pytest docs/tools/tests`
+
+Dependency-nya di-install persis dari `uv.lock` lewat grup `ci` di `pyproject.toml`. Situs dokumentasi dibangun oleh workflow terpisah, **Dokumentasi**, pada pull request yang mengubah `docs/`.
+
+Workflow ini sengaja tidak meng-install extra `ocr` dan `detection`, karena keduanya membawa torch CUDA berukuran beberapa GB. Akibatnya, test yang butuh `docling` atau `rfdetr` dilewati di sana. Jalankan `uv run pytest` di komputermu sebelum mengirim perubahan di modul OCR atau deteksi. Test integrasi Milvus, skill pool, boilerplate computer vision, dan `research/` juga tidak dijalankan di workflow ini.
+
+Status hijau berarti lima langkah di atas lulus. Status itu tidak menggantikan review: workflow tidak tahu apakah perubahan sesuai tujuan, apakah dokumentasinya benar, atau apakah ada kunci rahasia di diff.
+
 ## Yang boleh dan tidak boleh
 
 Aturan di bawah dijaga oleh test atau pemeriksa bila ada. Sisanya dijaga lewat review, dan pull request yang melanggarnya diminta direvisi.
@@ -300,7 +319,7 @@ Bagian ini untuk pemilik repository dan reviewer. Urutannya dari yang paling mur
 
     Perintah pertama menampilkan dependency baru, yang kedua impor baru di luar adapter, dan yang ketiga pola kunci rahasia. Hasil kosong tidak menjamin bersih, karena pola ini hanya mencari yang umum.
 
-4. **Jalankan pemeriksa sendiri**, jangan hanya percaya hasil yang ditempel:
+4. **Lihat status workflow Pemeriksaan kode** di pull request. Jika merah, minta kontributor memperbaikinya sebelum kamu membaca lebih jauh. Jika hijau, jalankan pemeriksa sendiri hanya untuk perubahan di modul OCR atau deteksi, yang dilewati di workflow, atau jika ada alasan tidak percaya hasilnya:
 
     ```shell
     uv run pytest
@@ -323,3 +342,4 @@ Di Claude Code, `/code-review` dan `/security-review` bisa menjadi pendapat kedu
 3. Jalankan test, ketiga pemeriksa gaya kode, dan `uv run mkdocs build --strict`.
 4. Commit dan push branch-mu, lalu buka pull request ke `main`.
 5. Isi templat pull request: apa yang berubah dan kenapa, cara mengujinya, bantuan AI, dan hasil pemeriksa.
+6. Tunggu workflow **Pemeriksaan kode** selesai. Jika merah, perbaiki di branch yang sama; workflow berjalan lagi setiap kali kamu push.

@@ -1,0 +1,70 @@
+# Memeriksa kode setiap pull request dan setiap push ke main: gaya kode dan test.
+#
+# Pemeriksaannya sama dengan yang dijalankan kontributor di komputernya (lihat
+# docs/panduan/berkontribusi.md), jadi hasilnya bisa dibandingkan langsung.
+# Situs dokumentasi dibangun oleh .github/workflows/docs.yml.
+#
+# Supaya hasilnya selalu sama dengan di komputermu:
+# - setiap action dikunci ke commit SHA (versinya tertulis di komentar),
+# - versi uv, Python, dan runner ditulis persis,
+# - paket Python di-install persis dari uv.lock (grup "ci" di pyproject).
+# Dependabot (.github/dependabot.yml) membuka PR saat ada versi action baru.
+#
+# Yang tidak dijalankan di sini:
+# - test yang butuh docling atau rfdetr, karena extra ocr dan detection membawa
+#   torch CUDA berukuran beberapa GB. Test itu dilewati otomatis; jalankan
+#   `uv run pytest` di komputermu sebelum menggabungkan perubahan di modul OCR
+#   atau deteksi.
+# - test yang butuh server Milvus (ZUL_RUN_INTEGRATION), skill pool
+#   (framework/agentic), boilerplate computer vision, dan research/latihan.
+name: Pemeriksaan kode
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Pemeriksaan untuk pull request dibatalkan begitu ada commit baru di pull
+# request itu. Pemeriksaan untuk main selalu selesai.
+concurrency:
+  group: ${{ github.event_name == 'pull_request' && format('ci-{0}', github.ref) || format('ci-{0}', github.sha) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  periksa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: "0.12.3"
+          python-version: "3.11"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      # --frozen memakai uv.lock apa adanya, tanpa menyusun ulang versi.
+      - name: Install dependency
+        run: uv sync --frozen --no-default-groups --group ci
+
+      - name: Gaya kode (black)
+        run: uv run --no-sync black --check framework docs/tools
+
+      - name: Gaya kode (ruff)
+        run: uv run --no-sync ruff check framework docs/tools
+
+      - name: Gaya komentar anak tangga
+        run: uv run --no-sync python framework/scripts/comment_style.py
+
+      - name: Test paket zul
+        run: uv run --no-sync pytest framework/tests
+
+      - name: Test tool dokumentasi
+        run: uv run --no-sync pytest docs/tools/tests

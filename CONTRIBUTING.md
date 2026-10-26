@@ -23,6 +23,7 @@ Jangan memakai `uv sync` tanpa `--inexact`. Library skill pool yang tidak tercat
 3. Jalankan test dan pemeriksa gaya kode di bawah.
 4. Perbarui dokumentasi yang terkait di `docs/`, lalu jalankan `uv run mkdocs build --strict`.
 5. Push branch-mu dan buka pull request ke `main`. Isi templat yang muncul.
+6. Tunggu workflow **Pemeriksaan kode** selesai. Ia menjalankan black, ruff, pemeriksa komentar, dan test. Test yang butuh `docling` atau `rfdetr` dilewati di sana, jadi jalankan `uv run pytest` sendiri jika kamu mengubah modul OCR atau deteksi.
 
 ## Test dan gaya kode
 

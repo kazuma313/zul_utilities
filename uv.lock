@@ -7742,6 +7742,16 @@ vision = [
 ]
 
 [package.dev-dependencies]
+ci = [
+    { name = "black" },
+    { name = "fastapi" },
+    { name = "httpx" },
+    { name = "langchain" },
+    { name = "langchain-ollama" },
+    { name = "pytest" },
+    { name = "ruff" },
+    { name = "zul", extra = ["analysis", "converter", "evaluation", "gemini", "llm", "mcp", "milvus", "pdf", "redis", "tracking", "vision"] },
+]
 dev = [
     { name = "black" },
     { name = "fastapi" },
@@ -7805,6 +7815,16 @@ requires-dist = [
 provides-extras = ["milvus", "redis", "converter", "analysis", "pdf", "ocr", "llm", "gemini", "vision", "tracking", "detection", "mcp", "evaluation", "all"]
 
 [package.metadata.requires-dev]
+ci = [
+    { name = "black", specifier = ">=23.0.0" },
+    { name = "fastapi", specifier = ">=0.115" },
+    { name = "httpx", specifier = ">=0.27" },
+    { name = "langchain", specifier = ">=1.0.5" },
+    { name = "langchain-ollama", specifier = ">=1.0.0" },
+    { name = "pytest", specifier = ">=7.0.0" },
+    { name = "ruff", specifier = ">=0.1.0" },
+    { name = "zul", extras = ["milvus", "redis", "converter", "analysis", "pdf", "llm", "gemini", "vision", "tracking", "mcp", "evaluation"] },
+]
 dev = [
     { name = "black", specifier = ">=23.0.0" },
     { name = "fastapi", specifier = ">=0.115" },
