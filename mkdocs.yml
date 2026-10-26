@@ -152,6 +152,7 @@ nav:
           - Mengatur model dan API key: panduan/mengatur-llm.md
           - Menjalankan aplikasi: panduan/menjalankan-aplikasi.md
           - Menghubungkan code assistant: panduan/menghubungkan-code-assistant.md
+          - Merapikan struktur proyek: panduan/merapikan-struktur-proyek.md
       - Agent:
           - Menambah tool: panduan/menambah-tool.md
           - Mengubah system prompt: panduan/mengubah-system-prompt.md

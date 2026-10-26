@@ -93,7 +93,7 @@ zul build hexa --name my-agent
       </g>
     </g>
   </g>
-</svg>
+</svg>
 </div>
 
 </div>
@@ -112,5 +112,7 @@ Zul adalah wrapper dari berbagai library Python, seperti LangChain, OpenCV, RF-D
 | Dokumen | Markdown ke PDF dan PPTX | [Mengubah Markdown menjadi PDF dan PPTX](panduan/mengonversi-markdown.md) |
 | Analisis | `ChartGenerator` dengan uji statistik | [Membuat grafik perbandingan](panduan/membuat-grafik.md) |
 | Computer Vision | Deteksi dan tracking, teks di sudut frame, garis dan poligon penghitung, timer, arah hadap, jarak, blur | [Mendeteksi dan melacak orang](panduan/mendeteksi-dan-melacak-orang.md) |
+| MCP untuk code assistant | Server MCP yang memberi Claude Code, Cursor, dan VS Code akses ke modul, dokumentasi, dan boilerplate Zul | [Menghubungkan Zul ke code assistant](tutorial/code-assistant.md) |
+| Struktur proyek berinduk | Aturan dan pemeriksa untuk membagi proyek menjadi `backend`, `frontend`, `mobile`, dan `assets` | [Merapikan struktur proyek](panduan/merapikan-struktur-proyek.md), [aturannya](konsep/struktur-proyek-berinduk.md) |
 
 </div>

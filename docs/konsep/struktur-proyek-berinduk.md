@@ -134,6 +134,7 @@ Sebuah folder yang berisi satu aplikasi utuh diganti namanya menjadi induknya. M
 ## Halaman terkait
 
 - [Arsitektur hexagonal](arsitektur-hexagonal.md) untuk susunan di dalam `backend`.
+- [Merapikan struktur proyek](../panduan/merapikan-struktur-proyek.md) untuk langkah-langkah memakainya pada proyek yang sudah ada.
 - [Membuat proyek](../panduan/membuat-proyek.md) untuk `zul build hexa`.
 - [MCP server](../referensi/mcp.md) untuk daftar tool, resource, dan prompt.
 - [Menghubungkan code assistant](../panduan/menghubungkan-code-assistant.md) untuk memasang MCP Zul.
