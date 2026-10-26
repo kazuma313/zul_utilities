@@ -283,8 +283,7 @@ def uninstalled_in_extra(extra: str) -> list[str]:
 
 @pytest.mark.parametrize("extra", sorted(EXTRA_MODULES))
 def test_each_extra_is_enough_for_its_modules(extra):
-    # Extra yang belum ter-install di environment ini, misalnya ocr dan
-    # detection di CI, tidak bisa diuji; modulnya memang butuh librarynya.
+    # Extra yang tidak ter-install, misalnya di CI, dilewati.
     missing = uninstalled_in_extra(extra)
     if missing:
         pytest.skip(f"extra {extra} belum ter-install: {', '.join(missing)}")
