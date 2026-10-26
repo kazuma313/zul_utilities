@@ -118,6 +118,71 @@ Library besar seperti Docling dan PyTorch hanya ter-install lewat *extra*, misal
 
 Dokumentasi lengkap terbit di **https://zulkit.my.id/**, dengan bagian Tutorial, Panduan, Referensi, Konsep, dan Blog. Cara menulis dan menerbitkannya ada di [`docs/README.md`](docs/README.md).
 
+Setiap topik punya halaman dengan peran berbeda: tutorial dan panduan untuk mengerjakan sesuatu, referensi untuk mencari fakta, dan konsep untuk memahami alasannya. Tabel berikut mengelompokkan halamannya per topik.
+
+### Memulai
+
+| Topik | Isi | Halaman |
+|---|---|---|
+| **Instalasi** | Memasang perintah `zul`, memilih extra, dan mengisi environment variable. | [Instalasi Zul](https://zulkit.my.id/panduan/instalasi-zul/), [Perintah zul](https://zulkit.my.id/referensi/cli/), [Environment variable](https://zulkit.my.id/referensi/konfigurasi/), [Library yang dipakai](https://zulkit.my.id/referensi/library/) |
+| **Proyek pertama** | Membuat proyek dari template, mengatur model, dan menjalankannya. | [Membuat agent pertamamu](https://zulkit.my.id/tutorial/agent-pertama/), [Membuat proyek baru](https://zulkit.my.id/panduan/membuat-proyek/), [Mengatur model dan API key](https://zulkit.my.id/panduan/mengatur-llm/), [Menjalankan aplikasi](https://zulkit.my.id/panduan/menjalankan-aplikasi/) |
+
+### Agent dan template hexagonal
+
+| Topik | Isi | Halaman |
+|---|---|---|
+| **Arsitektur hexagonal** | Lapisan `domain`, `application`, `infrastructure`, dan `interface`, dan arah dependensinya. | [Arsitektur hexagonal](https://zulkit.my.id/konsep/arsitektur-hexagonal/), [Perjalanan sebuah request](https://zulkit.my.id/konsep/alur-request/), [Struktur proyek hexa](https://zulkit.my.id/referensi/struktur-proyek/), [Hexagonal dari nol](https://zulkit.my.id/hexagonal/) |
+| **Agent ReAct** | Putaran model dan tool, batas langkah, tool, node, dan system prompt. | [Cara kerja agent ReAct](https://zulkit.my.id/konsep/agent-react/), [API agent](https://zulkit.my.id/referensi/agent/), [Menambah tool](https://zulkit.my.id/panduan/menambah-tool/), [Menambah node](https://zulkit.my.id/panduan/menambah-node/), [Mengatur batas langkah](https://zulkit.my.id/panduan/mengatur-batas-langkah/), [Mengubah system prompt](https://zulkit.my.id/panduan/mengubah-system-prompt/) |
+| **Human-in-the-loop** | Agent berhenti menunggu persetujuan, lalu dilanjutkan. | [Meminta persetujuan manusia](https://zulkit.my.id/tutorial/persetujuan-manusia/), [Cara kerja](https://zulkit.my.id/konsep/human-in-the-loop/), [Mewajibkan persetujuan](https://zulkit.my.id/panduan/mewajibkan-persetujuan/), [Format review](https://zulkit.my.id/referensi/format-review/) |
+| **Subagents** | Supervisor yang mendelegasikan pekerjaan ke spesialis. | [Membangun tim agent](https://zulkit.my.id/tutorial/tim-agent/), [Cara kerja subagents](https://zulkit.my.id/konsep/subagents/), [Menambah subagent](https://zulkit.my.id/panduan/menambah-subagent/) |
+| **Memory dan percakapan** | Apa yang disimpan checkpointer, dan menyimpan percakapan di database. | [Memory dan thread](https://zulkit.my.id/konsep/memory/), [Menyimpan percakapan](https://zulkit.my.id/panduan/menyimpan-percakapan/) |
+| **REST API dan playground** | Endpoint HTTP, dan panel untuk mencoba agent di browser. | [HTTP API](https://zulkit.my.id/referensi/http-api/), [Playground API](https://zulkit.my.id/referensi/playground-api/), [Menambah endpoint](https://zulkit.my.id/panduan/menambah-endpoint/), [Mencoba di playground](https://zulkit.my.id/panduan/mencoba-di-playground/) |
+| **Pengujian** | Menguji agent dengan model palsu, tanpa memanggil LLM asli. | [Menguji tanpa LLM asli](https://zulkit.my.id/konsep/pengujian/), [Menguji agent](https://zulkit.my.id/panduan/menguji-agent/) |
+
+### Data, dokumen, dan model
+
+| Topik | Isi | Halaman |
+|---|---|---|
+| **Vector database** | `MilvusHelper` dan `RedisHelper` berbasis file config, termasuk hybrid search. | [Milvus](https://zulkit.my.id/panduan/memakai-milvus/), [Redis](https://zulkit.my.id/panduan/memakai-redis/), [MilvusHelper](https://zulkit.my.id/referensi/milvus/), [RedisHelper](https://zulkit.my.id/referensi/redis/) |
+| **OCR** | Mengubah PDF dan gambar menjadi teks dengan Docling VLM atau Gemini. | [Mengubah dokumen menjadi teks](https://zulkit.my.id/panduan/membaca-dokumen-ocr/), [Menyiapkan dokumen untuk RAG](https://zulkit.my.id/panduan/menyiapkan-dokumen-untuk-rag/), [OCR](https://zulkit.my.id/referensi/ocr/) |
+| **LLM dan embedding** | `AIService` untuk memanggil model chat dan embedding. | [Memanggil LLM dan embedding](https://zulkit.my.id/panduan/memanggil-llm-dan-embedding/), [AI Service](https://zulkit.my.id/referensi/ai-service/) |
+| **Konversi dokumen** | Markdown menjadi PDF dan PPTX. | [Mengubah Markdown](https://zulkit.my.id/panduan/mengonversi-markdown/), [Markdown converter](https://zulkit.my.id/referensi/markdown-converter/) |
+| **Grafik dan crypto** | Grafik perbandingan dengan uji statistik, candlestick, dan snapshot harga. | [Membuat grafik](https://zulkit.my.id/panduan/membuat-grafik/), [ChartGenerator](https://zulkit.my.id/referensi/grafik/), [Candlestick crypto](https://zulkit.my.id/panduan/membuat-chart-crypto/), [Snapshot crypto](https://zulkit.my.id/panduan/mengambil-snapshot-crypto/) |
+| **Helper kecil** | Fungsi pendukung, seperti logger dan pengukur waktu. | [Memakai helper kecil](https://zulkit.my.id/panduan/memakai-helper/), [Helper kecil](https://zulkit.my.id/referensi/helper/) |
+
+### Evaluasi dan computer vision
+
+| Topik | Isi | Halaman |
+|---|---|---|
+| **Evaluasi retrieval** | `zul.evaluation` menilai retriever dengan ragas, plus hit rate, MRR, dan latensi tanpa model penilai. | [Mengevaluasi retrieval dan RAG](https://zulkit.my.id/panduan/mengevaluasi-retrieval/), [Evaluasi retrieval](https://zulkit.my.id/referensi/evaluation/) |
+| **Computer vision** | Fungsi kecil untuk video: deteksi RF-DETR, ByteTrack, garis dan poligon penghitung, timer, dan gambar. | [Mendeteksi dan melacak orang](https://zulkit.my.id/panduan/mendeteksi-dan-melacak-orang/), [Garis dan poligon](https://zulkit.my.id/panduan/menghitung-dengan-garis-dan-poligon/), [Durasi per orang](https://zulkit.my.id/panduan/mengukur-durasi/), [Menggambar di frame](https://zulkit.my.id/panduan/menggambar-di-frame/), [Arah hadap dan jarak](https://zulkit.my.id/panduan/membaca-arah-hadap-dan-jarak/), [Menyamarkan area](https://zulkit.my.id/panduan/menghitamkan-dan-menyamarkan-area/), [Cara kerjanya](https://zulkit.my.id/konsep/cara-kerja-computer-vision/), [Computer Vision](https://zulkit.my.id/referensi/computer-vision/) |
+| **Boilerplate computer vision** | Aplikasi analitik kamera lengkap di `framework/project/computer_vision`. | [Memulai dari boilerplate](https://zulkit.my.id/panduan/memulai-proyek-computer-vision/) |
+
+### Code assistant dan struktur kode
+
+| Topik | Isi | Halaman |
+|---|---|---|
+| **MCP server** | `zul mcp serve` memberi Claude Code, Cursor, VS Code, dan Claude Desktop akses ke modul, dokumentasi, dan boilerplate Zul. | [Menghubungkan Zul ke code assistant](https://zulkit.my.id/tutorial/code-assistant/), [Menghubungkan code assistant lain](https://zulkit.my.id/panduan/menghubungkan-code-assistant/), [MCP server](https://zulkit.my.id/referensi/mcp/) |
+| **Struktur proyek berinduk** | Membagi proyek menjadi `backend`, `frontend`, `mobile`, dan `assets`, dan merapikannya lewat MCP. | [Struktur proyek berinduk](https://zulkit.my.id/konsep/struktur-proyek-berinduk/), [Merapikan struktur proyek](https://zulkit.my.id/panduan/merapikan-struktur-proyek/) |
+| **Lapisan adapter** | Library pihak ketiga hanya diimpor di `framework/src/zul/adapters/`. | [Lapisan adapter](https://zulkit.my.id/konsep/lapisan-adapter/), [Mengubah perilaku library](https://zulkit.my.id/panduan/mengubah-perilaku-library/) |
+
+### Skill pool
+
+| Topik | Isi | Halaman |
+|---|---|---|
+| **Mind map** | Skill yang membuat mind map dari sebuah topik. | [Membuat mind map](https://zulkit.my.id/panduan/membuat-mindmap/) |
+| **Silabus dan materi belajar** | Skill yang menyusun silabus dan materi, dengan model lokal atau API. | [Membuat silabus dan materi](https://zulkit.my.id/panduan/membuat-silabus-dan-materi/), [Model lokal untuk skill belajar](https://zulkit.my.id/konsep/model-lokal-untuk-skill-belajar/) |
+| **Transcript YouTube** | Skill yang mengambil transcript video YouTube. | [Mengambil transcript YouTube](https://zulkit.my.id/panduan/mengambil-transcript-youtube/) |
+
+### Berkontribusi dan menerbitkan
+
+| Topik | Isi | Halaman |
+|---|---|---|
+| **Berkontribusi** | Yang boleh dan tidak boleh, aturan untuk bantuan AI, dan cara meninjau kontribusi. | [Berkontribusi ke Zul](https://zulkit.my.id/panduan/berkontribusi/) |
+| **Situs dokumentasi dan blog** | Cara situs dibangun dan diterbitkan, dan cara menulis tulisan blog. | [Menerbitkan dokumentasi](https://zulkit.my.id/panduan/menerbitkan-dokumentasi/), [Cara situs diterbitkan](https://zulkit.my.id/konsep/penerbitan-dokumentasi/), [Workflow dokumentasi](https://zulkit.my.id/referensi/workflow-dokumentasi/), [Menulis tulisan blog](https://zulkit.my.id/panduan/menulis-blog/), [Format tulisan blog](https://zulkit.my.id/referensi/blog/) |
+
+Tulisan bertanggal tentang apa yang dipelajari ada di [Blog](https://zulkit.my.id/blog/).
+
 ## Pengembangan
 
 Siapkan lingkungan dari root repository:
