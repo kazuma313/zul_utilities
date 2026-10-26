@@ -72,7 +72,7 @@ Contoh dari `find_examples` yang berjudul file, misalnya `garis_penghitung.py`, 
 
 - Aturan fungsi kecil: setiap modul mengerjakan satu hal yang bisa dirangkai, tanpa kelas untuk satu kasus.
 - Docstring `zul.adapters`: library pihak ketiga hanya diimpor di `zul/adapters/`, beserta daftar library yang boleh diimpor langsung.
-- Bagian **Mengikuti gaya kode**, **Menulis komentar dan docstring**, dan **Mengikuti gaya penulisan** dari [Berkontribusi](../panduan/berkontribusi.md).
+- Bagian **Mengikuti gaya kode**, **Menulis komentar dan docstring**, **Mengikuti gaya penulisan**, **Yang boleh dan tidak boleh**, dan **Berkontribusi dengan bantuan AI** dari [Berkontribusi](../panduan/berkontribusi.md). Dengan begitu, assistant yang menulis kode untuk Zul membaca batas yang sama dengan yang dipakai reviewer.
 - Aturan lisensi: tidak ada library berlisensi AGPL atau GPL.
 
 ### Pemeriksaan `check_code`

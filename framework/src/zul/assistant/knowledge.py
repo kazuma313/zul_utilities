@@ -507,6 +507,8 @@ def conventions() -> str:
             "## Mengikuti gaya kode",
             "## Menulis komentar dan docstring",
             "### Mengikuti gaya penulisan",
+            "## Yang boleh dan tidak boleh",
+            "## Berkontribusi dengan bantuan AI",
         ):
             lines += [_section_text(text, heading), ""]
     else:

@@ -167,6 +167,8 @@ def test_conventions_come_from_the_adapter_docstring_and_contributing_page():
     assert "## Fungsi kecil, bukan use case" in text
     assert "`numpy`" in text
     assert "## Mengikuti gaya kode" in text
+    assert "## Yang boleh dan tidak boleh" in text
+    assert "## Berkontribusi dengan bantuan AI" in text
     assert "AGPL" in text
 
 

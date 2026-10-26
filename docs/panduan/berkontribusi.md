@@ -11,10 +11,10 @@ Mengubah Zul sendiri mencakup menambah perintah, memperbaiki helper, mengembangk
     ```shell
     git clone https://github.com/kazuma313/zul_utilities.git
     cd zul_utilities
-    uv sync
+    uv sync --inexact
     ```
 
-    `uv sync` membuat `.venv`, meng-install Zul dalam mode editable beserta semua extra, dan meng-install tool pengembangan: pytest, ruff, black, dan MkDocs.
+    `uv sync` membuat `.venv`, meng-install Zul dalam mode editable beserta semua extra, dan meng-install tool pengembangan: pytest, ruff, black, dan MkDocs. Opsi `--inexact` menjaga paket lain di environment tetap terpasang. Tanpa opsi itu, `uv sync` menghapus paket yang tidak tercatat di `uv.lock`, misalnya library untuk skill pool.
 
 2. Pastikan semuanya ter-install:
 
@@ -206,11 +206,120 @@ Panel Playground tampil saat halaman ini dibuka sebagai situs dokumentasi.
 </div>
 ```
 
+## Yang boleh dan tidak boleh
+
+Aturan di bawah dijaga oleh test atau pemeriksa bila ada. Sisanya dijaga lewat review, dan pull request yang melanggarnya diminta direvisi.
+
+### Yang boleh
+
+| Boleh | Syaratnya |
+|---|---|
+| Memperbaiki bug | Sertakan test yang gagal sebelum perbaikan dan lulus sesudahnya. |
+| Menambah fungsi kecil yang berlaku umum | Docstring dengan bagian `Gunanya:` dan `Cara pakai:`, nama yang umum tanpa istilah domain, dan test dengan data buatan. |
+| Menambah dukungan library baru | Buat adapter di `framework/src/zul/adapters/`, satu file per library, dengan lisensi MIT, BSD, atau Apache 2.0, dan daftarkan sebagai extra di `pyproject.toml`. |
+| Menulis atau memperbaiki dokumentasi di `docs/` | Cocokkan dengan kode lebih dulu, dan `mkdocs build --strict` lolos. |
+| Menambah studi di `framework/studies/` atau skill di `framework/agentic/` | Folder baru dengan `README.md` sendiri. |
+| Memakai code assistant | Ikuti [aturan untuk bantuan AI](#berkontribusi-dengan-bantuan-ai). |
+
+### Yang tidak boleh
+
+| Tidak boleh | Alasan dan penjagaannya |
+|---|---|
+| Mengimpor library pihak ketiga di luar `framework/src/zul/adapters/` | Mengganti atau mengunci versi sebuah library dilakukan di satu file. `test_architecture.py` gagal jika dilanggar. |
+| Menambah dependency berlisensi AGPL atau GPL | Zul berlisensi MIT. `test_no_dependency_uses_an_agpl_license` gagal jika dilanggar. Periksa lisensi dependency baru sebelum menambahkannya. |
+| Menaruh API key, token, password, atau alamat server pribadi di kode, notebook, dokumentasi, atau pesan commit | Repository ini publik, dan riwayat git tidak bisa dibersihkan sepenuhnya. Notebook disamarkan dengan `framework/scripts/mask_api_keys.py`. Jika kunci terlanjur ter-commit, cabut di penyedianya; menghapus commit tidak cukup. |
+| Meng-commit rekaman video, frame CCTV, bobot model (`weights/`), hasil jalan (`outputs/`), atau file besar lain | Ukuran repository, dan privasi orang yang terekam. Dokumentasi tidak boleh memuat frame dari rekaman asli. |
+| Membuat kelas atau panduan untuk satu kasus penggunaan | Modul Zul adalah fungsi kecil yang bisa dirangkai. Tunjukkan kasusnya sebagai rangkaian fungsi yang sudah ada. |
+| Mengubah isi `research/` | Folder itu berisi latihan pribadi pemilik repository dan tidak menerima kontribusi. |
+| Mengedit `uv.lock` dengan tangan, atau memperbarui banyak dependency di pull request fitur | Perubahan dependency diulas sendiri. Jalankan `uv lock` hanya jika `pyproject.toml` berubah. |
+| Menghapus, melewati (`skip`), atau melonggarkan test supaya lulus | Test yang gagal adalah informasi. Perbaiki penyebabnya. |
+| Mematikan pemeriksa dengan `# noqa` atau `# type: ignore` tanpa alasan, atau mengubah aturan di `pyproject.toml` supaya lolos | Pemeriksa dijaga supaya gaya kode tetap seragam. Beri alasan di komentar jika memang perlu. |
+| Memformat ulang, mengganti nama, atau memindahkan file yang tidak berkaitan dengan tujuan pull request | Diff yang berisi perubahan acak tidak bisa ditinjau. |
+| Mengubah `.github/` (workflow dan Dependabot) tanpa membuka issue lebih dulu | Workflow berjalan dengan izin ke repository dan situs. |
+| Menulis di dokumentasi hal yang belum kamu periksa terhadap kode | Dokumentasi yang rapi tetapi salah lebih merugikan daripada yang berantakan tetapi benar. |
+
+## Berkontribusi dengan bantuan AI
+
+Memakai code assistant, termasuk menulis hampir seluruh kode lewat percakapan dengan model (vibe coding), diperbolehkan. Satu hal berlaku sama untuk semua kontributor: kamu bertanggung jawab atas setiap baris yang kamu kirim. Reviewer meninjau hasil kerjamu, bukan keluaran model.
+
+### Aturannya
+
+1. **Pahami setiap baris.** Jika kamu tidak bisa menjelaskan kenapa sebuah baris ada, hapus baris itu.
+2. **Sebut bantuan AI di deskripsi pull request.** Tulis alat atau model yang dipakai, bagian mana yang dibantu, dan apa yang kamu periksa sendiri. Memakai AI tidak dihukum. Pull request yang jelas dibuat model tetapi tidak mengakuinya diminta direvisi.
+3. **Jalankan sendiri semua pemeriksa, lalu tempel hasilnya.** Jangan menulis "semua test lulus" kalau kamu belum menjalankannya. Perintahnya ada di bagian [Menjalankan test](#menjalankan-test) dan [Mengikuti gaya kode](#mengikuti-gaya-kode).
+4. **Satu pull request, satu tujuan.** Usahakan di bawah 400 baris berubah, di luar test dan dokumentasi. Pull request yang lebih besar dipecah.
+5. **Sambungkan assistant ke MCP Zul.** Minta ia memanggil `conventions`, `list_modules`, dan `module_guide` sebelum menulis, lalu `check_code` untuk setiap file baru. Di Claude Code, prompt `/mcp__zul__tulis_modul_zul` menjalankan urutan itu. Caranya ada di [Menghubungkan code assistant](menghubungkan-code-assistant.md).
+6. **Batasi apa yang boleh diubah assistant.** Sebutkan file yang boleh disentuh, dan larang menambah dependency, file, atau abstraksi yang tidak diminta.
+
+Prompt awal yang bisa kamu tempel ke assistant:
+
+```text
+Baca aturan lewat tool `conventions` dari MCP Zul, lalu kerjakan hanya
+tugas ini: TUGAS.
+
+Ubah hanya file ini: DAFTAR_FILE. Jangan menambah dependency, file baru,
+parameter yang tidak dipakai, atau fallback "jaga-jaga". Tulis test dengan
+data buatan. Setelah selesai, jalankan `check_code`, `pytest`, `black`,
+`ruff`, `comment_style.py`, dan `mkdocs build --strict`, lalu laporkan
+perintah dan hasil aslinya.
+```
+
+Ganti `TUGAS` dan `DAFTAR_FILE` dengan tugas dan file yang kamu maksud.
+
+### Tanda pull request yang akan diminta direvisi
+
+- Impor atau fungsi yang tidak ada di library, hasil karangan model. Jalankan kodenya sebelum mengirim.
+- Test yang hanya mengulang implementasi, atau yang meniru (mock) fungsi yang sedang diuji.
+- `try/except` yang menelan error, blok `pass`, `TODO` tanpa issue, atau kode yang dikomentari.
+- Parameter, kelas, atau helper yang tidak dipanggil di mana pun.
+- Docstring yang hanya mengulang nama fungsi, dan dokumentasi dengan nama parameter yang tidak ada di kode.
+- Komentar bergaya asisten, seperti "Langkah 1" atau penjelasan yang mengulang kode, serta emoji dan kata promosi.
+- Perubahan besar di file yang tidak berkaitan dengan tujuan pull request.
+- Kunci, alamat server, atau jalur folder pribadi di contoh.
+
+## Meninjau kontribusi
+
+Bagian ini untuk pemilik repository dan reviewer. Urutannya dari yang paling murah dan paling sering menolak.
+
+1. **Baca deskripsi pull request.** Tujuan, bantuan AI, dan hasil pemeriksa harus ada. Jika tidak, minta dilengkapi sebelum membaca kodenya.
+2. **Lihat ukuran dan sebarannya:**
+
+    ```shell
+    git diff --stat main...HEAD
+    ```
+
+    Perubahan di folder yang tidak berkaitan, di `research/` atau `.github/`, atau di `uv.lock` tanpa penjelasan sudah menjadi alasan untuk meminta revisi.
+
+3. **Cari pelanggaran yang bisa dicari dengan mesin:**
+
+    ```shell
+    git diff main...HEAD -U0 -- pyproject.toml
+    git diff main...HEAD -U0 -- framework/src/zul ':!framework/src/zul/adapters' | grep -E "^\+(import|from) "
+    git diff main...HEAD -U0 | grep -nE "sk-[A-Za-z0-9]{10,}|api[_-]?key|password|token"
+    ```
+
+    Perintah pertama menampilkan dependency baru, yang kedua impor baru di luar adapter, dan yang ketiga pola kunci rahasia. Hasil kosong tidak menjamin bersih, karena pola ini hanya mencari yang umum.
+
+4. **Jalankan pemeriksa sendiri**, jangan hanya percaya hasil yang ditempel:
+
+    ```shell
+    uv run pytest
+    uv run black --check framework docs/tools
+    uv run ruff check framework docs/tools
+    uv run python framework/scripts/comment_style.py
+    uv run mkdocs build --strict
+    ```
+
+5. **Baca test sebelum implementasi.** Untuk perbaikan bug, test barunya harus gagal pada commit sebelum perbaikan. Test yang tidak pernah gagal tidak membuktikan apa pun.
+6. **Cocokkan dokumentasi dengan kode.** Jalankan satu contoh kode dari halaman yang diubah, dan periksa nama parameter terhadap fungsinya.
+7. **Putuskan.** Setujui, minta revisi dengan daftar yang spesifik, atau tutup dengan alasan. Alasan penutupan yang umum: tidak ada penjelasan bantuan AI, perubahan terlalu besar atau mencampur beberapa tujuan, melanggar salah satu aturan di [Yang tidak boleh](#yang-tidak-boleh), atau mengubah perilaku tanpa test.
+
+Di Claude Code, `/code-review` dan `/security-review` bisa menjadi pendapat kedua atas diff pull request. Keduanya melengkapi, bukan menggantikan, langkah di atas.
+
 ## Mengirim perubahan
 
 1. Buat branch dari `main`: `git checkout -b feature/nama-fitur`.
 2. Kerjakan perubahannya, tambahkan test, dan perbarui dokumentasi yang terkait.
 3. Jalankan test, ketiga pemeriksa gaya kode, dan `uv run mkdocs build --strict`.
 4. Commit dan push branch-mu, lalu buka pull request ke `main`.
-
-Jelaskan di pull request apa yang berubah dan kenapa, serta cara mengujinya.
+5. Isi templat pull request: apa yang berubah dan kenapa, cara mengujinya, bantuan AI, dan hasil pemeriksa.
