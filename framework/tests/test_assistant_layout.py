@@ -1,6 +1,7 @@
 """Tes struktur proyek berinduk: aturan dan pemeriksa check_layout."""
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -290,3 +291,47 @@ def test_a_drive_root_or_the_home_folder_is_too_broad(monkeypatch):
 
     assert "terlalu luas" in layout.check_layout(anchor)
     assert "terlalu luas" in layout.check_layout(str(Path.home()))
+
+
+def test_nested_names_in_reasons_are_escaped(tmp_path):
+    hostile = "x$(id)`;ls.xcodeproj"
+    _write(tmp_path, {"app/" + hostile + "/project.pbxproj": "data"})
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "$(id)" not in report
+    assert "`;ls" not in report
+    assert "x\\x24\\x28id\\x29" in report
+
+
+def test_frontend_configs_need_an_exact_name(tmp_path):
+    _write(
+        tmp_path,
+        {
+            "site/vite.config.ts": "export default {}",
+            "odd/vite.configX": "nothing",
+            "odd/notes.txt": "nothing",
+        },
+    )
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "git mv -- site frontend" in report
+    assert "vite.configX" not in report
+    assert "`odd`: tidak ada tanda yang dikenali" in report
+
+
+def test_symlinked_parents_are_not_followed(tmp_path_factory, tmp_path):
+    outside = tmp_path_factory.mktemp("outside")
+    _write(outside, {"run.py": "print('outside')", "deep/also.js": "export {}"})
+    try:
+        os.symlink(outside, tmp_path / "assets", target_is_directory=True)
+    except (OSError, NotImplementedError):
+        pytest.skip("symlink tidak bisa dibuat di sistem ini")
+
+    report = layout.check_layout(str(tmp_path))
+
+    assert "`assets` adalah symlink; tidak diperiksa." in report
+    assert "run.py" not in report
+    assert "also.js" not in report
+    assert "Induk yang ada: belum ada." in report

@@ -111,13 +111,8 @@ BACKEND_FILES = {
     "Gemfile",
 }
 MOBILE_FILES = {"pubspec.yaml", "AndroidManifest.xml", "Podfile"}
-FRONTEND_CONFIGS = (
-    "vite.config",
-    "next.config",
-    "nuxt.config",
-    "astro.config",
-    "svelte.config",
-    "angular.json",
+FRONTEND_CONFIG = re.compile(
+    r"(?:vite|next|nuxt|astro|svelte)\.config\.(?:js|ts|mjs|cjs|mts|cts)|angular\.json"
 )
 MOBILE_PACKAGES = {"react-native", "expo", "@capacitor/core", "nativescript"}
 FRONTEND_PACKAGES = {
@@ -223,7 +218,7 @@ def _walk(folder: Path, depth: int = 3):
 
 def _package_parent(path: Path) -> tuple[str, str] | None:
     try:
-        if path.stat().st_size > MAX_FILE_BYTES:
+        if path.is_symlink() or path.stat().st_size > MAX_FILE_BYTES:
             return None
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -255,7 +250,7 @@ def _file_verdict(path: Path) -> Verdict:
         verdict.candidates["mobile"] = f"file {name}"
     elif name == "package.json" and (found := _package_parent(path)):
         verdict.candidates[found[0]] = found[1]
-    elif name.startswith(FRONTEND_CONFIGS):
+    elif FRONTEND_CONFIG.fullmatch(name):
         verdict.candidates["frontend"] = f"file {name}"
     elif extension in EXTENSION_PARENT:
         verdict.candidates[EXTENSION_PARENT[extension]] = f"file {extension}"
@@ -271,7 +266,7 @@ def _folder_verdict(folder: Path) -> Verdict:
     for current, dirs, files in _walk(folder):
         for name in dirs:
             if name in {"android", "ios"} or name.endswith(".xcodeproj"):
-                found.setdefault("mobile", f"folder {name}")
+                found.setdefault("mobile", f"folder {_label(name)}")
         for name in files:
             seen += 1
             if seen > MAX_FILES:
@@ -301,7 +296,7 @@ def _is_marker(name: str) -> bool:
     return (
         name == "package.json"
         or name in BACKEND_FILES | MOBILE_FILES
-        or name.startswith(FRONTEND_CONFIGS)
+        or bool(FRONTEND_CONFIG.fullmatch(name))
     )
 
 
@@ -413,7 +408,7 @@ def _code_files(folder: Path):
     for current, _, files in _walk(folder, depth=8):
         for name in files:
             path = current / name
-            if path.suffix.lower() not in SCANNED_CODE:
+            if path.suffix.lower() not in SCANNED_CODE or path.is_symlink():
                 continue
             seen += 1
             if seen > MAX_FILES:
@@ -558,9 +553,15 @@ def check_layout(path: str = ".") -> str:
     if not root.is_dir():
         return f"Folder `{_label(path)}` tidak ditemukan atau bukan folder."
 
-    present = [parent for parent in PARENTS if (root / parent).is_dir()]
+    linked = [parent for parent in PARENTS if (root / parent).is_symlink()]
+    present = [
+        parent
+        for parent in PARENTS
+        if (root / parent).is_dir() and parent not in linked
+    ]
     absent = [parent for parent in PARENTS if parent not in present]
     moves, decisions = _misplaced(root)
+    decisions += [f"`{parent}` adalah symlink; tidak diperiksa." for parent in linked]
     crossings = _crossings(root, present)
     missing = _missing(root, present)
 

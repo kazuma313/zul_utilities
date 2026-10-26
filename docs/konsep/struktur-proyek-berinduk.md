@@ -128,7 +128,7 @@ Sebuah folder yang berisi satu aplikasi utuh diganti namanya menjadi induknya. M
 
 - **Folder campuran.** Folder yang berisi kode web dan server sekaligus harus dipecah oleh pemiliknya. Tool tidak menebak.
 - **Tipe bersama.** Jika `frontend` dan `mobile` perlu tipe data yang sama, buat tipe itu dari skema API `backend` di setiap klien.
-- **Nama `assets`.** Folder bernama jamak, seperti `docs/assets` di repository Zul. Jika kamu lebih suka `asset`, ubah `PARENTS` di `zul/assistant/layout.py` dan halaman ini.
+- **Nama `assets`.** Folder bernama jamak, seperti `docs/assets` di repository Zul. Nama ini tetap, dan `check_layout` tidak menerima `asset`.
 - **Monorepo atau repo terpisah.** Struktur ini cocok untuk satu repository. Jika setiap induk berada di repository sendiri, aturan 1 sampai 8 tetap berlaku, tetapi `check_layout` tidak bisa memeriksa impor lintas repository.
 
 ## Halaman terkait
