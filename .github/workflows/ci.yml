@@ -63,8 +63,26 @@ jobs:
       - name: Gaya komentar anak tangga
         run: uv run --no-sync python framework/scripts/comment_style.py
 
+      # Keluaran pytest juga disimpan ke berkas, supaya langkah terakhir bisa
+      # menaruh test yang gagal sebagai anotasi. COLUMNS melebarkan baris
+      # ringkasan supaya pesan errornya tidak terpotong.
       - name: Test paket zul
-        run: uv run --no-sync pytest framework/tests
+        run: |
+          set -o pipefail
+          COLUMNS=250 uv run --no-sync pytest framework/tests --tb=line | tee pytest-zul.log
 
       - name: Test tool dokumentasi
-        run: uv run --no-sync pytest docs/tools/tests
+        run: |
+          set -o pipefail
+          COLUMNS=250 uv run --no-sync pytest docs/tools/tests --tb=line | tee pytest-docs.log
+
+      # Log job di GitHub hanya bisa dibuka setelah login. Langkah ini menaruh
+      # test yang gagal (sampai 10 per langkah) sebagai anotasi, yang tampil
+      # di tab Files changed dan bisa dibaca lewat API tanpa login.
+      - name: Ringkas test yang gagal
+        if: failure()
+        run: |
+          grep -hE '^(FAILED|ERROR) ' pytest-*.log | head -10 | while read -r line; do
+            line="${line//'%'/'%25'}"
+            echo "::error::${line}"
+          done
