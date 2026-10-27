@@ -4,7 +4,7 @@
  * Bentuk: { "jenis": "langkah", "judul", "langkah": [{ "ikon", "nama", "rincian" }] }
  */
 import { JUMLAH_ADAPTIF as J } from './skema.mjs';
-import { esc, ikon, alfa, kontras } from './umum.mjs';
+import { esc, ikon, alfa, kontras, muatBaris } from './umum.mjs';
 
 const ALAMI = 250;
 
@@ -57,7 +57,7 @@ export const blokLangkah = {
         const warna = palet[i];
         return `<div style="position:absolute;left:${f(x - 34 * kk)}px;top:${f(cy - 34 * kk)}px;width:${f(68 * kk)}px;height:${f(68 * kk)}px;box-sizing:border-box;border-radius:${f(34 * kk)}px;border:4px solid ${warna};background:${w.latar};display:flex;align-items:center;justify-content:center">${ikon(s.ikon, Math.round(30 * kk), warna, 2)}</div>
 <div style="position:absolute;left:${f(x - 34 * kk)}px;top:${f(cy - 42 * kk)}px;width:28px;height:28px;border-radius:14px;background:${warna};display:flex;align-items:center;justify-content:center"><p data-teks="${id}-${i}-nomor" style="margin:0;font-size:16px;font-weight:700;line-height:1;color:${kontras(warna, w)}">${i + 1}</p></div>
-${P(`${id}-${i}-nama`, x - lebar / 2 + 12, cy + 46 * kk, lebar - 24, `text-align:center;font-size:${Math.round(24 * kk)}px;font-weight:600;line-height:1.1;color:${w.teks}`, esc(s.nama))}
+${P(`${id}-${i}-nama`, x - lebar / 2 + 12, cy + 46 * kk, lebar - 24, `text-align:center;white-space:nowrap;font-size:${muatBaris(s.nama, lebar - 24, Math.round(24 * kk))}px;font-weight:600;line-height:1.1;color:${w.teks}`, esc(s.nama))}
 ${P(`${id}-${i}-rincian`, x - lebar / 2 + 12, cy + 80 * kk, lebar - 24, `text-align:center;font-size:${Math.round(19 * kk)}px;line-height:1.18;color:${w.teks2}`, esc(s.rincian))}`;
       })
       .join('\n');

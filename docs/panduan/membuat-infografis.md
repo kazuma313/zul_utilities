@@ -239,6 +239,7 @@ Pesan khusus susunan adaptif:
 | `jangan diisi: dengan "ikuti_pita"` | `angka`, `satuan`, dan `rentang` dihitung dari pita waktu. Hapus isiannya. |
 | `butuh blok pita_waktu yang sah` | `ikuti_pita` atau `"lama_pita"` butuh blok pita waktu. Tambahkan blok itu, atau tulis angkanya sendiri. |
 | `harus "kiri" atau "kanan"` | `unggul` di blok banding hanya boleh `"kiri"` atau `"kanan"`. Hapus bila tidak ada yang unggul. |
+| `gabungannya N huruf, maksimal 100` | `sumber` dan `kaki` ditulis di satu baris di kaki lembar. Perpendek salah satunya. Berlaku juga untuk susunan linimasa. |
 
 ## Memakai merek sendiri
 

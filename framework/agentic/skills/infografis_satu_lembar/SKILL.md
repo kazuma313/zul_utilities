@@ -133,6 +133,8 @@ Aturan ini dijaga oleh `cek.mjs`, dan semuanya berasal dari koreksi nyata atas i
 | Istilah teknis atau bahasa asing tanpa penjelasan | Kata sehari-hari |
 | Kata bersayap: terbaik, terlengkap, canggih, inovatif | Fakta: angka, nama, atau contoh |
 
+Pada susunan adaptif dan linimasa, `sumber` dan `kaki` ditulis di satu baris di kaki lembar, jadi gabungan hurufnya paling banyak 100.
+
 Aturan umum: satu ide per isian, kalimat paling banyak 10 kata, angka selalu disertai satuan (juta, ribu, %, kali, bulan, orang), tanpa emoji, tanda `*` hanya untuk menyorot angka di `contoh.jawab_utama`.
 
 ## Ikon yang boleh dipakai

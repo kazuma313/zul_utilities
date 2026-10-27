@@ -10,7 +10,7 @@
  * tampil adalah nomor urut.
  */
 import { JUMLAH_ADAPTIF as J } from './skema.mjs';
-import { esc, ikon, alfa } from './umum.mjs';
+import { esc, ikon, alfa, muatBaris } from './umum.mjs';
 
 const KARTU_MAKS = 3;
 
@@ -72,10 +72,13 @@ export const blokTahap = {
           const dalam = info[i];
           const mulaiPoin = dalam.rentang ? 156 : 130;
           const jarakPoin = 56 + e / 2;
+          // angka mengecil bila angka dan satuannya tidak muat sejajar di dalam kartu
+          const lebarSatuan = dalam.satuan ? dalam.satuan.length * 0.62 * 24 + 10 : 0;
+          const ukuranAngka = muatBaris(dalam.angka, lebar - 44 - 40 - lebarSatuan, 66, 0.72);
           return `<div style="position:absolute;left:${kiri.toFixed(1)}px;top:${atas}px;width:${lebar.toFixed(1)}px;height:${270 + e}px;box-sizing:border-box;border-radius:28px;border-top:6px solid ${palet[i]};background:linear-gradient(180deg,${alfa(palet[i], 0.2)},${w.kartu} 62%)"></div>
-<div style="position:absolute;left:${(kiri + 22).toFixed(1)}px;top:${atas + 16}px;display:flex;flex-direction:row;align-items:baseline;gap:10px"><p data-teks="${id}-${i}-angka" style="margin:0;font-size:66px;font-weight:700;line-height:1;letter-spacing:-2px;color:${palet[i]}">${esc(dalam.angka)}</p>${dalam.satuan ? `<p data-teks="${id}-${i}-satuan" style="margin:0;font-size:24px;line-height:1;color:${w.teks2}">${esc(dalam.satuan)}</p>` : ''}</div>
+<div style="position:absolute;left:${(kiri + 22).toFixed(1)}px;top:${atas + 16}px;display:flex;flex-direction:row;align-items:baseline;gap:10px"><p data-teks="${id}-${i}-angka" style="margin:0;white-space:nowrap;font-size:${ukuranAngka}px;font-weight:700;line-height:1;letter-spacing:-2px;color:${palet[i]}">${esc(dalam.angka)}</p>${dalam.satuan ? `<p data-teks="${id}-${i}-satuan" style="margin:0;white-space:nowrap;font-size:24px;line-height:1;color:${w.teks2}">${esc(dalam.satuan)}</p>` : ''}</div>
 <div style="position:absolute;left:${(kiri + lebar - 22 - 32).toFixed(1)}px;top:${atas + 24}px">${ikon(it.ikon, 32, palet[i], 1.8)}</div>
-${P(`${id}-${i}-nama`, kiri + 22, atas + 92, lebar - 44, `font-size:27px;font-weight:600;line-height:1.1;color:${w.teks}`, esc(it.nama))}
+${P(`${id}-${i}-nama`, kiri + 22, atas + 92, lebar - 44, `white-space:nowrap;font-size:${muatBaris(it.nama, lebar - 44, 27)}px;font-weight:600;line-height:1.1;color:${w.teks}`, esc(it.nama))}
 ${dalam.rentang ? P(`${id}-${i}-rentang`, kiri + 22, atas + 124, 0, `font-size:19px;line-height:1.1;color:${w.redup}`, esc(dalam.rentang)) : ''}
 ${it.poin
   .map(
@@ -98,8 +101,8 @@ ${it.poin
           const dalam = info[i];
           const tinggiPoin = it.poin.length * 25 * kk;
           return `<div style="position:absolute;left:${kiri}px;top:${atas.toFixed(1)}px;width:${984 - geser}px;height:${tinggi.toFixed(1)}px;box-sizing:border-box;border-radius:22px;border-left:6px solid ${palet[i]};background:linear-gradient(90deg,${alfa(palet[i], 0.2)},${w.kartu} 70%)"></div>
-<div style="position:absolute;left:${kiri + 24}px;top:${(atas + (tinggi - 40 * kk) / 2).toFixed(1)}px;width:84px"><p data-teks="${id}-${i}-angka" style="margin:0;font-size:${Math.round(38 * kk)}px;font-weight:700;line-height:1;letter-spacing:-1px;color:${palet[i]}">${esc(dalam.angka)}</p></div>
-${P(`${id}-${i}-nama`, kiri + 112, atas + (tinggi - (dalam.rentang ? 52 : 28) * kk) / 2, 236, `font-size:${Math.round(24 * kk)}px;font-weight:600;line-height:1.1;color:${w.teks}`, esc(it.nama))}
+<div style="position:absolute;left:${kiri + 24}px;top:${(atas + (tinggi - 40 * kk) / 2).toFixed(1)}px;width:84px"><p data-teks="${id}-${i}-angka" style="margin:0;white-space:nowrap;font-size:${muatBaris(dalam.angka, 84, Math.round(38 * kk), 0.75)}px;font-weight:700;line-height:1;letter-spacing:-1px;color:${palet[i]}">${esc(dalam.angka)}</p></div>
+${P(`${id}-${i}-nama`, kiri + 112, atas + (tinggi - (dalam.rentang ? 52 : 28) * kk) / 2, 236, `white-space:nowrap;font-size:${muatBaris(it.nama, 236, Math.round(24 * kk))}px;font-weight:600;line-height:1.1;color:${w.teks}`, esc(it.nama))}
 ${dalam.rentang ? P(`${id}-${i}-rentang`, kiri + 112, atas + (tinggi - 52 * kk) / 2 + 30 * kk, 0, `font-size:${Math.round(18 * kk)}px;line-height:1.1;color:${w.redup}`, esc(dalam.rentang)) : ''}
 <div style="position:absolute;left:${kiri + 360}px;top:${(atas + (tinggi - tinggiPoin) / 2).toFixed(1)}px;width:${984 - geser - 440}px">${it.poin
             .map((t, j) => `<p data-teks="${id}-${i}-poin-${j}" style="margin:0;font-size:${Math.round(19 * kk)}px;line-height:${Math.round(25 * kk)}px;color:${w.teks2}">${esc(t)}</p>`)

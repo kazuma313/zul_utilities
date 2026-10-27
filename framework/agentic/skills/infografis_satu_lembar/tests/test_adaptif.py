@@ -8,6 +8,7 @@ huruf dari jaringan, jadi hanya berjalan bila INFOGRAFIS_UJI_BROWSER=1.
 
 import copy
 import importlib.util
+import itertools
 import json
 import os
 import re
@@ -27,7 +28,9 @@ spec = importlib.util.spec_from_file_location(
 skill = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(skill)
 
-butuh_node = pytest.mark.skipif(shutil.which("node") is None, reason="Node.js tidak ada")
+butuh_node = pytest.mark.skipif(
+    shutil.which("node") is None, reason="Node.js tidak ada"
+)
 
 
 def baca(nama: str) -> dict:
@@ -52,7 +55,10 @@ def html_dari(isi, folder_hasil) -> str:
 
 
 def atas_dari(html: str, id_teks: str) -> float:
-    cocok = re.search(rf'data-teks="{id_teks}" style="position:absolute;left:[\d.]+px;top:([\d.]+)px', html)
+    cocok = re.search(
+        rf'data-teks="{id_teks}" style="position:absolute;left:[\d.]+px;top:([\d.]+)px',
+        html,
+    )
     assert cocok, id_teks
     return float(cocok.group(1))
 
@@ -88,7 +94,10 @@ def tambah_blok_padat(c):
             "judul": "Pot atau tanah",
             "kiri": {"nama": "Pot", "ikon": "keranjang"},
             "kanan": {"nama": "Tanah", "ikon": "lokasi"},
-            "baris": [{"topik": f"Baris {i}", "kiri": "Satu", "kanan": "Dua"} for i in range(5)],
+            "baris": [
+                {"topik": f"Baris {i}", "kiri": "Satu", "kanan": "Dua"}
+                for i in range(5)
+            ],
         },
     ]
 
@@ -118,7 +127,14 @@ MASALAH = {
         "adaptif_cara_menanam.json",
         lambda c: c["blok"].__setitem__(
             0,
-            {"jenis": "tahap", "ikuti_pita": True, "items": [{"nama": "A", "ikon": "pohon", "poin": ["Satu"]}, {"nama": "B", "ikon": "api", "poin": ["Dua"]}]},
+            {
+                "jenis": "tahap",
+                "ikuti_pita": True,
+                "items": [
+                    {"nama": "A", "ikon": "pohon", "poin": ["Satu"]},
+                    {"nama": "B", "ikon": "api", "poin": ["Dua"]},
+                ],
+            },
         ),
         "butuh blok pita_waktu yang sah",
     ),
@@ -126,7 +142,14 @@ MASALAH = {
         "adaptif_dua_kota.json",
         lambda c: c["blok"].__setitem__(
             1,
-            {"jenis": "tahap", "ikuti_pita": True, "items": [{"nama": "A", "ikon": "pohon", "poin": ["Satu"]}, {"nama": "B", "ikon": "api", "poin": ["Dua"]}]},
+            {
+                "jenis": "tahap",
+                "ikuti_pita": True,
+                "items": [
+                    {"nama": "A", "ikon": "pohon", "poin": ["Satu"]},
+                    {"nama": "B", "ikon": "api", "poin": ["Dua"]},
+                ],
+            },
         ),
         "harus berisi 3 tahap, sama dengan jumlah masa",
     ),
@@ -137,7 +160,10 @@ MASALAH = {
             {
                 "jenis": "tahap",
                 "ikuti_pita": True,
-                "items": [{"nama": n, "ikon": "pohon", "poin": ["Satu"], "angka": "9"} for n in "ABC"],
+                "items": [
+                    {"nama": n, "ikon": "pohon", "poin": ["Satu"], "angka": "9"}
+                    for n in "ABC"
+                ],
             },
         ),
         "dihitung dari pita waktu",
@@ -193,9 +219,25 @@ MASALAH = {
         lambda c: c["kepala"].update(sorot="besar"),
         "atau hapus isian ini supaya dibuat otomatis",
     ),
+    "sumber dan kaki tidak muat satu baris": (
+        "adaptif_cara_menanam.json",
+        lambda c: c.update(
+            sumber="Survei Dinas Pertanian Kota tentang kebun rumah tangga di perkotaan, 2026"
+        ),
+        "maksimal 100 supaya muat satu baris di kaki lembar",
+    ),
+    "sumber dan kaki linimasa tidak muat satu baris": (
+        "majapahit_masa_pudar.json",
+        lambda c: c.update(
+            sumber="Kajian masa pudar Trowulan; Ricklefs 2010; Cahyono 2012; Baker dan Phongpaichit 2017"
+        ),
+        "maksimal 100 supaya muat satu baris di kaki lembar",
+    ),
     "kata kabur": (
         "adaptif_cara_menanam.json",
-        lambda c: c["blok"][0]["langkah"][0].update(rincian="alat terbaik untuk pemula"),
+        lambda c: c["blok"][0]["langkah"][0].update(
+            rincian="alat terbaik untuk pemula"
+        ),
         'kata "terbaik" tidak jelas',
     ),
 }
@@ -214,7 +256,9 @@ def test_each_mistake_is_rejected_with_a_message_that_names_the_fix(kasus):
 
 @butuh_node
 def test_the_blank_adaptive_template_is_not_accepted_until_filled_in():
-    laporan = skill.periksa_infografis((CONTOH / "kosong_adaptif.json").read_text(encoding="utf-8"))
+    laporan = skill.periksa_infografis(
+        (CONTOH / "kosong_adaptif.json").read_text(encoding="utf-8")
+    )
 
     assert "BELUM LOLOS" in laporan
     assert "kepala.judul_1" in laporan
@@ -228,17 +272,28 @@ def test_the_blank_adaptive_template_is_not_accepted_until_filled_in():
 def potongan_katalog() -> dict[str, dict]:
     teks = KATALOG.read_text(encoding="utf-8")
     hasil = {}
-    for jenis, isi in re.findall(r"<!-- blok:(\w+) -->\s*```json\n(.*?)\n```", teks, re.S):
+    for jenis, isi in re.findall(
+        r"<!-- blok:(\w+) -->\s*```json\n(.*?)\n```", teks, re.S
+    ):
         hasil[jenis] = json.loads(isi)
     return hasil
 
 
 def test_the_catalog_has_an_example_for_every_block():
-    assert set(potongan_katalog()) == {"pita_waktu", "tahap", "alur", "banding", "langkah", "angka"}
+    assert set(potongan_katalog()) == {
+        "pita_waktu",
+        "tahap",
+        "alur",
+        "banding",
+        "langkah",
+        "angka",
+    }
 
 
 @butuh_node
-@pytest.mark.parametrize("jenis", ["pita_waktu", "tahap", "alur", "banding", "langkah", "angka"])
+@pytest.mark.parametrize(
+    "jenis", ["pita_waktu", "tahap", "alur", "banding", "langkah", "angka"]
+)
 def test_every_catalog_example_passes_the_check(jenis):
     potongan = potongan_katalog()
     pengisi = "langkah" if jenis != "langkah" else "banding"
@@ -253,6 +308,48 @@ def test_every_catalog_example_passes_the_check(jenis):
 # --------------------------------------------------------------------------
 # Menyesuaikan diri
 # --------------------------------------------------------------------------
+
+
+JENIS_BLOK = ["pita_waktu", "tahap", "alur", "banding", "langkah", "angka"]
+
+
+def susun(jenis: list[str]) -> dict:
+    """Lembar dari potongan katalog dengan kepala contoh; tahap mengikuti pita bila keduanya ada."""
+    potongan = potongan_katalog()
+    isi = copy.deepcopy(baca("adaptif_cara_menanam.json"))
+    isi["blok"] = [copy.deepcopy(potongan[j]) for j in jenis]
+    if "pita_waktu" in jenis:
+        for blok in isi["blok"]:
+            if blok["jenis"] == "tahap":
+                blok["ikuti_pita"] = True
+                blok["items"] = blok["items"][: len(potongan["pita_waktu"]["masa"])]
+                for butir in blok["items"]:
+                    butir.pop("angka", None)
+                    butir.pop("satuan", None)
+    return isi
+
+
+@butuh_node
+def test_every_block_combination_passes_or_is_refused_with_the_height_message():
+    for jumlah in (2, 3, 4):
+        for jenis in itertools.combinations(JENIS_BLOK, jumlah):
+            laporan = skill.periksa_infografis(susun(list(jenis)))
+
+            lolos = "LOLOS" in laporan and "BELUM" not in laporan
+            ditolak = (
+                "BELUM LOLOS: 1 gagal" in laporan
+                and "terlalu padat: isinya butuh" in laporan
+            )
+            assert lolos or ditolak, f"{jenis}: {laporan}"
+
+
+@butuh_node
+def test_a_sheet_that_is_too_full_names_the_height_of_each_block():
+    laporan = skill.periksa_infografis(
+        susun(["pita_waktu", "tahap", "alur", "banding"])
+    )
+
+    assert "pita_waktu 382, tahap 292, alur 221, banding 282" in laporan
 
 
 @butuh_node
@@ -279,10 +376,15 @@ def test_without_a_highlight_the_brand_initial_is_shown(folder_hasil):
 def test_blocks_are_drawn_in_the_order_given_and_use_the_space(folder_hasil):
     tiga = html_dari(baca("adaptif_cara_menanam.json"), folder_hasil)
     dua = html_dari(
-        ubah("adaptif_cara_menanam.json", lambda c: c.update(blok=c["blok"][:2])), folder_hasil
+        ubah("adaptif_cara_menanam.json", lambda c: c.update(blok=c["blok"][:2])),
+        folder_hasil,
     )
 
-    assert atas_dari(tiga, "b0-judul") < atas_dari(tiga, "b1-judul") < atas_dari(tiga, "b2-judul")
+    assert (
+        atas_dari(tiga, "b0-judul")
+        < atas_dari(tiga, "b1-judul")
+        < atas_dari(tiga, "b2-judul")
+    )
     # dengan satu blok lebih sedikit, blok kedua mendapat ruang lebih besar
     selisih_dua = atas_dari(dua, "b1-judul") - atas_dari(dua, "b0-judul")
     selisih_tiga = atas_dari(tiga, "b1-judul") - atas_dari(tiga, "b0-judul")
@@ -293,7 +395,11 @@ def test_blocks_are_drawn_in_the_order_given_and_use_the_space(folder_hasil):
 def test_the_cards_follow_the_number_of_periods(folder_hasil):
     def lima_masa(c):
         c["blok"][0]["masa"] = [
-            {"nama": f"Masa {i + 1}", "mulai": 1000 + i * 100, "selesai": 1100 + i * 100}
+            {
+                "nama": f"Masa {i + 1}",
+                "mulai": 1000 + i * 100,
+                "selesai": 1100 + i * 100,
+            }
             for i in range(5)
         ]
         c["blok"][0]["peristiwa"] = [
@@ -322,10 +428,16 @@ def test_the_cards_follow_the_number_of_periods(folder_hasil):
 def test_the_palette_has_one_color_per_period(folder_hasil):
     def tiga_warna(c):
         c["blok"] = c["blok"][:1]
-        c["blok"].append({"jenis": "angka", "judul": "Dua angka", "angka": [
-            {"nilai": 10, "tampil": "10%", "arti": "angka pertama contoh"},
-            {"nilai": 20, "tampil": "20%", "arti": "angka kedua contoh"},
-        ]})
+        c["blok"].append(
+            {
+                "jenis": "angka",
+                "judul": "Dua angka",
+                "angka": [
+                    {"nilai": 10, "tampil": "10%", "arti": "angka pertama contoh"},
+                    {"nilai": 20, "tampil": "20%", "arti": "angka kedua contoh"},
+                ],
+            }
+        )
 
     html = html_dari(ubah("adaptif_dua_kota.json", tiga_warna), folder_hasil)
 
@@ -334,7 +446,9 @@ def test_the_palette_has_one_color_per_period(folder_hasil):
 
 
 @butuh_node
-def test_the_old_timeline_layout_still_renders_through_the_adaptive_engine(folder_hasil):
+def test_the_old_timeline_layout_still_renders_through_the_adaptive_engine(
+    folder_hasil,
+):
     html = html_dari(baca("majapahit_masa_pudar.json"), folder_hasil)
 
     assert re.search(r'data-teks="sorot-nilai"[^>]*>426<', html)
@@ -359,6 +473,72 @@ def png_ukuran(berkas: Path) -> tuple[int, int]:
     data = berkas.read_bytes()[:24]
     assert data[:8] == b"\x89PNG\r\n\x1a\n"
     return struct.unpack(">II", data[16:24])
+
+
+def isi_sepanjang_batas(isi: dict) -> dict:
+    """Setiap teks diisi sampai batas hurufnya dengan huruf lebar, dan sumber serta kaki dipendekkan."""
+    lebar = "Mawar Wimba Memeng Wawan Mumu " * 8
+    tetap = {"jenis", "ikon", "unggul", "susunan", "merek", "utama", "ikuti_pita"}
+
+    def daun(node, jalur=()):
+        if isinstance(node, dict):
+            for kunci, nilai in node.items():
+                if kunci not in tetap:
+                    yield from daun(nilai, (*jalur, kunci))
+        elif isinstance(node, list):
+            for urutan, nilai in enumerate(node):
+                yield from daun(nilai, (*jalur, urutan))
+        elif isinstance(node, str):
+            yield jalur
+
+    def taruh(jalur, nilai):
+        node = isi
+        for kunci in jalur[:-1]:
+            node = node[kunci]
+        node[jalur[-1]] = nilai
+
+    def nama(jalur):
+        return "".join(
+            f"[{k}]" if isinstance(k, int) else f".{k}" for k in jalur
+        ).lstrip(".")
+
+    semua = list(daun(isi))
+    for jalur in semua:
+        taruh(jalur, lebar[:100])
+    batas = {
+        cocok.group(1): int(cocok.group(2))
+        for cocok in re.finditer(
+            r"GAGAL\s+(\S+): terlalu panjang \(\d+ huruf, maksimal (\d+)\)",
+            skill.periksa_infografis(isi),
+        )
+    }
+    for urutan, jalur in enumerate(semua):
+        panjang = batas.get(nama(jalur), 20)
+        if nama(jalur) in {"sumber", "kaki"}:
+            panjang = min(panjang, 40)
+        mulai = (urutan * 7) % 30
+        taruh(jalur, lebar[mulai : mulai + panjang].strip())
+    return isi
+
+
+@butuh_node
+@pytest.mark.skipif(
+    os.environ.get("INFOGRAFIS_UJI_BROWSER") != "1",
+    reason="menggambar PNG butuh Edge atau Chrome dan huruf dari jaringan",
+)
+@pytest.mark.parametrize(
+    "jenis",
+    [
+        ["langkah", "banding"],
+        ["tahap", "angka"],
+        ["pita_waktu", "alur"],
+        ["banding", "langkah", "angka"],
+    ],
+)
+def test_text_as_long_as_the_limits_still_does_not_overlap(jenis, folder_hasil):
+    laporan = skill.buat_infografis(isi_sepanjang_batas(susun(jenis)), "uji")
+
+    assert "tidak ada teks yang bertumpuk" in laporan, laporan
 
 
 @butuh_node

@@ -51,6 +51,21 @@ export function buatTeks(G, P, semuaTeks, BATAS) {
 }
 
 /**
+ * Ukuran huruf terbesar (paling banyak `ukuran`) supaya teks satu baris muat di `lebar`.
+ * Memakai perkiraan lebar huruf yang longgar, jadi huruf lebar seperti m dan w pun muat.
+ */
+export const muatBaris = (teks, lebar, ukuran, rasio = 0.62) => Math.max(12, Math.min(ukuran, Math.floor(lebar / (rasio * String(teks).length))));
+
+export const KAKI_MAKS = 100;
+
+/** Sumber dan kaki ditulis di satu baris di kaki lembar, jadi gabungan hurufnya harus muat. */
+export function periksaKaki(c, G) {
+  if (typeof c.sumber !== 'string' || typeof c.kaki !== 'string') return;
+  const jumlah = c.sumber.trim().length + c.kaki.trim().length;
+  if (jumlah > KAKI_MAKS) G('sumber + kaki', `gabungannya ${jumlah} huruf, maksimal ${KAKI_MAKS} supaya muat satu baris di kaki lembar. Perpendek salah satunya.`);
+}
+
+/**
  * Skrip yang dijalankan di dalam peramban setelah huruf selesai dimuat: mencari teks yang
  * bertumpuk atau keluar lembar. Hasilnya ditaruh di <pre id="qa"> untuk dibaca bangun.mjs.
  * Setiap elemen yang ingin diperiksa diberi atribut data-teks.

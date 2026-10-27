@@ -6,7 +6,7 @@
  *           "tujuan": [{ "ikon", "nama", "arti", "arah" }], "utama"?: nomor tujuan }
  */
 import { JUMLAH_ADAPTIF as J } from './skema.mjs';
-import { esc, ikon, alfa } from './umum.mjs';
+import { esc, ikon, alfa, muatBaris } from './umum.mjs';
 
 const ALAMI = 221;
 
@@ -60,9 +60,14 @@ export const blokAlur = {
     const chip = b.tujuan
       .map((t, i) => {
         const utama = b.utama === i;
+        // nama dan arti mengecil bila tidak muat di samping ikon dan penanda arah
+        const lebarArah = t.arah.length * (0.62 * 16 + 1.5) + 27;
+        const lebarTeks = 602 - 18 - Math.round(34 * kk) - 24 - lebarArah;
+        const ukuranNama = muatBaris(t.nama, lebarTeks, Math.round(22 * kk));
+        const ukuranArti = muatBaris(t.arti, lebarTeks, Math.round(18 * kk));
         return `<div style="position:absolute;left:${CHIP_KIRI}px;top:${atasChip[i].toFixed(1)}px;width:602px;height:${tinggiChip.toFixed(1)}px;box-sizing:border-box;border-radius:${(tinggiChip / 2).toFixed(1)}px;background:${w.kartu};${utama ? `border:2px solid ${w.aksen};` : ''}display:flex;flex-direction:row;align-items:center;gap:12px;padding:0 10px 0 8px">
 <div style="width:${Math.round(34 * kk)}px;height:${Math.round(34 * kk)}px;border-radius:${Math.round(17 * kk)}px;background:${w.latar};display:flex;align-items:center;justify-content:center;flex-shrink:0">${ikon(t.ikon, Math.round(20 * kk), w.aksen, 2)}</div>
-<div style="flex:1;min-width:0"><p data-teks="${id}-${i}-nama" style="margin:0;font-size:${Math.round(22 * kk)}px;font-weight:600;line-height:1.1;color:${w.teks}">${esc(t.nama)}</p><p data-teks="${id}-${i}-arti" style="margin:0;font-size:${Math.round(18 * kk)}px;line-height:1.1;color:${w.teks2}">${esc(t.arti)}</p></div>
+<div style="flex:1;min-width:0"><p data-teks="${id}-${i}-nama" style="margin:0;white-space:nowrap;font-size:${ukuranNama}px;font-weight:600;line-height:1.1;color:${w.teks}">${esc(t.nama)}</p><p data-teks="${id}-${i}-arti" style="margin:0;white-space:nowrap;font-size:${ukuranArti}px;line-height:1.1;color:${w.teks2}">${esc(t.arti)}</p></div>
 <p data-teks="${id}-${i}-arah" style="margin:0;padding:4px 12px;border:1.5px solid ${alfa(w.aksen, 0.55)};border-radius:999px;font-size:16px;letter-spacing:1.5px;text-transform:uppercase;line-height:1.1;color:${w.aksen};flex-shrink:0">${esc(t.arah)}</p>
 </div>`;
       })

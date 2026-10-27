@@ -10,7 +10,7 @@
  * blok muat di lembar, dan melaporkan cara memperbaikinya bila tidak.
  */
 import { IKON, BATAS_ADAPTIF, JUMLAH_ADAPTIF as J, AREA_BLOK as AREA, JENIS_BLOK } from './skema.mjs';
-import { esc, alfa, paletKe, pembuatP, SKRIP_QA } from './umum.mjs';
+import { esc, alfa, paletKe, pembuatP, periksaKaki, SKRIP_QA } from './umum.mjs';
 import { blokPita, adaTahun } from './blok_pita.mjs';
 import { blokTahap } from './blok_tahap.mjs';
 import { blokAlur } from './blok_alur.mjs';
@@ -114,6 +114,7 @@ export function periksaAdaptif(c, { G, teks, objek }) {
   teks('sumber', c.sumber, 'sumber', { satuan: false });
   if (typeof c.sumber === 'string' && c.sumber.trim().length < 6) Gx('sumber', 'sebutkan sumbernya (penulis dan tahun, atau lembaga). Jangan memakai fakta tanpa sumber.');
   teks('kaki', c.kaki, 'kaki', { satuan: false });
+  periksaKaki(c, Gx);
 }
 
 // ── gambar
@@ -241,7 +242,7 @@ ${kepala}
 
 ${isiBlok}
 
-${P('kaki', 48, 1319, 984, `font-size:18px;line-height:1.2;color:${w.redup}`, esc(`Sumber: ${c.sumber}. ${c.kaki}`))}
+<p data-teks="kaki" style="position:absolute;left:48px;bottom:10px;width:984px;margin:0;font-size:18px;line-height:1.2;color:${w.redup}">${esc(`Sumber: ${c.sumber}. ${c.kaki}`)}</p>
 
 </div>
 ${SKRIP_QA}

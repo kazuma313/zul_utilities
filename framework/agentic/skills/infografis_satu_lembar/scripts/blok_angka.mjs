@@ -5,7 +5,7 @@
  *           "angka": [{ "nilai": 0 sampai 100, "tampil", "arti" }] }
  */
 import { JUMLAH_ADAPTIF as J } from './skema.mjs';
-import { esc } from './umum.mjs';
+import { esc, muatBaris } from './umum.mjs';
 
 const garis = (n) => (n <= 2 ? 156 : n === 3 ? 140 : 124);
 
@@ -47,13 +47,15 @@ export const blokAngka = {
     const lebar = 984 / n;
     const r = (D - 22) / 2;
     const keliling = 2 * Math.PI * r;
+    // angka di tengah mengecil bila tidak muat di bagian dalam cincin
+    const ukuranTampil = (a) => muatBaris(a.tampil, D - 44, Math.round(D * 0.21), 0.68);
     const cincin = b.angka
       .map((a, i) => {
         const cx = 48 + lebar * (i + 0.5);
         const atas = y + 40;
         return `<div style="position:absolute;left:${(cx - D / 2).toFixed(1)}px;top:${atas.toFixed(1)}px;width:${D.toFixed(1)}px;height:${D.toFixed(1)}px">
 <svg width="${D.toFixed(1)}" height="${D.toFixed(1)}" viewBox="0 0 ${D.toFixed(1)} ${D.toFixed(1)}" aria-hidden="true"><circle cx="${D / 2}" cy="${D / 2}" r="${r.toFixed(1)}" fill="none" stroke="${w.lingkar}" stroke-width="18"/><circle cx="${D / 2}" cy="${D / 2}" r="${r.toFixed(1)}" fill="none" stroke="${palet[i]}" stroke-width="18" stroke-linecap="round" stroke-dasharray="${((a.nilai / 100) * keliling).toFixed(1)} ${keliling.toFixed(1)}" transform="rotate(-90 ${D / 2} ${D / 2})"/></svg>
-<p data-teks="${id}-${i}-tampil" style="position:absolute;left:0;top:${(D / 2 - D * 0.1).toFixed(1)}px;width:${D.toFixed(1)}px;margin:0;text-align:center;font-size:${Math.round(D * 0.21)}px;font-weight:600;line-height:1;letter-spacing:-1px;color:${palet[i]}">${esc(a.tampil)}</p>
+<p data-teks="${id}-${i}-tampil" style="position:absolute;left:0;top:${(D / 2 - ukuranTampil(a) / 2).toFixed(1)}px;width:${D.toFixed(1)}px;margin:0;text-align:center;white-space:nowrap;font-size:${ukuranTampil(a)}px;font-weight:600;line-height:1;letter-spacing:-1px;color:${palet[i]}">${esc(a.tampil)}</p>
 </div>
 ${P(`${id}-${i}-arti`, cx - lebar / 2 + 14, atas + D + 14, lebar - 28, `text-align:center;font-size:22px;line-height:1.2;color:${w.teks2}`, esc(a.arti))}`;
       })

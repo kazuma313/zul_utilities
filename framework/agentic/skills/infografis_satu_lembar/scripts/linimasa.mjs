@@ -6,6 +6,7 @@
  * tahun seluruhnya dihitung di sini, jadi tidak ada angka yang perlu dikarang model.
  */
 import { IKON, BATAS_LINIMASA as B, JUMLAH_LINIMASA as J, TAHUN_MIN, TAHUN_MAKS } from './skema.mjs';
+import { periksaKaki } from './umum.mjs';
 
 const adaTahun = (v) => Number.isInteger(v) && v >= TAHUN_MIN && v <= TAHUN_MAKS;
 
@@ -94,6 +95,7 @@ export function periksaLinimasa(c, { G, teks, objek }) {
   teks('sumber', c.sumber, 'sumber', { satuan: false });
   if (typeof c.sumber === 'string' && c.sumber.trim().length < 6) G('sumber', 'sebutkan sumbernya (penulis dan tahun, atau lembaga). Jangan memakai fakta tanpa sumber.');
   teks('kaki', c.kaki, 'kaki', { satuan: false });
+  periksaKaki(c, G);
 }
 
 // ── gambar: susunan linimasa adalah bentuk khusus susunan adaptif (pita waktu, tahap, alur)
