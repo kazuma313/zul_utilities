@@ -2,7 +2,7 @@
 
 Dokumen ini untuk manusia, bukan untuk model. Isinya: berapa besar model yang dibutuhkan, framework apa saja yang bisa dipakai, dan apa syarat minimum mesin yang menjalankan skill.
 
-Folder ini hanya berisi **skill**: yang di dalamnya ada model bahasa yang bekerja. Script yang tidak memanggil model, seperti `youtube_transcript`, `crypto_snapshot`, `crypto_chart`, `calculator`, `chart`, `docx`, `xlsx`, dan `web_search`, ada di `../utilities/`. Formatnya sama (METADATA.md, SKILL.md, tool LangChain opsional), jadi agent tetap bisa memanggilnya sebagai tool.
+Folder ini hanya berisi **skill**: yang di dalamnya ada model bahasa yang bekerja. Script yang tidak memanggil model, seperti `youtube_transcript`, `crypto_snapshot`, `crypto_chart`, `market_price`, `calculator`, `chart`, `docx`, `xlsx`, dan `web_search`, ada di `../utilities/`. Formatnya sama (METADATA.md, SKILL.md, tool LangChain opsional), jadi agent tetap bisa memanggilnya sebagai tool.
 
 ## Prinsip: dua mesin yang terpisah
 
@@ -175,7 +175,7 @@ Skill dan utility lain tidak memanggil model sendiri; modelnya ditentukan aplika
 | Memilih skill dan memanggil tool (`docx`, `xlsx`, `chart`, `calculator`, `web_search`, `subagent_research`, `youtube_transcript`, `crypto_snapshot`, `crypto_chart`) | `qwen3:8b` | Tool calling bawaan jalan dengan penalaran mati. `gemma3:4b` juga bisa, tetapi lewat JSON berskema karena Ollama tidak memberinya tool calling. |
 | Membaca gambar (`image`) | `gemma3:4b` | Model teks seperti `qwen3` tidak bisa membaca gambar. Isi `VISION_MODEL_ID`; tanpa itu tool memakai `GENERAL_MODEL_ID`. |
 
-`youtube_transcript`, `crypto_snapshot`, dan `crypto_chart` tidak butuh model sama sekali, karena itu ketiganya ada di `../utilities/`. Skrip dan fungsi Python-nya bisa dipakai langsung dari terminal atau kode; model hanya dibutuhkan jika script itu dipakai sebagai tool di agent.
+`youtube_transcript`, `crypto_snapshot`, `crypto_chart`, dan `market_price` tidak butuh model sama sekali, karena itu keempatnya ada di `../utilities/`. Skrip dan fungsi Python-nya bisa dipakai langsung dari terminal atau kode; model hanya dibutuhkan jika script itu dipakai sebagai tool di agent.
 
 ## Ringkasnya
 

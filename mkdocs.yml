@@ -176,6 +176,7 @@ nav:
           - Mengambil transcript YouTube: panduan/mengambil-transcript-youtube.md
           - Mengambil snapshot harga crypto: panduan/mengambil-snapshot-crypto.md
           - Membuat candlestick chart crypto: panduan/membuat-chart-crypto.md
+          - Mengambil harga pasar: panduan/mengambil-harga-pasar.md
           - Mengevaluasi retrieval dan RAG: panduan/mengevaluasi-retrieval.md
       - Skill:
           - Membuat mind map: panduan/membuat-mindmap.md

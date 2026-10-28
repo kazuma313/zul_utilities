@@ -46,6 +46,7 @@ Alat bantu yang kamu panggil langsung dari kode atau terminal: helper dari paket
 | Mengambil transcript dan metadata video YouTube, tanpa model AI | [Mengambil transcript YouTube](mengambil-transcript-youtube.md) |
 | Mengambil harga token crypto beserta EMA, Stochastic, dan volume, tanpa model AI | [Mengambil snapshot harga crypto](mengambil-snapshot-crypto.md) |
 | Menggambar candlestick chart token crypto beserta indikatornya, tanpa model AI | [Membuat candlestick chart crypto](membuat-chart-crypto.md) |
+| Mengambil harga historis dan pergerakan harga terkini emas, indeks, saham, dan kurs, tanpa model AI | [Mengambil harga pasar](mengambil-harga-pasar.md) |
 
 ## Skill
 

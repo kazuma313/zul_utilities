@@ -131,7 +131,7 @@ Semua extra kecuali `ocr` dan `detection` sekitar 650 MB. `zul[all]` sekitar 3,8
 | 👁️ **OCR dan dokumen** | Docling VLM, Gemini, Markdown ke PDF dan PPTX. |
 | 🎥 **Computer vision** | Fungsi kecil untuk video: deteksi RF-DETR, ByteTrack, garis dan poligon penghitung, timer, dan gambar. |
 | 📏 **Evaluasi retrieval** | `zul.evaluation` menilai retriever dengan ragas, plus hit rate, MRR, dan latensi tanpa model penilai. |
-| 🧩 **Skill pool** | Skill untuk agent AI di `framework/agentic/`: mind map, silabus dan materi belajar, infografis satu lembar, contextual retrieval, transcript YouTube, crypto. |
+| 🧩 **Skill pool** | Skill untuk agent AI di `framework/agentic/`: mind map, silabus dan materi belajar, infografis satu lembar, contextual retrieval, transcript YouTube, crypto, harga pasar. |
 | 🧑‍💻 **MCP untuk code assistant** | `zul mcp serve` memberi Claude Code, Cursor, VS Code, dan Claude Desktop akses ke modul, dokumentasi, dan boilerplate Zul. |
 
 ## Dokumentasi
@@ -168,6 +168,7 @@ Setiap topik punya halaman dengan peran berbeda: tutorial dan panduan untuk meng
 | **LLM dan embedding** | `AIService` untuk memanggil model chat dan embedding. | `zul[llm]` | [Memanggil LLM dan embedding](https://zulkit.my.id/panduan/memanggil-llm-dan-embedding/), [AI Service](https://zulkit.my.id/referensi/ai-service/) |
 | **Konversi dokumen** | Markdown menjadi PDF dan PPTX. | `zul[converter]` | [Mengubah Markdown](https://zulkit.my.id/panduan/mengonversi-markdown/), [Markdown converter](https://zulkit.my.id/referensi/markdown-converter/) |
 | **Grafik dan crypto** | Grafik perbandingan dengan uji statistik, candlestick, dan snapshot harga. | `zul[analysis]` untuk grafik; skill crypto dijalankan dari checkout repository | [Membuat grafik](https://zulkit.my.id/panduan/membuat-grafik/), [ChartGenerator](https://zulkit.my.id/referensi/grafik/), [Candlestick crypto](https://zulkit.my.id/panduan/membuat-chart-crypto/), [Snapshot crypto](https://zulkit.my.id/panduan/mengambil-snapshot-crypto/) |
+| **Harga pasar** | Harga historis dan pergerakan harga terkini emas, indeks, saham, dan kurs dari Yahoo Finance: gold/idr, gold/usd, spx, ihsg, BBCA, BMRI. | Dari checkout repository; hanya standard library | [Mengambil harga pasar](https://zulkit.my.id/panduan/mengambil-harga-pasar/) |
 | **Helper kecil** | Fungsi pendukung, seperti logger dan pengukur waktu. | Dasar; `zul[pdf]`, `zul[analysis]`, atau `zul[llm]` untuk tiga helper tertentu | [Memakai helper kecil](https://zulkit.my.id/panduan/memakai-helper/), [Helper kecil](https://zulkit.my.id/referensi/helper/) |
 
 ### Evaluasi dan computer vision
